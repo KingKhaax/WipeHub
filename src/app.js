@@ -94,7 +94,26 @@ function playerInfo(id, entry) {
   if (!CLASSES[cls]) cls = a.subType || entry?.type || cls;
   return { id, name: entry?.name || a.name || '?', cls, spec, icon };
 }
-const classColor = (cls) => CLASSES[cls]?.color || '#9aa3b2';
+// En el tema claro se oscurecen los colores de clase demasiado claros (sacerdote, pícaro…) para que se lean sobre fondo blanco
+const lightClassColor = (hex) => {
+  const m = /^#([0-9a-f]{6})$/i.exec(hex);
+  if (!m) return hex;
+  const n = parseInt(m[1], 16);
+  const r = (n >> 16) / 255, g = ((n >> 8) & 255) / 255, b = (n & 255) / 255;
+  const mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn;
+  let h = 0;
+  if (d) h = mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4;
+  h = (h * 60 + 360) % 360;
+  const l = (mx + mn) / 2, sat = d ? d / (1 - Math.abs(2 * l - 1)) : 0;
+  if (l <= 0.4) return hex;
+  const L = 0.4, c = (1 - Math.abs(2 * L - 1)) * Math.min(1, sat * 1.1), x = c * (1 - Math.abs(((h / 60) % 2) - 1)), mm = L - c / 2;
+  const [r1, g1, b1] = h < 60 ? [c, x, 0] : h < 120 ? [x, c, 0] : h < 180 ? [0, c, x] : h < 240 ? [0, x, c] : h < 300 ? [x, 0, c] : [c, 0, x];
+  return '#' + [r1, g1, b1].map((v) => Math.round((v + mm) * 255).toString(16).padStart(2, '0')).join('');
+};
+const classColor = (cls) => {
+  const c = CLASSES[cls]?.color || '#9aa3b2';
+  return document.documentElement.dataset.theme === 'light' ? lightClassColor(c) : c;
+};
 const className = (cls) => CLASSES[cls]?.[S.lang] || CLASSES[cls]?.en || cls || '';
 function specName(spec) {
   if (!spec) return '';
@@ -688,7 +707,7 @@ async function loadReport(input, opts = {}) {
   main.innerHTML = loadingHTML();
   try {
     const d = await gql(`query($code:String!){reportData{report(code:$code){
-      code title startTime endTime zone{name} owner{name}
+      code title startTime endTime zone{id name} owner{name}
       phases{encounterID phases{id name isIntermission}}
       fights{id name encounterID kill fightPercentage bossPercentage difficulty startTime endTime size friendlyPlayers boundingBox{minX maxX minY maxY} phaseTransitions{id startTime} keystoneLevel keystoneAffixes keystoneBonus keystoneTime dungeonPulls{id startTime endTime boundingBox{minX maxX minY maxY} enemyNPCs{id gameID minimumInstanceID maximumInstanceID}}}
       masterData{actors{id name type subType server petOwner icon gameID} abilities{gameID name icon type}}}}}`, { code });
@@ -913,8 +932,11 @@ function eyebrow(f) {
   return esc(parts.filter(Boolean).join(' · '));
 }
 
+// Cabecera de cada pestaña: el color de la zona de la banda como ambiente de fondo y el icono del jefe junto al título
 function headerHTML(f, title, sub = '') {
-  return `<div class="hdr"><div class="eyebrow">${eyebrow(f)}</div><h1>${esc(title)}</h1>${sub ? `<div class="sub">${sub}</div>` : ''}</div>`;
+  const zid = S.report?.zone?.id;
+  const boss = f?.encounterID && !f.keystoneLevel ? `<img class="hdr-boss" src="https://assets.rpglogs.com/img/warcraft/bosses/${f.encounterID}-icon.jpg" width="48" height="48" alt="" onerror="this.remove()">` : '';
+  return `<div class="hdr"${zid ? ` style="--art:url(https://assets.rpglogs.com/img/warcraft/zones/zone-${zid}.png)"` : ''}>${boss}<div class="hdr-t"><div class="eyebrow">${eyebrow(f)}</div><h1>${esc(title)}</h1>${sub ? `<div class="sub">${sub}</div>` : ''}</div></div>`;
 }
 
 function parsePill(p, estimated = false, low = false) {
@@ -1880,7 +1902,10 @@ async function loadExpansion() {
   } catch (e) { console.warn('expansion', e); }
 }
 
-const loadingHTML = () => `<div class="loading"><span class="spinner"></span>${t('loading')}</div>`;
+// Esqueletos de carga: bloques que imitan la forma final en vez de un círculo girando
+const skelRows = (n, cls = '') => Array.from({ length: n }, (_, i) => `<div class="sk-row ${cls}"><i class="sk sk-ic"></i><i class="sk sk-tx" style="width:${38 + ((i * 37) % 38)}%"></i><i class="sk sk-v"></i></div>`).join('');
+const skelCards = (n = 5, rows = 5) => Array.from({ length: n }, () => `<div class="tp-card sk-card"><i class="sk sk-tx" style="width:58%;height:16px;margin-bottom:12px"></i>${skelRows(rows)}</div>`).join('');
+const loadingHTML = () => `<div class="sk-page" role="status" aria-label="${esc(t('loading'))}"><i class="sk sk-eyebrow"></i><i class="sk sk-title"></i><i class="sk sk-sub"></i><div class="sk-table">${skelRows(9)}</div></div>`;
 const errorHTML = (msg) => `<div class="error"><b>${t('error')}</b><p>${esc(msg)}</p></div>`;
 
 let toastTimer;

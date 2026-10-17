@@ -719,9 +719,9 @@ const Extras2 = (() => {
     S.post = async (seq) => { window._nightText = nightText(rows, r); fillNightTops(seq); fillChivato(seq); fillNightAvoid(seq); };
     return headerHTML(f, t('tabs.night'), `${esc(r.title)} · ${new Date(r.startTime).toLocaleDateString(locale())}`)
       + `<div class="ov-tiles">${tiles}</div>
-      <div class="night-tops" id="nightTops"><div class="loading"><span class="spinner"></span>${LL('Calculando los rankings de la noche…', 'Computing the night rankings…')}</div></div>
-      <div class="night-tops" id="nightAvoid"><div class="loading"><span class="spinner"></span>${LL('Calculando el daño evitable de la noche…', 'Computing the avoidable damage of the night…')}</div></div>
-      <div id="nightChivato"><div class="loading"><span class="spinner"></span>${LL('Contando pociones y piedras de salud…', 'Counting health potions and healthstones…')}</div></div>
+      <div class="night-tops" id="nightTops">${skelCards(6, 5)}</div>
+      <div class="night-tops" id="nightAvoid">${skelCards(2, 6)}</div>
+      <div id="nightChivato"><div class="tp-card sk-card">${skelRows(6)}</div></div>
       <div class="night-grid">${cards}</div>
       <div class="set-actions"><button class="btn" data-action="night-copy">${LL('Copiar informe para Discord', 'Copy report for Discord')}</button><button class="btn" data-action="night-png">${LL('Guardar como imagen', 'Save as image')}</button></div>`;
   }
@@ -760,7 +760,7 @@ const Extras2 = (() => {
       drawMulti(document.getElementById('manaCv'), lines, fightDur(w));
     };
     return headerHTML(f, t('tabs.mana'), LL('Maná de cada sanador a lo largo del pull, a partir de sus lanzamientos.', 'Each healer\'s mana over the pull, from their casts.'))
-      + `<div id="manaBox"><div class="loading"><span class="spinner"></span>${t('loading')}</div></div>
+      + `<div id="manaBox"><div class="tp-card sk-card">${skelRows(6)}</div></div>
       <p class="foot">${LL('Se muestra el maná justo en cada hechizo que lanza el sanador; entre hechizos se une con líneas rectas.', 'Mana is sampled at each spell the healer casts; straight lines join the samples.')}</p>`;
   }
 
@@ -888,4 +888,58 @@ const Extras2 = (() => {
   };
 
   return { sidePulls, afterSidebar, bestOther };
+})();
+
+// ---- Pulido visual: cifras que cuentan al aparecer y barra lateral plegable en ventanas estrechas
+(() => {
+  const SEL = '.tp-val, .ov-tile > div, .gr-rk b, .chv-row.tot b';
+  const done = new WeakSet();
+  const reduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches || document.documentElement.dataset.motion === 'reduced';
+  function countUp(el) {
+    if (done.has(el)) return;
+    done.add(el);
+    if (el.children.length || reduce() || S.liveReport) return;
+    const txt = el.textContent.trim();
+    if (txt.includes(':')) return;
+    const m = txt.match(/^(~?)(\d[\d.,]*)(.*)$/);
+    if (!m) return;
+    const dec = S.lang === 'en' ? '.' : ',';
+    const tok = m[2];
+    const decimals = tok.includes(dec) ? tok.length - tok.lastIndexOf(dec) - 1 : 0;
+    const val = parseFloat(tok.split(dec === ',' ? '.' : ',').join('').replace(dec, '.'));
+    if (!isFinite(val) || val <= 0) return;
+    const t0 = performance.now(), dur = 650;
+    const step = (now) => {
+      const k = Math.min(1, (now - t0) / dur);
+      const e = 1 - Math.pow(1 - k, 3);
+      el.textContent = m[1] + (k < 1 ? num(val * e, decimals) : tok) + m[3];
+      if (k < 1) requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
+  }
+  const main = document.getElementById('main');
+  if (main) {
+    let pending = false;
+    new MutationObserver(() => {
+      if (pending) return;
+      pending = true;
+      requestAnimationFrame(() => { pending = false; main.querySelectorAll(SEL).forEach(countUp); });
+    }).observe(main, { childList: true, subtree: true });
+  }
+
+  const btn = document.getElementById('sideToggle');
+  const side = document.getElementById('sidebar');
+  if (btn && side) {
+    const sync = () => { btn.hidden = side.hidden; if (side.hidden) document.body.classList.remove('side-open'); };
+    new MutationObserver(sync).observe(side, { attributes: true, attributeFilter: ['hidden'] });
+    sync();
+    btn.addEventListener('click', () => {
+      document.documentElement.style.setProperty('--tb-h', document.querySelector('.topbar').offsetHeight + 'px');
+      document.body.classList.toggle('side-open');
+    });
+    document.addEventListener('click', (ev) => {
+      if (!document.body.classList.contains('side-open')) return;
+      if (ev.target.closest('.sidebar .fight') || (!ev.target.closest('.sidebar') && !ev.target.closest('#sideToggle'))) document.body.classList.remove('side-open');
+    });
+  }
 })();

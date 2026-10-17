@@ -2412,3 +2412,72 @@ button.brand .brand-logo { width: 36px; height: 36px; border-radius: 9px; }
 /* Barra superior: Idioma, Exportar y Ajustes sin cuadrado gris (la caja solo aparece al pasar el ratón) */
 .top-actions .home-btn#langBtn, .top-actions .home-btn#exportBtn, #settingsBtn { background: transparent; border-color: transparent; box-shadow: none; }
 .top-actions .home-btn#langBtn:hover, .top-actions .home-btn#exportBtn:hover, #settingsBtn:hover { background: var(--panel-2); border-color: transparent; }
+
+/* =====================================================================
+   Pulido visual: formas coherentes, cabeceras con ambiente, esqueletos, tipografía, tema claro y ventanas estrechas
+   ===================================================================== */
+
+/* 1. Una sola forma por tipo de elemento: las barras y tablas de datos son cuadradas; tarjetas, botones y chips, redondeados */
+.bar-in, .bar-wrap .bar-in, .seg, .bar-in .seg, .mbar, .mbar > span, .hpbar, .hpbar > span, .gr-bar, .gr-bar i, .ut-row, .ut-fill, .cd-lane, .cdm img, .rk-bar, .rk-bar > span { border-radius: 0; }
+.hpbar > span { box-shadow: none; }
+.bar-in .seg { background-image: none; box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .18); }
+@keyframes barGrow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.bar-in, .mbar > span, .ut-fill, .hpbar > span { transform-origin: left center; animation: barGrow .55s cubic-bezier(.2, .8, .2, 1) both; }
+
+/* 2. Cabecera con ambiente de la zona y el icono del jefe */
+.hdr { position: relative; isolation: isolate; }
+.hdr:has(> .hdr-t) { display: flex; flex-wrap: wrap; align-items: center; gap: 0 18px; }
+.hdr:has(> .hdr-t)::after { flex: 1 1 100%; }
+.hdr[style*="--art"] { padding: 20px 24px 18px; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: var(--panel); }
+.hdr[style*="--art"]::before { content: ''; position: absolute; inset: -40px; z-index: -1; background: var(--art) right center / cover no-repeat; filter: blur(26px) saturate(1.5); opacity: .42; -webkit-mask-image: linear-gradient(90deg, transparent 5%, #000 95%); mask-image: linear-gradient(90deg, transparent 5%, #000 95%); }
+.hdr[style*="--art"]::after { display: none; }
+.hdr-t { min-width: 0; flex: 1; }
+.hdr-boss { flex: none; border-radius: 10px; box-shadow: 0 0 0 1px var(--line-strong, var(--line)), 0 6px 18px rgba(0, 0, 0, .35); }
+:root[data-theme="light"] .hdr[style*="--art"]::before { opacity: .22; }
+
+/* 3. Esqueletos de carga */
+.sk { display: block; border-radius: 4px; background: linear-gradient(100deg, var(--panel-2) 25%, color-mix(in srgb, var(--panel-2) 60%, var(--text) 9%) 45%, var(--panel-2) 65%); background-size: 220% 100%; animation: skShim 1.4s linear infinite; }
+@keyframes skShim { from { background-position: 120% 0; } to { background-position: -120% 0; } }
+.sk-page { padding: 6px 0; }
+.sk-eyebrow { width: 180px; height: 11px; margin-bottom: 14px; }
+.sk-title { width: 340px; max-width: 70%; height: 34px; margin-bottom: 12px; }
+.sk-sub { width: 260px; max-width: 55%; height: 13px; margin-bottom: 28px; }
+.sk-table { display: grid; gap: 6px; }
+.sk-row { display: flex; align-items: center; gap: 12px; height: 34px; padding: 0 8px; border-radius: 0; background: color-mix(in srgb, var(--panel) 70%, transparent); }
+.sk-ic { width: 24px; height: 24px; flex: none; }
+.sk-tx { height: 12px; }
+.sk-v { width: 54px; height: 12px; margin-left: auto; flex: none; }
+.sk-card .sk-row { height: 32px; margin-top: 4px; }
+@media (prefers-reduced-motion: reduce) { .sk { animation: none; } .bar-in, .mbar > span, .ut-fill, .hpbar > span { animation: none; } }
+:root[data-motion="reduced"] .sk, :root[data-motion="reduced"] .bar-in, :root[data-motion="reduced"] .mbar > span, :root[data-motion="reduced"] .ut-fill { animation: none; }
+
+/* 4. Jerarquía de texto: las mayúsculas espaciadas quedan para las cabeceras de tabla y las insignias; el resto va en minúsculas con más peso */
+.eyebrow, h3.sec, .recent-h, .card h3, .welcome h3, .subh, .stat small, .exp-info > small, .patch small, .an-card small, .pn-box small, .au-sec > small, .arm-stats h5, .pf-sum > div:first-child small, .pf-tal-h, .pf-sum2-t, .p22-txt small, .cc-btn-t small, .cc-day b, .gc-grp, .cd-kh b, .cd-spike > span, .mg-keyb > b { text-transform: none; letter-spacing: .15px; }
+.eyebrow { font-size: 13px; font-weight: 600; letter-spacing: .3px; }
+h3.sec, .recent-h { font-size: 17px; font-weight: 700; letter-spacing: 0; }
+.card h3, .welcome h3, .subh, .gc-grp, .arm-stats h5 { font-size: 14px; font-weight: 700; }
+.cd-kh b { font-size: 15px; }
+
+/* 5. Tema claro: los elementos nuevos usan colores del tema en vez de blanco/negro fijos */
+:root[data-theme="light"] .ut-row .name, :root[data-theme="light"] .ut-row b { color: var(--text); text-shadow: none; }
+:root[data-theme="light"] .ut-fill { opacity: .4; }
+:root[data-theme="light"] .cd-lane { background: rgba(20, 40, 70, .05); }
+:root[data-theme="light"] .cdm img { box-shadow: 0 0 0 2px var(--cc), 0 2px 5px rgba(20, 40, 70, .25); }
+:root[data-theme="light"] .cd-chip, :root[data-theme="light"] .wl-gsum { background: var(--panel); }
+:root[data-theme="light"] .wl-row:not(.th):nth-child(even) { background: rgba(20, 40, 70, .035); }
+:root[data-theme="light"] .hdr-boss { box-shadow: 0 0 0 1px var(--line), 0 4px 12px rgba(20, 40, 70, .2); }
+
+/* 6. Ventanas estrechas: la lista de intentos se pliega detrás del botón ☰ */
+.side-toggle { display: none; }
+@media (max-width: 1100px) {
+  .side-toggle { display: inline-flex; font-size: 18px; padding: 6px 10px; }
+  .side-toggle[hidden] { display: none; }
+  .sidebar { position: fixed; z-index: 60; left: 0; top: var(--tb-h, 62px); bottom: 0; width: min(300px, 86vw); transform: translateX(-104%); transition: transform .22s ease; box-shadow: 8px 0 28px rgba(0, 0, 0, .45); }
+  body.side-open .sidebar { transform: none; }
+  body.side-open .main { filter: brightness(.7); }
+  .main { padding: 18px 16px 50px; }
+  .hdr h1 { font-size: 30px; }
+  .hdr[style*="--art"] { padding: 14px 16px; }
+}
+@media (max-width: 760px) { .hdr-boss { width: 36px; height: 36px; } .night-tops { grid-template-columns: 1fr; } }
+:root[data-theme="light"] .rank-btn, :root[data-theme="light"] .rank-btn.active { color: #6a4a00; }
