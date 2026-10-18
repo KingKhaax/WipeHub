@@ -168,7 +168,8 @@ const Cards = (() => {
     // al salir se espera un instante: si el puntero vuelve a entrar al mismo objeto (borde, hijos) el tooltip no parpadea
     const hideSoon = () => { clearTimeout(off); off = setTimeout(hide, 80); };
     document.addEventListener('mouseover', (ev) => {
-      const t = ev.target.closest?.('[data-itip]');
+      // sobre una gema sale el tooltip de la gema, no el de la pieza
+      const t = ev.target.closest?.('.pf-gem') ? null : ev.target.closest?.('[data-itip]');
       if (!t) { if (cur) hideSoon(); return; }
       clearTimeout(off);
       if (t === cur) return;

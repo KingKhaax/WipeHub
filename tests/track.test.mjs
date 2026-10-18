@@ -31,10 +31,19 @@ test('sin texto de dificultad: ids de bonus y, si no, nivel de objeto', () => {
   assert.equal(trackOf(item(null, 100)).key, null);
 });
 
+test('piezas creadas: la pista es la de la crest que exigen (331 pide crests de Mito)', () => {
+  assert.equal(trackOf(item('Tidal Crafted', 331, { crafted: [36, 40], bonus: [12214, 12497, 13751, 13836] })).key, 'myth');
+  assert.equal(trackOf(item('Tidal Crafted', 331, { crafted: [36, 40] })).key, 'myth'); // sin id de crest: por nivel de objeto
+  assert.equal(trackOf(item('Tidal Crafted', 318, { crafted: [36, 40], bonus: [12214, 13835] })).key, 'hero');
+  assert.equal(trackOf(item('Tidal Crafted', 305, { crafted: [36, 40], bonus: [12214, 13834] })).key, 'champion');
+  assert.equal(trackOf(item('Tidal Crafted', 328, { crafted: [36], bonus: [13835] })).key, 'hero');
+  assert.equal(trackOf(item('Tidal Crafted', 331, { crafted: [36, 40] })).crafted, true);
+});
+
 test('las piezas creadas llevan «Crafteado» y su pista sale por nivel de objeto', () => {
   const c = trackOf(item('Tidal Crafted', 331, { crafted: [36, 40] }));
   assert.equal(c.crafted, true);
-  assert.equal(c.key, 'hero');
+  assert.equal(c.key, 'myth');
   assert.equal(trackOf(item('Creado por las mareas', 331)).crafted, true);
   assert.equal(trackOf(item('Mythic', 334, { crafted: [36] })).key, 'myth');
 });

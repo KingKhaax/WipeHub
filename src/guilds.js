@@ -277,7 +277,8 @@ const Guilds = (() => {
     const favs = new Set(lsList('gd:favs'));
     const wrap = (c, canHide) => {
       const k = charKey(c);
-      const pick = `data-gd="armory" data-key="${esc(k)}" data-realm="${esc(c.realmSlug)}" data-name="${esc(c.name)}" data-region="${esc(c.region || '')}"`;
+      // al pulsar un personaje se abre al instante su ficha completa (equipo, talentos, logs por jefe, modelo 3D...)
+      const pick = `data-gd="open-char" data-key="${esc(k)}" data-realm="${esc(c.realmSlug)}" data-realmname="${esc(c.realmName || c.realmSlug)}" data-name="${esc(c.name)}" data-region="${esc(c.region || '')}"`;
       return `<div class="char-wrap ${st.armory?.key === k ? 'open' : ''}">${Cards.charCardHTML(c, { onClick: pick })}<div class="cc-act">
         <button type="button" class="${favs.has(k) ? 'on' : ''}" data-gd="fav" data-key="${esc(k)}" title="${esc(favs.has(k) ? LL('Quitar de favoritos', 'Remove from favorites') : LL('Añadir a favoritos', 'Add to favorites'))}" aria-label="${esc(LL('Favorito', 'Favorite'))}">${ICON_STAR(favs.has(k))}</button>
         ${canHide ? `<button type="button" data-gd="${c.manual ? 'delchar' : 'hide'}" data-key="${esc(k)}" title="${esc(LL('Quitar de la lista', 'Remove from the list'))}" aria-label="${esc(LL('Quitar', 'Remove'))}">${ICON_X}</button>` : ''}</div></div>${armoryHTML(c)}`;
@@ -607,6 +608,7 @@ const Guilds = (() => {
       render();
     } else if (a === 'unhide') { lsSet('gd:hidden', '[]'); render(); }
     else if (a === 'armory') { if (st.armory?.key === el.dataset.key) { clearInterval(st.armoryTimer); st.armory = null; render(); } else openArmory(el.dataset.key, el.dataset.realm, el.dataset.name, false, el.dataset.region || ''); }
+    else if (a === 'open-char') { if (typeof Profile !== 'undefined') Profile.open({ name: el.dataset.name, slug: el.dataset.realm, realm: el.dataset.realmname || el.dataset.realm, region: (el.dataset.region || st.status?.region || 'eu').toLowerCase() }); }
     else if (a === 'armory-refresh') { const x = st.armory; if (x) openArmory(x.key, x.realmSlug, x.name, false, x.region || ''); }
     else if (a === 'armory-close') { clearInterval(st.armoryTimer); st.armory = null; render(); }
     else if (a === 'pick-char') { if (!S.guildOpen) await open(); pickGuild({ name: el.dataset.guild, realmSlug: el.dataset.realm, realmName: el.dataset.realmname, region: el.dataset.region || st.status?.region }); }

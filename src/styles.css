@@ -1561,6 +1561,24 @@ img.role-ic { border-radius: 7px; }
 .pf-it .arm-ic { width: 28px; height: 28px; }
 .pf-itx { display: flex; flex-direction: column; min-width: 0; flex: 1; line-height: 1.2; }
 .pf-itx b { color: var(--q, var(--text)); font-weight: 600; font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pf-itn { display: flex; align-items: baseline; gap: 6px; min-width: 0; }
+.pf-upg { flex: none; font-size: 11px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
+.pf-upg.full { color: #5fd38d; }
+.pf-gems { display: flex; gap: 4px; margin-top: 2px; }
+.pf-gem { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 5px; background: rgba(255, 255, 255, .06); border: 1px solid var(--line); cursor: help; }
+.pf-gem img { width: 18px; height: 18px; border-radius: 4px; display: block; }
+.pf-gem i { width: 9px; height: 9px; background: #6fb7ff; transform: rotate(45deg); }
+/* tooltip de las gemas, como el de objetos del juego */
+.gemtip { position: fixed; z-index: 70; max-width: 340px; padding: 10px 12px; background: rgba(8, 12, 22, .97); border: 1px solid #3a5280; border-radius: 6px; box-shadow: 0 10px 34px rgba(0, 0, 0, .6); pointer-events: none; font-size: 13px; line-height: 1.45; color: #fff; }
+.gemtip .gt-head { display: flex; gap: 10px; align-items: flex-start; }
+.gemtip .gt-head > img { border-radius: 5px; border: 1px solid #000; flex: none; }
+.gemtip table { border-collapse: collapse; } .gemtip td { padding: 0; vertical-align: top; }
+.gemtip b { font-weight: 600; font-size: 14px; }
+.gemtip .q0 { color: #9d9d9d; } .gemtip .q1 { color: #fff; } .gemtip .q2 { color: #1eff00; } .gemtip .q3 { color: #4d9dff; } .gemtip .q4 { color: #c77bff; } .gemtip .q5 { color: #ff8000; }
+.gemtip .q, .gemtip .whtt-extra { color: #ffd100; }
+.gemtip .moneygold, .gemtip .moneysilver, .gemtip .moneycopper { margin-left: 4px; }
+.gemtip .moneygold::after, .gemtip .moneysilver::after, .gemtip .moneycopper::after { content: ''; display: inline-block; width: 10px; height: 10px; margin-left: 3px; border-radius: 50%; vertical-align: -1px; }
+.gemtip .moneygold::after { background: #ffd24a; } .gemtip .moneysilver::after { background: #c9ced6; } .gemtip .moneycopper::after { background: #c47a3d; }
 .pf-itx i { font-style: normal; font-size: 11px; color: #5fd38d; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .pf-itx i.gem { color: #6fb7ff; }
 .pf-it em { font-style: normal; font-weight: 700; font-variant-numeric: tabular-nums; }
@@ -1578,8 +1596,14 @@ img.role-ic { border-radius: 7px; }
 @media (max-width: 1500px) { .pf-grid { grid-template-columns: minmax(0, 1.6fr) minmax(300px, 1fr); grid-template-areas: "left model" "left mid"; } .pf-modelcol { position: static; } }
 @media (max-width: 1000px) { .pf-grid { grid-template-columns: 1fr; grid-template-areas: "model" "left" "mid"; } }
 .pf-mpanel { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: #070a10; --m1: #101826; --m2: #243a5c; --m3: #5b8def; }
-.pf-mhead { text-align: center; font-weight: 600; font-size: 14px; padding: 6px 10px; background: rgba(0, 0, 0, .55); border-bottom: 1px solid var(--line); }
-.pf-mpanel .pf-model { min-height: 560px; border: 0; border-radius: 0; overflow: hidden;
+.pf-mhead { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; font-weight: 600; font-size: 14px; padding: 6px 10px; background: rgba(0, 0, 0, .55); border-bottom: 1px solid var(--line); }
+.pf-mname { display: inline-flex; align-items: center; gap: 7px; justify-content: center; }
+.pf-mspec { border-radius: 4px; }
+.pf-mlinks { display: inline-flex; justify-content: flex-end; gap: 6px; }
+.pf-lnk { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; overflow: hidden; transition: transform .12s, filter .12s; }
+.pf-lnk:hover { transform: translateY(-1px) scale(1.12); filter: brightness(1.15); }
+.pf-lnk img { width: 22px; height: 22px; border-radius: 50%; display: block; }
+.pf-mpanel .pf-model { min-height: 600px; border: 0; border-radius: 0; overflow: hidden; align-items: center; padding: 10px 0 70px;
   background: linear-gradient(180deg, transparent 72%, rgba(0, 0, 0, .5)), var(--cbg, linear-gradient(transparent, transparent)) 50% 100% / cover no-repeat, radial-gradient(ellipse 70% 42% at 50% 64%, color-mix(in srgb, var(--m3) 42%, transparent), transparent 72%),
     radial-gradient(ellipse 100% 38% at 50% 100%, var(--m2), transparent 78%),
     linear-gradient(90deg, color-mix(in srgb, var(--m3) 26%, transparent), transparent 24%, transparent 76%, color-mix(in srgb, var(--m3) 26%, transparent)),
@@ -2586,3 +2610,20 @@ h3.sec, .recent-h { font-size: 17px; font-weight: 700; letter-spacing: 0; }
 /* Botones de color con texto blanco: fondo algo más oscuro para llegar al contraste recomendado (4,5:1) */
 .btn.primary, .pn-btn, .cmp-n.mine { background: color-mix(in srgb, var(--accent) 74%, #000); background-image: none; }
 .btn.primary:hover, .pn-btn:hover { background: color-mix(in srgb, var(--accent) 66%, #000); background-image: none; }
+
+/* Expansion All Stars (ficha de personaje) */
+.pf-xp{margin-top:18px}
+.pf-xp-h{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.pf-xp-h h4{margin:0;font-size:15px}
+.pf-xp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.pf-xpc{border:1px solid var(--line);border-radius:8px;background:var(--panel);overflow:hidden}
+.pf-xpc.none{opacity:.55}
+.pf-xpc-h{padding:6px 10px;font-weight:700;font-size:13px;border-bottom:1px solid var(--line);text-align:center}
+.pf-xpc-b{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;padding:10px}
+.pf-xpc-p{display:flex;align-items:center;gap:6px}
+.pf-xpc-p span,.pf-xpc-r{display:flex;flex-direction:column;line-height:1.15}
+.pf-xpc-r{text-align:right}
+.pf-xpc small{color:var(--muted);font-size:11px}
+.pf-xpc b{font-size:14px}
+.pf-xpc-z{display:flex;flex-direction:column;align-items:center;gap:2px}
+.pf-xpc-z img{border-radius:6px}

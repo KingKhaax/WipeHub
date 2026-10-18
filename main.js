@@ -1015,6 +1015,30 @@ async function itemIcon(id, token, region = bnetRegion()) {
 
 const tipColor = (c) => (c ? `rgb(${c.r},${c.g},${c.b})` : '');
 
+
+// ---- Wowhead (tooltips públicos de objetos): nivel de mejora de cada pieza («6/6») y tooltip de cada gema, con caché en memoria
+const whItemMem = new Map();
+function wowheadItem(id, bonus, level, loc) {
+  const key = `${id}|${(bonus || []).join(':')}|${level}|${loc}`;
+  if (!whItemMem.has(key)) {
+    whItemMem.set(key, (async () => {
+      try {
+        const q = bonus && bonus.length ? `&bonus=${bonus.join(':')}` : '';
+        const res = await fetch(`https://nether.wowhead.com/tooltip/item/${Number(id)}?dataEnv=1&locale=${loc}&lvl=${Number(level) || 90}${q}`, { headers: { 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) WipeTime', accept: 'application/json' } });
+        if (!res.ok) return null;
+        const j = await res.json();
+        return { name: j.name || '', icon: j.icon || '', quality: j.quality ?? 0, tooltip: j.tooltip || '' };
+      } catch { return null; }
+    })());
+  }
+  return whItemMem.get(key);
+}
+const upgradeFrom = (tt) => {
+  const t = String(tt || '').replace(/<[^>]+>/g, ' ').replace(/&nbsp;/g, ' ');
+  const m = t.match(/(?:Upgrade Level|Nivel de mejora|Nivel de actualizaci[oó]n)[^0-9]{0,40}?(\d+)\s*\/\s*(\d+)/i);
+  return m ? `${m[1]}/${m[2]}` : '';
+};
+
 async function armory(realmSlug, name, lang, region = bnetRegion()) {
   if (!BNET_REGIONS.includes(region)) region = bnetRegion();
   const token = await bnetAppToken();
@@ -1029,7 +1053,7 @@ async function armory(realmSlug, name, lang, region = bnetRegion()) {
     slot: i.slot?.type || '', slotName: i.slot?.name || '', id: i.item?.id, name: i.name || '', ilvl: i.level?.value || 0,
     quality: i.quality?.type || 'COMMON', icon: icons[k], binding: i.binding?.name || '',
     enchant: (i.enchantments || []).map((e) => e.display_string).filter(Boolean),
-    gems: (i.sockets || []).map((sk) => ({ name: sk.item?.name || '', stat: sk.display_string || '' })),
+    gems: (i.sockets || []).map((sk) => ({ name: sk.item?.name || '', stat: sk.display_string || '', id: sk.item?.id || 0 })),
     set: i.set?.item_set?.name || '', armorType: i.item_subclass?.name || '',
     // Datos para exportar a SimC (ids de bonus, gemas, encantamiento y estadísticas de objetos creados)
     simc: { bonus: i.bonus_list || [], gems: (i.sockets || []).map((sk) => sk.item?.id).filter(Boolean), enchant: (i.enchantments || []).map((e) => e.enchantment_id).filter(Boolean), crafted: (i.modified_crafting_stat || []).map((x) => x.id).filter(Boolean) },
@@ -1049,6 +1073,12 @@ async function armory(realmSlug, name, lang, region = bnetRegion()) {
       sell: i.sell_price?.display_strings ? { g: i.sell_price.display_strings.gold, s: i.sell_price.display_strings.silver, c: i.sell_price.display_strings.copper } : null,
     },
   }));
+  // Nivel de mejora de cada pieza (Wowhead, siempre en inglés para leerlo igual en cualquier idioma) y tooltip de cada gema en el idioma de la app
+  const whLoc = { es: 6, en: 0 }[lang] ?? 0;
+  await Promise.all(items.map(async (it) => { const r = await wowheadItem(it.id, it.simc.bonus, sum.level, 0); it.upg = upgradeFrom(r?.tooltip); }));
+  const gemIds = [...new Set(items.flatMap((it) => it.gems.map((g) => g.id)).filter(Boolean))];
+  const gemTips = {};
+  await Promise.all(gemIds.map(async (id) => { const r = await wowheadItem(id, [], 90, whLoc); if (r) gemTips[id] = { name: r.name, icon: r.icon, quality: r.quality, tip: r.tooltip }; }));
   // Nivel de objeto equipado con decimales: media de los 16 huecos (un arma a dos manos cuenta en los dos)
   const lvl = (t) => items.find((x) => x.slot === t)?.ilvl || 0;
   const mh = items.find((x) => x.slot === 'MAIN_HAND');
@@ -1075,7 +1105,7 @@ async function armory(realmSlug, name, lang, region = bnetRegion()) {
     render: md?.assets?.find((a) => a.key === 'main-raw')?.value || md?.assets?.find((a) => a.key === 'main')?.value || md?.assets?.find((a) => a.key === 'inset')?.value || '',
     avatar: md?.assets?.find((a) => a.key === 'avatar')?.value || '', lastLogin: sum.last_login_timestamp || 0, gender: sum.gender?.type || '', faction: sum.faction?.type || '',
     guildRealm: sum.guild?.realm?.slug || '', guildRealmName: sum.guild?.realm?.name || '', realmSlug: sum.realm?.slug || realmSlug, region,
-    items, ilvlExact: Math.floor(ilvlExact * 100 + 1e-9) / 100, stats, at: Date.now(),
+    items, gemTips, ilvlExact: Math.floor(ilvlExact * 100 + 1e-9) / 100, stats, at: Date.now(),
   };
 }
 

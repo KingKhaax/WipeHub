@@ -15,7 +15,7 @@ const Profile = (() => {
   const ASSETS = 'https://assets.rpglogs.com/img/warcraft';
   const SLOT_ORDER = ['HEAD', 'NECK', 'SHOULDER', 'BACK', 'CHEST', 'SHIRT', 'TABARD', 'WRIST', 'HANDS', 'WAIST', 'LEGS', 'FEET', 'FINGER_1', 'FINGER_2', 'TRINKET_1', 'TRINKET_2', 'MAIN_HAND', 'OFF_HAND'];
   const QCOLOR = { POOR: '#9d9d9d', COMMON: '#ffffff', UNCOMMON: '#1eff00', RARE: '#0070dd', EPIC: '#a335ee', LEGENDARY: '#ff8000', ARTIFACT: '#e6cc80', HEIRLOOM: '#00ccff' };
-  const st = { q: null, zones: null, zone: null, diff: 0, partition: -1, boss: 0, spec: '', metric: 'dps', arm: null, rio: null, wcl: null, wclErr: '', armErr: '', busy: false, at: 0, timer: null };
+  const st = { q: null, zones: null, zone: null, diff: 0, partition: -1, boss: 0, spec: '', metric: 'dps', arm: null, rio: null, wcl: null, wclErr: '', armErr: '', busy: false, at: 0, timer: null, xpExp: 0, xp: null };
 
   const regionName = (r) => ({ eu: LL('Europa', 'Europe'), us: LL('América', 'America'), kr: LL('Corea', 'Korea'), tw: LL('Taiwán', 'Taiwan') }[r] || r.toUpperCase());
   const cleanLine = (x) => String(x ?? '').replace(/\|A:[^|]*\|a/g, '').replace(/\|c[0-9a-fA-F]{8}|\|cn[^:]*:|\|r/g, '').replace(/^Enchanted: /i, '').replace(/\s+/g, ' ').trim();
@@ -126,6 +126,8 @@ const Profile = (() => {
     render();
     await Promise.all([fetchWcl(), fetchGear()]);
     st.busy = false;
+    fetchXp().then(() => { if (S.profileOpen) repaint(); });
+    resolveLocale();
     st.at = Date.now();
     if (S.profileOpen) render();
     // el equipo se vuelve a pedir cada minuto mientras la ficha está abierta
@@ -157,6 +159,22 @@ const Profile = (() => {
       } catch { /* no existe en esa región */ }
     }
     return null;
+  }
+
+  // Al entrar por un enlace directo no se sabe el idioma del reino: se averigua con la búsqueda para poner su bandera (Zul'jin es español, no inglés)
+  async function resolveLocale() {
+    const q = st.q;
+    if (!q || q.locale) return;
+    try {
+      const r = await window.api.rioSearch(q.name);
+      const m = (r.list || []).find((x) => x.region === q.region && x.realmSlug === q.slug && x.locale);
+      if (m && st.q === q) {
+        q.locale = m.locale;
+        const l = recent().map((x) => (x.slug === q.slug && x.region === q.region && x.name.toLowerCase() === q.name.toLowerCase() ? { ...x, locale: m.locale } : x));
+        lsSet('prof:recent', JSON.stringify(l));
+        repaint();
+      }
+    } catch (e) { /* sin bandera exacta: se queda la de la región */ }
   }
 
   async function search(name, realm, region) {
@@ -228,7 +246,7 @@ const Profile = (() => {
     sidebar.hidden = true;
     st.q = { name: q.name, slug: q.slug, realm: q.realm || q.slug, region: REGIONS.includes(q.region) ? q.region : 'eu', locale: q.locale || '' };
     st.arm = null; st.rio = null; st.wcl = null; st.wclErr = ''; st.armErr = '';
-    st.embed = null; st.encLogs = {}; st.openEnc = null; st.boss = 0; st.spec = '';
+    st.xp = null; st.xpExp = 0; st.embed = null; st.encLogs = {}; st.openEnc = null; st.boss = 0; st.spec = '';
     const l = recent().filter((x) => !(x.slug === st.q.slug && x.name.toLowerCase() === st.q.name.toLowerCase() && x.region === st.q.region));
     l.unshift({ name: st.q.name, realm: st.q.realm, slug: st.q.slug, region: st.q.region, locale: st.q.locale });
     lsSet('prof:recent', JSON.stringify(l.slice(0, 8)));
@@ -364,8 +382,7 @@ const Profile = (() => {
         <td${has && r.lockedIn === false ? ' class="pf-lockcell"' : ''}>${has ? `<span class="pf-pct">${pct(r.rankPercent, r.lockedIn === false)}${specImg(r)}</span>` : '-'}</td><td class="n pf-dps">${has ? num(r.bestAmount, 1) : '-'}</td><td class="n">${has ? num0(r.totalKills) : 0}</td>
         <td class="n">${has && r.fastestKill ? clock(r.fastestKill) : '-'}</td><td>${has ? pct(r.medianPercent) : '-'}</td>
         <td class="n">${has && a2 ? num(a2.points, 2) : '-'}</td>
-        <td class="n" title="${a2 ? esc(`${num0(a2.total)} ${LL('jugadores', 'players')}`) : ''}">${has && a2 ? `<b style="color:${parseColor(a2.rankPercent)}">${num0(a2.rank)}</b>` : '-'}</td>
-        <td class="n">${has && a2 ? num0(a2.regionRank) : '-'}</td><td class="n">${has && a2 ? num0(a2.serverRank) : '-'}</td></tr>`
+        <td class="n" title="${a2 ? esc(`${num0(a2.total)} ${LL('jugadores', 'players')}`) : ''}">${has && a2 ? `<b style="color:${parseColor(a2.rankPercent)}">${num0(a2.rank)}</b>` : '-'}</td></tr>`
         + (has && st.openEnc === e.id ? encLogsHTML(e.id, clsKey) : '');
     }).join('');
     // Resumen con la misma disposición que Warcraft Logs: dificultad arriba, mejor media a la izquierda,
@@ -376,10 +393,71 @@ const Profile = (() => {
       <div class="pf-sum2-r"><span>${LL('Media mediana', 'Median Perf. Avg')}: <b style="color:${rankColor(zr.medianPerformanceAverage)}">${zr.medianPerformanceAverage != null ? num(zr.medianPerformanceAverage, 1) : '—'}</b></span>
         <span>${LL('Kills registradas', 'Kills Logged')}: <b>${num0(kills)}</b></span></div>
       <div class="pf-sum2-b">${LL('Puntos All Star', 'All Star Points')}: <b class="pf-as">${as ? num(as.points, 2) : '—'}</b>${as ? ` (<b style="color:${rankColor(as.rankPercent)}">${num0(as.rank)}</b>)` : ''}${partName(as?.partition) ? ` <span class="muted">(${esc(partName(as.partition))})</span>` : ''}${asSpec}</div></div>
-      <div class="pf-tbl-w"><table class="pf-table"><thead><tr><th rowspan="2">${LL('Jefe', 'Boss')}</th><th rowspan="2">${LL('Mejor %', 'Best %')}</th><th rowspan="2">${LL(`${unit} máximo`, `Highest ${unit}`)}</th><th rowspan="2">Kills</th><th rowspan="2">${LL('Más rápida', 'Fastest')}</th><th rowspan="2">${LL('Med.', 'Med')}</th><th colspan="4">All Stars</th></tr>
-        <tr><th>${LL('Puntos', 'Points')}</th><th>${LL('Mundo', 'World')}</th><th>${esc(regionName(st.q.region))}</th><th>${LL('Reino', 'Realm')}</th></tr></thead><tbody>${rows}</tbody></table></div>`;
+      <div class="pf-tbl-w"><table class="pf-table"><thead><tr><th rowspan="2">${LL('Jefe', 'Boss')}</th><th rowspan="2">${LL('Mejor %', 'Best %')}</th><th rowspan="2">${LL(`${unit} máximo`, `Highest ${unit}`)}</th><th rowspan="2">Kills</th><th rowspan="2">${LL('Más rápida', 'Fastest')}</th><th rowspan="2">${LL('Med.', 'Med')}</th><th colspan="2">All Stars</th></tr>
+        <tr><th>${LL('Puntos', 'Points')}</th><th>${LL('Mundo', 'World')}</th></tr></thead><tbody>${rows}</tbody></table></div>`;
   }
 
+
+  // ------------------------------------------------------------ Expansion All Stars (como Warcraft Logs)
+  // Una tarjeta por banda de la expansión elegida: dificultad más alta con kills, puntos All Star, jefes derrotados y puesto mundial
+  const XP_DIFFS = [5, 4, 3, 1];
+  async function fetchXp() {
+    const q = st.q;
+    try {
+      const zones = await zonesList();
+      const cur = zones.find((z) => z.id === st.zone) || zones[zones.length - 1];
+      const expId = st.xpExp || cur?.expId;
+      if (!expId) return;
+      const key = `${q.region}/${q.slug}/${q.name}|${expId}|${st.metric}|${st.partition}`;
+      if (st.xp && st.xp.key === key) return;
+      st.xp = { key, expId, rows: null };
+      const zs = zones.filter((z) => z.expId === expId).sort((a, b) => b.id - a.id);
+      const metric = METRICS.some(([m]) => m === st.metric) ? st.metric : 'dps';
+      const part = `,partition:${Number(st.partition)}`;
+      const fields = [];
+      zs.forEach((z) => (z.difficulties || []).filter((d) => XP_DIFFS.includes(d.id)).forEach((d) => fields.push([z, d.id, `z${z.id}d${d.id}: zoneRankings(zoneID:${z.id},difficulty:${d.id},metric:${metric}${part})`])));
+      if (!fields.length) { st.xp.rows = []; return; }
+      const d = await gql(`{characterData{character(name:${JSON.stringify(q.name)},serverSlug:${JSON.stringify(q.slug)},serverRegion:${JSON.stringify(q.region.toUpperCase())}){${fields.map((f) => f[2]).join(' ')}}}}`, undefined, true);
+      const ch = d.characterData?.character || {};
+      st.xp.rows = zs.map((z) => {
+        let best = null;
+        for (const dd of XP_DIFFS) {
+          const zr = ch[`z${z.id}d${dd}`];
+          if (!zr) continue;
+          const killed = (zr.rankings || []).filter((r) => r.totalKills > 0).length;
+          if (!killed) continue;
+          const as = [...(zr.allStars || [])].sort((a, b) => b.points - a.points)[0];
+          best = { zone: z, diff: dd, killed, total: z.encounters.length, as };
+          break;
+        }
+        return best || { zone: z, diff: 0, killed: 0, total: z.encounters.length, as: null };
+      });
+    } catch (e) { if (st.xp) st.xp.rows = []; }
+  }
+  function xpHTML() {
+    if (!st.wcl || st.wclErr) return '';
+    const zones = st.zones || [];
+    const cur = zones.find((z) => z.id === st.zone);
+    const expId = st.xpExp || cur?.expId;
+    if (!expId) return '';
+    const exps = [...new Map(zones.map((z) => [z.expId, z.expName])).entries()].sort((a, b) => b[0] - a[0]);
+    const dd = ddHTML('xpexp', { label: exps.find((e) => e[0] === expId)?.[1] || '' }, exps.map(([id, name]) => ({ v: id, label: name, on: id === expId })));
+    const clsKey = WCL_CLASS[st.wcl.classID] || Cards.CLASS_KEY[st.arm?.classId] || '';
+    const rows = st.xp && st.xp.expId === expId ? st.xp.rows : null;
+    let body;
+    if (!rows) body = `<div class="loading"><span class="spinner"></span>${t('loading')}</div>`;
+    else {
+      const cards = rows.map((r) => {
+        const a = r.as;
+        return `<div class="pf-xpc${r.diff ? '' : ' none'}"><div class="pf-xpc-h">${r.diff ? esc(diffName(r.diff)) : '—'}</div>
+          <div class="pf-xpc-b"><div class="pf-xpc-p">${clsKey ? `<img src="${classIconUrl(clsKey)}" width="30" height="30" alt="">` : ''}<span><small>${LL('Puntos', 'Points')}</small><b>${a ? num(a.points, 2) : '—'}</b></span></div>
+            <div class="pf-xpc-z" title="${esc(r.zone.name)}"><img src="${ASSETS}/zones/zone-${r.zone.id}.png" width="30" height="30" alt="" loading="lazy"><b style="color:${parseColor(r.total ? (r.killed / r.total) * 100 : 0)}">${r.killed} / ${r.total}</b></div>
+            <div class="pf-xpc-r"><small>${LL('Puesto', 'Rank')}</small><b style="color:${rankColor(a?.rankPercent)}">${a ? num0(a.rank) : '—'}</b></div></div></div>`;
+      }).join('');
+      body = `<div class="pf-xp-grid">${cards}</div>`;
+    }
+    return `<div class="pf-xp"><div class="pf-xp-h"><h4>${LL('All Stars de la expansión', 'Expansion All Stars')}</h4>${dd}</div>${body}</div>`;
+  }
 
   // ------------------------------------------------------------ exportar a SimC
   // Texto en el formato del addon SimulationCraft (el que Warcraft Logs genera con «Export to SimC»): personaje, talentos y los 16 objetos
@@ -445,11 +523,20 @@ const Profile = (() => {
   const TRACK_TEXT = [[/m[ií]tic|mythic|\bmito\b|\bmyth\b/i, 'myth'], [/heroic|her[oó]ic|h[eé]roe?\b|\bhero\b/i, 'hero'], [/\bnormal\b|campe[oó]n|champion/i, 'champion'],
     [/raid finder|buscador de bandas|\blfr\b|veterano|veteran/i, 'veteran'], [/aventurero|adventurer/i, 'adventurer'], [/explorador|explorer/i, 'explorer']];
   const TRACK_NAME = { explorer: ['Explorador', 'Explorer'], adventurer: ['Aventurero', 'Adventurer'], veteran: ['Veterano', 'Veteran'], champion: ['Campeón', 'Champion'], hero: ['Héroe', 'Hero'], myth: ['Mito', 'Myth'] };
+  // Piezas creadas: la pista es la de la crest (blasón) que exige crearlas. Cada crest deja su id de bonus en la pieza
+  // (13836 = Mito, 13835 = Héroe, 13834 = Campeón); si la pieza no lo trae, por nivel de objeto (una pieza creada de 331 pide crests de Mito).
+  const CRAFT_CREST = { 13836: 'myth', 13835: 'hero', 13834: 'champion' };
+  const CRAFT_BY_ILVL = [[331, 'myth'], [315, 'hero'], [298, 'champion'], [285, 'veteran'], [270, 'adventurer'], [255, 'explorer']];
   function trackOf(it) {
     const text = it.tip?.nameDesc?.t || '';
     const crafted = !!it.simc?.crafted?.length || /crafted|creado|fabricad|artesan/i.test(text);
+    if (crafted) {
+      for (const b of it.simc?.bonus || []) if (CRAFT_CREST[b]) return { key: CRAFT_CREST[b], crafted };
+      const w = CRAFT_BY_ILVL.find(([min]) => it.ilvl >= min);
+      return { key: TRACK_TEXT.find(([re]) => re.test(text))?.[1] || (w ? w[1] : null), crafted };
+    }
     let key = TRACK_TEXT.find(([re]) => re.test(text))?.[1] || null;
-    if (!key && !crafted) for (const b of it.simc?.bonus || []) if (TRACK_BONUS[b]) { key = TRACK_BONUS[b]; break; }
+    if (!key) for (const b of it.simc?.bonus || []) if (TRACK_BONUS[b]) { key = TRACK_BONUS[b]; break; }
     if (!key) { const w = TRACK_BY_ILVL.find(([min]) => it.ilvl >= min); key = w ? w[1] : null; }
     return { key, crafted };
   }
@@ -461,15 +548,76 @@ const Profile = (() => {
     return `<em class="pf-il">${crafted ? `<span class="pf-crafted">${LL('Crafteado', 'Crafted')}</span>` : ''}${icon}<span class="pf-iln">${esc(it.ilvl || '')}</span></em>`;
   }
 
+
+  // ------------------------------------------------------------ tooltip de las gemas (tooltip de objeto de Wowhead, en el idioma de la app)
+  const GEM_OK = new Set(['B', 'I', 'SPAN', 'BR', 'DIV', 'TABLE', 'TBODY', 'TR', 'TD', 'TH', 'P', 'SMALL', 'STRONG', 'EM']);
+  function gemTipHTML(d) {
+    const doc = new DOMParser().parseFromString(`<div id="r">${d?.tip || ''}</div>`, 'text/html');
+    const root = doc.getElementById('r');
+    root.querySelectorAll('[id^="useText"]').forEach((n) => n.remove()); // «Uso:» de un efecto que Wowhead no detalla: el juego no lo enseña
+    const clean = (n) => {
+      for (const c of [...n.childNodes]) {
+        if (c.nodeType === 8) c.remove();
+        else if (c.nodeType === 1) {
+          if (['SCRIPT', 'STYLE', 'IMG', 'IFRAME'].includes(c.tagName)) { c.remove(); continue; }
+          if (!GEM_OK.has(c.tagName)) { clean(c); c.replaceWith(...c.childNodes); continue; }
+          const col = /^color:\s*(#[0-9a-f]{3,8});?$/i.exec(c.getAttribute('style') || ''); // se conserva el color del tipo de gema (p. ej. Amatista)
+          for (const at of [...c.attributes]) if (at.name !== 'class') c.removeAttribute(at.name);
+          if (col) c.style.color = col[1];
+          clean(c);
+        }
+      }
+    };
+    clean(root);
+    return root.innerHTML;
+  }
+  let gemEl = null;
+  function gemTipEl() {
+    if (!gemEl) { gemEl = document.createElement('div'); gemEl.className = 'gemtip surface-dark'; gemEl.hidden = true; document.body.appendChild(gemEl); }
+    return gemEl;
+  }
+  document.addEventListener('mouseover', (ev) => {
+    const g = ev.target.closest?.('.pf-gem[data-gem]');
+    if (!g) return;
+    const d = st.arm?.gemTips?.[g.dataset.gem];
+    if (!d) return;
+    const el = gemTipEl();
+    el.innerHTML = `<div class="gt-head"><img src="wcicon://i/${encodeURIComponent(d.icon || '')}" width="36" height="36" alt=""><div class="gt-body">${gemTipHTML(d)}</div></div>`;
+    el.hidden = false;
+  });
+  document.addEventListener('mousemove', (ev) => {
+    if (!gemEl || gemEl.hidden) return;
+    const w = gemEl.offsetWidth, h = gemEl.offsetHeight;
+    let x = ev.clientX + 16, y = ev.clientY + 16;
+    if (x + w > window.innerWidth - 8) x = ev.clientX - w - 16;
+    if (y + h > window.innerHeight - 8) y = Math.max(8, window.innerHeight - h - 8);
+    gemEl.style.left = `${x}px`;
+    gemEl.style.top = `${y}px`;
+  });
+  document.addEventListener('mouseout', (ev) => { if (gemEl && ev.target.closest?.('.pf-gem') && !ev.relatedTarget?.closest?.('.pf-gem')) gemEl.hidden = true; });
+
   function gearHTML() {
     const a = st.arm;
     if (!a) return st.armErr ? `<div class="empty sm">${esc(st.armErr)}</div>` : `<div class="loading"><span class="spinner"></span>${t('loading')}</div>`;
     const items = [...a.items].filter((i) => !['SHIRT', 'TABARD'].includes(i.slot)).sort((x, y) => SLOT_ORDER.indexOf(x.slot) - SLOT_ORDER.indexOf(y.slot));
-    const ilvl = a.ilvlExact ? num(a.ilvlExact, 2) : (st.rio?.ilvl || a.ilvlEquipped);
+    // media de los 16 huecos con dos decimales (un arma a dos manos cuenta en las dos manos); si no viniera calculada, se calcula aquí con las piezas
+    const exact = a.ilvlExact || (() => {
+      const lv = (t) => a.items.find((x) => x.slot === t)?.ilvl || 0;
+      const slots = ['HEAD', 'NECK', 'SHOULDER', 'BACK', 'CHEST', 'WRIST', 'HANDS', 'WAIST', 'LEGS', 'FEET', 'FINGER_1', 'FINGER_2', 'TRINKET_1', 'TRINKET_2', 'MAIN_HAND', 'OFF_HAND'];
+      const twoH = !a.items.some((x) => x.slot === 'OFF_HAND');
+      return a.items.length ? Math.floor((slots.reduce((sum, sl) => sum + (sl === 'OFF_HAND' && twoH ? lv('MAIN_HAND') : lv(sl)), 0) / 16) * 100 + 1e-9) / 100 : 0;
+    })();
+    const ilvl = exact ? num(exact, 2) : (st.rio?.ilvl || a.ilvlEquipped);
     const rows = items.map((it) => {
-      const extra = [...it.enchant.map((e) => `<i class="ench">${esc(cleanLine(e))}</i>`), ...it.gems.map((g) => `<i class="gem">${esc(cleanLine(g.name || g.stat || ''))}</i>`)].join('');
+      const gems = it.gems.filter((g) => g.id).map((g) => {
+        const d = st.arm?.gemTips?.[g.id];
+        return `<span class="pf-gem" data-gem="${g.id}" aria-label="${esc(d?.name || g.name)}">${d?.icon ? `<img src="wcicon://i/${encodeURIComponent(d.icon)}" width="18" height="18" alt="">` : '<i></i>'}</span>`;
+      }).join('');
+      const extra = [...it.enchant.map((e) => `<i class="ench">${esc(cleanLine(e))}</i>`), gems ? `<span class="pf-gems">${gems}</span>` : ''].join('');
+      // mejora al final del nombre: 1/6, 6/6...
+      const upg = it.upg ? `<small class="pf-upg${/^(\d+)\/\1$/.test(it.upg) ? ' full' : ''}">${esc(it.upg)}</small>` : '';
       return `<div class="pf-it" style="--q:${QCOLOR[it.quality] || '#fff'}" data-itip="${Cards.itemTipKey(it)}"><span class="arm-ic">${it.icon ? `<img src="${Cards.media(it.icon)}" alt="" loading="lazy">` : ''}</span>
-        <span class="pf-itx"><b title="${esc(it.name)}">${esc(it.name)}</b>${extra}</span>${ilvlHTML(it)}</div>`;
+        <span class="pf-itx"><span class="pf-itn"><b title="${esc(it.name)}">${esc(it.name)}</b>${upg}</span>${extra}</span>${ilvlHTML(it)}</div>`;
     }).join('');
     return `<div class="pf-gear-h"><b>${LL('Equipo', 'Gear')}</b><button type="button" class="pf-simc" data-pf="simc" title="${esc(LL('Copia tu equipo y talentos en el formato de SimulationCraft', 'Copies your gear and talents in the SimulationCraft format'))}">${simcLabel()}</button><span>${LL('Nivel de objeto', 'Item Level')}: <b>${esc(ilvl || '—')}</b></span></div>${rows}`;
   }
@@ -493,11 +641,19 @@ const Profile = (() => {
     // Fondo de la armería de Blizzard según la clase (render.worldofwarcraft.com/profile-backgrounds/v2/armory_bg_class_<clase>.jpg)
     const bgName = { DeathKnight: 'death_knight', DemonHunter: 'demon_hunter' }[clsKey] || clsKey.toLowerCase();
     const classBg = clsKey ? Cards.media(`https://render.worldofwarcraft.com/profile-backgrounds/v2/armory_bg_class_${bgName}.jpg`) : '';
-    const model = a?.render ? `<div class="pf-mpanel" data-cls="${esc(clsKey)}"${classBg ? ` style="--cbg:url('${classBg}')"` : ''}><div class="pf-mhead" style="color:${classColor(clsKey)}">${esc(a.spec || a.cls || '')}</div><div class="pf-model" data-tilt><img src="${Cards.media(a.render)}" alt="${esc(a.name)}" draggable="false" crossorigin="anonymous"></div></div>` : '';
+    const q = st.q;
+    const nmLow = encodeURIComponent(q.name.toLowerCase());
+    const slugEnc = encodeURIComponent(q.slug);
+    const lk = (u, title, img) => `<a href="#" class="pf-lnk" data-pf="ext" data-u="${esc(u)}" title="${esc(title)}" aria-label="${esc(title)}"><img src="linkicons/${img}.png" width="22" height="22" alt=""></a>`;
+    const specKey = Cards.SPEC_KEY[a?.specId];
+    const model = a?.render ? `<div class="pf-mpanel" data-cls="${esc(clsKey)}"${classBg ? ` style="--cbg:url('${classBg}')"` : ''}>
+      <div class="pf-mhead"><span></span><span class="pf-mname" style="color:${classColor(clsKey)}">${specKey ? `<img class="pf-mspec" src="${specIconUrl(specKey)}" width="22" height="22" alt="">` : ''}${esc(a.spec || a.cls || '')}</span>
+        <span class="pf-mlinks">${lk(`https://worldofwarcraft.blizzard.com/${S.lang === 'es' ? 'es_es' : 'en_gb'}/character/${q.region}/${slugEnc}/${nmLow}`, LL('Armería de World of Warcraft', 'World of Warcraft Armory'), 'wow')}${lk(`https://www.raider.io/characters/${q.region}/${slugEnc}/${nmLow}`, 'Raider.IO', 'raiderio')}${lk(`https://www.raidbots.com/simbot/quick?region=${q.region}&realm=${slugEnc}&name=${nmLow}`, LL('Simular en Raidbots', 'Sim on Raidbots'), 'raidbots')}</span></div>
+      <div class="pf-model" data-tilt><img src="${Cards.media(a.render)}" alt="${esc(a.name)}" draggable="false" crossorigin="anonymous"></div></div>` : '';
     main.innerHTML = `<div class="pf">
       <div class="pf-back"><button type="button" class="btn ghost sm" data-pf="home">${LL('← Inicio', '← Home')}</button></div>
       ${headerHTML()}
-      <div class="pf-grid"><section class="pf-left">${controlsHTML()}${tableHTML()}</section>
+      <div class="pf-grid"><section class="pf-left">${controlsHTML()}${tableHTML()}${xpHTML()}</section>
         <aside class="pf-mid"><div class="pf-gear">${gearHTML()}</div>${talentsHTML()}</aside>
         <aside class="pf-modelcol">${model}</aside></div></div>`;
   }
@@ -568,10 +724,11 @@ const Profile = (() => {
     }
     else if (a === 'dd-pick') {
       const k = el.dataset.dd, v = el.dataset.v;
-      const reload = () => { st.wcl = null; repaint(); fetchWcl().then(repaint); };
+      const reload = () => { st.wcl = null; repaint(); fetchWcl().then(repaint); fetchXp().then(repaint); };
       const zoneReset = () => { st.partition = -1; st.boss = 0; st.openEnc = null; };
       if (k === 'exp') { const z = (st.zones || []).filter((x) => x.expId === Number(v)).sort((a, b) => b.id - a.id)[0]; if (z) { st.zone = z.id; zoneReset(); reload(); } }
       else if (k === 'zone') { st.zone = Number(v); zoneReset(); reload(); }
+      else if (k === 'xpexp') { st.xpExp = Number(v); st.xp = null; repaint(); fetchXp().then(repaint); }
       else if (k === 'metric') { st.metric = v; reload(); }
       else if (k === 'diff') { st.diff = Number(v); st.openEnc = null; reload(); }
       else if (k === 'spec') { st.spec = v; st.openEnc = null; reload(); }
