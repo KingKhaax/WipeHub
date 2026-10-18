@@ -66,44 +66,31 @@
       "order": 2,
       "phases": [
         {
-          "phase": "General",
+          "phase": "Fase 1 (bucle del consejo)",
           "mechanics": [
-            { "name": "Dominio de Ula'tek", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Si los 2 centinelas se juntan a <40m, reciben un 99% menos de daño — no los juntes.", "verified": true },
-            { "name": "Estasis vitriólica", "type": "raidwide", "diffs": ["N", "H", "M"], "note": "Si el DPS no está balanceado entre los dos jefes, se curan entre sí.", "verified": true },
-            { "name": "Marca de ácido / Marca de sangre", "type": "tanque", "diffs": ["N", "H", "M"], "note": "Marca con daño acumulado cerca de cada jefe; cambio de tanque tras cada intermedio.", "verified": true }
+            { "name": "Dominio de Ula'tek", "type": "add", "diffs": ["N", "H", "M"], "note": "Cada gólem refuerza al otro con un 99 % menos de daño mientras estén a menos de 40 m. Hay que mantenerlos separados y dividir la banda en dos grupos. Los dos comparten una barra de energía: al llegar a 100 empieza el intermedio.", "verified": true },
+            { "name": "Marca de ácido", "type": "avoid", "diffs": ["N", "H", "M"], "note": "El Aliento de Ula'tek (gólem verde) marca cada 5 s a los jugadores a menos de 40 m: daño de Naturaleza cada 2 s durante 40 s, acumulable. Quedarse junto a un gólem sigue acumulando, así que los grupos cambian de lado.", "verified": true },
+            { "name": "Marca de sangre", "type": "avoid", "diffs": ["N", "H", "M"], "note": "La Sangre de Ula'tek (gólem rojo) marca cada 5 s a los jugadores a menos de 40 m: daño de las Sombras cada 2 s durante 40 s, acumulable. Igual que con la marca de ácido, hay que rotar de lado.", "verified": true },
+            { "name": "Gotitas tóxicas", "type": "avoid", "diffs": ["N", "H", "M"], "note": "El Aliento de Ula'tek escupe gotitas tóxicas (2 s) por delante: tras 12 s cada una provoca una Explosión nociva a toda la banda. Los jugadores las destruyen pisándolas (reciben daño de Naturaleza): se reparten una o dos por jugador. En Mítico pisar de más o ponerse en los conos es letal.", "verified": true },
+            { "name": "Coagulación de veneno", "type": "add", "diffs": ["N", "H", "M"], "note": "El Aliento de Ula'tek vomita una masa pegajosa (1,5 s) que cobra vida como baba viviente y pulsa Contaminar sobre toda la banda hasta que muere. Es la prioridad de muerte del grupo verde; en Mítico se mata antes del intermedio.", "verified": true },
+            { "name": "Contaminar", "type": "raidwide", "diffs": ["N", "H", "M"], "note": "La Coagulación de veneno irradia daño de Naturaleza a todos cada 3 s mientras siga viva.", "verified": true },
+            { "name": "Veneno viviente", "type": "avoid", "diffs": ["H", "M"], "note": "El veneno escupido por el Aliento regresa al gólem tras 4 s: daño de Naturaleza a quien esté en su camino. Hay que no ponerse entre la baba y el jefe.", "verified": true },
+            { "name": "Embate potenciador", "type": "tanque", "diffs": ["N", "H", "M"], "note": "El gólem verde golpea a su objetivo (1,5 s) con daño físico enorme y cada golpe consecutivo al mismo objetivo lo potencia más. Solo se reinicia al golpear a otro tanque: hay que cambiar de tanque.", "verified": true },
+            { "name": "Sangre contagiada", "type": "dispel", "diffs": ["N", "H", "M"], "note": "La Sangre de Ula'tek infecta a varios jugadores con un veneno de las Sombras (daño cada 2 s durante 18 s) que los sanadores pueden disipar.", "verified": true },
+            { "name": "Veneno de sangre", "type": "avoid", "diffs": ["H", "M"], "note": "Al agotarse o disiparse deja un charco tóxico de las Sombras: más grande cuantas más acumulaciones tuviera el jugador. Se disipa en el borde de la sala, lejos de la zona de juego. En Mítico los charcos se colocan siguiendo un patrón para mantener el suelo limpio.", "verified": true },
+            { "name": "Miasma inestable", "type": "soak", "diffs": ["N", "H", "M"], "note": "La Sangre de Ula'tek marca a un jugador: a los 8 s explota con daño de las Sombras enorme repartido entre quienes estén cerca (a menos de 8 m). Es una absorción obligatoria; en Mítico, si no hay suficientes, la banda muere. Los golpeados reciben Oscuridad pegajosa.", "verified": true },
+            { "name": "Oscuridad pegajosa", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Veneno de sangre pegajoso tras el Miasma inestable: daño de las Sombras cada 2 s durante 6 s, acumulable. Hay que separarse después de absorber.", "verified": true },
+            { "name": "Inyección de veneno de sangre", "type": "tanque", "diffs": ["N", "H", "M"], "note": "La Sangre de Ula'tek inyecta veneno al tanque (1,5 s): daño físico inmediato enorme y un DoT de las Sombras de 40 s acumulable. Al terminar deja un charco gigante, así que el tanque saliente se aleja antes. Hay que cambiar de tanque antes de que suban las acumulaciones.", "verified": true },
+            { "name": "Protoveneno cambiante", "type": "avoid", "diffs": ["M"], "note": "Mítico (4 s). Contamina a 8 jugadores aleatorios con un círculo y daño de Peste cada 2 s. El contacto entre dos círculos neutraliza el veneno; un círculo con un jugador sin contaminar provoca una Erupción de protoveneno. Hay que separarse antes de cada lanzamiento; los marcados pueden tener que correr al otro grupo para encontrar pareja.", "verified": true },
+            { "name": "Erupción de protoveneno", "type": "avoid", "diffs": ["M"], "note": "Mítico. Si el contacto sale mal, estalla una erupción de toxinas incompatibles: daño de Peste a quien esté a 10 m y repulsión. El DoT de Peste sigue hasta que se limpia. Hay que mantener la calma junto a los jefes y cuerpo a cuerpo para evitar repulsiones en cadena.", "verified": true }
           ]
         },
         {
-          "phase": "Aliento de Ula'tek",
+          "phase": "Intermedio (Estasis vitriólica)",
           "mechanics": [
-            { "name": "Gotitas tóxicas", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Adds pequeños que hay que pisar antes de que exploten.", "verified": true },
-            { "name": "Veneno viviente", "type": "avoid", "diffs": ["H", "M"], "note": "Tras destruir las gotitas, el veneno vuelve hacia el jefe — evitar su camino.", "verified": true },
-            { "name": "Coagulación de veneno", "type": "add", "diffs": ["N", "H", "M"], "note": "Add grande que lanza Contaminar mientras viva — prioridad de muerte.", "verified": true },
-            { "name": "Embate potenciador", "type": "tanque", "diffs": ["N", "H", "M"], "note": "Golpe físico que crece cada vez que impacta al mismo tanque.", "verified": true }
-          ]
-        },
-        {
-          "phase": "Sangre de Ula'tek",
-          "mechanics": [
-            { "name": "Miasma inestable", "type": "soak", "diffs": ["N", "H", "M"], "note": "Marca a un jugador; tras 8s explota repartiendo el daño entre quien la soakea.", "verified": true },
-            { "name": "Oscuridad pegajosa", "type": "raidwide", "diffs": ["N", "H", "M"], "note": "Veneno de Sombras acumulado en soakers; en Heroico deja un charco al expirar.", "verified": true },
-            { "name": "Veneno de sangre", "type": "avoid", "diffs": ["H", "M"], "note": "Charco tóxico en el suelo — agrupar cerca del borde para no gastar espacio.", "verified": true },
-            { "name": "Sangre contagiada", "type": "dispel", "diffs": ["N", "H", "M"], "note": "Veneno disipable que infecta a los jugadores — dispelar rápido.", "verified": true },
-            { "name": "Inyección de veneno de sangre", "type": "tanque", "diffs": ["N", "H", "M"], "note": "Golpe físico grande que aumenta de intensidad con cada golpe al mismo objetivo.", "verified": true }
-          ]
-        },
-        {
-          "phase": "Intermedio",
-          "mechanics": [
-            { "name": "Estasis vitriólica (Intermedio)", "type": "raidwide", "diffs": ["N", "H", "M"], "note": "Ambos jefes igualan vida al mayor; el de menos vida se cura.", "verified": true },
-            { "name": "Toxinas helicoidales", "type": "oneshot", "diffs": ["N", "H", "M"], "note": "Veneno de sangre — colisionar para sumar exactamente 4; en Heroico pasarse de 4 mata.", "verified": true }
-          ]
-        },
-        {
-          "phase": "Mítico",
-          "mechanics": [
-            { "name": "Protoveneno cambiante", "type": "avoid", "diffs": ["M"], "note": "Contamina a jugadores aleatorios con Peste; dos contaminados que se tocan se neutralizan, contaminado+sano = Erupción de protoveneno.", "verified": true },
-            { "name": "Erupción de protoveneno", "type": "avoid", "diffs": ["M"], "note": "Explosión que daña y repele a los cercanos cuando un contaminado toca a uno no contaminado.", "verified": true }
+            { "name": "Estasis vitriólica", "type": "raidwide", "diffs": ["N", "H", "M"], "note": "Al llegar a 100 de energía los centinelas se reúnen en el centro y equilibran sus niveles de fluidos durante 30 s: reciben un 99 % menos de daño y el más débil se cura hasta igualar al más sano. Hay que mantener la vida de los dos gólems parecida durante el combate (cambiando jugadores, no parando el daño). Al acabar, los dos grupos y los tanques cambian de lado.", "verified": true },
+            { "name": "Toxinas helicoidales", "type": "soak", "diffs": ["N", "H", "M"], "note": "Todos reciben un veneno de Peste de 28 s con 4 orbes (rojos y verdes). Tocar a otro jugador combina las acumulaciones: con exactamente 4 acumulaciones verdes se neutraliza. Se preasignan grupos de 4 que se encuentran. En Mítico los recuentos aparecen un momento y luego se ocultan: con 3 verdes se espera quieto marcándose, con 1 se busca a los marcados y con 2 se queda entre los dos jefes.", "verified": true },
+            { "name": "Ráfaga cultivada", "type": "oneshot", "diffs": ["N", "H", "M"], "note": "Quien llega al final de las Toxinas helicoidales sin exactamente 4 acumulaciones explota: daño de Peste enorme y un DoT de 1 min, casi siempre letal, y deja un gran charco. Se asigna una esquina de castigo o se usa una inmunidad. En Mítico un fallo suele acabar con la banda.", "verified": true }
           ]
         }
       ]
@@ -149,46 +136,46 @@
       "order": 4,
       "phases": [
         {
-          "phase": "General",
+          "phase": "Mor'zahi (todo el combate)",
           "mechanics": [
-            { "name": "Frente unido", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Si los 3 jefes están a <30m entre sí, reciben un 99% menos de daño — no los juntes.", "verified": true },
-            { "name": "Ascensión final", "type": "oneshot", "diffs": ["N", "H", "M"], "note": "Canalización letal de Mor'zahi si nadie alimenta a un jefe antes de que acabe.", "verified": true }
+            { "name": "Orden de Mor'zahi", "type": "add", "diffs": ["N", "H", "M"], "note": "Mor'zahi toma el control de un explorador (canalización de 1 min) y le da facultades potenciadas: solo el controlado usa las versiones peligrosas, así que siempre hay una marioneta y dos tortollanos normales. Cuando se rompe el control, Mor'zahi gasta toda su energía en tomar a otro explorador.", "verified": true },
+            { "name": "Pescado asqueroso", "type": "add", "diffs": ["N", "H", "M"], "note": "Los cajones de Gebbo contienen pescado. Se lanza al tortollano poseído para romper la concentración de Mor'zahi y forzar una nueva Orden (reinicia su energía). Hay 3 comidas de pescado en total; en Mítico se da el pescado cuando a la Ascensión final le quedan unos 4 s. Orden recomendado: en Heroico Iku, Nama y Gebbo; en Mítico Gebbo, Iku y Nama.", "verified": true },
+            { "name": "Ascensión final", "type": "enrage", "diffs": ["N", "H", "M"], "note": "Mor'zahi carga energía de fondo: al llegar a 100 canaliza 1 min y hace daño de las Sombras a todos cada 1 s hasta que muera la banda. Es el enrage duro (cuarta vez a 100, tras las tres comidas de pescado): todos los tortollanos deben estar muertos antes.", "verified": true },
+            { "name": "Presencia malévola", "type": "raidwide", "diffs": ["N", "H", "M"], "note": "Daño de las Sombras a todos cada 2 s durante todo el combate.", "verified": true },
+            { "name": "Ojos malignos", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Las estatuas de la cámara lanzan llamas espirituales a los jugadores: daño de las Sombras a quien esté a 3 m del impacto. Los círculos pueden matar de un golpe.", "verified": true },
+            { "name": "Frente unido", "type": "add", "diffs": ["N", "H", "M"], "note": "Mientras los tres exploradores estén a menos de 30 m entre sí reciben un 99 % menos de daño. Hay que separarlos: solo se pueden cleavear dos a la vez.", "verified": true }
           ]
         },
         {
-          "phase": "Trader Gebbo",
+          "phase": "Comerciante Gebbo",
           "mechanics": [
-            { "name": "Lanzar trastos", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Cajones lanzados por la sala; romperlos aplica Astillas (sangrado acumulado).", "verified": true },
-            { "name": "Pescado asqueroso", "type": "add", "diffs": ["N", "H", "M"], "note": "Se recoge y se lanza a un tortoliano poseído para interrumpir a Mor'zahi.", "verified": true }
+            { "name": "Lanzar trastos", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Gebbo lanza cajones (3 s): daño físico enorme a quien esté a 3 m del impacto. Los cajones son también la fuente del pescado. Los círculos de aparición pueden matar de un golpe.", "verified": true },
+            { "name": "Astillas", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Pisar un cajón provoca una hemorragia acumulable (8 s en Heroico). En Mítico romper un cajón hace daño y aplica un sangrado acumulable de 6 s a toda la banda: se asigna un jugador a romper cajones, hasta 2 acumulaciones y luego esperar a que bajen.", "verified": true },
+            { "name": "Ruptura de reliquia", "type": "raidwide", "diffs": ["N", "H", "M"], "note": "Si un cajón con reliquia no se toca en 25 s, estalla: daño enorme de las Sombras a toda la banda. Hay que romper todos los cajones a tiempo (el cajón brilla en verde).", "verified": true },
+            { "name": "Lanzamiento de champiñón", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Gebbo coloca champiñones saltarines (7 s) en las ubicaciones de los jugadores. Quien los toca sale lanzado por los aires (Rebote) y el champiñón estalla poco después (Ráfaga fúngica): daño de Naturaleza a 5 m. En Mítico hay un solo champiñón por bomba.", "verified": true },
+            { "name": "Sorpresa explosiva", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Gebbo lanza una bomba (10 s) a la posición de un jugador: daño físico a 10 m del impacto y luego una Ola explosiva. Se coloca en el borde de la sala porque deja un charco que se encoge.", "verified": true },
+            { "name": "Ola explosiva", "type": "oneshot", "diffs": ["N", "H", "M"], "note": "Onda de fuego letal de la bomba: daño enorme y un DoT de 10 s a quien toque. Se esquiva saltando a un champiñón en el momento justo (o con teletransporte, salto o parpadeo). Si el champiñón se revienta antes de tiempo bloquea el paso y suele matar a casi toda la banda.", "verified": true },
+            { "name": "Pala machacadora", "type": "enrage", "diffs": ["H", "M"], "note": "Cuando muere otro explorador, Gebbo se equipa una pala: daño físico extra y repulsión en cada golpe. Conviene equilibrar la vida de los tres.", "verified": true }
           ]
         },
         {
-          "phase": "First Mate Nama",
+          "phase": "Sabia de pergaminos Iku",
           "mechanics": [
-            { "name": "Concha giratoria", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Conchas en cono que aturden a los jugadores — hay que apuntarlas al borde.", "verified": true },
-            { "name": "Golpes constantes", "type": "tanque", "diffs": ["N", "H", "M"], "note": "Aumenta el daño físico de Nama contra el mismo objetivo con cada golpe.", "verified": true }
+            { "name": "Salva de Pirofrío", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Mientras Iku está bajo la Orden de Mor'zahi lanza una salva (5 s) de misiles de fuego o escarcha a varios jugadores: cada impacto aplica Llamas ardientes (fuego) o Escarcha penetrante (escarcha) y deja un charco del mismo tipo. Se lanzan dos series. Los misiles de escarcha van a los cuerpo a cuerpo y los de fuego a los a distancia.", "verified": true },
+            { "name": "Llamas ardientes", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Fuego: daño cada 1 s durante 1 min o hasta que lo cancele un efecto de Escarcha. Se limpia pisando una Parche de escarcha. Si te alcanza un misil del elemento contrario con un debuff activo se produce una Explosión elemental que puede acabar con la banda (en Mítico es un wipe): hay que limpiar todas las acumulaciones antes de la siguiente serie.", "verified": true },
+            { "name": "Escarcha penetrante", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Escarcha: daño cada 1 s y −60 % de velocidad de movimiento durante 1 min o hasta que lo cancele un efecto de Fuego. Se limpia pisando una Zona de Fuego. No hay que correr a un charco del tipo contrario al que se tiene si eso va a dejar acumulaciones.", "verified": true },
+            { "name": "Nova de traslación", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Iku se teletransporta (7 s) a la posición de un jugador y hace daño Arcano a toda la banda, que baja con la distancia al objetivo. Hay que separarse al menos 20-30 m de los cuerpo a cuerpo y no colocarla cerca de la banda.", "verified": true },
+            { "name": "Llamas ligadas al hielo", "type": "cortable", "diffs": ["H", "M"], "note": "Iku dispara (4 s) un torrente mágico a un jugador: daño de Pirofrío, un DoT y −50 % de velocidad. Hay que interrumpirlo o, si no, disipar.", "verified": true },
+            { "name": "Fragmentos trituradores", "type": "tanque", "diffs": ["N", "H", "M"], "note": "Iku proyecta fragmentos de hielo sobre su objetivo (3,5 s): daño de Escarcha cada 0,5 s y cada fragmento suma +50 % de daño de Fragmentos trituradores durante 80 s. Hay que cambiar de tanque con las acumulaciones.", "verified": true }
           ]
         },
         {
-          "phase": "Scrollsage Iku",
+          "phase": "Contramaestre Nama",
           "mechanics": [
-            { "name": "Llamas ligadas al hielo", "type": "cortable", "diffs": ["N", "H", "M"], "note": "Cast interrumpible — rotación de 2-3 jugadores.", "verified": true },
-            { "name": "Fragmentos trituradores", "type": "tanque", "diffs": ["N", "H", "M"], "note": "Carga de tanque — cambio tras cada carga.", "verified": true },
-            { "name": "Nova de traslación", "type": "raidwide", "diffs": ["N", "H", "M"], "note": "Teletransporte a un ranged marcado + daño de raid reducido por distancia.", "verified": true }
-          ]
-        },
-        {
-          "phase": "Ultimates",
-          "mechanics": [
-            { "name": "Sorpresa explosiva (Gebbo)", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Champiñones saltarines + bombas — usar el champiñón para saltar la Ola explosiva.", "verified": true },
-            { "name": "Batacazo potente (Nama)", "type": "soak", "diffs": ["N", "H", "M"], "note": "3 marcados reciben salto + repulsión repartida entre los cercanos.", "verified": true },
-            { "name": "Salva de Pirofrío (Iku)", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Proyectiles de Fuego/Escarcha que dejan zonas — cruzar el tipo opuesto las limpia con daño de raid.", "verified": true }
-          ]
-        },
-        {
-          "phase": "Mítico",
-          "mechanics": [
-            { "name": "Ruptura de reliquia", "type": "raidwide", "diffs": ["M"], "note": "Romper un cajón aplica sangrado a todo el raid; si no se rompe a tiempo, daño extra de raid.", "verified": true }
+            { "name": "Batacazo potente", "type": "soak", "diffs": ["N", "H", "M"], "note": "Nama marca a tres jugadores (10 s) y salta a cada uno, el más cercano primero: cada impacto hace daño físico enorme repartido entre quienes estén a 6 m y los repele. Si un punto marcado queda vacío, la banda recibe el golpe entero. Se hacen tres grupos de absorción; todos absorben el primero y se dejan empujar hacia el segundo y el tercero.", "verified": true },
+            { "name": "Réplica", "type": "avoid", "diffs": ["H", "M"], "note": "Cada Batacazo potente deja un suelo sísmico: daño físico cada 1 s a quien esté a 6 m durante 30 s. Hay que salir de los cráteres tras los saltos.", "verified": true },
+            { "name": "Concha giratoria", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Nama lanza tres conchas giratorias en cono (4 s): aturden 4 s a quien las toque. Va contra los cuerpo a cuerpo: se orienta hacia el borde de la sala.", "verified": true },
+            { "name": "Golpes constantes", "type": "tanque", "diffs": ["N", "H", "M"], "note": "Cada ataque de Nama aumenta un 4 % el daño físico que recibe su objetivo durante 30 s. Hay que cambiar de tanque con las acumulaciones.", "verified": true }
           ]
         }
       ]
@@ -200,32 +187,37 @@
       "order": 5,
       "phases": [
         {
-          "phase": "Fase principal",
+          "phase": "Bucle principal",
           "mechanics": [
-            { "name": "Depredador alfa", "type": "tanque", "diffs": ["N", "H", "M"], "note": "Secuencia de 5 golpes (2 Despedazar, 2 Mutilar, 1 Tempestad) en orden aleatorio.", "verified": true },
-            { "name": "Despedazar", "type": "tanque", "diffs": ["N", "H", "M"], "note": "Golpes en cono frontal; apuntarlo lejos del raid.", "verified": true },
-            { "name": "Mutilar", "type": "soak", "diffs": ["N", "H", "M"], "note": "Ataque de veneno en cono repartido entre los golpeados; aplica Cuchillada mutilada.", "verified": true },
-            { "name": "Tempestad", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Vórtices de viento venenoso que dañan y ralentizan — esquivar.", "verified": true },
-            { "name": "Veneno corrosivo", "type": "tanque", "diffs": ["N", "H", "M"], "note": "Carga de tanque — cambio sobre 6 cargas.", "verified": true },
-            { "name": "Oleada venenosa", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Jugadores asignados sueltan Quistes viscosos en marcas del suelo.", "verified": true },
-            { "name": "Residuo cáustico", "type": "avoid", "diffs": ["H", "M"], "note": "Heroico: charcos que suben 30% el daño recibido.", "verified": true },
-            { "name": "Vientos cruzados furiosos", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Viento direccional — emparejarse con quien mira al lado opuesto.", "verified": true }
+            { "name": "Depredador alfa", "type": "tanque", "diffs": ["N", "H", "M"], "note": "Combo de 5 ataques (dos Despedazar, dos Mutilar y una Tempestad) en orden aleatorio, todos los conos hacia el tanque. Los tanques se cambian durante el combo y los dos grupos de absorción tienen que saber a cuál le toca. El bucle es Depredador alfa, Oleada venenosa, dos Vientos cruzados furiosos y el intermedio al llegar a 100 de energía; después vuelve a empezar.", "verified": true },
+            { "name": "Despedazar", "type": "tanque", "diffs": ["N", "H", "M"], "note": "Tajos de Sszorak en cono frontal: daño físico enorme y +600 % de daño de Despedazar durante 25 s, acumulable. Los tanques se cambian entre lanzamientos y lo reciben en el borde de la plataforma; el resto se queda fuera del cono.", "verified": true },
+            { "name": "Mutilar", "type": "soak", "diffs": ["N", "H", "M"], "note": "Cono frontal de garras envenenadas (3 s): daño de Naturaleza repartido entre los jugadores golpeados; si hay menos de 5 es letal. Aplica Cuchillada mutilada. El grupo 1 absorbe el primer Mutilar y el grupo 2 el segundo: el mismo grupo nunca absorbe dos seguidos. Necesita dos grupos iguales (por ejemplo cuerpo a cuerpo y a distancia).", "verified": true },
+            { "name": "Cuchillada mutilada", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Heridas tóxicas en los alcanzados por Mutilar: DoT de Naturaleza de 22 s repartido entre los afectados, que sube un 500 % el daño del siguiente Mutilar.", "verified": true },
+            { "name": "Tempestad", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Vórtices de viento venenoso que giran en espiral por la arena: daño al tocarlos, un DoT y −30 % de velocidad de movimiento acumulable. No apuntan a nadie: hay que esquivarlos. Las muertes por tornado son una de las causas principales de wipe en Mítico.", "verified": true },
+            { "name": "Veneno corrosivo", "type": "tanque", "diffs": ["N", "H", "M"], "note": "Los ataques cuerpo a cuerpo de Sszorak corroen la armadura del tanque: cada golpe suma un 3 % de daño físico recibido durante 25 s. Hay que cambiar de tanque con las acumulaciones.", "verified": true },
+            { "name": "Presencia de Ula'tek", "type": "raidwide", "diffs": ["N", "H", "M"], "note": "Niebla cáustica del Altar de los Seis Vientos: daño de Naturaleza a todos cada 2 s durante todo el combate. La sanación es constante; por eso se recomienda un quinto sanador.", "verified": true },
+            { "name": "Oleada venenosa", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Sszorak escupe veneno a dos jugadores por combo (canalización de 4 s): daño cada 1 s durante 10 s y, al agotarse, explota con daño a toda la banda (menos cuanto más lejos) y deja un Quiste viscoso. Los marcados se alejan del grupo y dejan los quistes en las marcas correctas.", "verified": true },
+            { "name": "Quiste viscoso", "type": "soak", "diffs": ["N", "H", "M"], "note": "Pegote de toxina inestable que dura 2 min: explota al agotarse o al tocarlo un jugador, con repulsión, daño de Naturaleza y una ralentización acumulable. Mientras se lleva el veneno se resisten los empujes del viento. Se colocan en las marcas opuestas a los túneles que van a soplar: cuatro quistes cubren tres vientos y sobra uno.", "verified": true },
+            { "name": "Garras cáusticas", "type": "avoid", "diffs": ["H", "M"], "note": "Sszorak lanza toxinas con las garras en las ubicaciones de los jugadores: daño de Naturaleza a 6 m del impacto y un charco de Residuo cáustico. Hay que esquivar los impactos y el tanque lleva al jefe a una zona limpia.", "verified": true },
+            { "name": "Residuo cáustico", "type": "avoid", "diffs": ["H", "M"], "note": "Charco de ácido: daño de Naturaleza cada 1 s y +30 % de daño recibido a quien esté dentro.", "verified": true },
+            { "name": "Vientos cruzados furiosos", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Varios jugadores reciben círculos con una flecha (8 s de vientos): al terminar salen despedidos en la dirección de su flecha y reciben Ráfagas turbulentas. Cada ciclo ocurre dos veces. Hay que apuntar la flecha hacia otro marcado y chocar en el aire (los círculos también cuentan); si no se choca con nadie se acaba cayendo hacia el borde. En Mítico hay 4 líneas de dirección. Los vientos hacen daño durante 8 s y luego estallan a 6 m: hay que separarse.", "verified": true },
+            { "name": "Ráfagas turbulentas", "type": "avoid", "diffs": ["N", "H", "M"], "note": "El jugador lanzado flota 10 s con la velocidad de caída muy reducida. Al tocar a otro jugador afectado, los vientos de ambos se disipan y caen.", "verified": true }
           ]
         },
         {
-          "phase": "Intermedio",
+          "phase": "Intermedio (100 de energía)",
           "mechanics": [
-            { "name": "Vorágine aullante", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Vendavales que empujan por la plataforma.", "verified": true },
-            { "name": "Atrincherarse", "type": "raidwide", "diffs": ["N", "H", "M"], "note": "Sszorak recibe +30% daño 25s — ventana de cooldowns de DPS.", "verified": true }
+            { "name": "Atrincherarse", "type": "raidwide", "diffs": ["N", "H", "M"], "note": "Al llegar a 100 de energía Sszorak se atrinchera: recibe un 30 % más de daño durante 25 s. Es la ventana de daño del intermedio.", "verified": true },
+            { "name": "Vorágine aullante", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Serie de vendavales por la arena (tres vientos): cada uno empuja a todos los jugadores en la dirección indicada. Se apila la banda en el centro (píxel) y se deja empujar contra el quiste colocado opuesto al túnel activo, que lanza de vuelta hacia el jefe con resistencia al viento. Tras el tercer viento el grupo va al quiste de reserva y lo revienta para limpiar la zona.", "verified": true }
           ]
         },
         {
           "phase": "Mítico",
           "mechanics": [
-            { "name": "Furia de sierpe", "type": "avoid", "diffs": ["M"], "note": "Marca a un jugador y acumula ira con el tiempo.", "verified": true },
-            { "name": "Ferocidad desmedida", "type": "enrage", "diffs": ["M"], "note": "Condición de wipe al llegar a 100 de ira.", "verified": true },
-            { "name": "A la matanza", "type": "soak", "diffs": ["M"], "note": "Carga al marcado si hay 14+ jugadores cerca — soak de carga.", "verified": true },
-            { "name": "Virulencia", "type": "avoid", "diffs": ["M"], "note": "Daño de Naturaleza periódico que estalla al eliminarse — esparcirse.", "verified": true }
+            { "name": "Furia de sierpe", "type": "soak", "diffs": ["M"], "note": "Mítico. Marca con un gran círculo rojo al jugador más alejado del jefe y Sszorak empieza a ganar energía de rabia. Hay que apilar a 14 jugadores a menos de 8 m del marcado para activar A la matanza, en el momento exacto que da el NSRT. Cada Depredador alfa termina con una de estas apilaciones; durante Atrincherarse no se puede activar.", "verified": true },
+            { "name": "A la matanza", "type": "avoid", "diffs": ["M"], "note": "Mítico. Sszorak consume su rabia y carga contra el jugador marcado, dañando a todos los que golpea y aplicándoles Virulencia. Es el reinicio de su energía: la apilación existe para activarlo.", "verified": true },
+            { "name": "Virulencia", "type": "avoid", "diffs": ["M"], "note": "Mítico. DoT de Naturaleza de 5 s en los alcanzados por A la matanza. Al agotarse estalla en 4 direcciones: quien reciba el impacto sufre daño enorme y recibe Virulencia otra vez, con líneas más largas la segunda vez. Hay que separarse antes de que expire y usar un personal cada dos series.", "verified": true },
+            { "name": "Ferocidad desmedida", "type": "enrage", "diffs": ["M"], "note": "Mítico. Si la rabia llega a 100, Sszorak gana un 500 % de daño y un 50 % de velocidad de ataque hasta que muera la banda. Es lo que ocurre si una apilación falla o se hace demasiado pronto: hacer la segunda apilación (la anterior al intermedio) 2 s antes de tiempo hace imposible sobrevivir a la primera Furia de sierpe tras el intermedio sin enrage.", "verified": true }
           ]
         }
       ]
@@ -427,26 +419,24 @@
       "order": 9,
       "phases": [
         {
-          "phase": "Heroico y Mítico",
+          "phase": "Todo el combate (bucle de la burbuja)",
           "mechanics": [
-            { "name": "Burbuja atrayente", "type": "add", "diffs": ["H", "M"], "note": "Gran burbuja que atrae a los múrlocs cercanos; estalla después.", "verified": true },
-            { "name": "Mareas pulsátiles", "type": "raidwide", "diffs": ["H", "M"], "note": "Los rabiosos burbujaleta emiten daño de Escarcha periódico a todos — matar al llegar a la burbuja.", "verified": true },
-            { "name": "Remolinos turbulentos", "type": "avoid", "diffs": ["H", "M"], "note": "Remolinos que avanzan hacia la burbuja y dañan a quien esté en su trayectoria — dejan un hueco libre.", "verified": true },
-            { "name": "¡Pop!", "type": "raidwide", "diffs": ["H", "M"], "note": "La burbuja estalla: daño de Escarcha a todos + repulsión.", "verified": true },
-            { "name": "Escarcha escalofriante", "type": "soak", "diffs": ["H", "M"], "note": "Daño + ralentización de 6s; deja un Orbe congelado en cada afectado.", "verified": true },
-            { "name": "Orbe congelado", "type": "soak", "diffs": ["H", "M"], "note": "Soak obligatorio: daño + DoT acumulado + 20% más daño de Escarcha recibido 16s.", "verified": true },
-            { "name": "Destrozar", "type": "raidwide", "diffs": ["H", "M"], "note": "Un Orbe congelado no soakeado explota con gran daño de raid + DoT acumulado.", "verified": true },
-            { "name": "Chorro de agua", "type": "tanque", "diffs": ["H", "M"], "note": "Daño continuo + repulsión + carga de daño recibido — cambio de tanque. Elimina la Escarcha persistente.", "verified": true },
-            { "name": "Lluvia abisal", "type": "raidwide", "diffs": ["H", "M"], "note": "Canalización de 4s con daño de raid y DoT residual — peligroso si se solapa con otras mecánicas.", "verified": true },
-            { "name": "Poderío de clamaolas", "type": "enrage", "diffs": ["H", "M"], "note": "Enrage suave: sube el daño de Escarcha de Nymrissa con el tiempo.", "verified": true },
-            { "name": "Mareas sin fin", "type": "enrage", "diffs": ["H", "M"], "note": "Enrage duro: daño de raid constante hasta que alguien muere — hay que matar al jefe antes.", "verified": true }
-          ]
-        },
-        {
-          "phase": "Mítico",
-          "mechanics": [
-            { "name": "Escudo de aguaniebla", "type": "cortable", "diffs": ["M"], "note": "Las hieloescamas burbujaleta protegen a los múrlocs cercanos con 99% menos daño — prioridad de muerte.", "verified": true },
-            { "name": "Ráfaga de Escarcha", "type": "raidwide", "diffs": ["M"], "note": "En Mítico, soakear un Orbe congelado también estalla con daño de raid — repartir los soaks.", "verified": true }
+            { "name": "Burbuja atrayente", "type": "add", "diffs": ["N", "H", "M"], "note": "Nymrissa forma una enorme burbuja de líquido que embelesa y atrae a los múrlocs curiosos. Hay que frenar a los múrlocs antes de que lleguen a la burbuja: todo lo demás del combate depende de eso. Los que llegan se convierten en Rabiosos burbujaleta. Los indicadores de agua muestran cuántos salen de cada punto; se lleva al jefe al mayor y los a distancia se ocupan de los sueltos (cualquier control sirve).", "verified": true },
+            { "name": "Mareas pulsátiles", "type": "raidwide", "diffs": ["H", "M"], "note": "Los rabiosos burbujaleta (múrlocs que llegaron a la burbuja) infligen daño de Escarcha a toda la banda cada 3 s mientras vivan: hay que matarlos al verlos. Coincidir con la Lluvia abisal o el ¡Pop! es la causa más habitual de wipe.", "verified": true },
+            { "name": "Escudo de aguaniebla", "type": "add", "diffs": ["M"], "note": "Mítico. Un múrloc de las profundidades se une al enjambre y reduce un 99 % el daño que reciben los múrlocs cercanos. Es el objetivo prioritario en cuanto aparece: hasta que muere, el daño al resto se desperdicia.", "verified": true },
+            { "name": "Remolinos turbulentos", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Los remolinos despiertan en la grieta y salen disparados hacia la burbuja: daño de Escarcha enorme a quien esté en su camino. Hay exactamente un hueco entre ellos: la banda corre al hueco y se apila. Ocurre justo después de limpiar a los múrlocs.", "verified": true },
+            { "name": "¡Pop!", "type": "raidwide", "diffs": ["N", "H", "M"], "note": "Cuando un remolino llega a la burbuja estalla: daño de Escarcha a todos y repulsión. Hay que preparar un cooldown de sanación y colocarse para que la repulsión no empuje al agua, donde los tiburones matan. Una Puerta de brujo en ese momento o ponerse cerca de la burbuja cancelan la repulsión.", "verified": true },
+            { "name": "Mordedura salvaje", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Quien pasa demasiado tiempo en el agua recibe el ataque de un tiburón: mordiscos de daño físico cada 1 s durante 20 s.", "verified": true },
+            { "name": "Escarcha escalofriante", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Nymrissa deja helados a varios jugadores (2 s): daño de Escarcha cada 1,5 s y −15 % de velocidad de movimiento durante 4,5 s. Cada impacto deja un Orbe congelado en la posición del jugador. Avanzar a saltitos coloca los orbes en línea y facilita recogerlos.", "verified": true },
+            { "name": "Orbe congelado", "type": "soak", "diffs": ["N", "H", "M"], "note": "Orbe gélido que se pega al jugador al tocarlo: daño de Escarcha, un DoT de 12 s y deja Escarcha persistente donde se recogió. Hay que absorberlos siempre (no se esquivan): lo ideal es que los recojan tanques o jugadores móviles o con inmunidad, manteniendo los orbes y la escarcha fuera de los caminos y de la burbuja. Si ninguno lo toca, se Destroza.", "verified": true },
+            { "name": "Ráfaga de Escarcha", "type": "raidwide", "diffs": ["M"], "note": "Mítico. Al tocar un Orbe congelado estalla y hace daño de Escarcha a toda la banda. Hay que escalonar las recogidas para que no caigan varias ráfagas a la vez y mantener a la banda con vida para la limpieza.", "verified": true },
+            { "name": "Destrozar", "type": "oneshot", "diffs": ["N", "H", "M"], "note": "Un Orbe congelado que nadie toca se destroza: daño enorme de Escarcha a toda la banda y un DoT acumulable de 30 s. Los orbes se absorben, no se esquivan.", "verified": true },
+            { "name": "Escarcha persistente", "type": "avoid", "diffs": ["N", "H", "M"], "note": "Parche helado: daño de Escarcha cada 1 s y hace resbalar. Se queda donde se recogió el orbe: hay que mantenerlo lejos de la burbuja y de los caminos. El Chorro de agua puede lavarlo.", "verified": true },
+            { "name": "Aluvión de hoja de hielo", "type": "tanque", "diffs": ["N", "H"], "note": "Nymrissa potencia su arma con hielo y asesta un tajo a su objetivo (2 s): daño de Escarcha cada 1 s durante 5 s. Es el golpe de tanque de Normal y Heroico.", "verified": true },
+            { "name": "Chorro de agua", "type": "tanque", "diffs": ["M"], "note": "Nymrissa condensa el agua (3 s) y lanza un chorro a presión sobre su objetivo durante 6 s: daño de Escarcha cada 1 s y repulsión gradual; cada acumulación aumenta un 20 % el daño que se recibe de Chorro de agua durante 35 s. El tanque activo puede apuntarlo a través de un parche de Escarcha persistente para limpiarlo. Hay que cambiar de tanque con las acumulaciones.", "verified": true },
+            { "name": "Lluvia abisal", "type": "raidwide", "diffs": ["N", "H", "M"], "note": "Nymrissa canaliza un torrente de las grietas del techo (2 s): daño de Escarcha cada 1 s durante 4 s y deja a las víctimas empapadas con un DoT. Es una comprobación de sanación; no debe coincidir con las Mareas pulsátiles ni con el ¡Pop!.", "verified": true },
+            { "name": "Poderío de clamaolas", "type": "enrage", "diffs": ["N", "H", "M"], "note": "Enrage blando: cada acumulación aumenta un 3 % el daño de Escarcha de Nymrissa, así que cuanto más dura el combate más cuesta.", "verified": true },
+            { "name": "Mareas sin fin", "type": "enrage", "diffs": ["N", "H", "M"], "note": "Enrage duro: daño de Escarcha a toda la banda cada segundo hasta que muera un jugador. Hay que matar a Nymrissa antes de que lo canalice.", "verified": true }
           ]
         }
       ]
