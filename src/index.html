@@ -12,11 +12,11 @@
 <body>
   <header class="topbar">
     <button class="btn ghost icon side-toggle" id="sideToggle" aria-label="Lista de intentos" title="Lista de intentos" hidden>☰</button>
-    <button class="brand" id="brandHome" title="Inicio"><img class="brand-logo" src="logo.png" alt="">WipeTime</button>
-    <button class="btn ghost home-btn" id="homeBtn" aria-label="Inicio / Home"><img class="wi" src="icons/inv_misc_rune_01.jpg" width="20" height="20" alt=""><span id="homeLabel">Inicio</span></button>
-    <button class="btn ghost home-btn" id="cmpBtn"><img class="wi" src="icons/spell_holy_crusade.jpg" width="20" height="20" alt=""><span id="cmpLabel">Comparar logs</span></button>
-    <button class="btn ghost home-btn" id="guildBtn" title="Guilds"><img class="wi" src="icons/inv_shirt_guildtabard_01.jpg" width="20" height="20" alt=""><span id="guildLabel">Guilds</span></button>
-    <button class="btn ghost home-btn" id="profBtn"><img class="wi" src="icons/inv_misc_head_human_01.jpg" width="20" height="20" alt=""><span id="profLabel">Personajes</span></button>
+    <a class="brand" id="brandHome" href="#/" title="Inicio"><img class="brand-logo" src="logo.png" alt="">WipeTime</a>
+    <a class="btn ghost home-btn" id="homeBtn" href="#/" aria-label="Inicio / Home"><img class="wi" src="icons/inv_misc_rune_01.jpg" width="20" height="20" alt=""><span id="homeLabel">Inicio</span></a>
+    <a class="btn ghost home-btn" id="cmpBtn" href="#/compare"><img class="wi" src="icons/spell_holy_crusade.jpg" width="20" height="20" alt=""><span id="cmpLabel">Comparar logs</span></a>
+    <a class="btn ghost home-btn" id="guildBtn" href="#/guilds" title="Guilds"><img class="wi" src="icons/inv_shirt_guildtabard_01.jpg" width="20" height="20" alt=""><span id="guildLabel">Guilds</span></a>
+    <a class="btn ghost home-btn" id="profBtn" href="#/characters"><img class="wi" src="icons/inv_misc_head_human_01.jpg" width="20" height="20" alt=""><span id="profLabel">Personajes</span></a>
     <form id="loadForm" class="load">
       <input id="urlInput" type="text" spellcheck="false" autocomplete="off">
       <button id="loadBtn" type="submit" class="btn primary"></button>

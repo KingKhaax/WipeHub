@@ -186,6 +186,11 @@ details.enc > summary::-webkit-details-marker { display: none; }
 
 /* ---------- tabs ---------- */
 .tabs { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 22px; border-bottom: 1px solid var(--line); }
+/* botones convertidos en enlaces (para Atrás, Mayús + clic...): se ven igual que antes */
+a.tab, a.fight, a.rank-btn, a.btn, a.brand, a.home-btn { text-decoration: none; }
+a.tab { display: inline-block; }
+a.fight { box-sizing: border-box; }
+a.brand, a.rank-btn, a.btn:not(.home-btn):not(.primary) { color: inherit; }
 .tab {
   background: none; border: 0; padding: 8px 12px; color: var(--muted);
   border-bottom: 2px solid transparent; margin-bottom: -1px;

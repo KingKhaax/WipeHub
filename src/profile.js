@@ -524,5 +524,8 @@ const Profile = (() => {
     open({ name, slug, realm: slug, region: m[1].toLowerCase() });
   }, 900);
 
-  return { open, render, formHTML, sectionHTML, search, load, embed, embedHTML };
+  // Ruta de la ficha abierta (#/char/eu/zuljin/okita), para la URL de la pantalla
+  const route = () => (S.profileOpen && st.q ? `#/char/${st.q.region}/${encodeURIComponent(st.q.slug)}/${encodeURIComponent(st.q.name)}` : null);
+
+  return { open, render, formHTML, sectionHTML, search, load, embed, embedHTML, route };
 })();

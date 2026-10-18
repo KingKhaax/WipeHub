@@ -58,6 +58,13 @@ const $ = (sel, el = document) => el.querySelector(sel);
 const main = $('#main');
 const sidebar = $('#sidebar');
 
+const IS_WEB = /^https?:$/.test(location.protocol);
+// clic normal = se navega aquí; con Mayús / Ctrl / Cmd / Alt (o clic central) se deja al navegador abrir el enlace aparte.
+// En la app de escritorio no hay ventanas nuevas: cualquier clic izquierdo es normal.
+const plainClick = (ev) => ev.button === 0 && (!IS_WEB || !(ev.shiftKey || ev.ctrlKey || ev.metaKey || ev.altKey));
+// Los botones de la barra superior son enlaces: solo el clic normal ejecuta la acción aquí
+const navClick = (fn) => (ev) => { if (!plainClick(ev)) return; ev.preventDefault(); fn(ev); };
+
 function lsGet(k) { try { return localStorage.getItem(k); } catch { return null; } }
 function lsSet(k, v) { try { localStorage.setItem(k, v); } catch { /* sin almacenamiento */ } }
 
@@ -728,6 +735,7 @@ async function loadReport(input, opts = {}) {
   if (!S.hasCreds) return toast(t('noCreds'));
   if (typeof Replay !== 'undefined') Replay.stop();
   const seq = ++S.seq;
+  S.routeBusy = seq; // mientras carga no se toca la URL (el estado aún es el de antes)
   S.home = false;
   S.cmpOpen = false;
   S.guildOpen = false;
@@ -778,11 +786,16 @@ async function loadReport(input, opts = {}) {
     if (!target && fight && fight !== 'last') target = S.fights.find((f) => f.id === Number(fight));
     if (!target) target = bosses[bosses.length - 1] || S.fights[S.fights.length - 1];
     S.fight = target;
+    if (opts.tab) S.tab = opts.tab;
+    if (opts.player != null) { S.player = opts.player; S.ptab = opts.ptab || 'abilities'; }
     renderSidebar();
     render();
   } catch (e) {
     if (seq !== S.seq) return;
     main.innerHTML = errorHTML(friendlyError(e));
+  } finally {
+    if (S.routeBusy === seq) S.routeBusy = 0;
+    setTimeout(syncRoute, 0);
   }
 }
 
@@ -853,8 +866,8 @@ function renderSidebar() {
     const bar = f.encounterID && f.kill ? '<span class="hpbar kill"><span style="width:100%;--c:${parseColor(100)}"></span></span>'
       : f.encounterID && p != null
         ? `<span class="hpbar" title="${esc(LL('Vida restante del jefe', 'Boss health remaining'))}"><span style="width:${Math.max(3, Math.min(100, p))}%;--c:${pcol}"></span></span>` : '';
-    return `<button class="fight ${f.kill ? 'kill' : ''} ${S.fight?.id === f.id && !S.combineMode ? 'active' : ''} ${S.combine.includes(f.id) ? 'combined' : ''}" data-action="fight" data-id="${f.id}">${S.combineMode ? `<span class="cbox">${S.combine.includes(f.id) ? '✓' : ''}</span>` : ''}
-      <span class="fl">${label}</span><span class="ft">${clock(fightDur(f))}</span>${bar}</button>${typeof Extras2 !== 'undefined' && S.fight?.id === f.id && f.dungeonPulls?.length ? Extras2.sidePulls(f) : ''}`;
+    return `<a class="fight ${f.kill ? 'kill' : ''} ${S.fight?.id === f.id && !S.combineMode ? 'active' : ''} ${S.combine.includes(f.id) ? 'combined' : ''}" href="${reportHash(S.code, f.id, S.tab)}" data-action="fight" data-id="${f.id}">${S.combineMode ? `<span class="cbox">${S.combine.includes(f.id) ? '✓' : ''}</span>` : ''}
+      <span class="fl">${label}</span><span class="ft">${clock(fightDur(f))}</span>${bar}</a>${typeof Extras2 !== 'undefined' && S.fight?.id === f.id && f.dungeonPulls?.length ? Extras2.sidePulls(f) : ''}`;
   };
   let html = `<button class="whoami-line" data-action="whoami"><span class="me-av" id="meAv"></span>${S.me ? `${t('you')}: <b>${esc(S.me)}</b>` : t('notInLog')} · <span class="link">${t('change')}</span></button>
     <div class="rep-title">${esc(r.title)}</div>
@@ -914,9 +927,9 @@ async function render() {
   const f = combined ? combinedFight() : windowed(raw);
   S.viewCombined = combined;
   const seq = ++S.seq;
-  const rkBtn = S.player ? '' : `<button class="rank-btn ${S.tab === 'rankings' ? 'active' : ''}" data-action="tab" data-tab="rankings"><img class="wi" src="icons/achievement_bg_winwsg.jpg" width="22" height="22" alt="">${t('tabs.rankings')}</button>`;
+  const rkBtn = S.player ? '' : `<a class="rank-btn ${S.tab === 'rankings' ? 'active' : ''}" href="${reportHash(S.code, raw.id, 'rankings')}" data-action="tab" data-tab="rankings"><img class="wi" src="icons/achievement_bg_winwsg.jpg" width="22" height="22" alt="">${t('tabs.rankings')}</a>`;
   const nav = S.player ? '' : `${rkBtn}<nav class="tabs">${TABS.filter((k) => !window.tabHidden?.(k)).map((k) =>
-    `<button class="tab ${S.tab === k ? 'active' : ''}" data-action="tab" data-tab="${k}">${t('tabs.' + k)}</button>`).join('')}</nav>`;
+    `<a class="tab ${S.tab === k ? 'active' : ''}" href="${reportHash(S.code, raw.id, k)}" data-action="tab" data-tab="${k}">${t('tabs.' + k)}</a>`).join('')}</nav>`;
   const banner = S.combine.length > 1 ? `<div class="combine-banner">${LL(`Combinando ${S.combine.length} pulls`, `Combining ${S.combine.length} pulls`)}${combined ? '' : ` · <span class="muted">${LL('esta pestaña muestra solo el pull seleccionado', 'this tab only shows the selected pull')}</span>`}<span class="grow"></span><button class="chip" data-action="combine-clear">${LL('Salir', 'Exit')}</button></div>` : '';
   main.innerHTML = `${nav}${banner}${combined ? '' : raw.encounterID || fightDur(raw) > 20000 ? rangeBar(raw) : ''}<section id="view">${loadingHTML()}</section>`;
   S.post = null;
@@ -1066,7 +1079,7 @@ function rankedList(rows, { parse, parseIlvl, slots, slotsIlvl, clickable = !S.v
     const pets = Math.min(r.pets || 0, r.total);
     const segs = pets > 0 ? [[r.total - pets, color], [pets, PET_TEAL]] : [[r.total, color]];
     const bar = segs.map(([v, c]) => `<span class="seg" style="flex:${v} 1 0;background:${c};--c:${c}"></span>`).join('');
-    return `<div class="row ${me ? 'me' : ''} ${invalid?.has(r.name) ? 'invalid' : ''} ${clickable ? 'click' : ''}" data-ri="${i}" ${clickable ? `data-action="player" data-id="${r.id}"` : ''}>
+    return `<div class="row ${me ? 'me' : ''} ${invalid?.has(r.name) ? 'invalid' : ''} ${clickable ? 'click' : ''}" data-ri="${i}" ${clickable ? `data-action="player" data-id="${r.id}" data-href="${esc(playerHref(r.id))}"` : ''}>
       ${hasParse ? `<span class="c-parse">${pill(parse, slots, 'pill-slot', r)}</span>` : ''}
       <div class="r-name">
         ${r.icon ? `<img class="spec-ic-sm" src="${specIconUrl(esc(r.icon))}" width="22" height="22" alt="" style="--cc:${color}">` : `<span class="dot" style="background:${color}"></span>`}
@@ -1704,7 +1717,7 @@ async function viewPlayer(f, id) {
   ].join('');
 
   const ptabs = ['taken', 'abilities', 'healing', 'rotation', 'buffs'].map((k) =>
-    `<button class="tab ${S.ptab === k ? 'active' : ''}" data-action="ptab" data-tab="${k}">${t('ptabs.' + k)}</button>`).join('');
+    `<a class="tab ${S.ptab === k ? 'active' : ''}" href="${reportHash(S.code, S.fight.id, null, id, k)}" data-action="ptab" data-tab="${k}">${t('ptabs.' + k)}</a>`).join('');
 
   let body = '';
   if (takenMode) body = takenTable(td, takenTotal, dur);
@@ -1717,8 +1730,8 @@ async function viewPlayer(f, id) {
   else body = aurasTable(pd);
 
   return `<div class="hdr player-hdr">
-      <div class="hdr-row"><button class="btn ghost" data-action="back">${t('back')}</button>
-        <button class="btn primary an-btn" data-action="ptab" data-tab="analyze">✦ ${t('analyze')}</button></div>
+      <div class="hdr-row"><a class="btn ghost" href="${reportHash(S.code, S.fight.id, S.tab)}" data-action="back">${t('back')}</a>
+        <a class="btn primary an-btn" href="${reportHash(S.code, S.fight.id, null, id, 'analyze')}" data-action="ptab" data-tab="analyze">✦ ${t('analyze')}</a></div>
       <div class="eyebrow">${eyebrow(f)}</div>
       <div class="phead">
         <img class="spec-ic lg" src="${specIconUrl(esc(p.icon))}" alt="">
@@ -1919,7 +1932,7 @@ function renderWelcome() {
       <span class="feat-ic"><img src="wcicon://i/${icon}" width="48" height="48" alt=""></span>
       <div><b>${t(h)}</b><span>${t(p)}</span></div></div>`).join('')}</div>
     ${recent.length ? `<h3 class="recent-h">${t('recent')}<button class="mini-btn" data-action="recent-clear">${LL('Borrar todos', 'Clear all')}</button></h3><div class="recent">${recent.map((r) =>
-      `<div class="rwrap"><button class="rcard" data-action="recent" data-code="${esc(r.code)}"><b>${esc(r.title)}</b><small>${esc(zoneName(r.zone))} · ${new Date(r.date).toLocaleDateString(locale())}</small></button><button class="rdel" data-action="recent-del" data-code="${esc(r.code)}" title="${esc(LL('Quitar de la lista', 'Remove from list'))}" aria-label="${esc(LL('Quitar', 'Remove'))}">✕</button></div>`).join('')}</div>` : ''}
+      `<div class="rwrap"><button class="rcard" data-action="recent" data-code="${esc(r.code)}" data-href="#/report/${esc(r.code)}"><b>${esc(r.title)}</b><small>${esc(zoneName(r.zone))} · ${new Date(r.date).toLocaleDateString(locale())}</small></button><button class="rdel" data-action="recent-del" data-code="${esc(r.code)}" title="${esc(LL('Quitar de la lista', 'Remove from list'))}" aria-label="${esc(LL('Quitar', 'Remove'))}">✕</button></div>`).join('')}</div>` : ''}
     <footer class="made-by">${t('madeBy')} <b>Drakko</b>
       <svg class="heart" viewBox="0 0 24 24" width="16" height="16" aria-label="love"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.2 2.8 4.5 6.3 4.5c2 0 3.6 1.1 4.4 2.6l1.3 2.2 1.3-2.2c.8-1.5 2.4-2.6 4.4-2.6 3.5 0 5.4 3.7 3.9 7.2C19.500 16.400 12 21 12 21z" fill="currentColor"/></svg>
     </footer>
@@ -2064,6 +2077,7 @@ function applyStaticText() {
 document.addEventListener('click', async (ev) => {
   const el = ev.target.closest('[data-action]');
   if (!el) return;
+  if (el.tagName === 'A' && el.getAttribute('href')) { if (!plainClick(ev)) return; ev.preventDefault(); }
   const a = el.dataset.action;
   const id = el.dataset.id != null ? Number(el.dataset.id) : null;
   switch (a) {
@@ -2320,7 +2334,7 @@ function goHome() {
   renderWelcome();
   main.scrollTop = 0;
 }
-$('#homeBtn').addEventListener('click', goHome);
+$('#homeBtn').addEventListener('click', navClick(goHome));
 
 // Botón de la barra superior resaltado según la sección abierta (al arrancar, Inicio)
 function markNav() {
@@ -2354,10 +2368,10 @@ function openCharSearch() {
   main.scrollTop = 0;
   const i = document.querySelector('#pfForm input[name="name"]'); if (i) i.focus();
 }
-$('#profBtn').addEventListener('click', openCharSearch);
-$('#cmpBtn').addEventListener('click', () => { S.guildOpen = false; S.profileOpen = false; Compare.open(); });
-$('#guildBtn').addEventListener('click', () => Guilds.open());
-$('#brandHome').addEventListener('click', goHome);
+$('#profBtn').addEventListener('click', navClick(openCharSearch));
+$('#cmpBtn').addEventListener('click', navClick(() => { S.guildOpen = false; S.profileOpen = false; Compare.open(); }));
+$('#guildBtn').addEventListener('click', navClick(() => Guilds.open()));
+$('#brandHome').addEventListener('click', navClick(goHome));
 
 // Menú «Idioma»: el idioma en uso va resaltado
 function renderLangList() {
@@ -2394,6 +2408,125 @@ function setLang(code) {
   else renderWelcome();
 }
 
+// ============================================================ rutas: cada pantalla con su propia URL
+// #/                                         inicio
+// #/report/CÓDIGO/fight/N/PESTAÑA            un intento de un log (pestaña: damage, healing, deaths...)
+// #/report/CÓDIGO/fight/N/player/ID/PESTAÑA  un jugador dentro del intento
+// #/compare  #/guilds  #/characters          secciones de la barra superior
+// #/char/REGIÓN/REINO/NOMBRE                 ficha de un personaje
+// Así «Atrás» y «Adelante» del navegador funcionan, F5 se queda en la pantalla, se puede copiar el enlace de lo que se ve
+// y los enlaces se abren en otra ventana con Mayús + clic (o en otra pestaña con Ctrl + clic o clic central).
+const reportHash = (code, fight, tab, player, ptab) => `#/report/${code}${fight != null ? `/fight/${fight}` : ''}${player != null ? `/player/${player}${ptab ? `/${ptab}` : ''}` : tab ? `/${tab}` : ''}`;
+const playerHref = (id) => (S.code && S.fight ? reportHash(S.code, S.fight.id, null, id, S.tab === 'taken' ? 'taken' : S.tab === 'healing' ? 'healing' : 'abilities') : '');
+
+function routeFromState() {
+  if (S.profileOpen && typeof Profile !== 'undefined' && Profile.route?.()) return Profile.route();
+  if (S.guildOpen) return '#/guilds';
+  if (S.cmpOpen && !S.profileOpen) return '#/compare';
+  if (main.querySelector('.charsearch')) return '#/characters';
+  if (S.home || !S.report || !S.fight || !S.code) return '#/';
+  return reportHash(S.code, S.fight.id, S.tab, S.player, S.ptab);
+}
+
+function parseRoute(h) {
+  const m = /^#\/(.*)$/.exec(h || '');
+  if (!m) return null;
+  let seg;
+  try { seg = m[1].split('/').filter(Boolean).map(decodeURIComponent); } catch { return null; }
+  if (!seg.length || seg[0] === 'home') return { kind: 'home' };
+  if (seg[0] === 'compare') return { kind: 'compare' };
+  if (seg[0] === 'guilds') return { kind: 'guilds' };
+  if (seg[0] === 'characters') return { kind: 'characters' };
+  if (seg[0] === 'char' && seg.length >= 4) return { kind: 'char', region: seg[1], slug: seg[2], name: seg.slice(3).join('/') };
+  if (seg[0] === 'report' && /^[A-Za-z0-9:]{10,}$/.test(seg[1] || '')) {
+    const r = { kind: 'report', code: seg[1], fight: null, tab: null, player: null, ptab: null };
+    let i = 2;
+    if (seg[i] === 'fight' && /^\d+$/.test(seg[i + 1] || '')) { r.fight = Number(seg[i + 1]); i += 2; }
+    if (seg[i] === 'player' && /^\d+$/.test(seg[i + 1] || '')) { r.player = Number(seg[i + 1]); r.ptab = seg[i + 2] || null; }
+    else if (seg[i] && /^[a-z]+$/.test(seg[i])) r.tab = seg[i];
+    return r;
+  }
+  return null;
+}
+
+let routed = false;
+let routeLock = 0;
+function routeTitle() {
+  const sec = { '#/compare': LL('Comparar logs', 'Compare logs'), '#/guilds': 'Guilds', '#/characters': LL('Personajes', 'Characters') }[routeFromState()];
+  if (sec) return `WipeTime · ${sec}`;
+  if (S.profileOpen && typeof Profile !== 'undefined' && Profile.route?.()) return `WipeTime · ${decodeURIComponent(Profile.route().split('/').pop())}`;
+  if (!S.home && S.report && S.fight) return `${S.fight.encounterID ? `${S.fight.name} · ` : ''}${S.report.title} · WipeTime`;
+  return 'WipeTime';
+}
+// Lleva la URL a donde está la pantalla: la primera vez la sustituye y después añade una entrada al historial
+function syncRoute(replace = false) {
+  if (S.routeBusy || routeLock) return;
+  if (/^#char=/i.test(location.hash)) return; // enlace antiguo de una ficha: lo abre el módulo de personajes y después se pone la ruta nueva
+  const want = routeFromState();
+  document.title = routeTitle();
+  if ((location.hash || '#/') === want) { routed = true; return; }
+  try { history[routed && !replace ? 'pushState' : 'replaceState'](null, '', location.pathname + location.search + want); } catch { /* sin historial */ }
+  routed = true;
+}
+let syncTimer = 0;
+new MutationObserver(() => { clearTimeout(syncTimer); syncTimer = setTimeout(syncRoute, 0); }).observe(main, { childList: true });
+
+// Pone la pantalla que indica la URL (al pulsar Atrás/Adelante o al abrir un enlace)
+async function applyRoute(hash) {
+  const r = parseRoute(hash);
+  if (!r) return;
+  if ((hash || '#/') === routeFromState()) return;
+  routeLock++;
+  try {
+    if (r.kind === 'home') goHome();
+    else if (r.kind === 'compare') { S.guildOpen = false; S.profileOpen = false; Compare.open(); }
+    else if (r.kind === 'guilds') Guilds.open();
+    else if (r.kind === 'characters') openCharSearch();
+    else if (r.kind === 'char') Profile.open({ name: r.name, slug: r.slug, realm: r.slug, region: r.region.toLowerCase() });
+    else if (r.kind === 'report') {
+      if (S.report && S.code === r.code && S.fights?.length) {
+        const f = r.fight != null ? S.fights.find((x) => x.id === r.fight) : S.fight;
+        if (typeof Replay !== 'undefined') Replay.stop();
+        S.home = false; S.cmpOpen = false; S.guildOpen = false; S.profileOpen = false;
+        if (f) S.fight = f;
+        S.tab = r.tab || (r.player != null ? S.tab : 'damage');
+        S.player = r.player;
+        if (r.player != null) S.ptab = r.ptab || 'abilities';
+        renderSidebar();
+        render();
+      } else {
+        await loadReport(`https://www.warcraftlogs.com/reports/${r.code}${r.fight != null ? `#fight=${r.fight}` : ''}`, { fightId: r.fight ?? undefined, tab: r.tab, player: r.player, ptab: r.ptab });
+      }
+    }
+  } finally {
+    routeLock--;
+    setTimeout(() => syncRoute(true), 0);
+  }
+}
+window.addEventListener('popstate', () => { applyRoute(location.hash); });
+
+// Mayús + clic abre otra ventana y Ctrl/Cmd + clic o clic central otra pestaña también en los elementos que no son enlaces
+// (filas de jugadores, tarjetas de logs recientes...) pero llevan data-href con su ruta
+function openRoute(href, newWindow) {
+  const u = location.pathname + location.search + href;
+  try { if (newWindow) window.open(u, '_blank', 'popup=yes,width=1280,height=860'); else window.open(u, '_blank'); } catch { /* bloqueado por el navegador */ }
+}
+document.addEventListener('click', (ev) => {
+  if (!IS_WEB || plainClick(ev) || ev.button !== 0) return;
+  const el = ev.target.closest('[data-href]');
+  if (!el || el.tagName === 'A' || !el.dataset.href) return;
+  ev.preventDefault();
+  ev.stopPropagation();
+  openRoute(el.dataset.href, ev.shiftKey);
+}, true);
+document.addEventListener('auxclick', (ev) => {
+  if (!IS_WEB || ev.button !== 1) return;
+  const el = ev.target.closest('[data-href]');
+  if (!el || el.tagName === 'A' || !el.dataset.href) return;
+  ev.preventDefault();
+  openRoute(el.dataset.href, false);
+});
+
 (async function init() {
   // El inicio usa partes de scripts que se cargan después de este (buscador de personajes, cuenta atrás del parche):
   // se espera a que estén todos para que al abrir salga directamente el inicio completo
@@ -2401,6 +2534,7 @@ function setLang(code) {
   applyStaticText();
   await refreshConfig();
   renderWelcome();
+  { const r0 = parseRoute(location.hash); if (r0 && r0.kind !== 'home') applyRoute(location.hash); else syncRoute(true); }
   const before = S.expansion?.id;
   await loadExpansion();
   if (!S.report && S.expansion?.id !== before) renderWelcome();
