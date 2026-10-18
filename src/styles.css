@@ -2496,3 +2496,7 @@ h3.sec, .recent-h { font-size: 17px; font-weight: 700; letter-spacing: 0; }
 :root[data-theme="light"] .hero .btn.ghost, :root[data-theme="light"] .hero .cmp-cta { background: #fff; color: var(--text); border-color: var(--line); text-shadow: none; }
 :root[data-theme="light"] .hero .btn.ghost:hover { background: var(--panel-2); }
 :root[data-theme="light"] .hero .btn.ghost, :root[data-theme="light"] .hero .cmp-cta { color: #16243a !important; }
+
+/* Botones de color con texto blanco: fondo algo más oscuro para llegar al contraste recomendado (4,5:1) */
+.btn.primary, .pn-btn, .cmp-n.mine { background: color-mix(in srgb, var(--accent) 74%, #000); background-image: none; }
+.btn.primary:hover, .pn-btn:hover { background: color-mix(in srgb, var(--accent) 66%, #000); background-image: none; }
