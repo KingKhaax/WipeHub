@@ -380,12 +380,14 @@ const Guilds = (() => {
   async function afterBody() {
     const el = document.getElementById('gdTab');
     if (!el) return;
+    const tok = st.abTok = (st.abTok || 0) + 1; // si se repinta mientras carga, la carga anterior no pisa a la nueva
     try {
       if (st.tab === 'logs') await logsTab(el);
       else if (st.tab === 'rank') await rankTab(el);
       else {
         // zona y dificultad (los mismos filtros que el ranking) y el contenido de la pestaña
         const zones = await zonesList();
+        if (tok !== st.abTok || !el.isConnected) return;
         const zone = zones.find((z) => z.id === st.zone) || zones[zones.length - 1];
         const chip = (attr, on, label) => `<button class="chip ${on ? 'on' : ''}" ${attr}>${label}</button>`;
         const diffs = st.tab === 'roster' ? '' : `<div class="metricbar"><span class="muted">${LL('Dificultad', 'Difficulty')}</span>${[[5, LL('Mítico', 'Mythic')], [4, LL('Heroico', 'Heroic')], [3, 'Normal']].map(([d, l]) => chip(`data-gd="diff" data-v="${d}"`, st.diff === d, l)).join('')}</div>`;
@@ -396,7 +398,7 @@ const Guilds = (() => {
     } catch (e) {
       console.warn('guilds', e);
       const box = document.getElementById('gdTab');
-      if (box) box.innerHTML = errorHTML(friendlyError(e) || friendly(e.message));
+      if (box && tok === st.abTok) box.innerHTML = errorHTML(friendlyError(e) || friendly(e.message));
     }
   }
 
@@ -683,5 +685,29 @@ const Guilds = (() => {
     pickGuild({ name, realmSlug: realm, realmName: realm, region: reg });
   });
 
-  return { open, render, mountChars };
+  // Direcciones: #/guilds/región/reino/Nombre[/pestaña] para una guild y #/guilds/vs/región/reino/Nombre/región/reino/Nombre para compararlas
+  const TABS = ['logs', 'prog', 'att', 'roster', 'rank'];
+  function route() {
+    const e = encodeURIComponent;
+    if (st.sel) return `#/guilds/${e(String(st.sel.region || st.status?.region || 'eu').toLowerCase())}/${e(st.sel.realmSlug)}/${e(st.sel.name)}${st.tab && st.tab !== 'logs' ? `/${st.tab}` : ''}`;
+    const v = typeof GuildCmp !== 'undefined' && GuildCmp.route?.();
+    return v || '#/guilds';
+  }
+  async function openRoute(seg) {
+    if (seg[0] === 'vs' && seg.length >= 7) {
+      st.sel = null; st.results = null;
+      await open();
+      GuildCmp.openPair([{ region: seg[1], realmSlug: seg[2], name: seg[3] }, { region: seg[4], realmSlug: seg[5], name: seg[6] }]);
+      return;
+    }
+    if (seg.length >= 3) {
+      await open();
+      st.tab = TABS.includes(seg[3]) ? seg[3] : 'logs';
+      await pickGuild({ name: seg[2], realmSlug: seg[1], realmName: seg[1], region: seg[0].toLowerCase() });
+      return;
+    }
+    open();
+  }
+
+  return { open, render, mountChars, route, openRoute };
 })();

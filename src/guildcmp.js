@@ -359,5 +359,13 @@ const GuildCmp = (() => {
     else if (a === 'row') { const id = Number(el.dataset.e); if (st.open.has(id)) st.open.delete(id); else st.open.add(id); repaint(); }
   });
 
-  return { html, fetchPulls, dedupe };
+  const route = () => (st.sel[0] && st.sel[1] ? `#/guilds/vs/${st.sel.map((g) => `${encodeURIComponent(String(g.region).toLowerCase())}/${encodeURIComponent(g.realmSlug)}/${encodeURIComponent(g.name)}`).join('/')}` : '');
+  function openPair(list) {
+    list.forEach((g, i) => { st.sel[i] = { name: g.name, realmSlug: g.realmSlug, realmName: g.realmSlug, region: String(g.region).toLowerCase() }; st.res[i] = null; st.msg[i] = ''; });
+    st.open.clear();
+    repaint();
+    refresh();
+  }
+
+  return { html, fetchPulls, dedupe, route, openPair };
 })();

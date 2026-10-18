@@ -81,6 +81,11 @@ const TableSort = (() => {
   const tableKey = (d, ordinal) => `${location.hash.split('/').slice(0, 3).join('/')}|${d.cols.map((c) => tx(c.el)).join('|')}|${ordinal}`;
 
   function sortTable(d, col, dir) {
+    if (!d.rows[0]?.el.isConnected) { // las filas se repintaron desde que se preparó la tabla: se vuelven a leer
+      const nd = describe(d.head);
+      if (!nd) return false;
+      d.rows = nd.rows; d.parent = nd.parent; d.table = nd.table;
+    }
     const vals = d.rows.map((r) => {
       const cell = d.table ? r.el.cells[col] : r.el.children[col];
       return cellText(cell);
@@ -100,11 +105,12 @@ const TableSort = (() => {
       }
       return mul * vals[a].localeCompare(vals[b], lang() === 'es' ? 'es' : 'en', { numeric: true, sensitivity: 'base' }) || a - b;
     });
+    const dest = d.table ? d.rows[0].el.parentElement : d.parent; // antes de mover las filas (dentro del fragmento no tienen padre)
     const frag = document.createDocumentFragment();
     for (const i of order) { frag.appendChild(d.rows[i].el); for (const a of d.rows[i].attached) frag.appendChild(a); }
     busy = true;
     // las filas se vuelven a colocar justo detrás de la cabecera (o al final del cuerpo de la tabla)
-    if (d.table) (d.rows[0].el.parentElement).appendChild(frag); else d.parent.appendChild(frag);
+    dest.appendChild(frag);
     busy = false;
     return numeric;
   }

@@ -219,6 +219,7 @@ const Compare = (() => {
       st.results = resultsHTML(a, warns);
       status('');
       render();
+      if (typeof syncRoute === 'function') syncRoute();
       $('#cmpResults')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } catch (e) {
       console.error(e);
@@ -312,5 +313,34 @@ const Compare = (() => {
     $('#cmpWin').innerHTML = windowHTML(st.last);
   });
 
-  return { open, render };
+  // Dirección de la comparación: #/compare/CÓDIGO.pelea.jugador/CÓDIGO.pelea.jugador… (el primero es el log principal)
+  const seg = (r) => `${r.code}.${r.fightId}.${r.playerId}`;
+  function route() {
+    if (!st || !st.last || st.dirty || !allLoaded()) return '#/compare';
+    return `#/compare/${[st.main, ...withUrl()].map(seg).join('/')}`;
+  }
+  async function openRoute(parts) {
+    if (!S.hasCreds) { openSettings(); return; }
+    const logs = parts.map((x) => { const [code, f, p] = String(x).split('.'); return /^[A-Za-z0-9:]{10,}$/.test(code || '') ? { code, f: Number(f) || null, p: p != null && p !== '' ? Number(p) : null } : null; }).filter(Boolean).slice(0, MAX_LOGS + 1);
+    if (logs.length < 2) { open(); return; }
+    st = { rows: logs.slice(1).map(() => newRow()), main: newRow(), results: null, win: [0, 30000], last: null, hintName: '', dirty: true };
+    const url = (l) => `https://www.warcraftlogs.com/reports/${l.code}${l.f ? `#fight=${l.f}` : ''}`;
+    st.main.url = url(logs[0]);
+    st.hintId = logs[0].p;
+    st.rows.forEach((r, i) => { r.url = url(logs[i + 1]); });
+    open();
+    await loadRow(st.main, true);
+    if (st.main.state === 'ready' && logs[0].p != null && st.main.players.some((x) => x.id === logs[0].p)) st.main.playerId = logs[0].p;
+    render();
+    for (let i = 0; i < st.rows.length; i++) {
+      await loadRow(st.rows[i], false);
+      const l = logs[i + 1];
+      if (st.rows[i].state === 'ready' && l.p != null && st.rows[i].players.some((x) => x.id === l.p)) st.rows[i].playerId = l.p;
+    }
+    st.dirty = !allLoaded();
+    render();
+    if (canRun()) run();
+  }
+
+  return { open, render, route, openRoute };
 })();

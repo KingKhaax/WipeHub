@@ -187,6 +187,9 @@ document.addEventListener('error', (e) => {
     el.src = m ? SPEC_ICON_BASE + cap(m[1]) + '-' + cap(m[2]) + '.jpg' : ICON_BASE + raw + '.jpg';
     return;
   }
+  // último intento: Wowhead (no pasa por Cloudflare, que se bloquea a ratos)
+  const zm = el.src.match(/\/warcraft\/(?:abilities|icons)\/([a-z0-9_\-]+)\.jpg$/i);
+  if (zm && !el.dataset.zam) { el.dataset.zam = '1'; el.src = `https://wow.zamimg.com/images/wow/icons/large/${zm[1].toLowerCase()}.jpg`; return; }
   if (!el.dataset.fb) { el.dataset.fb = '1'; el.src = FALLBACK_ICON; }
 }, true);
 
@@ -2422,8 +2425,8 @@ const playerHref = (id) => (S.code && S.fight ? reportHash(S.code, S.fight.id, n
 
 function routeFromState() {
   if (S.profileOpen && typeof Profile !== 'undefined' && Profile.route?.()) return Profile.route();
-  if (S.guildOpen) return '#/guilds';
-  if (S.cmpOpen && !S.profileOpen) return '#/compare';
+  if (S.guildOpen) return (typeof Guilds !== 'undefined' && Guilds.route?.()) || '#/guilds';
+  if (S.cmpOpen && !S.profileOpen) return (typeof Compare !== 'undefined' && Compare.route?.()) || '#/compare';
   if (main.querySelector('.charsearch')) return '#/characters';
   if (S.home || !S.report || !S.fight || !S.code) return '#/';
   return reportHash(S.code, S.fight.id, S.tab, S.player, S.ptab);
@@ -2435,8 +2438,8 @@ function parseRoute(h) {
   let seg;
   try { seg = m[1].split('/').filter(Boolean).map(decodeURIComponent); } catch { return null; }
   if (!seg.length || seg[0] === 'home') return { kind: 'home' };
-  if (seg[0] === 'compare') return { kind: 'compare' };
-  if (seg[0] === 'guilds') return { kind: 'guilds' };
+  if (seg[0] === 'compare') return { kind: 'compare', parts: seg.slice(1) };
+  if (seg[0] === 'guilds') return { kind: 'guilds', parts: seg.slice(1) };
   if (seg[0] === 'characters') return { kind: 'characters' };
   if (seg[0] === 'char' && seg.length >= 4) return { kind: 'char', region: seg[1], slug: seg[2], name: seg.slice(3).join('/') };
   if (seg[0] === 'report' && /^[A-Za-z0-9:]{10,}$/.test(seg[1] || '')) {
@@ -2453,7 +2456,8 @@ function parseRoute(h) {
 let routed = false;
 let routeLock = 0;
 function routeTitle() {
-  const sec = { '#/compare': LL('Comparar logs', 'Compare logs'), '#/guilds': 'Guilds', '#/characters': LL('Personajes', 'Characters') }[routeFromState()];
+  const rt = routeFromState();
+  const sec = { '#/compare': LL('Comparar logs', 'Compare logs'), '#/guilds': 'Guilds', '#/characters': LL('Personajes', 'Characters') }[rt] || (/^#\/compare\//.test(rt) ? LL('Comparar logs', 'Compare logs') : /^#\/guilds\//.test(rt) ? 'Guilds' : '');
   if (sec) return `WipeTime · ${sec}`;
   if (S.profileOpen && typeof Profile !== 'undefined' && Profile.route?.()) return `WipeTime · ${decodeURIComponent(Profile.route().split('/').pop())}`;
   if (!S.home && S.report && S.fight) return `${S.fight.encounterID ? `${S.fight.name} · ` : ''}${S.report.title} · WipeTime`;
@@ -2480,8 +2484,8 @@ async function applyRoute(hash) {
   routeLock++;
   try {
     if (r.kind === 'home') goHome();
-    else if (r.kind === 'compare') { S.guildOpen = false; S.profileOpen = false; Compare.open(); }
-    else if (r.kind === 'guilds') Guilds.open();
+    else if (r.kind === 'compare') { S.guildOpen = false; S.profileOpen = false; if (r.parts.length) Compare.openRoute(r.parts); else Compare.open(); }
+    else if (r.kind === 'guilds') { if (r.parts.length) Guilds.openRoute(r.parts); else Guilds.open(); }
     else if (r.kind === 'characters') openCharSearch();
     else if (r.kind === 'char') Profile.open({ name: r.name, slug: r.slug, realm: r.slug, region: r.region.toLowerCase() });
     else if (r.kind === 'report') {

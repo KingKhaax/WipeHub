@@ -255,6 +255,11 @@ const Profile = (() => {
     load();
   }
 
+  // Con «Todos» los parches Warcraft Logs enseña el All Star con el mejor puesto de todos ellos (no el de más puntos):
+  // si en un parche eres top 10, en otro top 5 y en otro top 1, sale el top 1
+  function bestAs(list) {
+    return [...(list || [])].filter((x) => x && x.rank > 0).sort((a, b) => a.rank - b.rank || b.points - a.points)[0] || [...(list || [])].sort((a, b) => b.points - a.points)[0];
+  }
   const rankColor = (p) => (p == null ? 'var(--muted)' : parseColor(p));
 
   const tilesHTML = () => xpHTML();
@@ -341,7 +346,7 @@ const Profile = (() => {
     if (!zr || !zone) return `<div class="empty sm">${LL('Sin datos para este parche y dificultad.', 'No data for this patch and difficulty.')}</div>`;
     const byEnc = new Map((zr.rankings || []).map((r) => [r.encounter?.id, r]));
     const kills = (zr.rankings || []).reduce((s, r) => s + (r.totalKills || 0), 0);
-    const as = [...(zr.allStars || [])].sort((a, b) => b.points - a.points)[0];
+    const as = bestAs(zr.allStars);
     const unit = zr.metric === 'hps' ? 'HPS' : 'DPS';
     // est = parse aún no confirmado en los rankings de Warcraft Logs: el porcentaje es una estimación y va con «~»
     const pct = (v, est) => (v == null ? '-' : `<b style="color:${parseColor(v)}">${est ? '~' : ''}${Math.floor(v)}</b>`);
@@ -395,7 +400,7 @@ const Profile = (() => {
       if (!fields.length) { st.xp.rows = []; return; }
       const d = await gql(`{characterData{character(name:${JSON.stringify(q.name)},serverSlug:${JSON.stringify(q.slug)},serverRegion:${JSON.stringify(q.region.toUpperCase())}){${fields.join(' ')}}}}`, undefined, true);
       const ch = d.characterData?.character || {};
-      const topAs = (zr) => [...(zr?.allStars || [])].sort((a, b) => b.points - a.points)[0];
+      const topAs = (zr) => bestAs(zr?.allStars);
       const rows = raids.map((z) => {
         for (const dd of XP_DIFFS) {
           const zr = ch[`z${z.id}d${dd}`];
@@ -428,7 +433,7 @@ const Profile = (() => {
         const a = r.as;
         const title = r.mp ? mpName(r.zone.name) : `${r.zone.name}${r.diff ? ` ${diffName(r.diff)}` : ''}`;
         const spec = a?.spec && clsKey ? specIconUrl(`${clsKey}-${String(a.spec).split(' ').join('')}`) : (clsKey ? classIconUrl(clsKey) : '');
-        const lab = r.mp ? LL(`Temporada ${mpNum(r.zone.name)}`, `Season ${mpNum(r.zone.name)}`) : 'All Stars';
+        const lab = r.mp ? LL(`Temp. ${mpNum(r.zone.name)}`, `Season ${mpNum(r.zone.name)}`) : 'All Stars';
         return `<div class="pf-xpc${a ? '' : ' none'}"><div class="pf-xpc-h" title="${esc(title)}">${esc(title)}</div>
           <div class="pf-xpc-b"><span class="pf-xpc-z"><img src="${ASSETS}/zones/zone-${r.zone.id}.png" width="46" height="46" alt="" loading="lazy">${r.mp ? '' : `<b style="color:${parseColor(r.total ? (r.killed / r.total) * 100 : 0)}">${r.killed} / ${r.total}</b>`}</span>
             ${spec ? `<img class="pf-xpc-s" src="${spec}" width="40" height="40" alt="">` : ''}

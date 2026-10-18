@@ -501,7 +501,7 @@ async function fetchCdn(urls, cacheFile) {
   let lastErr;
   for (const url of [].concat(urls)) {
     try {
-      const res = await fetch(url, { signal: AbortSignal.timeout(10000) });
+      const res = await fetch(url, { signal: AbortSignal.timeout(6000) });
       if (!res.ok) throw new Error('CDN_' + res.status);
       const buf = Buffer.from(await res.arrayBuffer());
       if (buf.length < 100) throw new Error('CDN_EMPTY');
@@ -539,7 +539,7 @@ async function resolveIcon(name) {
     cdnUrl = [`${WCL_SPEC_CDN}${specKey || name.slice(5)}.jpg`, ...mirrors(candidates.find((c) => !c.startsWith('classicon_')))];
   } else {
     candidates = aliasesOf(name);
-    cdnUrl = [`${WCL_ABILITY_CDN}${name}.jpg`, ...mirrors(name)];
+    cdnUrl = [...mirrors(name), `${WCL_ABILITY_CDN}${name}.jpg`]; // primero los que no pasan por Cloudflare: si está bloqueado cada icono esperaba 10 s y acababa en «?»
   }
   try {
     const index = hd ? await loadPackIndex() : new Map();
