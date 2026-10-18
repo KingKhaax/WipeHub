@@ -152,6 +152,8 @@
       enchant: (i.enchantments || []).map((e) => e.display_string).filter(Boolean),
       gems: (i.sockets || []).map((sk) => ({ name: sk.item?.name || '', stat: sk.display_string || '' })),
       set: i.set?.item_set?.name || '', armorType: i.item_subclass?.name || '',
+    // Datos para exportar a SimC (ids de bonus, gemas, encantamiento y estadísticas de objetos creados)
+    simc: { bonus: i.bonus_list || [], gems: (i.sockets || []).map((sk) => sk.item?.id).filter(Boolean), enchant: (i.enchantments || []).map((e) => e.enchantment_id).filter(Boolean), crafted: (i.modified_crafting_stat || []).map((x) => x.id).filter(Boolean) },
       // Todo lo necesario para el tooltip del objeto (tal como lo devuelve Blizzard para esa versión concreta: dificultad, nivel, estadísticas)
       tip: {
         level: i.level?.display_string || '', nameDesc: i.name_description ? { t: i.name_description.display_string, c: tipColor(i.name_description.color) } : null,
@@ -188,7 +190,7 @@
       dodge: pct(st.dodge), parry: pct(st.parry), block: pct(st.block),
     } : null;
     return {
-      name: sum.name, level: sum.level, race: sum.race?.name, cls: sum.character_class?.name, classId: sum.character_class?.id,
+      name: sum.name, level: sum.level, race: sum.race?.name, raceId: sum.race?.id || 0, cls: sum.character_class?.name, classId: sum.character_class?.id,
       spec: sum.active_spec?.name || '', specId: sum.active_spec?.id || 0, faction: sum.faction?.type, guild: sum.guild?.name || '', realmName: sum.realm?.name || realmSlug,
       ilvlAvg: sum.average_item_level || 0, ilvlEquipped: sum.equipped_item_level || 0, achievements: sum.achievement_points || 0,
       render: md?.assets?.find((a) => a.key === 'main-raw')?.value || md?.assets?.find((a) => a.key === 'main')?.value || md?.assets?.find((a) => a.key === 'inset')?.value || '',

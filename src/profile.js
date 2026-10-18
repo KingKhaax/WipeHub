@@ -380,6 +380,86 @@ const Profile = (() => {
         <tr><th>${LL('Puntos', 'Points')}</th><th>${LL('Mundo', 'World')}</th><th>${esc(regionName(st.q.region))}</th><th>${LL('Reino', 'Realm')}</th></tr></thead><tbody>${rows}</tbody></table></div>`;
   }
 
+
+  // ------------------------------------------------------------ exportar a SimC
+  // Texto en el formato del addon SimulationCraft (el que Warcraft Logs genera con «Export to SimC»): personaje, talentos y los 16 objetos
+  const SIMC_SLOT = { HEAD: 'head', NECK: 'neck', SHOULDER: 'shoulder', BACK: 'back', CHEST: 'chest', WRIST: 'wrist', HANDS: 'hands', WAIST: 'waist', LEGS: 'legs', FEET: 'feet', FINGER_1: 'finger1', FINGER_2: 'finger2', TRINKET_1: 'trinket1', TRINKET_2: 'trinket2', MAIN_HAND: 'main_hand', OFF_HAND: 'off_hand' };
+  const SIMC_RACE = { 1: 'human', 2: 'orc', 3: 'dwarf', 4: 'night_elf', 5: 'undead', 6: 'tauren', 7: 'gnome', 8: 'troll', 9: 'goblin', 10: 'blood_elf', 11: 'draenei', 22: 'worgen', 24: 'pandaren', 25: 'pandaren', 26: 'pandaren', 27: 'nightborne', 28: 'highmountain_tauren', 29: 'void_elf', 30: 'lightforged_draenei', 31: 'zandalari_troll', 32: 'kul_tiran', 34: 'dark_iron_dwarf', 35: 'vulpera', 36: "mag'har_orc", 37: 'mechagnome', 52: 'dracthyr', 70: 'dracthyr', 84: 'earthen', 85: 'earthen' };
+  const SIMC_TANK = new Set(['blood', 'brewmaster', 'guardian', 'protection', 'vengeance']);
+  const SIMC_HEAL = new Set(['holy', 'discipline', 'restoration', 'mistweaver', 'preservation']);
+  const SIMC_SPELL = new Set(['shadow', 'balance', 'elemental', 'devastation', 'augmentation', 'devourer']);
+  // rol que usa SimC: tank, heal, spell (a distancia con hechizos) o attack
+  const simcRole = (cls, spec) => (SIMC_TANK.has(spec) ? 'tank' : SIMC_HEAL.has(spec) ? 'heal' : cls === 'mage' || cls === 'warlock' || SIMC_SPELL.has(spec) ? 'spell' : 'attack');
+  function simcText() {
+    const a = st.arm;
+    if (!a?.items?.length) return '';
+    const cls = (Cards.CLASS_KEY[a.classId] || '').toLowerCase();
+    const spec = (Cards.SPEC_KEY[a.specId] || '').split('-')[1] || '';
+    const race = SIMC_RACE[a.raceId] || String(a.race || '').toLowerCase().replace(/[^a-z']+/g, '_');
+    const d = new Date();
+    const stamp = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+    const lines = [`# ${a.name} - ${spec ? spec[0].toUpperCase() + spec.slice(1) : a.spec} - ${stamp} - ${st.q.region.toUpperCase()}/${a.realmName || st.q.realm}`, '# Exportado por WipeTime', '',
+      `${cls}="${a.name}"`, `level=${a.level}`, `race=${race}`, `region=${st.q.region}`, `server=${st.q.slug}`, `role=${simcRole(cls, spec)}`];
+    if (st.rio?.talents?.text) lines.push(`talents=${st.rio.talents.text}`);
+    if (spec) lines.push(`spec=${spec}`);
+    lines.push('');
+    for (const sl of Object.keys(SIMC_SLOT)) {
+      const it = a.items.find((x) => x.slot === sl);
+      if (!it) continue;
+      const s = it.simc || {};
+      const parts = [`id=${it.id}`];
+      if (s.bonus?.length) parts.push(`bonus_id=${s.bonus.join('/')}`);
+      if (s.gems?.length) parts.push(`gem_id=${s.gems.join('/')}`);
+      if (s.enchant?.length) parts.push(`enchant_id=${s.enchant.join('/')}`);
+      if (s.crafted?.length) parts.push(`crafted_stats=${s.crafted.join('/')}`);
+      lines.push(`${SIMC_SLOT[sl]}=,${parts.join(',')}`);
+    }
+    return lines.join('\n') + '\n';
+  }
+  // Copia el texto y avisa en el propio botón: tick verde y texto en verde unos segundos
+  let simcTimer = 0;
+  async function copySimc(btn) {
+    const txt = simcText();
+    if (!txt) return toast(LL('Todavía no hay equipo para exportar', 'There is no gear to export yet'));
+    try { await navigator.clipboard.writeText(txt); } catch {
+      const ta = document.createElement('textarea'); ta.value = txt; ta.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(ta); ta.select();
+      let okc = false; try { okc = document.execCommand('copy'); } catch { /* sin permiso */ } ta.remove();
+      if (!okc) return toast(LL('No se pudo copiar al portapapeles', 'Could not copy to the clipboard'));
+    }
+    clearTimeout(simcTimer);
+    btn.classList.add('done');
+    btn.innerHTML = `<span class="pf-simc-tick">✓</span> ${LL('Copiado para SimC', 'Copied for SimC')}`;
+    simcTimer = setTimeout(() => { btn.classList.remove('done'); btn.innerHTML = simcLabel(); }, 2600);
+  }
+  const simcLabel = () => `<img class="wi" src="icons/inv_letter_15.jpg" width="14" height="14" alt="">${LL('Exportar a SimC', 'Export to SimC')}`;
+
+
+  // ------------------------------------------------------------ pista de mejora de cada pieza (iconos de Peterodox)
+  // Blizzard no manda la pista de mejora de cada objeto (Explorador, Aventurero, Veterano, Campeón, Héroe, Mito), así que se deduce:
+  // 1) de los ids de bonus del objeto (13333 = Normal/Campeón, 13334 = Heroico/Héroe, 13335 = Mítico/Mito) y del texto «Buscador de bandas»;
+  // 2) si no hay, del nivel de objeto con los tramos de esta temporada (cada pista abarca 13 niveles). Al cambiar de temporada solo hay que tocar TRACK_BY_ILVL.
+  const TRACK_BONUS = { 13333: 'champion', 13334: 'hero', 13335: 'myth' };
+  const TRACK_BY_ILVL = [[334, 'myth'], [321, 'hero'], [308, 'champion'], [295, 'veteran'], [282, 'adventurer'], [269, 'explorer']];
+  const TRACK_NAME = { explorer: ['Explorador', 'Explorer'], adventurer: ['Aventurero', 'Adventurer'], veteran: ['Veterano', 'Veteran'], champion: ['Campeón', 'Champion'], hero: ['Héroe', 'Hero'], myth: ['Mito', 'Myth'] };
+  function trackOf(it) {
+    const text = it.tip?.nameDesc?.t || '';
+    const crafted = !!it.simc?.crafted?.length || /crafted|creado|fabricad|artesan/i.test(text);
+    let key = null;
+    if (!crafted) {
+      for (const b of it.simc?.bonus || []) if (TRACK_BONUS[b]) { key = TRACK_BONUS[b]; break; }
+      if (!key && /raid finder|buscador de bandas|\blfr\b/i.test(text)) key = 'veteran';
+    }
+    if (!key) { const w = TRACK_BY_ILVL.find(([min]) => it.ilvl >= min); key = w ? w[1] : null; }
+    return { key, crafted };
+  }
+  // «Crafteado» + icono de su pista + nivel de objeto, o solo el icono y el nivel; el icono va a la izquierda del número
+  function ilvlHTML(it) {
+    const { key, crafted } = trackOf(it);
+    const nm = key ? LL(TRACK_NAME[key][0], TRACK_NAME[key][1]) : '';
+    const icon = key ? `<img class="pf-trk" src="tracks/${key}.png" alt="" title="${esc(crafted ? `${LL('Crafteado', 'Crafted')} · ${nm}` : nm)}">` : '';
+    return `<em class="pf-il">${crafted ? `<span class="pf-crafted">${LL('Crafteado', 'Crafted')}</span>` : ''}${icon}<span class="pf-iln">${esc(it.ilvl || '')}</span></em>`;
+  }
+
   function gearHTML() {
     const a = st.arm;
     if (!a) return st.armErr ? `<div class="empty sm">${esc(st.armErr)}</div>` : `<div class="loading"><span class="spinner"></span>${t('loading')}</div>`;
@@ -388,9 +468,9 @@ const Profile = (() => {
     const rows = items.map((it) => {
       const extra = [...it.enchant.map((e) => `<i class="ench">${esc(cleanLine(e))}</i>`), ...it.gems.map((g) => `<i class="gem">${esc(cleanLine(g.name || g.stat || ''))}</i>`)].join('');
       return `<div class="pf-it" style="--q:${QCOLOR[it.quality] || '#fff'}" data-itip="${Cards.itemTipKey(it)}"><span class="arm-ic">${it.icon ? `<img src="${Cards.media(it.icon)}" alt="" loading="lazy">` : ''}</span>
-        <span class="pf-itx"><b title="${esc(it.name)}">${esc(it.name)}</b>${extra}</span><em>${esc(it.ilvl || '')}</em></div>`;
+        <span class="pf-itx"><b title="${esc(it.name)}">${esc(it.name)}</b>${extra}</span>${ilvlHTML(it)}</div>`;
     }).join('');
-    return `<div class="pf-gear-h"><b>${LL('Equipo', 'Gear')}</b><span>${LL('Nivel de objeto', 'Item Level')}: <b>${esc(ilvl || '—')}</b></span></div>${rows}`;
+    return `<div class="pf-gear-h"><b>${LL('Equipo', 'Gear')}</b><button type="button" class="pf-simc" data-pf="simc" title="${esc(LL('Copia tu equipo y talentos en el formato de SimulationCraft', 'Copies your gear and talents in the SimulationCraft format'))}">${simcLabel()}</button><span>${LL('Nivel de objeto', 'Item Level')}: <b>${esc(ilvl || '—')}</b></span></div>${rows}`;
   }
 
   // Talentos que lleva ahora (Raider.IO): héroe y clase/especialización, con tooltip y botón para copiarlos al juego
@@ -407,12 +487,18 @@ const Profile = (() => {
   function render() {
     if (!S.profileOpen || !st.q) return;
     const a = st.arm;
-    const model = a?.render ? `<div class="pf-model" data-tilt><img src="${Cards.media(a.render)}" alt="${esc(a.name)}" draggable="false" crossorigin="anonymous"></div>` : '';
+    // Modelo 3D en su propia columna, con el nombre de la especialización arriba y un fondo según la clase (como en Warcraft Logs)
+    const clsKey = Cards.CLASS_KEY[a?.classId] || WCL_CLASS[st.wcl?.classID] || '';
+    // Fondo de la armería de Blizzard según la clase (render.worldofwarcraft.com/profile-backgrounds/v2/armory_bg_class_<clase>.jpg)
+    const bgName = { DeathKnight: 'death_knight', DemonHunter: 'demon_hunter' }[clsKey] || clsKey.toLowerCase();
+    const classBg = clsKey ? Cards.media(`https://render.worldofwarcraft.com/profile-backgrounds/v2/armory_bg_class_${bgName}.jpg`) : '';
+    const model = a?.render ? `<div class="pf-mpanel" data-cls="${esc(clsKey)}"${classBg ? ` style="--cbg:url('${classBg}')"` : ''}><div class="pf-mhead" style="color:${classColor(clsKey)}">${esc(a.spec || a.cls || '')}</div><div class="pf-model" data-tilt><img src="${Cards.media(a.render)}" alt="${esc(a.name)}" draggable="false" crossorigin="anonymous"></div></div>` : '';
     main.innerHTML = `<div class="pf">
       <div class="pf-back"><button type="button" class="btn ghost sm" data-pf="home">${LL('← Inicio', '← Home')}</button></div>
       ${headerHTML()}
       <div class="pf-grid"><section class="pf-left">${controlsHTML()}${tableHTML()}</section>
-        <aside class="pf-right"><div class="pf-gear">${gearHTML()}</div>${talentsHTML()}${model}</aside></div></div>`;
+        <aside class="pf-mid"><div class="pf-gear">${gearHTML()}</div>${talentsHTML()}</aside>
+        <aside class="pf-modelcol">${model}</aside></div></div>`;
   }
 
   // ------------------------------------------------------------ buscador (portada)
@@ -461,6 +547,7 @@ const Profile = (() => {
     else if (a === 'focus') { const i = document.querySelector('#pfForm input[name="name"]'); if (i) i.focus(); }
     else if (!S.profileOpen && !(S.guildOpen && st.embed)) return;
     else if (a === 'update') load();
+    else if (a === 'simc') copySimc(el);
     else if (a === 'refresh-wcl') refreshWcl();
     else if (a === 'enc') { const id = Number(el.dataset.e); st.openEnc = st.openEnc === id ? null : id; repaint(); }
     else if (a === 'refresh-logs') {

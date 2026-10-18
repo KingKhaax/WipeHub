@@ -1547,6 +1547,14 @@ img.role-ic { border-radius: 7px; }
 .pf-table tr.none td.pf-boss { color: var(--muted); font-weight: 500; }
 .pf-gear { border-radius: 12px; border: 1px solid var(--line); background: var(--panel); overflow: hidden; margin-bottom: 12px; }
 .pf-gear-h { display: flex; justify-content: space-between; padding: 8px 12px; background: var(--panel-2); border-bottom: 1px solid var(--line); font-size: 13px; }
+/* Botón «Exportar a SimC»: amarillo; al pulsar se pone verde con un tick */
+.pf-gear-h { align-items: center; gap: 10px; }
+.pf-gear-h > span { margin-left: auto; }
+.pf-simc { display: inline-flex; align-items: center; gap: 6px; border: 1px solid rgba(231, 184, 74, .45); background: rgba(231, 184, 74, .1); color: #e7b84a; font-weight: 600; font-size: 12px; padding: 3px 10px; border-radius: 6px; cursor: pointer; transition: background .15s, color .15s, border-color .15s; }
+.pf-simc:hover { background: rgba(231, 184, 74, .2); color: #ffd36a; }
+.pf-simc img.wi { border-radius: 3px; }
+.pf-simc.done, .pf-simc.done:hover { color: #3fd07a; border-color: rgba(63, 208, 122, .55); background: rgba(63, 208, 122, .12); }
+.pf-simc-tick { font-weight: 800; }
 .pf-it { display: flex; align-items: center; gap: 8px; padding: 4px 10px; border-bottom: 1px solid var(--line); min-width: 0; }
 .pf-it:last-child { border-bottom: 0; }
 .pf-it .arm-ic { width: 28px; height: 28px; }
@@ -1555,8 +1563,42 @@ img.role-ic { border-radius: 7px; }
 .pf-itx i { font-style: normal; font-size: 11px; color: #5fd38d; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .pf-itx i.gem { color: #6fb7ff; }
 .pf-it em { font-style: normal; font-weight: 700; font-variant-numeric: tabular-nums; }
+.pf-it em.pf-il { display: inline-flex; align-items: center; justify-content: flex-end; gap: 7px; white-space: nowrap; }
+.pf-trk { height: 19px; width: auto; max-width: 30px; object-fit: contain; flex: none; }
+.pf-iln { min-width: 2.6ch; text-align: right; }
+.pf-crafted { font-size: 11px; font-weight: 600; color: #e7b84a; letter-spacing: .02em; }
 .pf-model { min-height: 420px; }
 @media (max-width: 1000px) { .pf-grid { grid-template-columns: 1fr; } .pf-upd { align-items: flex-start; margin-left: 0; } }
+/* Ficha de personaje en tres columnas, como Warcraft Logs: tabla de jefes | equipo y talentos | modelo 3D */
+.pf-grid { grid-template-columns: minmax(0, 1.55fr) minmax(310px, .9fr) minmax(250px, .5fr); grid-template-areas: "left mid model"; }
+.pf-left { grid-area: left; }
+.pf-mid { grid-area: mid; min-width: 0; }
+.pf-modelcol { grid-area: model; min-width: 0; position: sticky; top: 12px; align-self: start; } /* el modelo se queda a la vista al bajar */
+@media (max-width: 1500px) { .pf-grid { grid-template-columns: minmax(0, 1.6fr) minmax(300px, 1fr); grid-template-areas: "left model" "left mid"; } .pf-modelcol { position: static; } }
+@media (max-width: 1000px) { .pf-grid { grid-template-columns: 1fr; grid-template-areas: "model" "left" "mid"; } }
+.pf-mpanel { border: 1px solid var(--line); border-radius: 10px; overflow: hidden; background: #070a10; --m1: #101826; --m2: #243a5c; --m3: #5b8def; }
+.pf-mhead { text-align: center; font-weight: 600; font-size: 14px; padding: 6px 10px; background: rgba(0, 0, 0, .55); border-bottom: 1px solid var(--line); }
+.pf-mpanel .pf-model { min-height: 560px; border: 0; border-radius: 0; overflow: hidden;
+  background: linear-gradient(180deg, transparent 72%, rgba(0, 0, 0, .5)), var(--cbg, linear-gradient(transparent, transparent)) 50% 100% / cover no-repeat, radial-gradient(ellipse 70% 42% at 50% 64%, color-mix(in srgb, var(--m3) 42%, transparent), transparent 72%),
+    radial-gradient(ellipse 100% 38% at 50% 100%, var(--m2), transparent 78%),
+    linear-gradient(90deg, color-mix(in srgb, var(--m3) 26%, transparent), transparent 24%, transparent 76%, color-mix(in srgb, var(--m3) 26%, transparent)),
+    linear-gradient(180deg, var(--m1), #05070b 88%);
+  box-shadow: inset 0 0 70px rgba(0, 0, 0, .65); }
+.pf-mpanel .pf-model::after { background: radial-gradient(closest-side, rgba(0, 0, 0, .7), transparent); }
+.pf-mpanel .pf-model .mdl-crop { width: 86%; }
+.pf-mpanel[data-cls="Warrior"] { --m1: #2a1710; --m2: #7a3a1c; --m3: #d9a05b; }
+.pf-mpanel[data-cls="Paladin"] { --m1: #2b2108; --m2: #8a6a1c; --m3: #f7d56c; }
+.pf-mpanel[data-cls="Hunter"] { --m1: #0f2410; --m2: #2f6a24; --m3: #abd473; }
+.pf-mpanel[data-cls="Rogue"] { --m1: #1a1a10; --m2: #4a4a18; --m3: #e8e06a; }
+.pf-mpanel[data-cls="Priest"] { --m1: #1b1b28; --m2: #4a4a78; --m3: #e8e8ff; }
+.pf-mpanel[data-cls="DeathKnight"] { --m1: #07141f; --m2: #14507a; --m3: #59b8ff; }
+.pf-mpanel[data-cls="Shaman"] { --m1: #08152e; --m2: #1448a0; --m3: #3a8dff; }
+.pf-mpanel[data-cls="Mage"] { --m1: #0d1532; --m2: #2c3fa0; --m3: #46d0ff; }
+.pf-mpanel[data-cls="Warlock"] { --m1: #1a0b26; --m2: #4b2475; --m3: #9b86e8; }
+.pf-mpanel[data-cls="Monk"] { --m1: #2a0b09; --m2: #8c2314; --m3: #ef5a30; }
+.pf-mpanel[data-cls="Druid"] { --m1: #1a1204; --m2: #5a3e0e; --m3: #ff8a1a; }
+.pf-mpanel[data-cls="DemonHunter"] { --m1: #13071f; --m2: #431268; --m3: #b43fe0; }
+.pf-mpanel[data-cls="Evoker"] { --m1: #041f1b; --m2: #0f6256; --m3: #3fb59c; }
 
 /* Versión: verde si es la más reciente, rojo (con pulso suave) si hay una nueva */
 .ver-badge.ok { background: rgba(61, 220, 132, .12); }
