@@ -2617,7 +2617,7 @@ h3.sec, .recent-h { font-size: 17px; font-weight: 700; letter-spacing: 0; }
 .pf-xp-h{display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:8px}
 .pf-xp-h h4{margin:0;font-size:16px;font-weight:600}
 .pf-xp-h .abdd-btn{padding:3px 8px;font-size:12px}
-.pf-xp-grid{display:grid;grid-template-columns:repeat(auto-fill,210px);gap:10px}
+.pf-xp-grid{display:grid;grid-template-columns:repeat(auto-fit,210px);justify-content:center;gap:10px}
 .pf-xps .pf-xp-grid{grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:8px}
 .pf-tiles:has(.pf-xps){flex:1 1 100%;order:9}
 .pf-head:has(.pf-xps){flex-wrap:wrap !important}
