@@ -293,6 +293,19 @@ function fightData(f) {
   });
 }
 
+// Jugadores cuyos rankings quedan invalidados (p. ej. por recibir buffos externos en exceso): Warcraft Logs los lista
+// en el campo reportsBlacklistForCharacters de cada pelea del ranking, como cadena de texto o como objeto con el nombre.
+function invalidNames(json) {
+  const out = new Set();
+  for (const fd of json?.data || []) {
+    for (const x of fd.reportsBlacklistForCharacters || []) {
+      const n = typeof x === 'string' ? x : (x?.name || x?.characterName || x?.character?.name);
+      if (n) out.add(n);
+    }
+  }
+  return out;
+}
+
 function rankMap(json, field = 'rankPercent') {
   const m = new Map();
   for (const fd of json?.data || []) {
@@ -333,7 +346,7 @@ function mergeRankings(a, b) {
 
 function rankings(f) {
   return cached(`rank:${f.id}`, async () => {
-    if (!f.kill || !f.encounterID || !f.full || f.combined) return { dps: new Map(), hps: new Map(), dpsB: new Map(), hpsB: new Map() };
+    if (!f.kill || !f.encounterID || !f.full || f.combined) return { dps: new Map(), hps: new Map(), dpsB: new Map(), hpsB: new Map(), invalid: new Set() };
     try {
       // sin caché en disco: Warcraft Logs recalcula los parses de un log (al subirlo da valores provisionales y luego
       // los ajusta al entrar más logs), y guardarlos horas hacía que WipeTime enseñara un número y la web otro
@@ -346,11 +359,11 @@ function rankings(f) {
       // provisional = sin ranking calculado todavía (sin total de parses): no se da por bueno, la próxima vez se vuelve a pedir
       if (!chars.length || chars.some((x) => !x.totalParses)) setTimeout(() => S.cache.delete(`rank:${f.id}`), 0);
       else if (S.liveReport) setTimeout(() => S.cache.delete(`rank:${f.id}`), 60000); // log reciente: Warcraft Logs ajusta los parses
-      return { dps: rankMap(r.dps), hps: rankMap(r.hps), dpsB: rankMap(r.dps, 'bracketPercent'), hpsB: rankMap(r.hps, 'bracketPercent') };
+      return { dps: rankMap(r.dps), hps: rankMap(r.hps), dpsB: rankMap(r.dps, 'bracketPercent'), hpsB: rankMap(r.hps, 'bracketPercent'), invalid: new Set([...invalidNames(r.dps), ...invalidNames(r.hps)]) };
     } catch (e) {
       console.warn('rankings', e);
       setTimeout(() => S.cache.delete(`rank:${f.id}`), 0);
-      return { dps: new Map(), hps: new Map(), dpsB: new Map(), hpsB: new Map() };
+      return { dps: new Map(), hps: new Map(), dpsB: new Map(), hpsB: new Map(), invalid: new Set() };
     }
   });
 }
@@ -979,7 +992,7 @@ const PET_TEAL = '#5eb8c7';
 const petsOf = (e) => (e?.pets || []).reduce((s, p) => s + (p.total || 0), 0);
 const activeOf = (e, ms) => (e?.activeTime != null && ms > 0 ? Math.min(100, (e.activeTime / ms) * 100) : null);
 
-function rankedList(rows, { parse, parseIlvl, slots, slotsIlvl, clickable = !S.viewCombined, unit = '' } = {}) {
+function rankedList(rows, { parse, parseIlvl, slots, slotsIlvl, clickable = !S.viewCombined, unit = '', invalid = null } = {}) {
   if (!rows.length) return `<div class="empty">${t('noData')}</div>`;
   const max = Math.max(...rows.map((r) => r.total), 1);
   let list = rows;
@@ -1022,7 +1035,7 @@ function rankedList(rows, { parse, parseIlvl, slots, slotsIlvl, clickable = !S.v
     const pets = Math.min(r.pets || 0, r.total);
     const segs = pets > 0 ? [[r.total - pets, color], [pets, PET_TEAL]] : [[r.total, color]];
     const bar = segs.map(([v, c]) => `<span class="seg" style="flex:${v} 1 0;background:${c};--c:${c}"></span>`).join('');
-    return `<div class="row ${me ? 'me' : ''} ${clickable ? 'click' : ''}" data-ri="${i}" ${clickable ? `data-action="player" data-id="${r.id}"` : ''}>
+    return `<div class="row ${me ? 'me' : ''} ${invalid?.has(r.name) ? 'invalid' : ''} ${clickable ? 'click' : ''}" data-ri="${i}" ${clickable ? `data-action="player" data-id="${r.id}"` : ''}>
       ${hasParse ? `<span class="c-parse">${pill(parse, slots, 'pill-slot', r)}</span>` : ''}
       <div class="r-name">
         ${r.icon ? `<img class="spec-ic-sm" src="${specIconUrl(esc(r.icon))}" width="22" height="22" alt="" style="--cc:${color}">` : `<span class="dot" style="background:${color}"></span>`}
@@ -1151,6 +1164,17 @@ function parseOptions(f, rows, realMap, metric, realMapIlvl) {
   fillEstimatedPills(f, est, metric);
   const names = new Set(est.map((r) => r.name));
   return { slots: names, slotsIlvl: names };
+}
+
+// Aviso rojo encima del daño/sanación, como en Warcraft Logs: un punto por cada jugador con el ranking invalidado
+function invalidBannerHTML(rows, invalid) {
+  const list = rows.filter((r) => invalid?.has(r.name));
+  if (!list.length) return '';
+  return `<div class="inv-banner" role="note">${list.map((r) => {
+    const color = rowColor(r);
+    const ic = r.icon ? `<img class="spec-ic-sm" src="${specIconUrl(esc(r.icon))}" width="20" height="20" alt="" style="--cc:${color}">` : '';
+    return `<div class="inv-item"><span>${LL('Los rankings de', 'Ranks for')}</span>${ic}<b style="color:${color}">${esc(r.name)}</b><span>${LL('se han invalidado porque recibió buffos externos excesivos.', 'have been invalidated because they received excessive external buffs.')}</span></div>`;
+  }).join('')}</div>`;
 }
 
 function leaderSub(rows, f) {
@@ -1390,7 +1414,7 @@ const VIEWS = {
     </div>`;
     const real = S.parseMode === 'ilvl' ? rk.dpsB : rk.dps;
     const withParse = m === 'dps' || m === 'rdps';
-    return headerHTML(f, t('dmgTitle'), leaderSub(rows, f)) + bar + rankedList(rows, { unit: 'DPS', ...(withParse ? parseOptions(f, rows, rk.dps, 'dps', rk.dpsB) : {}) });
+    return headerHTML(f, t('dmgTitle'), leaderSub(rows, f)) + bar + invalidBannerHTML(rows, rk.invalid) + rankedList(rows, { unit: 'DPS', invalid: rk.invalid, ...(withParse ? parseOptions(f, rows, rk.dps, 'dps', rk.dpsB) : {}) });
   },
 
   async healing(f) {
@@ -1403,7 +1427,7 @@ const VIEWS = {
         return { ...playerInfo(e.id, e), ilvl: e.itemLevel, active: activeOf(e, dur * 1000), pets: petsOf(e), total: e.total, rate: e.total / dur, abil: abilList(e.abilities), note: ohp ? t('overheal', { p: num(ohp, 0) }) : '' };
       })
       .sort((a, b) => b.total - a.total);
-    return headerHTML(f, t('healTitle'), leaderSub(rows, f)) + rankedList(rows, { unit: 'HPS', ...parseOptions(f, rows, rk.hps, 'hps', rk.hpsB) });
+    return headerHTML(f, t('healTitle'), leaderSub(rows, f)) + invalidBannerHTML(rows, rk.invalid) + rankedList(rows, { unit: 'HPS', invalid: rk.invalid, ...parseOptions(f, rows, rk.hps, 'hps', rk.hpsB) });
   },
 
   async taken(f) {
