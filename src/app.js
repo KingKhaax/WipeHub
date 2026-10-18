@@ -23,8 +23,9 @@ const S = {
   home: true,
   cmpOpen: false,
   buffsPlayer: null,
-  rotZoom: 8,        // píxeles por segundo
+  rotZoom: 12,       // píxeles por segundo
   rotMode: 'lanes',
+  rotSel: new Set(), // habilidades pulsadas en Rotación (vacío = todas)
   cache: new Map(),
   seq: 0,
   sortMode: lsGet('sortMode') || 'desc', // desc | asc | name
@@ -1735,42 +1736,81 @@ function rotationHTML(f, casts) {
   if (!casts.length) return `<div class="empty">${t('noData')}</div>`;
   const dur = fightDur(f);
   const px = S.rotZoom;
-  const width = Math.ceil((dur / 1000) * px) + 30;
+  const width = Math.ceil((dur / 1000) * px) + 60;
   const x = (c) => ((c.timestamp - f.startTime) / 1000) * px;
-  const step = px >= 20 ? 5 : px >= 10 ? 10 : px >= 5 ? 30 : 60;
+  const step = px >= 32 ? 2 : px >= 20 ? 5 : px >= 10 ? 10 : px >= 5 ? 30 : 60;
   let ticks = '';
   for (let s = 0; s <= dur / 1000; s += step) ticks += `<span class="tick" style="left:${s * px}px">${clock(s * 1000 + f.startTime - f.fightStart)}</span>`;
 
-  const controls = `<div class="rot-ctl">
-      <button class="chip ${S.rotMode === 'lanes' ? 'on' : ''}" data-action="rotmode" data-mode="lanes">${t('lanes')}</button>
-      <button class="chip ${S.rotMode === 'sequence' ? 'on' : ''}" data-action="rotmode" data-mode="sequence">${t('sequence')}</button>
-      <span class="grow"></span><span class="muted">${t('totalCasts', { n: num(casts.length, 0) })}</span>
-      ${S.rotMode === 'lanes' ? `<span class="muted">${t('zoom')}</span><button class="btn ghost sm" data-action="zoom" data-d="-1">−</button><button class="btn ghost sm" data-action="zoom" data-d="1">+</button>` : ''}
-    </div>`;
-
-  if (S.rotMode === 'sequence') {
-    return controls + `<div class="seq">${casts.map((c) => {
-      const a = ability(c.abilityGameID);
-      return `<span class="seq-i">${iconImg(a.icon, 34, clockPrecise(c.timestamp - f.fightStart), c.abilityGameID)}<small>${clock(c.timestamp - f.fightStart)}</small></span>`;
-    }).join('')}</div>`;
-  }
-
+  // Habilidades del jugador, de más a menos usadas
   const byAbility = new Map();
   for (const c of casts) {
     if (!byAbility.has(c.abilityGameID)) byAbility.set(c.abilityGameID, []);
     byAbility.get(c.abilityGameID).push(c);
   }
-  const lanes = [...byAbility.entries()].sort((a, b) => b[1].length - a[1].length);
-  const labels = lanes.map(([id, list]) => {
+  const all = [...byAbility.entries()].sort((a, b) => b[1].length - a[1].length);
+
+  // Filtro: las habilidades pulsadas son las únicas que se ven; sin ninguna pulsada se ven todas
+  if (!(S.rotSel instanceof Set)) S.rotSel = new Set();
+  const picked = S.rotSel;
+  const active = all.filter(([id]) => picked.has(id));
+  const filtering = active.length > 0;
+  const shown = filtering ? active : all;
+  const shownCasts = filtering ? casts.filter((c) => picked.has(c.abilityGameID)) : casts;
+
+  const pick = `<div class="rot-pick">${all.map(([id, list]) => {
     const a = ability(id);
-    return `<div class="lane-label" data-spell="${id}">${iconImg(a.icon, 20)}<span>${esc(a.name)}</span><b>${list.length}</b></div>`;
-  }).join('');
-  const tracks = lanes.map(([id, list]) => {
+    const on = picked.has(id);
+    return `<button class="rot-chip ${on ? 'on' : ''} ${filtering && !on ? 'dim' : ''}" data-action="rotpick" data-id="${id}" title="${esc(a.name)}">${iconImg(a.icon, 20)}<span>${esc(a.name)}</span><b>${list.length}</b></button>`;
+  }).join('')}${filtering ? `<button class="rot-chip all" data-action="rotall">${t('rotAll')}</button>` : ''}</div>`;
+
+  const controls = `<div class="rot-ctl">
+      <button class="chip ${S.rotMode === 'lanes' ? 'on' : ''}" data-action="rotmode" data-mode="lanes">${t('lanes')}</button>
+      <button class="chip ${S.rotMode === 'sequence' ? 'on' : ''}" data-action="rotmode" data-mode="sequence">${t('sequence')}</button>
+      <span class="grow"></span><span class="muted">${t('totalCasts', { n: num(shownCasts.length, 0) })}</span>
+      ${S.rotMode === 'lanes' ? `<span class="muted">${t('zoom')}</span><button class="btn ghost sm" data-action="zoom" data-d="-1">−</button><button class="btn ghost sm" data-action="zoom" data-d="1">+</button>` : ''}
+    </div>`;
+
+  // Secuencia: todos los lanzamientos en orden, cada uno con su número y su hora exacta
+  if (S.rotMode === 'sequence') {
+    return controls + pick + `<div class="rot-hint muted">${t('rotHint')}</div><div class="seq">${shownCasts.map((c, i) => {
+      const a = ability(c.abilityGameID);
+      const tm = clockPrecise(c.timestamp - f.fightStart);
+      return `<span class="seq-i">${iconImg(a.icon, 34, tm, c.abilityGameID)}<b class="seq-t">${tm}</b><small>#${i + 1}</small></span>`;
+    }).join('')}</div>`;
+  }
+
+  // Por habilidad: una fila por habilidad y, debajo de cada icono, la hora exacta (min:seg.décimas).
+  // Las horas se reparten en varias alturas para que no se pisen entre lanzamientos cercanos.
+  const LBL = 42;   // ancho que ocupa cada hora
+  const ROW = 12;   // alto de cada altura de horas
+  const MAXROWS = 4;
+  let hidden = false;
+  const lanes = shown.map(([id, list]) => {
+    const ends = [];
+    const items = list.map((c) => {
+      const cx = x(c);
+      let k = 0;
+      while (k < MAXROWS && ends[k] !== undefined && cx - LBL / 2 < ends[k]) k++;
+      if (k >= MAXROWS) { hidden = true; return { c, cx, k: -1 }; }
+      ends[k] = cx + LBL / 2;
+      return { c, cx, k };
+    });
+    return { id, items, h: 36 + Math.max(1, ends.length) * ROW };
+  });
+  const labels = lanes.map(({ id, items, h }) => {
     const a = ability(id);
-    return `<div class="lane-track">${list.map((c) =>
-      `<img class="ai cast" style="left:${x(c)}px" width="22" height="22" src="${abilityIconUrl(a.icon)}" data-spell="${id}" data-spell-extra="${clockPrecise(c.timestamp - f.fightStart)}" alt="">`).join('')}</div>`;
+    return `<div class="lane-label" style="height:${h}px" data-action="rotpick" data-id="${id}" data-spell="${id}">${iconImg(a.icon, 20)}<span>${esc(a.name)}</span><b>${items.length}</b></div>`;
   }).join('');
-  return controls + `<div class="rot">
+  const tracks = lanes.map(({ id, items, h }) => {
+    const a = ability(id);
+    return `<div class="lane-track" style="height:${h}px">${items.map(({ c, cx, k }) => {
+      const tm = clockPrecise(c.timestamp - f.fightStart);
+      return `<img class="ai cast" style="left:${cx}px" width="26" height="26" src="${abilityIconUrl(a.icon)}" data-spell="${id}" data-spell-extra="${tm}" alt="">`
+        + (k >= 0 ? `<span class="cast-t" style="left:${cx}px;top:${34 + k * ROW}px">${tm}</span>` : '');
+    }).join('')}</div>`;
+  }).join('');
+  return controls + pick + `<div class="rot-hint muted">${t('rotHint')}${hidden ? ' ' + t('rotHidden') : ''}</div><div class="rot">
     <div class="rot-labels"><div class="ruler-pad"></div>${labels}</div>
     <div class="rot-scroll"><div style="width:${width}px"><div class="ruler">${ticks}</div>${tracks}</div></div>
   </div>`;
@@ -1981,6 +2021,18 @@ document.addEventListener('click', async (ev) => {
       S.debuffId = Number(el.dataset.id);
       render();
       break;
+    case 'toplog-open':
+      loadReport(el.dataset.u);
+      break;
+    case 'toplog-copy':
+      try {
+        await navigator.clipboard.writeText(el.dataset.u);
+        toast(LL('Enlace copiado', 'Link copied'));
+      } catch { toast(LL('No se pudo copiar el enlace', 'Could not copy the link')); }
+      break;
+    case 'toplog-ext':
+      try { window.api.openExternal(el.dataset.u); } catch { window.open(el.dataset.u, '_blank', 'noopener'); }
+      break;
     case 'copy-summary': {
       if (!S.fight) break;
       try {
@@ -2125,8 +2177,24 @@ document.addEventListener('click', async (ev) => {
       S.rotMode = el.dataset.mode;
       render();
       break;
+    case 'rotpick': {
+      const pid = Number(el.dataset.id);
+      if (!(S.rotSel instanceof Set)) S.rotSel = new Set();
+      if (S.rotSel.has(pid)) S.rotSel.delete(pid); else S.rotSel.add(pid);
+      const sc = $('.rot-scroll');
+      if (sc) S._rotScroll = sc.scrollLeft;
+      render();
+      break;
+    }
+    case 'rotall': {
+      S.rotSel = new Set();
+      const sc = $('.rot-scroll');
+      if (sc) S._rotScroll = sc.scrollLeft;
+      render();
+      break;
+    }
     case 'zoom': {
-      const levels = [2, 4, 8, 12, 20, 32];
+      const levels = [2, 4, 8, 12, 20, 32, 48, 64];
       const cur = levels.indexOf(S.rotZoom);
       const next = levels[Math.max(0, Math.min(levels.length - 1, cur + Number(el.dataset.d)))];
       const sc = $('.rot-scroll');

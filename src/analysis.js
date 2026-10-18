@@ -165,7 +165,7 @@ const Analysis = (() => {
         if (!actor || !fight) continue;
         const prof = await fetchProfile({ code: r.report.code, fight, actor: { id: actor.id, name: actor.name, cls: p.cls, spec: p.spec, icon: `${p.cls}-${p.spec}` }, metric });
         const realm = rankRealm(r);
-        out.push({ ...prof, label: realm ? `${cleanText(r.name)}-${realm}` : cleanText(r.name), rankPos: i + 1, rankName: r.name, rankRealm: realm, rankAmount: r.amount });
+        out.push({ ...prof, label: realm ? `${cleanText(r.name)}-${realm}` : cleanText(r.name), rankPos: i + 1, rankName: r.name, rankRealm: realm, rankAmount: r.amount, rankActorId: actor.id });
       } catch (e) { console.warn('top', r.name, e); }
     }
     try { // caché antigua de los mejores (ya no se usa)
@@ -518,6 +518,12 @@ const Analysis = (() => {
       ${roleSections(a)}`;
   }
 
+  // Enlace a la kill de un jugador del ranking, ya centrado en él (daño hecho o sanación según la métrica).
+  function topLogUrl(x, metric) {
+    const type = metric === 'hps' ? 'healing' : 'damage-done';
+    return `https://www.warcraftlogs.com/reports/${x.code}?fight=${x.fightId}&type=${type}${x.rankActorId != null ? '&source=' + x.rankActorId : ''}`;
+  }
+
   // ------------------------------------------------------------ vista de jugador: "Analizar"
   async function mountPlayer(f, id, p, seq) {
     const root = $('#anRoot');
@@ -541,7 +547,15 @@ const Analysis = (() => {
       const bossName = raw.name;
       root.innerHTML = `<div class="an-intro"><div>${L(`Comparado con los <b>${tops.length} mejores</b> ${esc(specName(p.spec))} ${esc(className(p.cls))} en <b>${esc(bossName)}</b> ${raw.keystoneLevel ? '(ranking de Mítica+, llaves de tu nivel +' + raw.keystoneLevel + ').' : '(ranking de la zona, kills).'}`,
         `Compared with the <b>${tops.length} best</b> ${esc(specName(p.spec))} ${esc(className(p.cls))} on <b>${esc(bossName)}</b> ${raw.keystoneLevel ? '(Mythic+ rankings, keys around your level +' + raw.keystoneLevel + ').' : '(zone rankings, kills).'}`)}
-        <small>${L('Analiza la pelea completa.', 'Analyzes the whole fight.')} ${tops.map((x) => `#${x.rankPos} ${esc(x.label)}`).join(' · ')}</small></div>
+        <small>${L('Analiza la pelea completa.', 'Analyzes the whole fight.')}</small>
+        <div class="an-tops">${tops.map((x) => {
+          const u = topLogUrl(x, metric);
+          const wt = `https://www.warcraftlogs.com/reports/${x.code}?fight=${x.fightId}`;
+          return `<div class="an-top"><b>#${x.rankPos}</b><span class="an-top-n">${esc(x.label)}</span><span class="muted">${x.rankAmount ? plain(x.rankAmount) + ' ' + (metric === 'hps' ? 'HPS' : 'DPS') : ''}</span>
+            <button class="btn ghost sm" data-action="toplog-open" data-u="${esc(wt)}" title="${L('Abre este log dentro de WipeTime', 'Open this log inside WipeTime')}">${L('Abrir aquí', 'Open here')}</button>
+            <button class="btn ghost sm" data-action="toplog-copy" data-u="${esc(u)}" title="${esc(u)}">${L('Copiar enlace', 'Copy link')}</button>
+            <button class="btn ghost sm" data-action="toplog-ext" data-u="${esc(u)}">Warcraft Logs ↗</button></div>`;
+        }).join('')}</div></div>
         <button class="btn" data-cmp="open" data-from-player="${id}">${L('Comparar con mis logs…', 'Compare with my logs…')}</button></div>
         ${sections(a)}`;
     } catch (e) {
