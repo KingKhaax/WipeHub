@@ -2364,7 +2364,8 @@ function openCharSearch() {
   S.home = false; S.cmpOpen = false; S.guildOpen = false; S.profileOpen = false;
   sidebar.hidden = true;
   $('#whoami').open && $('#whoami').close();
-  main.innerHTML = `<div class="charsearch">${typeof Profile !== 'undefined' ? Profile.sectionHTML() : ''}</div>`;
+  main.innerHTML = `<div class="charsearch">${typeof Profile !== 'undefined' ? Profile.sectionHTML() : ''}<div id="gdChars" class="gd-chars"></div></div>`;
+  if (typeof Guilds !== 'undefined') Guilds.mountChars();
   main.scrollTop = 0;
   const i = document.querySelector('#pfForm input[name="name"]'); if (i) i.focus();
 }
@@ -2537,7 +2538,8 @@ document.addEventListener('auxclick', (ev) => {
   { const r0 = parseRoute(location.hash); if (r0 && r0.kind !== 'home') applyRoute(location.hash); else syncRoute(true); }
   const before = S.expansion?.id;
   await loadExpansion();
-  if (!S.report && S.expansion?.id !== before) renderWelcome();
+  // al cargar la expansión se repinta el inicio, pero solo si sigue en pantalla (si ya se abrió otra sección por la URL, no se pisa)
+  if (!S.report && S.expansion?.id !== before && main.querySelector('.welcome') && S.home && !S.cmpOpen) renderWelcome();
 })();
 
 // Enlaces wipetime://report/<código>?fight=<n>

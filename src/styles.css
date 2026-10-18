@@ -1256,6 +1256,7 @@ img.ai { box-shadow: 0 0 0 1px rgba(0, 0, 0, .7), 0 0 0 2px rgba(47, 183, 192, .
 .cc { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border-radius: 14px; background: var(--panel); border: 1px solid var(--line); box-shadow: inset 0 1px 0 rgba(190, 235, 255, .05); }
 .cc.click { cursor: pointer; }
 .cc.click:hover { border-color: var(--gold-line); }
+.gd-chars { margin-top: 26px; }
 .cc-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 10px; }
 .cc-pic { position: relative; flex: none; width: var(--sz, 72px); height: var(--sz, 72px); border-radius: 6px; background: #05080f; border: 2px solid #3a4a6e; box-shadow: 0 0 0 1px #000; overflow: hidden; }
 .cc-pic img { width: 100%; height: 100%; object-fit: cover; display: block; }

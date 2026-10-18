@@ -47,6 +47,7 @@ const Guilds = (() => {
 
   // ------------------------------------------------------------ vista
   function render() {
+    renderCharsBox();
     if (!S.guildOpen) return;
     const s = st.status || {};
     const hasClient = s.canLogin;
@@ -79,10 +80,8 @@ const Guilds = (() => {
     const bodyUnderMine = !!(st.sel && Array.isArray(st.mine) && st.mine.some((g) => guildKey(g) === guildKey(st.sel)));
     const bodyDiv = `<div id="gdBody">${st.sel ? bodyHTML() : ''}</div>`;
     main.innerHTML = `<div class="hdr"><div class="eyebrow">${LL('Comunidad', 'Community')}</div><h1>Guilds</h1><div class="sub">${LL('Mira los logs de tu guild y quién tiene mejores parses.', 'See your guild\'s logs and who has the best parses.')}</div></div>
-      ${login}${mine ? `<h3 class="sec">${LL('Tus guilds', 'Your guilds')}</h3>${mine}` : `<div class="empty sm">${LL('No hace falta iniciar sesión: añade tus personajes abajo o busca tu guild y guárdala.', 'No sign-in needed: add your characters below or find your guild and save it.')}</div>`}
+      ${login}${mine ? `<h3 class="sec">${LL('Tus guilds', 'Your guilds')}</h3>${mine}` : `<div class="empty sm">${LL('No hace falta iniciar sesión: añade o busca tu guild abajo y guárdala. Tus personajes están en la pestaña Personajes.', 'No sign-in needed: add or find your guild below and save it. Your characters are in the Characters tab.')}</div>`}
       ${bodyUnderMine ? bodyDiv : ''}
-      ${charsHTML()}
-      <h4 class="subh">${LL('Añadir un personaje', 'Add a character')}</h4>${charFormHTML()}
       <h4 class="subh">${LL('Añadir una guild', 'Add a guild')}</h4>${guildFormHTML()}
       <div class="bn-or"><span>${LL('o busca una guild a mano', 'or find a guild by hand')}</span></div>${manual}
       ${typeof GuildCmp !== 'undefined' ? GuildCmp.html() : ''}
@@ -188,9 +187,9 @@ const Guilds = (() => {
     if (st.armory?.key !== key) return;
     if (r.error && silent && st.armory.data) return; // un fallo puntual no borra lo que ya se veía
     st.armory = r.error ? { key, status: 'err', err: r.error, realmSlug, name, region } : { key, status: 'ok', data: r, realmSlug, name, region };
-    if (S.guildOpen) render();
+    render();
     st.armoryTimer = setInterval(() => {
-      if (!S.guildOpen || st.armory?.key !== key) { clearInterval(st.armoryTimer); return; }
+      if ((!S.guildOpen && !document.getElementById('gdChars')) || st.armory?.key !== key) { clearInterval(st.armoryTimer); return; }
       openArmory(key, realmSlug, name, true, region);
     }, 60000);
   }
@@ -284,11 +283,41 @@ const Guilds = (() => {
         ${canHide ? `<button type="button" data-gd="${c.manual ? 'delchar' : 'hide'}" data-key="${esc(k)}" title="${esc(LL('Quitar de la lista', 'Remove from the list'))}" aria-label="${esc(LL('Quitar', 'Remove'))}">${ICON_X}</button>` : ''}</div></div>${armoryHTML(c)}`;
     };
     const favList = st.chars.filter((c) => favs.has(charKey(c)));
-    const list = st.chars.filter((c) => !hidden.has(charKey(c)));
-    const hiddenN = st.chars.length - list.length;
+    // un favorito pasa a «Personajes favoritos» y sale de «Tus personajes»; al quitarle la estrella vuelve a «Tus personajes»
+    const list = st.chars.filter((c) => !hidden.has(charKey(c)) && !favs.has(charKey(c)));
+    const hiddenN = st.chars.filter((c) => hidden.has(charKey(c)) && !favs.has(charKey(c))).length;
+    const empty = favList.length ? `<div class="empty sm">${LL('Todos tus personajes están en favoritos.', 'All your characters are in favorites.')}</div>` : `<div class="empty sm">${LL('Has quitado todos los personajes de la lista.', 'You removed every character from the list.')}</div>`;
     return `${favList.length ? `<h3 class="sec">${LL('Personajes favoritos', 'Favorite characters')}</h3><div class="cc-grid">${favList.map((c) => wrap(c, false)).join('')}</div>` : ''}
       <h3 class="sec">${LL('Tus personajes', 'Your characters')}${hiddenN ? ` <button type="button" class="mini-btn" data-gd="unhide">${LL(`Restaurar ${hiddenN} quitado${hiddenN === 1 ? '' : 's'}`, `Restore ${hiddenN} removed`)}</button>` : ''}</h3>
-      ${list.length ? `<div class="cc-grid">${list.map((c) => wrap(c, true)).join('')}</div>` : `<div class="empty sm">${LL('Has quitado todos los personajes de la lista.', 'You removed every character from the list.')}</div>`}`;
+      ${list.length ? `<div class="cc-grid">${list.map((c) => wrap(c, true)).join('')}</div>` : empty}`;
+  }
+
+  // Sección de personajes de la pestaña «Personajes»: conectar cuenta (si no lo está), favoritos, tus personajes y añadir un personaje
+  function charsPageHTML() {
+    const s = st.status || {};
+    const glyph = '<img class="wi" src="icons/inv_misc_head_human_01.jpg" width="30" height="30" alt="">';
+    const login = !s.loggedIn && s.canLogin ? `<div class="bn-card"><div class="bn-glow"></div><div class="bn-ic">${glyph}</div>
+      <div class="bn-txt"><h2>${LL('Conecta tu cuenta de Battle.net (opcional)', 'Connect your Battle.net account (optional)')}</h2>
+        <p>${LL('Traemos tus personajes automáticamente. También puedes añadirlos a mano abajo.', 'We bring in your characters automatically. You can also add them by hand below.')}</p></div>
+      <button class="bn-btn" data-gd="login">${glyph}<span>${LL('Iniciar sesión con Battle.net', 'Sign in with Battle.net')}</span></button></div>` : '';
+    const busy = st.busy === 'mine' ? `<div class="loading"><span class="spinner"></span>${LL('Buscando tus personajes…', 'Finding your characters…')}</div>` : '';
+    return `${login}${busy}${charsHTML()}<h4 class="subh">${LL('Añadir un personaje', 'Add a character')}</h4>${charFormHTML()}`;
+  }
+
+  // Pinta la sección de personajes dentro de la pestaña «Personajes» (si está abierta) y la prepara la primera vez
+  function renderCharsBox() {
+    const box = document.getElementById('gdChars');
+    if (!box) return;
+    box.innerHTML = charsPageHTML();
+    Cards.fillCrests(box);
+  }
+  async function mountChars() {
+    st.status = await window.api.bnetStatus();
+    if (!st.loginMine && st.status.cachedGuilds?.list && st.status.cachedGuilds.region === st.status.region) { st.loginMine = st.status.cachedGuilds.list; st.loginChars = st.status.cachedGuilds.chars || null; }
+    rebuild();
+    renderCharsBox();
+    loadSaved().then(renderCharsBox);
+    if (st.status.loggedIn && !st.fresh) { st.fresh = true; loadMine(); }
   }
 
   function resultsHTML() {
@@ -548,7 +577,7 @@ const Guilds = (() => {
 
   document.addEventListener('click', async (ev) => {
     const el = ev.target.closest('[data-gd]');
-    if (!el || !S.guildOpen) return;
+    if (!el || (!S.guildOpen && !el.closest('#gdChars'))) return;
     const a = el.dataset.gd;
     if (a === 'login') {
       el.disabled = true;
@@ -580,8 +609,8 @@ const Guilds = (() => {
     else if (a === 'armory') { if (st.armory?.key === el.dataset.key) { clearInterval(st.armoryTimer); st.armory = null; render(); } else openArmory(el.dataset.key, el.dataset.realm, el.dataset.name, false, el.dataset.region || ''); }
     else if (a === 'armory-refresh') { const x = st.armory; if (x) openArmory(x.key, x.realmSlug, x.name, false, x.region || ''); }
     else if (a === 'armory-close') { clearInterval(st.armoryTimer); st.armory = null; render(); }
-    else if (a === 'pick-char') pickGuild({ name: el.dataset.guild, realmSlug: el.dataset.realm, realmName: el.dataset.realmname, region: el.dataset.region || st.status?.region });
-    else if (a === 'delchar') { saveList('gd:chars', savedChars().filter((x) => charKey(x) !== el.dataset.key)); if (st.armory?.key === el.dataset.key) st.armory = null; await loadSaved(); render(); }
+    else if (a === 'pick-char') { if (!S.guildOpen) await open(); pickGuild({ name: el.dataset.guild, realmSlug: el.dataset.realm, realmName: el.dataset.realmname, region: el.dataset.region || st.status?.region }); }
+    else if (a === 'delchar') { saveList('gd:chars', savedChars().filter((x) => charKey(x) !== el.dataset.key)); lsSet('gd:favs', JSON.stringify(lsList('gd:favs').filter((x) => x !== el.dataset.key))); if (st.armory?.key === el.dataset.key) st.armory = null; await loadSaved(); render(); }
     else if (a === 'saveguild' || a === 'unsaveguild') {
       const g = st.sel;
       if (g) { const rest = savedGuilds().filter((x) => guildKey(x) !== guildKey(g)); saveList('gd:guilds', a === 'saveguild' ? [...rest, { name: g.name, realmSlug: g.realmSlug, realmName: g.realmName || g.realmSlug, region: g.region || st.status?.region || 'eu' }] : rest); rebuild(); render(); }
@@ -652,5 +681,5 @@ const Guilds = (() => {
     pickGuild({ name, realmSlug: realm, realmName: realm, region: reg });
   });
 
-  return { open, render };
+  return { open, render, mountChars };
 })();
