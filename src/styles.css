@@ -213,6 +213,13 @@ details.enc > summary::-webkit-details-marker { display: none; }
 .row:nth-child(even) { background: rgba(255, 255, 255, .02); }
 .row.head { min-height: 26px; color: var(--muted); font-size: 12px; font-weight: 600; background: var(--panel); }
 .row.head .rate { color: var(--muted); }
+/* Columnas ordenables (cabecera pulsable con flecha, como en Warcraft Logs) */
+.sortable, [data-ts] { cursor: pointer; user-select: none; -webkit-user-select: none; transition: color .12s; }
+.sortable:hover, [data-ts]:hover { color: var(--text); }
+.sortable.sorted, [data-ts][data-dir] { color: var(--text); }
+.sortable[data-dir="desc"]::after, [data-ts][data-dir="desc"]::after { content: ' ▼'; font-size: .8em; color: var(--accent); }
+.sortable[data-dir="asc"]::after, [data-ts][data-dir="asc"]::after { content: ' ▲'; font-size: .8em; color: var(--accent); }
+.sortable:focus-visible, [data-ts]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
 .row.click { cursor: pointer; }
 .row.click:hover { background: var(--hover); }
 .row.me { background: var(--panel-2); }
@@ -1508,8 +1515,8 @@ img.role-ic { border-radius: 7px; }
 .pf-tile-b span { display: flex; flex-direction: column; align-items: center; }
 .pf-tile-b small { color: var(--muted); font-size: 11px; }
 .pf-tile-b b { font-size: 17px; font-variant-numeric: tabular-nums; }
-.pf-prog { font-size: 22px; font-weight: 800; }
-.pf-prog small { font-size: 13px; font-weight: 600; }
+.pf-prog { font-size: 15px; font-weight: 700; }
+.pf-prog small { font-size: 15px; font-weight: 700; }
 /* kills/jefes en una sola línea (3/10), no apilados como el resto de métricas del recuadro */
 .pf-tile-b span.pf-prog { flex-direction: row; align-items: baseline; white-space: nowrap; }
 .pf-tile-b .pf-prog small { color: var(--muted); font-size: 15px; font-weight: 700; margin-left: 1px; }

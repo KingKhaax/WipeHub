@@ -249,7 +249,7 @@ const Profile = (() => {
       const killed = (zr.rankings || []).filter((r) => r.totalKills > 0).length;
       const total = zone?.encounters?.length || (zr.rankings || []).length;
       tiles.push(`<div class="pf-tile"><h4>${esc(zone?.name || '')} · ${esc(diffName(effDiff()))}</h4>
-        <div class="pf-tile-b"><span class="pf-prog">${killed}<small>/${total}</small></span><span><small>All Stars</small><b>${as ? num(as.points, 0) : '—'}</b></span>
+        <div class="pf-tile-b"><span class="pf-prog" style="color:${parseColor(total ? (killed / total) * 100 : 0)}" title="${esc(LL(`${killed} de ${total} jefes derrotados`, `${killed} of ${total} bosses defeated`))}">${killed}<small>/${total}</small></span><span><small>All Stars</small><b>${as ? num(as.points, 0) : '—'}</b></span>
         <span><small>${LL('Mundo', 'World')}</small><b style="color:${rankColor(as?.rankPercent)}">${as ? `#${num0(as.rank)}` : '—'}</b></span>
         <span><small>${esc(regionName(st.q.region))}</small><b style="color:${rankColor(as?.rankPercent)}">${as ? `#${num0(as.regionRank)}` : '—'}</b></span>
         <span><small>${LL('Reino', 'Realm')}</small><b>${as ? `#${num0(as.serverRank)}` : '—'}</b></span></div></div>`);

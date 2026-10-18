@@ -28,7 +28,12 @@ const S = {
   rotSel: new Set(), // habilidades pulsadas en Rotación (vacío = todas)
   cache: new Map(),
   seq: 0,
-  sortMode: lsGet('sortMode') || 'desc', // desc | asc | name
+  // Orden de las listas con barras: columna y sentido. Se cambia pulsando el nombre de la columna y se recuerda.
+  rankSort: (() => {
+    try { const j = JSON.parse(lsGet('rankSort') || 'null'); if (j && j.key) return j; } catch { /* sin guardar */ }
+    const m = lsGet('sortMode'); // formato anterior (botones)
+    return m === 'asc' ? { key: 'amount', dir: 'asc' } : m === 'name' ? { key: 'name', dir: 'asc' } : /^parse-/.test(m || '') ? { key: 'parse', dir: m === 'parse-asc' ? 'asc' : 'desc' } : { key: 'amount', dir: 'desc' };
+  })(),
   takenAbility: '', // habilidad elegida en Daño recibido ('' = todas)
   shieldKind: 'all', // all | boss | allies | adds
   dmgMetric: 'dps',   // dps | boss | active
@@ -318,10 +323,11 @@ function rankMap(json, field = 'rankPercent') {
   return m;
 }
 
-// El Parse % sale del modo «Parses» (como la web de Warcraft Logs); el Ilvl % del modo por defecto.
-// Además, en el modo por defecto («Rankings») da rankPercent 0 a los jugadores cuya posición es aproximada («~»,
-// fuera de la lista de ranking), mientras que en el modo «Parses» sí calcula su porcentaje, igual que la web. Se piden los
-// dos y, donde el primero da 0 con posición aproximada, se usa el valor del segundo.
+// El Parse % y el Ilvl % salen del modo por defecto de la API («Rankings»), que es el que enseña la web de Warcraft Logs:
+// con el log Kw3cy29J8t6gA7bG (Ula'tek heroico) acertó 22 de 23 jugadores, y el modo «Parses» (compara con todos los parses,
+// no solo con el mejor de cada jugador) no acertó ninguno y daba 10-17 puntos menos en los parses altos.
+// El modo «Parses» solo rellena los huecos: si el por defecto no trae valor (vacío o 0 en posiciones aproximadas «~»)
+// y «Parses» sí lo calcula, se usa ese.
 function mergeRankings(a, b) {
   const fa = a?.data?.[0];
   if (!fa) return a;
@@ -331,12 +337,8 @@ function mergeRankings(a, b) {
   for (const [k, ro] of Object.entries(fa.roles || {})) {
     roles[k] = { ...ro, characters: (ro.characters || []).map((c) => {
       const p = byName.get(c.name);
-      // El «Parse %» de la web de Warcraft Logs es el del modo «Parses» (el de «Rankings» sale 2-5 puntos más alto en logs recientes);
-      // el «Ilvl %» sí es el bracketPercent del modo por defecto, así que se conserva.
-      if (p && p.rankPercent > 0) return { ...c, rank: p.rank, best: p.best, totalParses: p.totalParses, rankPercent: p.rankPercent, bracketPercent: c.bracketPercent ?? p.bracketPercent, fromParses: true };
-      const approx = typeof c.rank === 'string' && c.rank.startsWith('~');
-      if (p && (c.rankPercent == null || c.rankPercent === 0) && (approx || c.rank >= c.totalParses) && p.rankPercent > 0) {
-        return { ...c, rank: p.rank, best: p.best, totalParses: p.totalParses, rankPercent: p.rankPercent, bracketPercent: p.bracketPercent || c.bracketPercent, fromParses: true };
+      if (p && (c.rankPercent == null || c.rankPercent === 0) && p.rankPercent > 0) {
+        return { ...c, rank: p.rank, best: p.best, totalParses: p.totalParses, rankPercent: p.rankPercent, bracketPercent: c.bracketPercent || p.bracketPercent, fromParses: true };
       }
       return c;
     }) };
@@ -487,6 +489,19 @@ async function estimateParses(f, rows, metric, mode = S.parseMode) {
   return out;
 }
 
+// Recoloca las filas ya pintadas según el orden elegido (cuando llegan valores que no estaban al pintar, como los parses estimados)
+function resortRankedDOM() {
+  const box = $('.ranked');
+  const rs = S.rankSort;
+  if (!box || !S.lastRanked || !rs) return;
+  const key = rs.key === 'parseI' ? 'parseI' : 'parse';
+  const cmp = rankSortCompare((e) => numOrNull(e[key]), rs.key, rs.dir);
+  const pairs = [...box.querySelectorAll(':scope > .row:not(.head)')].map((el) => ({ el, e: S.lastRanked[Number(el.dataset.ri)] })).filter((p) => p.e);
+  pairs.sort((a, b) => cmp(a.e, b.e));
+  S.lastRanked = pairs.map((p) => p.e);
+  pairs.forEach((p, i) => { p.el.dataset.ri = i; box.appendChild(p.el); });
+}
+
 // Rellena los huecos de parse después de pintar la lista, para no bloquear la vista.
 function fillEstimatedPills(f, rows, metric) {
   S.post = async (seq) => {
@@ -506,6 +521,7 @@ function fillEstimatedPills(f, rows, metric) {
       if (est.has(r.name)) r.parse = est.get(r.name);
       if (estI.has(r.name)) r.parseI = estI.get(r.name);
     }
+    if (S.rankSort?.key === 'parse' || S.rankSort?.key === 'parseI') resortRankedDOM(); // los parses estimados llegan después de pintar: se recoloca la lista
   };
 }
 
@@ -963,11 +979,25 @@ function parsePill(p, estimated = false, low = false) {
 }
 
 /** Lista con barras estilo ranking. rows: {id,name,cls,spec,total,rate?,note?,segs?[{v,color,label}]} */
-// Selector de orden común a todas las listas con barras
-function sortBarHTML(hasParse = false) {
-  const chip = (k, label) => `<button class="chip ${S.sortMode === k ? 'on' : ''}" data-action="sort" data-m="${k}">${label}</button>`;
-  return `<div class="sortbar"><span class="muted">${LL('Ordenar', 'Sort')}</span>${chip('desc', LL('↓ Mayor a menor', '↓ High to low'))}${chip('asc', LL('↑ Menor a mayor', '↑ Low to high'))}${chip('name', LL('A–Z', 'A–Z'))}<span class="grow"></span><button class="chip" data-action="export-img" data-m="copy" title="${esc(LL('Copiar esta lista como imagen', 'Copy this list as an image'))}">📋 ${LL('Copiar imagen', 'Copy image')}</button><button class="chip" data-action="export-img" data-m="save">💾 ${LL('Guardar PNG', 'Save PNG')}</button>${hasParse ? `<span class="sep"></span>${chip('parse-desc', LL('Parse: mejor a peor', 'Parse: best to worst'))}${chip('parse-asc', LL('Parse: peor a mejor', 'Parse: worst to best'))}` : ''}</div>`;
+// Botones de exportar común a todas las listas con barras (el orden se cambia pulsando el nombre de cada columna)
+function exportBarHTML() {
+  return `<div class="sortbar"><span class="grow"></span><button class="chip" data-action="export-img" data-m="copy" title="${esc(LL('Copiar esta lista como imagen', 'Copy this list as an image'))}">📋 ${LL('Copiar imagen', 'Copy image')}</button><button class="chip" data-action="export-img" data-m="save">💾 ${LL('Guardar PNG', 'Save PNG')}</button></div>`;
 }
+
+// Orden de la lista por una columna. Los valores que faltan (–) van siempre al final, sea cual sea el sentido.
+const RANK_SORT_DEFAULT_DIR = { name: 'asc' };
+function rankSortCompare(valOf, key, dir) {
+  const mul = dir === 'asc' ? 1 : -1;
+  return (x, y) => {
+    if (key === 'name') return mul * String(x.name).localeCompare(String(y.name), locale()) || y.total - x.total;
+    const a = valOf(x), b = valOf(y);
+    if (a == null && b == null) return y.total - x.total;
+    if (a == null) return 1;
+    if (b == null) return -1;
+    return mul * (a - b) || y.total - x.total;
+  };
+}
+const numOrNull = (v) => (typeof v === 'number' && Number.isFinite(v) ? v : null);
 
 const ENEMY_RED = '#e5484d';
 const rowColor = (r) => (CLASSES[r.cls] ? classColor(r.cls) : ENEMY_RED);
@@ -995,13 +1025,10 @@ const activeOf = (e, ms) => (e?.activeTime != null && ms > 0 ? Math.min(100, (e.
 function rankedList(rows, { parse, parseIlvl, slots, slotsIlvl, clickable = !S.viewCombined, unit = '', invalid = null } = {}) {
   if (!rows.length) return `<div class="empty">${t('noData')}</div>`;
   const max = Math.max(...rows.map((r) => r.total), 1);
-  let list = rows;
-  if (S.sortMode === 'asc') list = [...rows].reverse();
-  else if (S.sortMode === 'name') list = [...rows].sort((x, y) => x.name.localeCompare(y.name, locale()));
-  else if (parse && /^parse-/.test(S.sortMode)) {
-    const pv = (r) => { const v = parse.get(r.name); return typeof v === 'number' ? v : -1; };
-    list = [...rows].sort((x, y) => (S.sortMode === 'parse-asc' ? pv(x) - pv(y) : pv(y) - pv(x)));
-  }
+  const rs = S.rankSort || { key: 'amount', dir: 'desc' };
+  const valOf = (r) => (rs.key === 'parse' ? numOrNull(parse?.get(r.name)) : rs.key === 'parseI' ? numOrNull(parseIlvl?.get(r.name))
+    : rs.key === 'ilvl' ? (r.ilvl > 0 ? r.ilvl : null) : rs.key === 'active' ? numOrNull(r.active) : rs.key === 'rate' ? numOrNull(r.rate) : r.total);
+  const list = [...rows].sort(rankSortCompare(valOf, rs.key, rs.dir));
   const sum = rows.reduce((x, r) => x + r.total, 0) || 1;
   const hasParse = !!(parse || slots?.size);
   const hasParseI = !!(parseIlvl || slotsIlvl?.size);
@@ -1028,8 +1055,12 @@ function rankedList(rows, { parse, parseIlvl, slots, slotsIlvl, clickable = !S.v
     };
   });
   S.lastRankedMeta = { unit, hasParse, hasParseI, hasIlvl, hasActive, hasRate: hasRate || hasNote };
-  const head = `<div class="row head">${hasParse ? '<span>Parse %</span>' : ''}<span class="c-name">${LL('Nombre', 'Name')}</span><span class="c-amt">${LL('Cantidad', 'Amount')}</span>${hasNote ? '<span></span>' : ''}${hasIlvl ? '<span>Ilvl</span>' : ''}${hasParseI ? '<span>Ilvl %</span>' : ''}${hasActive ? `<span>${LL('Activo', 'Active')}</span>` : ''}${hasRate ? `<span class="c-rate">${unit}</span>` : ''}</div>`;
-  return `${sortBarHTML(!!parse)}<div class="ranked" style="--cols:${cols}">${head}${list.map((r, i) => {
+  const hc = (key, label, cls = '') => {
+    const on = rs.key === key;
+    return `<span class="${cls} sortable${on ? ' sorted' : ''}" data-action="rsort" data-k="${key}" role="button" tabindex="0" ${on ? `data-dir="${rs.dir}" aria-sort="${rs.dir === 'asc' ? 'ascending' : 'descending'}"` : ''} title="${esc(LL('Pulsa para ordenar por esta columna', 'Click to sort by this column'))}">${label}</span>`;
+  };
+  const head = `<div class="row head">${hasParse ? hc('parse', 'Parse %') : ''}${hc('name', LL('Nombre', 'Name'), 'c-name')}${hc('amount', LL('Cantidad', 'Amount'), 'c-amt')}${hasNote ? '<span></span>' : ''}${hasIlvl ? hc('ilvl', 'Ilvl') : ''}${hasParseI ? hc('parseI', 'Ilvl %') : ''}${hasActive ? hc('active', LL('Activo', 'Active')) : ''}${hasRate ? hc('rate', unit, 'c-rate') : ''}</div>`;
+  return `${exportBarHTML()}<div class="ranked" style="--cols:${cols}">${head}${list.map((r, i) => {
     const color = rowColor(r);
     const me = isMe(r.name);
     const pets = Math.min(r.pets || 0, r.total);
@@ -2078,11 +2109,14 @@ document.addEventListener('click', async (ev) => {
       S.takenAbility = el.dataset.name;
       render();
       break;
-    case 'sort':
-      S.sortMode = el.dataset.m;
-      lsSet('sortMode', S.sortMode);
+    case 'rsort': {
+      const k = el.dataset.k;
+      const cur = S.rankSort || { key: 'amount', dir: 'desc' };
+      S.rankSort = cur.key === k ? { key: k, dir: cur.dir === 'asc' ? 'desc' : 'asc' } : { key: k, dir: RANK_SORT_DEFAULT_DIR[k] || 'desc' };
+      lsSet('rankSort', JSON.stringify(S.rankSort));
       render();
       break;
+    }
     case 'metric':
       S.dmgMetric = el.dataset.m;
       render();

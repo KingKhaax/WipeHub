@@ -10,16 +10,27 @@ const mergeRankings = new Function(`${src.slice(start, end)}; return mergeRankin
 
 const mk = (chars) => ({ data: [{ roles: { dps: { characters: chars } } }] });
 
-test('Parse % sale del modo Parses y el Ilvl % del modo por defecto', () => {
-  const a = mk([{ name: 'Neerö', rank: 20, totalParses: 68, rankPercent: 71, bracketPercent: 68 }]);
-  const b = mk([{ name: 'Neerö', rank: '~14', totalParses: 47, rankPercent: 70, bracketPercent: 69 }]);
+test('Parse % e Ilvl % salen del modo por defecto, como la web de Warcraft Logs', () => {
+  // valores reales del log Kw3cy29J8t6gA7bG: por defecto 95 (la web enseña 95); el modo Parses daba 85
+  const a = mk([{ name: 'Natristare', rank: '~1527', totalParses: 30552, rankPercent: 95, bracketPercent: 96 }]);
+  const b = mk([{ name: 'Natristare', rank: '~3000', totalParses: 90000, rankPercent: 85, bracketPercent: 80 }]);
   const c = mergeRankings(a, b).data[0].roles.dps.characters[0];
-  assert.equal(c.rankPercent, 70);
-  assert.equal(c.bracketPercent, 68);
+  assert.equal(c.rankPercent, 95);
+  assert.equal(c.bracketPercent, 96);
+  assert.equal(c.fromParses, undefined);
 });
 
-test('si el modo Parses da 0 se conserva el valor por defecto', () => {
-  const a = mk([{ name: 'X', rank: 5, totalParses: 100, rankPercent: 95, bracketPercent: 90 }]);
+test('si el modo por defecto no trae valor, se rellena con el del modo Parses', () => {
+  const a = mk([{ name: 'X', rank: '~5', totalParses: 100, rankPercent: 0, bracketPercent: 0 }]);
+  const b = mk([{ name: 'X', rank: '~5', totalParses: 80, rankPercent: 70, bracketPercent: 66 }]);
+  const c = mergeRankings(a, b).data[0].roles.dps.characters[0];
+  assert.equal(c.rankPercent, 70);
+  assert.equal(c.bracketPercent, 66);
+  assert.equal(c.fromParses, true);
+});
+
+test('si los dos modos dan 0, se queda en 0', () => {
+  const a = mk([{ name: 'X', rank: 5, totalParses: 100, rankPercent: 0, bracketPercent: 0 }]);
   const b = mk([{ name: 'X', rank: '~5', totalParses: 80, rankPercent: 0, bracketPercent: 0 }]);
-  assert.equal(mergeRankings(a, b).data[0].roles.dps.characters[0].rankPercent, 95);
+  assert.equal(mergeRankings(a, b).data[0].roles.dps.characters[0].rankPercent, 0);
 });
