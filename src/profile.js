@@ -105,6 +105,21 @@ const Profile = (() => {
     st.rio = r.error ? null : r;
   }
 
+  // Vuelve a pedir solo los rankings/logs del personaje (por si ha subido un log nuevo), sin recargar el equipo.
+  // Los logs de cada jefe que estaban desplegados se piden otra vez al repintar.
+  async function refreshWcl() {
+    if (st.wclBusy || st.busy) return;
+    st.wclBusy = true;
+    repaint();
+    try { await fetchWcl(); } finally {
+      st.encLogs = {};
+      st.wclBusy = false;
+      st.at = Date.now();
+    }
+    repaint();
+    toast(st.wclErr ? st.wclErr : LL('Logs actualizados', 'Logs updated'));
+  }
+
   async function load() {
     clearInterval(st.timer);
     st.busy = true;
@@ -321,7 +336,8 @@ const Profile = (() => {
     // Botones de parche dentro de la season (como en Warcraft Logs): Todos + uno por cada parche de la banda
     const parts = (zone.partitions || []).filter((p) => p.name !== 'default');
     const ptabs = parts.length > 1 ? `<div class="pf-ptabs"><button type="button" class="pf-ptab ${st.partition === -1 ? 'on' : ''}" data-pf="part" data-v="-1">${LL('Todos', 'All')}</button>${parts.map((p) => `<button type="button" class="pf-ptab ${st.partition === p.id ? 'on' : ''}" data-pf="part" data-v="${p.id}" title="${esc(p.name)}">${esc(p.compactName || p.name)}</button>`).join('')}</div>` : '';
-    return `<div class="pf-fbar">${expDD}${zoneDD}</div><div class="pf-fbar">${metDD}${bossDD}${specDD}${diffDD}</div>${ptabs}`;
+    const refresh = `<button type="button" class="btn ghost sm pf-refresh" data-pf="refresh-wcl" title="${LL('Vuelve a pedir tus logs a Warcraft Logs por si has subido uno nuevo', 'Fetch your logs from Warcraft Logs again in case you uploaded a new one')}" ${st.wclBusy || st.busy ? 'disabled' : ''}>↻ ${st.wclBusy ? LL('Actualizando…', 'Updating…') : LL('Actualizar logs', 'Refresh logs')}</button>`;
+    return `<div class="pf-fbar">${expDD}${zoneDD}${refresh}</div><div class="pf-fbar">${metDD}${bossDD}${specDD}${diffDD}</div>${ptabs}`;
   }
 
   function tableHTML() {
@@ -444,6 +460,7 @@ const Profile = (() => {
     else if (a === 'focus') { const i = document.querySelector('#pfForm input[name="name"]'); if (i) i.focus(); }
     else if (!S.profileOpen && !(S.guildOpen && st.embed)) return;
     else if (a === 'update') load();
+    else if (a === 'refresh-wcl') refreshWcl();
     else if (a === 'enc') { const id = Number(el.dataset.e); st.openEnc = st.openEnc === id ? null : id; repaint(); }
     else if (a === 'refresh-logs') {
       const id = Number(el.dataset.e), k = encKey(id);

@@ -2223,6 +2223,7 @@ button.brand .brand-logo { width: 36px; height: 36px; border-radius: 9px; }
 .arm-model { align-self: stretch; }
 .mdl-crop { position: relative; width: 100%; max-height: 100%; overflow: hidden; }
 .mdl-crop img { z-index: 1; }
+.pf-model .mdl-crop { width: 78%; margin: 0 auto; }
 .arm-sec { margin-top: 18px; }
 .pf-embed { margin-top: 6px; }
 
@@ -2235,6 +2236,7 @@ button.brand .brand-logo { width: 36px; height: 36px; border-radius: 9px; }
 
 /* ---------- Filtros del personaje: desplegables con icono como los de Warcraft Logs ---------- */
 .pf-fbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin: 0 0 8px; }
+.pf-refresh { margin-left: auto; }
 .pf-dd .abdd-btn { min-height: 34px; background: var(--bg-deep); font-weight: 600; font-size: 13px; }
 .pf-dd .abdd-list { min-width: 220px; z-index: 45; }
 .pf-ddi { flex: none; border-radius: 4px; object-fit: cover; }
