@@ -127,7 +127,7 @@ const Profile = (() => {
     render();
     await Promise.all([fetchWcl(), fetchGear()]);
     st.busy = false;
-    fetchXp().then(() => { if (S.profileOpen) repaint(); });
+    Promise.all([fetchXp('cur'), fetchXp()]).then(() => { if (S.profileOpen) repaint(); });
     resolveLocale();
     st.at = Date.now();
     if (S.profileOpen) render();
@@ -247,7 +247,7 @@ const Profile = (() => {
     sidebar.hidden = true;
     st.q = { name: q.name, slug: q.slug, realm: q.realm || q.slug, region: REGIONS.includes(q.region) ? q.region : 'eu', locale: q.locale || '' };
     st.arm = null; st.rio = null; st.wcl = null; st.wclErr = ''; st.armErr = '';
-    st.xp = null; st.xpExp = 0; st.embed = null; st.encLogs = {}; st.openEnc = null; st.boss = 0; st.spec = '';
+    st.xp = null; st.xpc = null; st.xpExp = 0; st.embed = null; st.encLogs = {}; st.openEnc = null; st.boss = 0; st.spec = '';
     const l = recent().filter((x) => !(x.slug === st.q.slug && x.name.toLowerCase() === st.q.name.toLowerCase() && x.region === st.q.region));
     l.unshift({ name: st.q.name, realm: st.q.realm, slug: st.q.slug, region: st.q.region, locale: st.q.locale });
     lsSet('prof:recent', JSON.stringify(l.slice(0, 8)));
@@ -262,7 +262,7 @@ const Profile = (() => {
   }
   const rankColor = (p) => (p == null ? 'var(--muted)' : parseColor(p));
 
-  const tilesHTML = () => '';
+  const tilesHTML = () => xpStripHTML();
 
   // Enlaces a las mismas fichas en otras webs
   function linksHTML() {
@@ -380,24 +380,25 @@ const Profile = (() => {
   // ------------------------------------------------------------ Expansion All Stars (como Warcraft Logs)
   // Una tarjeta por banda de la expansión elegida: dificultad más alta con kills, puntos All Star, jefes derrotados y puesto mundial
   const XP_DIFFS = [5, 4, 3, 1];
-  async function fetchXp() {
+  async function fetchXp(which) {
+    const slot = which === 'cur' ? 'xpc' : 'xp'; // xpc: expansión actual (tira de la cabecera); xp: la elegida en el desplegable
     const q = st.q;
     try {
       const zones = await zonesList();
       const cur = zones.find((z) => z.id === st.zone) || zones[zones.length - 1];
-      const expId = st.xpExp || cur?.expId;
+      const expId = which === 'cur' ? Math.max(...zones.map((z) => z.expId)) : (st.xpExp || cur?.expId);
       if (!expId) return;
       const key = `${q.region}/${q.slug}/${q.name}|${expId}|${st.metric}|${st.partition}`;
-      if (st.xp && st.xp.key === key) return;
-      st.xp = { key, expId, rows: null };
+      if (st[slot] && st[slot].key === key) return;
+      st[slot] = { key, expId, rows: null };
       const raids = zones.filter((z) => z.expId === expId);
-      const mps = []; // solo bandas: la Mítica+ no sale en este bloque
+      const mps = (st.mpZones || []).filter((z) => z.expId === expId);
       const metric = METRICS.some(([m]) => m === st.metric) ? st.metric : 'dps';
       const part = `,partition:${Number(st.partition)}`;
       const fields = [];
       raids.forEach((z) => (z.difficulties || []).filter((d) => XP_DIFFS.includes(d.id)).forEach((d) => fields.push(`z${z.id}d${d.id}: zoneRankings(zoneID:${z.id},difficulty:${d.id},metric:${metric}${part})`)));
       mps.forEach((z) => fields.push(`z${z.id}d0: zoneRankings(zoneID:${z.id},metric:${metric})`));
-      if (!fields.length) { st.xp.rows = []; return; }
+      if (!fields.length) { st[slot].rows = []; return; }
       const d = await gql(`{characterData{character(name:${JSON.stringify(q.name)},serverSlug:${JSON.stringify(q.slug)},serverRegion:${JSON.stringify(q.region.toUpperCase())}){${fields.join(' ')}}}}`, undefined, true);
       const ch = d.characterData?.character || {};
       const topAs = (zr) => bestAs(zr?.allStars);
@@ -412,33 +413,59 @@ const Profile = (() => {
       for (const z of mps) rows.push({ zone: z, mp: true, diff: 0, as: topAs(ch[`z${z.id}d0`]) });
       const seen = new Map(); // dos zonas con el mismo nombre de temporada: se queda la que tiene datos
       for (const r of rows) { const k = r.mp ? mpNum(r.zone.name) : `r${r.zone.id}`; if (!seen.has(k) || (!seen.get(k).as && r.as)) seen.set(k, r); }
-      st.xp.rows = [...seen.values()].sort((a, b) => b.zone.id - a.zone.id);
-    } catch (e) { if (st.xp) st.xp.rows = []; }
+      st[slot].rows = [...seen.values()].sort((a, b) => b.zone.id - a.zone.id);
+    } catch (e) { if (st[slot]) st[slot].rows = []; }
   }
   const mpNum = (n) => (/season\s*(\d+)/i.exec(n) || [])[1] || '';
   const mpName = (n) => (mpNum(n) ? LL(`Mítica+ Temporada ${mpNum(n)}`, `Mythic+ Season ${mpNum(n)}`) : n);
-  function xpHTML() {
+  // Barra de jefes derrotados (como en Warcraft Logs): relleno verde si están todos, marrón si faltan
+  const killBar = (k, tot) => `<b class="pf-kb${tot && k >= tot ? ' full' : ''}" style="--p:${tot ? Math.round((k / tot) * 100) : 0}%">${k} / ${tot}</b>`;
+  function xpData(which) {
     const zones = st.zones || [];
     const cur = zones.find((z) => z.id === st.zone);
-    const expId = st.xpExp || cur?.expId;
-    if (!expId) return '';
-    const exps = [...new Map(zones.map((z) => [z.expId, z.expName])).entries()].sort((a, b) => b[0] - a[0]);
-    const dd = ddHTML('xpexp', { label: exps.find((e) => e[0] === expId)?.[1] || '' }, exps.map(([id, name]) => ({ v: id, label: name, on: id === expId })));
+    const expId = which === 'cur' ? (zones.length ? Math.max(...zones.map((z) => z.expId)) : 0) : (st.xpExp || cur?.expId);
+    if (!expId) return null;
     const clsKey = WCL_CLASS[st.wcl?.classID] || Cards.CLASS_KEY[st.arm?.classId] || '';
-    const rows = st.xp && st.xp.expId === expId ? st.xp.rows : null;
+    const sl = which === 'cur' ? st.xpc : st.xp;
+    const rows = sl && sl.expId === expId ? sl.rows : null;
+    return { zones, expId, clsKey, rows };
+  }
+  const xpSpec = (r, clsKey) => { const a = r.as; return a?.spec && clsKey ? specIconUrl(`${clsKey}-${String(a.spec).split(' ').join('')}`) : (clsKey ? classIconUrl(clsKey) : ''); };
+  const PTS = '#e8ff7a';
+  // Tira de la cabecera: una tarjeta por banda y por temporada de Mítica+
+  function xpStripHTML() {
+    const x = xpData('cur');
+    if (!x) return '';
+    if (!x.rows) return `<div class="pf-xp pf-xps"><div class="loading"><span class="spinner"></span>${t('loading')}</div></div>`;
+    return `<div class="pf-xp pf-xps"><div class="pf-xp-grid">${x.rows.map((r) => {
+      const a = r.as;
+      const title = r.mp ? mpName(r.zone.name) : `${r.zone.name}${r.diff ? ` ${diffName(r.diff)}` : ''}`;
+      const spec = xpSpec(r, x.clsKey);
+      const lab = r.mp ? LL(`Temporada ${mpNum(r.zone.name)}`, `Season ${mpNum(r.zone.name)}`) : 'All Stars';
+      return `<div class="pf-xpc${a ? '' : ' none'}"><div class="pf-xpc-h" title="${esc(title)}">${esc(title)}</div>
+        <div class="pf-xpc-b"><span class="pf-xpc-z"><img src="${ASSETS}/zones/zone-${r.zone.id}.png" width="40" height="40" alt="" loading="lazy">${r.mp ? '' : killBar(r.killed, r.total)}</span>
+          ${spec ? `<img class="pf-xpc-s" src="${spec}" width="40" height="40" alt="">` : ''}
+          <span class="pf-xpc-c"><small>${esc(lab)}</small><b style="color:${PTS}">${a ? num(a.points, 0) : '—'}</b></span>
+          <span class="pf-xpc-c"><small>${LL('Puesto', 'Rank')}</small><b style="color:${rankColor(a?.rankPercent)}">${a ? num0(a.rank) : '—'}</b></span></div></div>`;
+    }).join('')}</div></div>`;
+  }
+  // Bloque «Expansion All Stars» debajo de los logs: solo bandas
+  function xpHTML() {
+    const x = xpData();
+    if (!x) return '';
+    const exps = [...new Map(x.zones.map((z) => [z.expId, z.expName])).entries()].sort((a, b) => b[0] - a[0]);
+    const dd = ddHTML('xpexp', { label: exps.find((e) => e[0] === x.expId)?.[1] || '' }, exps.map(([id, name]) => ({ v: id, label: name, on: id === x.expId })));
     let body;
-    if (!rows) body = `<div class="loading"><span class="spinner"></span>${t('loading')}</div>`;
+    if (!x.rows) body = `<div class="loading"><span class="spinner"></span>${t('loading')}</div>`;
     else {
-      body = `<div class="pf-xp-grid">${rows.map((r) => {
+      body = `<div class="pf-xp-grid">${x.rows.filter((r) => !r.mp).map((r) => {
         const a = r.as;
-        const title = r.mp ? mpName(r.zone.name) : `${r.zone.name}${r.diff ? ` ${diffName(r.diff)}` : ''}`;
-        const spec = a?.spec && clsKey ? specIconUrl(`${clsKey}-${String(a.spec).split(' ').join('')}`) : (clsKey ? classIconUrl(clsKey) : '');
-        const lab = r.mp ? LL(`Temp. ${mpNum(r.zone.name)}`, `Season ${mpNum(r.zone.name)}`) : 'All Stars';
+        const spec = xpSpec(r, x.clsKey);
         const col = rankColor(a?.rankPercent);
-        return `<div class="pf-xpc${a ? '' : ' none'}"><div class="pf-xpc-h" title="${esc(title)}">${esc(title)}</div>
-          <div class="pf-xpc-b">${spec ? `<img class="pf-xpc-s" src="${spec}" width="44" height="44" alt="">` : ''}
-            <span class="pf-xpc-c"><small>${esc(lab)}</small><b style="color:${col}">${a ? num(a.points, 0) : '—'}</b></span>
-            <span class="pf-xpc-z"><img src="${ASSETS}/zones/zone-${r.zone.id}.png" width="56" height="56" alt="" loading="lazy">${r.mp ? '' : `<b style="color:${parseColor(r.total ? (r.killed / r.total) * 100 : 0)}">${r.killed} / ${r.total}</b>`}</span></div>
+        const dn = r.diff ? diffName(r.diff) : r.zone.name;
+        return `<div class="pf-xpc pf-xpc-big d${r.diff}${a ? '' : ' none'}"><div class="pf-xpc-h" title="${esc(r.zone.name)}">${esc(dn)}</div>
+          <div class="pf-xpc-b">${spec ? `<span class="pf-xpc-sp"><img class="pf-xpc-s" src="${spec}" width="44" height="44" alt=""><small>${LL('Puntos', 'Points')}</small><b style="color:${PTS}">${a ? num(a.points, 2) : '—'}</b></span>` : ''}
+            <span class="pf-xpc-z"><img src="${ASSETS}/zones/zone-${r.zone.id}.png" width="64" height="64" alt="" title="${esc(r.zone.name)}" loading="lazy">${killBar(r.killed, r.total)}</span></div>
           <div class="pf-xpc-r"><small>${LL('Puesto', 'Rank')}</small><b style="color:${col}">${a ? num0(a.rank) : '—'}</b></div></div>`;
       }).join('')}</div>`;
     }
@@ -710,7 +737,7 @@ const Profile = (() => {
     }
     else if (a === 'dd-pick') {
       const k = el.dataset.dd, v = el.dataset.v;
-      const reload = () => { st.wcl = null; repaint(); fetchWcl().then(repaint); fetchXp().then(repaint); };
+      const reload = () => { st.wcl = null; repaint(); fetchWcl().then(repaint); fetchXp('cur').then(repaint); fetchXp().then(repaint); };
       const zoneReset = () => { st.partition = -1; st.boss = 0; st.openEnc = null; };
       if (k === 'exp') { const z = (st.zones || []).filter((x) => x.expId === Number(v)).sort((a, b) => b.id - a.id)[0]; if (z) { st.zone = z.id; zoneReset(); reload(); } }
       else if (k === 'zone') { st.zone = Number(v); zoneReset(); reload(); }
