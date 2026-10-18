@@ -391,7 +391,7 @@ const Profile = (() => {
       if (st.xp && st.xp.key === key) return;
       st.xp = { key, expId, rows: null };
       const raids = zones.filter((z) => z.expId === expId);
-      const mps = (st.mpZones || []).filter((z) => z.expId === expId);
+      const mps = []; // solo bandas: la Mítica+ no sale en este bloque
       const metric = METRICS.some(([m]) => m === st.metric) ? st.metric : 'dps';
       const part = `,partition:${Number(st.partition)}`;
       const fields = [];
