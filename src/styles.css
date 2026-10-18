@@ -2611,21 +2611,23 @@ h3.sec, .recent-h { font-size: 17px; font-weight: 700; letter-spacing: 0; }
 .btn.primary, .pn-btn, .cmp-n.mine { background: color-mix(in srgb, var(--accent) 74%, #000); background-image: none; }
 .btn.primary:hover, .pn-btn:hover { background: color-mix(in srgb, var(--accent) 66%, #000); background-image: none; }
 
-/* Expansion All Stars (cabecera de la ficha): todas las tarjetas en una sola línea, como en WoWProgress */
-.pf-xp{flex:1 1 0;min-width:0}
-.pf-xp-h{display:flex;align-items:center;gap:8px;margin-bottom:6px}
-.pf-xp-h h4{margin:0;font-size:12px;color:var(--muted);font-weight:600}
+/* Expansion All Stars (debajo de los logs, como en Warcraft Logs): tarjetas con cabecera, especialización, puntos, banda y puesto grande */
+.pf-xp{margin-top:14px}
+.pf-xp-h{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.pf-xp-h h4{margin:0;font-size:15px;font-weight:700}
 .pf-xp-h .abdd-btn{padding:3px 8px;font-size:12px}
-.pf-xp-grid{display:flex;flex-wrap:nowrap;gap:6px;overflow-x:auto;padding-bottom:2px}
-.pf-xpc{flex:1 1 0;min-width:182px;border:1px solid var(--line);border-radius:4px;background:var(--panel-2);overflow:hidden}
+.pf-xp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.pf-xpc{border:1px solid var(--line);border-radius:6px;background:var(--panel-2);overflow:hidden;text-align:center}
 .pf-xpc.none{opacity:.55}
-.pf-xpc-h{padding:2px 6px;font-weight:700;font-size:11.5px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:color-mix(in srgb,var(--accent) 14%,transparent);border-bottom:1px solid var(--line)}
-.pf-xpc-b{display:flex;align-items:center;gap:4px;padding:3px 4px}
-.pf-xpc-z{position:relative;display:block;width:34px;height:34px;flex:none}
-.pf-xpc-z img{border-radius:3px;display:block;width:34px;height:34px}
-.pf-xpc-z b{position:absolute;left:0;right:0;bottom:0;text-align:center;font-size:9.5px;line-height:1.3;background:#000a;border-radius:0 0 3px 3px}
-.pf-xpc-s{width:30px;height:30px;border-radius:3px;border:1px solid var(--line);flex:none}
-.pf-xpc-c{display:flex;flex-direction:column;align-items:center;flex:1;min-width:0;line-height:1.15;border-left:1px solid var(--line)}
-.pf-xpc small{color:var(--muted);font-size:10.5px;white-space:nowrap}
-.pf-xpc-c b{font-size:12.5px;font-variant-numeric:tabular-nums}
+.pf-xpc-h{padding:5px 8px;font-weight:700;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:color-mix(in srgb,var(--accent) 16%,transparent);border-bottom:1px solid var(--line)}
+.pf-xpc-b{display:flex;align-items:center;justify-content:center;gap:10px;padding:10px 8px 4px}
+.pf-xpc-s{width:44px;height:44px;border-radius:4px;border:1px solid var(--line);flex:none}
+.pf-xpc-c{display:flex;flex-direction:column;align-items:center;line-height:1.2;min-width:0}
+.pf-xpc-c b{font-size:16px;font-variant-numeric:tabular-nums}
+.pf-xpc-z{position:relative;display:block;width:56px;height:56px;flex:none}
+.pf-xpc-z img{display:block;width:56px;height:56px;border-radius:4px}
+.pf-xpc-z b{position:absolute;left:0;right:0;bottom:0;text-align:center;font-size:11px;line-height:1.4;background:#000b;border-radius:0 0 4px 4px}
+.pf-xpc small{color:var(--muted);font-size:11px}
+.pf-xpc-r{padding:2px 8px 10px;display:flex;flex-direction:column;align-items:center;line-height:1.1}
+.pf-xpc-r b{font-size:30px;font-weight:800;font-variant-numeric:tabular-nums}
 @media (min-width: 1100px) { .pf-head { flex-wrap: nowrap; } .pf-head .pf-id { flex: none; } .pf-tiles { min-width: 0; flex-wrap: nowrap; } }

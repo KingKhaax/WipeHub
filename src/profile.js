@@ -262,7 +262,7 @@ const Profile = (() => {
   }
   const rankColor = (p) => (p == null ? 'var(--muted)' : parseColor(p));
 
-  const tilesHTML = () => xpHTML();
+  const tilesHTML = () => '';
 
   // Enlaces a las mismas fichas en otras webs
   function linksHTML() {
@@ -434,11 +434,12 @@ const Profile = (() => {
         const title = r.mp ? mpName(r.zone.name) : `${r.zone.name}${r.diff ? ` ${diffName(r.diff)}` : ''}`;
         const spec = a?.spec && clsKey ? specIconUrl(`${clsKey}-${String(a.spec).split(' ').join('')}`) : (clsKey ? classIconUrl(clsKey) : '');
         const lab = r.mp ? LL(`Temp. ${mpNum(r.zone.name)}`, `Season ${mpNum(r.zone.name)}`) : 'All Stars';
+        const col = rankColor(a?.rankPercent);
         return `<div class="pf-xpc${a ? '' : ' none'}"><div class="pf-xpc-h" title="${esc(title)}">${esc(title)}</div>
-          <div class="pf-xpc-b"><span class="pf-xpc-z"><img src="${ASSETS}/zones/zone-${r.zone.id}.png" width="46" height="46" alt="" loading="lazy">${r.mp ? '' : `<b style="color:${parseColor(r.total ? (r.killed / r.total) * 100 : 0)}">${r.killed} / ${r.total}</b>`}</span>
-            ${spec ? `<img class="pf-xpc-s" src="${spec}" width="40" height="40" alt="">` : ''}
-            <span class="pf-xpc-c"><small>${esc(lab)}</small><b style="color:${rankColor(a?.rankPercent)}">${a ? num(a.points, 0) : '—'}</b></span>
-            <span class="pf-xpc-c"><small>${LL('Puesto', 'Rank')}</small><b style="color:${rankColor(a?.rankPercent)}">${a ? num0(a.rank) : '—'}</b></span></div></div>`;
+          <div class="pf-xpc-b">${spec ? `<img class="pf-xpc-s" src="${spec}" width="44" height="44" alt="">` : ''}
+            <span class="pf-xpc-c"><small>${esc(lab)}</small><b style="color:${col}">${a ? num(a.points, 0) : '—'}</b></span>
+            <span class="pf-xpc-z"><img src="${ASSETS}/zones/zone-${r.zone.id}.png" width="56" height="56" alt="" loading="lazy">${r.mp ? '' : `<b style="color:${parseColor(r.total ? (r.killed / r.total) * 100 : 0)}">${r.killed} / ${r.total}</b>`}</span></div>
+          <div class="pf-xpc-r"><small>${LL('Puesto', 'Rank')}</small><b style="color:${col}">${a ? num0(a.rank) : '—'}</b></div></div>`;
       }).join('')}</div>`;
     }
     return `<div class="pf-xp"><div class="pf-xp-h"><h4>${LL('All Stars de la expansión', 'Expansion All Stars')}</h4>${dd}</div>${body}</div>`;
@@ -638,7 +639,7 @@ const Profile = (() => {
     main.innerHTML = `<div class="pf">
       <div class="pf-back"><button type="button" class="btn ghost sm" data-pf="home">${LL('← Inicio', '← Home')}</button></div>
       ${headerHTML()}
-      <div class="pf-grid"><section class="pf-left">${controlsHTML()}${tableHTML()}</section>
+      <div class="pf-grid"><section class="pf-left">${controlsHTML()}${tableHTML()}${xpHTML()}</section>
         <aside class="pf-mid"><div class="pf-gear">${gearHTML()}</div>${talentsHTML()}</aside>
         <aside class="pf-modelcol">${model}</aside></div></div>`;
   }
@@ -743,7 +744,7 @@ const Profile = (() => {
     st.arm = null; st.rio = null; st.wcl = null; st.wclErr = ''; st.openEnc = null; st.encLogs = {}; st.boss = 0; st.spec = '';
     fetchWcl().then(() => { if (st.embed === key) repaint(); });
   }
-  const embedHTML = () => (st.embed ? `<div class="pf pf-embed"><div class="pf-tiles">${tilesHTML()}</div>${controlsHTML()}${tableHTML()}</div>` : '');
+  const embedHTML = () => (st.embed ? `<div class="pf pf-embed"><div class="pf-tiles">${tilesHTML()}</div>${controlsHTML()}${tableHTML()}${xpHTML()}</div>` : '');
 
   // Enlace directo: …/WipeTime/#char=eu/zuljin/okita abre directamente la ficha de ese personaje
   setTimeout(() => {
