@@ -435,20 +435,21 @@ const Profile = (() => {
 
 
   // ------------------------------------------------------------ pista de mejora de cada pieza (iconos de Peterodox)
-  // Blizzard no manda la pista de mejora de cada objeto (Explorador, Aventurero, Veterano, Campeón, Héroe, Mito), así que se deduce:
-  // 1) de los ids de bonus del objeto (13333 = Normal/Campeón, 13334 = Heroico/Héroe, 13335 = Mítico/Mito) y del texto «Buscador de bandas»;
-  // 2) si no hay, del nivel de objeto con los tramos de esta temporada (cada pista abarca 13 niveles). Al cambiar de temporada solo hay que tocar TRACK_BY_ILVL.
+  // Pista de cada pieza, por este orden:
+  // 1) lo que pone el propio objeto (el texto de dificultad que manda Blizzard): Mítico/Mito -> Mito, Heroico/Héroe -> Héroe, Normal -> Campeón,
+  //    Buscador de bandas -> Veterano (y los nombres de pista tal cual: Campeón, Veterano, Aventurero, Explorador). «Mítico+» cuenta como Mito.
+  // 2) si no pone nada, los ids de bonus del objeto (13333 = Normal, 13334 = Heroico, 13335 = Mítico)
+  // 3) y si tampoco, el nivel de objeto con los tramos de esta temporada (cada pista abarca 13 niveles; al cambiar de temporada solo hay que tocar TRACK_BY_ILVL).
   const TRACK_BONUS = { 13333: 'champion', 13334: 'hero', 13335: 'myth' };
   const TRACK_BY_ILVL = [[334, 'myth'], [321, 'hero'], [308, 'champion'], [295, 'veteran'], [282, 'adventurer'], [269, 'explorer']];
+  const TRACK_TEXT = [[/m[ií]tic|mythic|\bmito\b|\bmyth\b/i, 'myth'], [/heroic|her[oó]ic|h[eé]roe?\b|\bhero\b/i, 'hero'], [/\bnormal\b|campe[oó]n|champion/i, 'champion'],
+    [/raid finder|buscador de bandas|\blfr\b|veterano|veteran/i, 'veteran'], [/aventurero|adventurer/i, 'adventurer'], [/explorador|explorer/i, 'explorer']];
   const TRACK_NAME = { explorer: ['Explorador', 'Explorer'], adventurer: ['Aventurero', 'Adventurer'], veteran: ['Veterano', 'Veteran'], champion: ['Campeón', 'Champion'], hero: ['Héroe', 'Hero'], myth: ['Mito', 'Myth'] };
   function trackOf(it) {
     const text = it.tip?.nameDesc?.t || '';
     const crafted = !!it.simc?.crafted?.length || /crafted|creado|fabricad|artesan/i.test(text);
-    let key = null;
-    if (!crafted) {
-      for (const b of it.simc?.bonus || []) if (TRACK_BONUS[b]) { key = TRACK_BONUS[b]; break; }
-      if (!key && /raid finder|buscador de bandas|\blfr\b/i.test(text)) key = 'veteran';
-    }
+    let key = TRACK_TEXT.find(([re]) => re.test(text))?.[1] || null;
+    if (!key && !crafted) for (const b of it.simc?.bonus || []) if (TRACK_BONUS[b]) { key = TRACK_BONUS[b]; break; }
     if (!key) { const w = TRACK_BY_ILVL.find(([min]) => it.ilvl >= min); key = w ? w[1] : null; }
     return { key, crafted };
   }
