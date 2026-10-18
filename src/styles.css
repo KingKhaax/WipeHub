@@ -2297,6 +2297,9 @@ button.brand .brand-logo { width: 36px; height: 36px; border-radius: 9px; }
 .pf-table tbody tr:hover td { background: color-mix(in srgb, var(--panel) 80%, var(--accent) 12%); }
 .pf-table td.pf-boss { display: table-cell; min-width: 0; padding: 3px 8px; text-align: left; }
 .pf-bw { display: flex; align-items: center; gap: 9px; min-width: 190px; }
+.pf-nolock { margin-left: auto; padding-left: 8px; font-size: 10px; font-weight: 700; color: var(--muted); white-space: nowrap; }
+.pf-bw:has(.pf-nolock)::after { margin-left: 10px !important; }
+.pf-table td.pf-lockcell { border-left: 1px solid var(--line-strong, var(--line)) !important; }
 .pf-bic { width: 28px; height: 28px; border-radius: 5px; }
 .pf-table tr.pf-enc td.pf-boss::after { content: none; }
 .pf-table tr.pf-enc .pf-bw::after { content: '▸'; margin-left: auto; color: var(--dim); font-size: 11px; transition: transform .15s; }

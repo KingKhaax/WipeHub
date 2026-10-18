@@ -351,7 +351,8 @@ const Profile = (() => {
     const kills = (zr.rankings || []).reduce((s, r) => s + (r.totalKills || 0), 0);
     const as = [...(zr.allStars || [])].sort((a, b) => b.points - a.points)[0];
     const unit = zr.metric === 'hps' ? 'HPS' : 'DPS';
-    const pct = (v) => (v == null ? '-' : `<b style="color:${parseColor(v)}">${Math.floor(v)}</b>`);
+    // est = parse aún no confirmado en los rankings de Warcraft Logs: el porcentaje es una estimación y va con «~»
+    const pct = (v, est) => (v == null ? '-' : `<b style="color:${parseColor(v)}">${est ? '~' : ''}${Math.floor(v)}</b>`);
     // Icono de la spec con la que se hizo el mejor parse (como en Warcraft Logs)
     const clsKey = WCL_CLASS[w.classID] || Cards.CLASS_KEY[st.arm?.classId] || '';
     const specImg = (r) => { const sp = r.bestSpec || r.spec; return clsKey && sp ? `<img class="pf-spec" src="${specIconUrl(`${clsKey}-${String(sp).split(' ').join('')}`)}" width="20" height="20" alt="" title="${esc(sp)}">` : ''; };
@@ -359,8 +360,8 @@ const Profile = (() => {
       const r = byEnc.get(e.id);
       const has = r && r.totalKills > 0;
       const a2 = r?.allStars;
-      return `<tr class="${has ? `pf-enc${st.openEnc === e.id ? ' open' : ''}` : 'none'}"${has ? ` data-pf="enc" data-e="${e.id}"` : ''}><td class="pf-boss"><div class="pf-bw"><span class="pf-bic"><img src="https://assets.rpglogs.com/img/warcraft/bosses/${e.id}-icon.jpg" width="28" height="28" loading="lazy" alt=""></span><span>${esc(e.name)}</span></div></td>
-        <td>${has ? `<span class="pf-pct">${pct(r.rankPercent)}${specImg(r)}</span>` : '-'}</td><td class="n pf-dps">${has ? num(r.bestAmount, 1) : '-'}</td><td class="n">${has ? num0(r.totalKills) : 0}</td>
+      return `<tr class="${has ? `pf-enc${st.openEnc === e.id ? ' open' : ''}` : 'none'}"${has ? ` data-pf="enc" data-e="${e.id}"` : ''}><td class="pf-boss"><div class="pf-bw"><span class="pf-bic"><img src="https://assets.rpglogs.com/img/warcraft/bosses/${e.id}-icon.jpg" width="28" height="28" loading="lazy" alt=""></span><span>${esc(e.name)}</span>${has && r.lockedIn === false ? `<small class="pf-nolock" title="${esc(LL('Este parse todavía no está confirmado en los rankings de Warcraft Logs: el porcentaje es una estimación y puede cambiar.', 'This parse is not locked into the Warcraft Logs rankings yet: the percentile is an estimate and may change.'))}">Not locked in</small>` : ''}</div></td>
+        <td${has && r.lockedIn === false ? ' class="pf-lockcell"' : ''}>${has ? `<span class="pf-pct">${pct(r.rankPercent, r.lockedIn === false)}${specImg(r)}</span>` : '-'}</td><td class="n pf-dps">${has ? num(r.bestAmount, 1) : '-'}</td><td class="n">${has ? num0(r.totalKills) : 0}</td>
         <td class="n">${has && r.fastestKill ? clock(r.fastestKill) : '-'}</td><td>${has ? pct(r.medianPercent) : '-'}</td>
         <td class="n">${has && a2 ? num(a2.points, 2) : '-'}</td>
         <td class="n" title="${a2 ? esc(`${num0(a2.total)} ${LL('jugadores', 'players')}`) : ''}">${has && a2 ? `<b style="color:${parseColor(a2.rankPercent)}">${num0(a2.rank)}</b>` : '-'}</td>
