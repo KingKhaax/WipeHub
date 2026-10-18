@@ -77,7 +77,9 @@ const Profile = (() => {
         + `<td><span class="pf-pct"><b style="color:${parseColor(r.rankPercent)}">${r.rankPercent != null ? Math.floor(r.rankPercent) : '-'}</b>${clsKey && r.spec ? `<img class="pf-spec" src="${specIconUrl(`${clsKey}-${String(r.spec).split(' ').join('')}`)}" width="18" height="18" alt="">` : ''}</span></td>`
         + `<td>${r.amount != null ? num(r.amount, 1) : '-'}</td><td>${r.duration ? clock(r.duration) : '-'}</td><td>${r.bracketData != null ? esc(r.bracketData) : '-'}</td>`
         + `<td class="pf-logs-go">${LL('Ver log', 'View log')} →</td></tr>`).join('') + `</tbody></table>`;
-    return `<tr class="pf-logs-row"><td colspan="10">${body}</td></tr>`;
+    const busy = encPending.has(encKey(id));
+    const bar = `<div class="pf-logs-bar"><button type="button" class="btn ghost sm" data-pf="refresh-logs" data-e="${id}" ${busy ? 'disabled' : ''}>↻ ${LL('Actualizar', 'Refresh')}</button></div>`;
+    return `<tr class="pf-logs-row"><td colspan="10">${bar}${body}</td></tr>`;
   }
 
   async function fetchWcl() {
@@ -443,6 +445,13 @@ const Profile = (() => {
     else if (!S.profileOpen && !(S.guildOpen && st.embed)) return;
     else if (a === 'update') load();
     else if (a === 'enc') { const id = Number(el.dataset.e); st.openEnc = st.openEnc === id ? null : id; repaint(); }
+    else if (a === 'refresh-logs') {
+      const id = Number(el.dataset.e), k = encKey(id);
+      if (encPending.has(k)) return;
+      encPending.add(k);
+      repaint();
+      fetchEncLogs(id).finally(() => { encPending.delete(k); repaint(); });
+    }
     else if (a === 'log') loadReport(`https://www.warcraftlogs.com/reports/${el.dataset.code}${el.dataset.fight ? `#fight=${el.dataset.fight}` : ''}`);
     else if (a === 'copytal') { const txt = st.rio?.talents?.text; if (txt) navigator.clipboard.writeText(txt).then(() => toast(LL('Talentos copiados: pégalos en el juego con «Importar»', 'Talents copied: paste them in game with «Import»'))); }
     else if (a === 'home') goHome();

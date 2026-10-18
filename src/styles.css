@@ -1675,6 +1675,7 @@ select option { background: #17171a; color: var(--text); }
 .pf-table tr.pf-enc.open td.pf-boss::after { transform: rotate(90deg); color: var(--accent); }
 .pf-table tr.pf-enc.open td { background: color-mix(in srgb, var(--accent) 8%, var(--panel)); }
 .pf-table tr.pf-logs-row > td { padding: 0 0 0 52px; background: var(--bg) !important; text-align: left; }
+.pf-logs-bar { display: flex; justify-content: flex-end; padding: 6px 10px 0; }
 .pf-logs { width: 100%; border-collapse: collapse; font-size: 13px; }
 .pf-logs th { padding: 7px 10px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); background: transparent; border: 0; border-bottom: 1px solid var(--line); }
 .pf-logs td { padding: 6px 10px; border: 0; border-bottom: 1px solid var(--line-soft); text-align: center; }
