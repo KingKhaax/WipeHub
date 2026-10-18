@@ -2651,7 +2651,10 @@ h3.sec, .recent-h { font-size: 17px; font-weight: 700; letter-spacing: 0; }
 .pf-xpc-big .pf-xpc-z{width:64px;height:64px}
 .pf-xpc-big .pf-xpc-z img{width:64px;height:64px;border-radius:2px}
 .pf-xpc-big .pf-kb{height:18px;line-height:18px;font-size:12px}
-.pf-xpc-r{padding:0 8px 8px;display:flex;flex-direction:column;align-items:center;line-height:1.15}
+.pf-xpc-r{margin:6px 6px 6px;padding:4px 8px 6px;display:flex;flex-direction:column;align-items:center;line-height:1.15;border:1px solid #6b6b6b;background:#0c0c0c}
+.pf-xpc-big .pf-xpc-s,.pf-xpc-big .pf-xpc-z img{border:1px solid #6b6b6b}
+.pf-xpc-big .pf-xpc-z img{box-sizing:border-box}
+.pf-xpc-big .pf-xpc-s{box-sizing:border-box}
 .pf-xpc-r small{font-size:17px}
 .pf-xpc-r b{font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
 @media (min-width: 1100px) { .pf-head { flex-wrap: nowrap; } .pf-head .pf-id { flex: none; } .pf-tiles { min-width: 0; flex-wrap: nowrap; } }
