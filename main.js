@@ -3,7 +3,7 @@ const zlib = require('zlib');
 const path = require('path');
 const fs = require('fs');
 
-// Migración desde las versiones que se llamaban LogLens: conserva credenciales, mapas, iconos y preferencias
+// Migración desde la versión que se llamaba LogLens: conserva credenciales, mapas, iconos y preferencias
 (function migrateOldProfile() {
   const SKIP = /^(Cache|Code Cache|GPUCache|DawnCache|Network|Session Storage|blob_storage|Crashpad|Singleton.*|lockfile|Cookies.*|SharedStorage.*|Shared Dictionary|Service Worker)$/i;
   try {

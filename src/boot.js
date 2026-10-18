@@ -38,6 +38,7 @@ var WCSettings = (function () {
   var data = {};
   try { data = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { data = {}; }
 
+  if (data.accent && !ACCENTS[data.accent]) delete data.accent; // acento que ya no existe (nombre antiguo del turquesa): vuelve al predeterminado
   // Rediseño de la interfaz (v2.6): el acento azul antiguo pasa al dorado una sola vez
   if (data.ui !== 3) {
     if (data.accent === 'blue' || data.accent === 'gold') delete data.accent;
@@ -63,7 +64,7 @@ var WCSettings = (function () {
     var n = parseInt(accent.slice(1), 16);
     var lum = (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255;
     root.style.setProperty('--on-accent', lum > 0.55 ? '#1b1306' : '#ffffff');
-    // el acento WipeTime usa el degradado del logo (teal -> azul -> índigo); el resto, un degradado suave de su color
+    // el acento turquesa usa el degradado del logo (teal -> azul -> índigo); el resto, un degradado suave de su color
     root.style.setProperty('--accent-grad', get('accent') === 'teal'
       ? 'linear-gradient(135deg, #19aaa8, #2c76b8 58%, #3e42c6)'
       : 'linear-gradient(180deg, color-mix(in srgb, ' + accent + ' 82%, #fff 18%), ' + accent + ')');
