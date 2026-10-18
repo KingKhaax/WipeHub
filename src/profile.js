@@ -45,6 +45,7 @@ const Profile = (() => {
     st.zones = (d.worldData?.expansions || []).flatMap((ex) => (ex.zones || []).map((z) => ({ ...z, expId: ex.id, expName: ex.name })))
       .filter((z) => z.encounters?.length >= 1 && !bad.test(z.name) && z.difficulties?.some((x) => [1, 2, 3, 4, 5].includes(x.id)))
       .sort((a, b) => a.expId - b.expId || a.id - b.id);
+    st.mpZones = (d.worldData?.expansions || []).flatMap((ex) => (ex.zones || []).map((z) => ({ ...z, expId: ex.id, expName: ex.name }))).filter((z) => /^mythic\+ season/i.test(z.name)).sort((a, b) => a.id - b.id);
     if (!st.zones.some((z) => z.id === st.zone)) st.zone = st.zones[st.zones.length - 1]?.id;
     return st.zones;
   }
@@ -256,34 +257,7 @@ const Profile = (() => {
 
   const rankColor = (p) => (p == null ? 'var(--muted)' : parseColor(p));
 
-  function tilesHTML() {
-    const w = st.wcl;
-    const zones = st.zones || [];
-    const zone = zones.find((z) => z.id === st.zone);
-    const zr = w?.zoneRankings;
-    const tiles = [];
-    if (zr) {
-      const as = [...(zr.allStars || [])].sort((a, b) => b.points - a.points)[0];
-      const killed = (zr.rankings || []).filter((r) => r.totalKills > 0).length;
-      const total = zone?.encounters?.length || (zr.rankings || []).length;
-      tiles.push(`<div class="pf-tile"><h4>${esc(zone?.name || '')} · ${esc(diffName(effDiff()))}</h4>
-        <div class="pf-tile-b"><span class="pf-prog" style="color:${parseColor(total ? (killed / total) * 100 : 0)}" title="${esc(LL(`${killed} de ${total} jefes derrotados`, `${killed} of ${total} bosses defeated`))}">${killed}<small>/${total}</small></span><span><small>All Stars</small><b>${as ? num(as.points, 0) : '—'}</b></span>
-        <span><small>${LL('Mundo', 'World')}</small><b style="color:${rankColor(as?.rankPercent)}">${as ? `#${num0(as.rank)}` : '—'}</b></span>
-        <span><small>${esc(regionName(st.q.region))}</small><b style="color:${rankColor(as?.rankPercent)}">${as ? `#${num0(as.regionRank)}` : '—'}</b></span>
-        <span><small>${LL('Reino', 'Realm')}</small><b>${as ? `#${num0(as.serverRank)}` : '—'}</b></span></div></div>`);
-    }
-    const rio = st.rio;
-    if (rio?.season) {
-      const ov = rio.ranks?.overall || {};
-      const label = String(rio.season.season || '').replace(/^season-/, '').toUpperCase();
-      tiles.push(`<div class="pf-tile"><h4>${LL('Mítica+', 'Mythic+')} · ${esc(label)}</h4>
-        <div class="pf-tile-b"><span><small>${LL('Puntuación', 'Score')}</small><b style="color:${esc(rio.season.segments?.all?.color || 'var(--text)')}">${num(rio.season.scores?.all || 0, 0)}</b></span>
-        <span><small>${LL('Mundo', 'World')}</small><b>${ov.world ? `#${num0(ov.world)}` : '—'}</b></span>
-        <span><small>${esc(regionName(st.q.region))}</small><b>${ov.region ? `#${num0(ov.region)}` : '—'}</b></span>
-        <span><small>${LL('Reino', 'Realm')}</small><b>${ov.realm ? `#${num0(ov.realm)}` : '—'}</b></span></div></div>`);
-    }
-    return tiles.join('');
-  }
+  const tilesHTML = () => xpHTML();
 
   // Enlaces a las mismas fichas en otras webs
   function linksHTML() {
@@ -411,50 +385,56 @@ const Profile = (() => {
       const key = `${q.region}/${q.slug}/${q.name}|${expId}|${st.metric}|${st.partition}`;
       if (st.xp && st.xp.key === key) return;
       st.xp = { key, expId, rows: null };
-      const zs = zones.filter((z) => z.expId === expId).sort((a, b) => b.id - a.id);
+      const raids = zones.filter((z) => z.expId === expId);
+      const mps = (st.mpZones || []).filter((z) => z.expId === expId);
       const metric = METRICS.some(([m]) => m === st.metric) ? st.metric : 'dps';
       const part = `,partition:${Number(st.partition)}`;
       const fields = [];
-      zs.forEach((z) => (z.difficulties || []).filter((d) => XP_DIFFS.includes(d.id)).forEach((d) => fields.push([z, d.id, `z${z.id}d${d.id}: zoneRankings(zoneID:${z.id},difficulty:${d.id},metric:${metric}${part})`])));
+      raids.forEach((z) => (z.difficulties || []).filter((d) => XP_DIFFS.includes(d.id)).forEach((d) => fields.push(`z${z.id}d${d.id}: zoneRankings(zoneID:${z.id},difficulty:${d.id},metric:${metric}${part})`)));
+      mps.forEach((z) => fields.push(`z${z.id}d0: zoneRankings(zoneID:${z.id},metric:${metric})`));
       if (!fields.length) { st.xp.rows = []; return; }
-      const d = await gql(`{characterData{character(name:${JSON.stringify(q.name)},serverSlug:${JSON.stringify(q.slug)},serverRegion:${JSON.stringify(q.region.toUpperCase())}){${fields.map((f) => f[2]).join(' ')}}}}`, undefined, true);
+      const d = await gql(`{characterData{character(name:${JSON.stringify(q.name)},serverSlug:${JSON.stringify(q.slug)},serverRegion:${JSON.stringify(q.region.toUpperCase())}){${fields.join(' ')}}}}`, undefined, true);
       const ch = d.characterData?.character || {};
-      st.xp.rows = zs.map((z) => {
-        let best = null;
+      const topAs = (zr) => [...(zr?.allStars || [])].sort((a, b) => b.points - a.points)[0];
+      const rows = raids.map((z) => {
         for (const dd of XP_DIFFS) {
           const zr = ch[`z${z.id}d${dd}`];
-          if (!zr) continue;
-          const killed = (zr.rankings || []).filter((r) => r.totalKills > 0).length;
-          if (!killed) continue;
-          const as = [...(zr.allStars || [])].sort((a, b) => b.points - a.points)[0];
-          best = { zone: z, diff: dd, killed, total: z.encounters.length, as };
-          break;
+          const killed = (zr?.rankings || []).filter((r) => r.totalKills > 0).length;
+          if (killed) return { zone: z, mp: false, diff: dd, killed, total: z.encounters.length, as: topAs(zr) };
         }
-        return best || { zone: z, diff: 0, killed: 0, total: z.encounters.length, as: null };
+        return { zone: z, mp: false, diff: 0, killed: 0, total: z.encounters.length, as: null };
       });
+      for (const z of mps) rows.push({ zone: z, mp: true, diff: 0, as: topAs(ch[`z${z.id}d0`]) });
+      const seen = new Map(); // dos zonas con el mismo nombre de temporada: se queda la que tiene datos
+      for (const r of rows) { const k = r.mp ? mpNum(r.zone.name) : `r${r.zone.id}`; if (!seen.has(k) || (!seen.get(k).as && r.as)) seen.set(k, r); }
+      st.xp.rows = [...seen.values()].sort((a, b) => b.zone.id - a.zone.id);
     } catch (e) { if (st.xp) st.xp.rows = []; }
   }
+  const mpNum = (n) => (/season\s*(\d+)/i.exec(n) || [])[1] || '';
+  const mpName = (n) => (mpNum(n) ? LL(`Mítica+ Temporada ${mpNum(n)}`, `Mythic+ Season ${mpNum(n)}`) : n);
   function xpHTML() {
-    if (!st.wcl || st.wclErr) return '';
     const zones = st.zones || [];
     const cur = zones.find((z) => z.id === st.zone);
     const expId = st.xpExp || cur?.expId;
     if (!expId) return '';
     const exps = [...new Map(zones.map((z) => [z.expId, z.expName])).entries()].sort((a, b) => b[0] - a[0]);
     const dd = ddHTML('xpexp', { label: exps.find((e) => e[0] === expId)?.[1] || '' }, exps.map(([id, name]) => ({ v: id, label: name, on: id === expId })));
-    const clsKey = WCL_CLASS[st.wcl.classID] || Cards.CLASS_KEY[st.arm?.classId] || '';
+    const clsKey = WCL_CLASS[st.wcl?.classID] || Cards.CLASS_KEY[st.arm?.classId] || '';
     const rows = st.xp && st.xp.expId === expId ? st.xp.rows : null;
     let body;
     if (!rows) body = `<div class="loading"><span class="spinner"></span>${t('loading')}</div>`;
     else {
-      const cards = rows.map((r) => {
+      body = `<div class="pf-xp-grid">${rows.map((r) => {
         const a = r.as;
-        return `<div class="pf-xpc${r.diff ? '' : ' none'}"><div class="pf-xpc-h">${r.diff ? esc(diffName(r.diff)) : '—'}</div>
-          <div class="pf-xpc-b"><div class="pf-xpc-p">${clsKey ? `<img src="${classIconUrl(clsKey)}" width="30" height="30" alt="">` : ''}<span><small>${LL('Puntos', 'Points')}</small><b>${a ? num(a.points, 2) : '—'}</b></span></div>
-            <div class="pf-xpc-z" title="${esc(r.zone.name)}"><img src="${ASSETS}/zones/zone-${r.zone.id}.png" width="30" height="30" alt="" loading="lazy"><b style="color:${parseColor(r.total ? (r.killed / r.total) * 100 : 0)}">${r.killed} / ${r.total}</b></div>
-            <div class="pf-xpc-r"><small>${LL('Puesto', 'Rank')}</small><b style="color:${rankColor(a?.rankPercent)}">${a ? num0(a.rank) : '—'}</b></div></div></div>`;
-      }).join('');
-      body = `<div class="pf-xp-grid">${cards}</div>`;
+        const title = r.mp ? mpName(r.zone.name) : `${r.zone.name}${r.diff ? ` ${diffName(r.diff)}` : ''}`;
+        const spec = a?.spec && clsKey ? specIconUrl(`${clsKey}-${String(a.spec).split(' ').join('')}`) : (clsKey ? classIconUrl(clsKey) : '');
+        const lab = r.mp ? LL(`Temporada ${mpNum(r.zone.name)}`, `Season ${mpNum(r.zone.name)}`) : 'All Stars';
+        return `<div class="pf-xpc${a ? '' : ' none'}"><div class="pf-xpc-h" title="${esc(title)}">${esc(title)}</div>
+          <div class="pf-xpc-b"><span class="pf-xpc-z"><img src="${ASSETS}/zones/zone-${r.zone.id}.png" width="46" height="46" alt="" loading="lazy">${r.mp ? '' : `<b style="color:${parseColor(r.total ? (r.killed / r.total) * 100 : 0)}">${r.killed} / ${r.total}</b>`}</span>
+            ${spec ? `<img class="pf-xpc-s" src="${spec}" width="40" height="40" alt="">` : ''}
+            <span class="pf-xpc-c"><small>${esc(lab)}</small><b style="color:${rankColor(a?.rankPercent)}">${a ? num(a.points, 0) : '—'}</b></span>
+            <span class="pf-xpc-c"><small>${LL('Puesto', 'Rank')}</small><b style="color:${rankColor(a?.rankPercent)}">${a ? num0(a.rank) : '—'}</b></span></div></div>`;
+      }).join('')}</div>`;
     }
     return `<div class="pf-xp"><div class="pf-xp-h"><h4>${LL('All Stars de la expansión', 'Expansion All Stars')}</h4>${dd}</div>${body}</div>`;
   }
@@ -653,7 +633,7 @@ const Profile = (() => {
     main.innerHTML = `<div class="pf">
       <div class="pf-back"><button type="button" class="btn ghost sm" data-pf="home">${LL('← Inicio', '← Home')}</button></div>
       ${headerHTML()}
-      <div class="pf-grid"><section class="pf-left">${controlsHTML()}${tableHTML()}${xpHTML()}</section>
+      <div class="pf-grid"><section class="pf-left">${controlsHTML()}${tableHTML()}</section>
         <aside class="pf-mid"><div class="pf-gear">${gearHTML()}</div>${talentsHTML()}</aside>
         <aside class="pf-modelcol">${model}</aside></div></div>`;
   }
