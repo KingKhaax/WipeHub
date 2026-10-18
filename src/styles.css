@@ -1504,6 +1504,9 @@ img.role-ic { border-radius: 7px; }
 .pf-tile-b b { font-size: 17px; font-variant-numeric: tabular-nums; }
 .pf-prog { font-size: 22px; font-weight: 800; }
 .pf-prog small { font-size: 13px; font-weight: 600; }
+/* kills/jefes en una sola línea (3/10), no apilados como el resto de métricas del recuadro */
+.pf-tile-b span.pf-prog { flex-direction: row; align-items: baseline; white-space: nowrap; }
+.pf-tile-b .pf-prog small { color: var(--muted); font-size: 15px; font-weight: 700; margin-left: 1px; }
 .pf-upd { display: flex; flex-direction: column; gap: 3px; align-items: flex-end; margin-left: auto; font-size: 12.5px; }
 .pf-upd b.bad { color: #ff7a7a; }
 .pf-grid { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(300px, 1fr); gap: 14px; align-items: start; }
