@@ -99,5 +99,6 @@ if (blocked) { console.log('Wowhead ha cortado (403): vuelve a ejecutarlo más t
 const clean = Object.fromEntries(Object.entries(out).sort((a, b) => a[0] - b[0]));
 const withIcon = Object.values(clean).filter((v) => v[2]).length;
 fs.writeFileSync(path.join(SRC, 'npcs.js'),
-  `// Generado por tools/build-npcs.mjs — id de NPC: [nombre en inglés, nombre en español, id de modelo para el icono]\nconst NPC_DATA = ${JSON.stringify(clean)};\n`);
+  `'use strict';
+// Generado por tools/build-npcs.mjs — id de NPC: [nombre en inglés, nombre en español, id de modelo para el icono]\nconst NPC_DATA = ${JSON.stringify(clean)};\n`);
 console.log('NPC', ids.length, 'con icono', withIcon);
