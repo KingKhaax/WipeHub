@@ -59,7 +59,7 @@ Descarga la última versión desde [Releases](https://github.com/KingKhaax/WipeT
 
 O sin descargar nada, en la web: [wipetime.vercel.app](https://wipetime.vercel.app).
 
-Los ejecutables todavía no llevan firma digital (está en trámite la firma gratuita de SignPath; ver [Code signing policy](#code-signing-policy)), así que Windows SmartScreen puede avisar la primera vez: pulsa *Más información → Ejecutar de todas formas*. Puedes comprobar el archivo con los hashes de `latest.json`.
+Los ejecutables no llevan firma digital, así que Windows SmartScreen puede avisar la primera vez: pulsa *Más información → Ejecutar de todas formas*. Puedes comprobar el archivo con los hashes de `latest.json`.
 
 ## <img src="docs/icons/inv_misc_note_06.jpg" width="28" height="28" alt="" align="absmiddle"> Novedades
 
