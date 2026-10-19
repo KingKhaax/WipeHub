@@ -1,0 +1,39 @@
+# Cada semana mira si el artículo de hotfixes de Blizzard tiene fechas más nuevas que la última de src/classchanges.js
+# (la pestaña «Cambios de clase»). Si las hay, abre un issue con el texto de esos días para pasarlo a la app.
+# No modifica nada solo: los cambios se revisan y se traducen a mano.
+name: Hotfixes de clases
+
+on:
+  schedule:
+    - cron: '0 8 * * 1'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - id: run
+        run: |
+          node tools/check-hotfixes.mjs > hotfixes.json
+          cat hotfixes.json
+          echo "dates=$(jq -r '.newDates | join(", ")' hotfixes.json)" >> "$GITHUB_OUTPUT"
+      - name: Abrir un issue si hay fechas nuevas
+        if: steps.run.outputs.dates != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="Hotfixes nuevos de Blizzard: ${{ steps.run.outputs.dates }}"
+          if [ -n "$(gh issue list --state all --search "\"$title\" in:title" --json number --jq '.[0].number')" ]; then
+            echo "Ya hay un issue para estas fechas."
+            exit 0
+          fi
+          { echo "El artículo de hotfixes de Blizzard tiene fechas más nuevas que la última de \`src/classchanges.js\` ($(jq -r .latestData hotfixes.json))."; echo; echo "Revisa los cambios de clases PvE y añádelos a la pestaña «Cambios de clase» (español e inglés)."; echo; echo '```'; jq -r .text hotfixes.json; echo '```'; } > body.md
+          gh issue create --title "$title" --body-file body.md

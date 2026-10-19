@@ -272,8 +272,8 @@
     },
     setZoom: (factor) => { document.documentElement.style.zoom = String(Math.min(2, Math.max(0.5, Number(factor) || 1))); },
     appInfo: async () => ({ electron: 'web', chrome: (navigator.userAgent.match(/(Chrome|Firefox|Safari)\/[\d.]+/) || [''])[0], version: VERSION }),
-    updateCheck: async () => ({ outdated: false, latest: VERSION, canInstall: false }),
-    updateInstall: async () => ({ error: 'WEB' }),
+    updateCheck: async () => { const latest = await fetchLatest(); const outdated = !!latest && isNewer(latest, VERSION); return { outdated, latest: latest || VERSION, canInstall: outdated }; },
+    updateInstall: async () => { await hardReload(); return { ok: true }; },
     onUpdateProgress: () => {},
     setPref: async () => true,
     clearIcons: async () => { try { if (window.caches) await caches.delete('wt-icons'); } catch { /* sin caché */ } return 0; },
@@ -476,6 +476,38 @@
     img.dataset.wtFix = '1';
     try { img.src = window.WT_iconCdn(decodeURIComponent(m[1]).replace(/\.(jpg|png|tga|blp)$/, '')); } catch { /* nombre no válido */ }
   }, true);
+
+  // ---- Versión nueva de la web: version.json (se publica con cada versión) frente a la que está cargada.
+  // Si es más nueva sale un aviso con «Recargar», que borra la caché de la web y la vuelve a cargar entera.
+  const semver = (v) => String(v || '').replace(/^v/i, '').split('.').map((n) => parseInt(n, 10) || 0);
+  function isNewer(a, b) { const x = semver(a), y = semver(b); for (let i = 0; i < 3; i++) { if ((x[i] || 0) !== (y[i] || 0)) return (x[i] || 0) > (y[i] || 0); } return false; }
+  async function fetchLatest() {
+    try { const r = await fetch('version.json?_=' + Date.now(), { cache: 'no-store' }); return r.ok ? String((await r.json()).version || '') : ''; } catch { return ''; }
+  }
+  async function hardReload() {
+    try { if (window.caches) for (const k of await caches.keys()) if (k.startsWith('wt-')) await caches.delete(k); } catch { /* sin caché */ }
+    try { if (navigator.serviceWorker) for (const r of await navigator.serviceWorker.getRegistrations()) await r.unregister(); } catch { /* sin service worker */ }
+    location.reload();
+  }
+  function showNewVersion(latest) {
+    if (document.getElementById('newVer')) return;
+    const es = (typeof S !== 'undefined' && S.lang ? S.lang : (navigator.language || 'es')).slice(0, 2) !== 'en';
+    const bar = document.createElement('div');
+    bar.id = 'newVer'; bar.className = 'newver'; bar.setAttribute('role', 'status');
+    bar.innerHTML = '<span></span><button type="button" class="btn primary sm" data-nv="go"></button><button type="button" class="btn ghost sm" data-nv="x" aria-label="×">×</button>';
+    bar.firstChild.textContent = es ? 'Hay una versión nueva de WipeTime (v' + latest + ').' : 'There is a new version of WipeTime (v' + latest + ').';
+    bar.querySelector('[data-nv="go"]').textContent = es ? 'Recargar' : 'Reload';
+    bar.addEventListener('click', (ev) => { const b = ev.target.closest('[data-nv]'); if (!b) return; if (b.dataset.nv === 'go') hardReload(); else bar.remove(); });
+    document.body.appendChild(bar);
+  }
+  let nvTimer = 0;
+  async function checkNewVersion() {
+    const latest = await fetchLatest();
+    if (latest && isNewer(latest, VERSION)) showNewVersion(latest);
+  }
+  setTimeout(checkNewVersion, 4000);
+  nvTimer = setInterval(checkNewVersion, 10 * 60 * 1000);
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') checkNewVersion(); });
 
   if ('serviceWorker' in navigator && location.protocol === 'https:') {
     navigator.serviceWorker.register('sw.js').catch(() => { /* sin service worker: vale el respaldo de arriba */ });

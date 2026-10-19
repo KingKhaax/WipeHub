@@ -793,7 +793,7 @@ html[data-motion="reduced"] *, html[data-motion="reduced"] *::before, html[data-
 .st-buff b { color: #6fb2ff; font-size: 12px; }
 .st-buff p { margin: 3px 0; color: #c5d0ea; }
 .st-foot { margin-top: 8px; font-size: 10px; color: #5d6e94; letter-spacing: .4px; }
-[data-spell] { cursor: help; }
+[data-spell] { cursor: default; }
 .sp { display: inline-flex; align-items: center; gap: 6px; }
 
 /* ---------- versión y actualizaciones ---------- */
@@ -874,7 +874,7 @@ h3.sec { margin: 22px 0 8px; font-size: 13px; letter-spacing: .4px; text-transfo
 .cd-l { display: flex; gap: 8px; align-items: center; font-size: 13px; padding-right: 10px; }
 .cd-l small { display: block; font-size: 11px; }
 .cd-t { position: relative; height: 32px; border-radius: 6px; background: rgba(255, 255, 255, .04); }
-.cdm { position: absolute; transform: translateX(-50%); z-index: 1; transition: transform .15s, filter .15s; cursor: help; }
+.cdm { position: absolute; transform: translateX(-50%); z-index: 1; transition: transform .15s, filter .15s; cursor: default; }
 .cdm img { border-radius: 6px; box-shadow: 0 0 0 2px var(--cc), 0 2px 6px #0008; display: block; }
 .cdm:hover { transform: translateX(-50%) scale(1.25); z-index: 5; filter: brightness(1.15); }
 /* Defensivos: una línea por tipo (banda, externos, personales) con leyenda debajo */
@@ -886,7 +886,7 @@ h3.sec { margin: 22px 0 8px; font-size: 13px; letter-spacing: .4px; text-transfo
 .cd-lane { position: relative; border-radius: 10px; background: rgba(0, 0, 0, .22); box-shadow: inset 0 0 0 1px var(--line); }
 .cd-g { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--line); opacity: .7; }
 .cd-legend { display: flex; flex-wrap: wrap; gap: 6px 8px; margin-top: 10px; }
-.cd-chip { display: inline-flex; align-items: center; gap: 8px; padding: 4px 10px 4px 5px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel-2, rgba(255, 255, 255, .04)); font-size: 12.5px; cursor: help; transition: border-color .15s, transform .15s; }
+.cd-chip { display: inline-flex; align-items: center; gap: 8px; padding: 4px 10px 4px 5px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel-2, rgba(255, 255, 255, .04)); font-size: 12.5px; cursor: default; transition: border-color .15s, transform .15s; }
 .cd-chip:hover { border-color: var(--k); transform: translateY(-1px); }
 .cd-chip img { border-radius: 5px; flex: none; }
 .cd-chip b { font-weight: 600; white-space: nowrap; }
@@ -1019,7 +1019,7 @@ h3.sec { margin: 22px 0 8px; font-size: 13px; letter-spacing: .4px; text-transfo
 .mg-row p { flex-basis: 100%; margin: 2px 0 0; color: var(--muted); }
 .mg-type { padding: 2px 8px; border-radius: 999px; font-size: 11px; color: #fff; background: color-mix(in srgb, var(--mc) 70%, #000 0%); border: 1px solid color-mix(in srgb, var(--mc) 60%, #fff 20%); }
 .mg-unv { color: #ffb454; font-size: 10px; text-transform: uppercase; letter-spacing: .4px; }
-.mg-skull { display: inline-flex; align-items: center; vertical-align: middle; cursor: help; }
+.mg-skull { display: inline-flex; align-items: center; vertical-align: middle; cursor: default; }
 .mg-skull.H { color: #cbd5e1; }
 .mg-skull.M { color: #ef4444; filter: drop-shadow(0 0 4px #ef444488); }
 .st-mech { margin-top: 8px; padding: 8px 10px; border-radius: 8px; border-left: 3px solid var(--mc); background: rgba(255, 255, 255, .06); }
@@ -1337,7 +1337,7 @@ img.role-ic { border-radius: 7px; }
 .mg-key-h { margin-bottom: 8px; font-family: var(--display); font-size: 16px; color: var(--title); }
 .mg-keyb { display: flex; flex-wrap: wrap; gap: 6px 8px; align-items: center; margin: 5px 0; }
 .mg-keyb > b { min-width: 170px; font-size: 12px; color: var(--mc); filter: brightness(1.35); text-transform: uppercase; letter-spacing: .4px; }
-.mg-keyi { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px 3px 4px; border-radius: 8px; background: rgba(255, 255, 255, .05); border: 1px solid color-mix(in srgb, var(--mc) 55%, transparent); font-size: 13px; cursor: help; }
+.mg-keyi { display: inline-flex; align-items: center; gap: 6px; padding: 3px 9px 3px 4px; border-radius: 8px; background: rgba(255, 255, 255, .05); border: 1px solid color-mix(in srgb, var(--mc) 55%, transparent); font-size: 13px; cursor: default; }
 .mg-keyi img { border-radius: 5px; box-shadow: 0 0 0 1px #000; }
 .mg-row { align-items: flex-start; gap: 12px; flex-wrap: nowrap; }
 .mg-ico { flex: none; line-height: 0; }
@@ -1412,7 +1412,7 @@ img.role-ic { border-radius: 7px; }
 .ag-gems { display: flex; gap: 3px; }
 .ag-gems img { border-radius: 4px; box-shadow: 0 0 0 1px #000; }
 .tl-grid { display: flex; flex-wrap: wrap; gap: 4px; max-height: 420px; overflow: auto; }
-.tl { position: relative; display: inline-flex; align-items: center; gap: 5px; padding: 2px 8px 2px 2px; border-radius: 7px; background: rgba(255, 255, 255, .05); font-size: 12px; cursor: help; }
+.tl { position: relative; display: inline-flex; align-items: center; gap: 5px; padding: 2px 8px 2px 2px; border-radius: 7px; background: rgba(255, 255, 255, .05); font-size: 12px; cursor: default; }
 .tl img { border-radius: 5px; box-shadow: 0 0 0 1px #000; }
 .tl em { position: absolute; left: 18px; bottom: 0; font-style: normal; font-size: 10px; font-weight: 800; color: #fff; background: rgba(0, 0, 0, .8); padding: 0 3px; border-radius: 3px; }
 
@@ -1565,7 +1565,7 @@ img.role-ic { border-radius: 7px; }
 .pf-upg { flex: none; font-size: 11px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
 .pf-upg.full { color: #5fd38d; }
 .pf-gems { display: flex; gap: 4px; margin-top: 2px; }
-.pf-gem { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 5px; background: rgba(255, 255, 255, .06); border: 1px solid var(--line); cursor: help; }
+.pf-gem { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 5px; background: rgba(255, 255, 255, .06); border: 1px solid var(--line); cursor: default; }
 .pf-gem img { width: 18px; height: 18px; border-radius: 4px; display: block; }
 .pf-gem i { width: 9px; height: 9px; background: #6fb7ff; transform: rotate(45deg); }
 /* tooltip de las gemas, como el de objetos del juego */
@@ -1748,7 +1748,7 @@ select option { background: #17171a; color: var(--text); }
 .pf-tal { margin-top: 14px; padding: 12px 14px; border-radius: 12px; background: var(--panel); border: 1px solid var(--line); }
 .pf-tal-h { display: block; margin: 10px 0 6px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
 .pf-tal-g { display: flex; flex-wrap: wrap; gap: 5px; }
-.pf-tal-i { position: relative; width: 34px; height: 34px; border-radius: 6px; overflow: hidden; border: 1px solid var(--line-strong); background: #000; cursor: help; }
+.pf-tal-i { position: relative; width: 34px; height: 34px; border-radius: 6px; overflow: hidden; border: 1px solid var(--line-strong); background: #000; cursor: default; }
 .pf-tal-i img { display: block; width: 100%; height: 100%; }
 .pf-tal-i i { position: absolute; right: 1px; bottom: 0; padding: 0 3px; border-radius: 3px; font-style: normal; font-size: 10px; font-weight: 700; background: rgba(0, 0, 0, .78); color: #fff; }
 .pf-tal-i.part { border-color: #c7a14a; }
@@ -1982,7 +1982,7 @@ button.dbf-row:hover { background: var(--hover); }
 .pn-btn { padding: 13px 18px; font-size: 15px; }
 
 /* Replay: los iconos de buffos y debuffos reciben el ratón para mostrar su tooltip con la duración en vivo */
-.rp-frames .rpf-au { pointer-events: auto; cursor: help; }
+.rp-frames .rpf-au { pointer-events: auto; cursor: default; }
 
 /* Clasificaciones con el formato de Warcraft Logs (ejecución, velocidad y jugadores) */
 .wl-sec { display: flex; align-items: center; gap: 10px; margin: 24px 0 10px; font-size: 16px; font-weight: 700; color: var(--title, var(--text)); }
@@ -2110,7 +2110,7 @@ button.dbf-row:hover { background: var(--hover); }
 .cc-dlg[open] { display: block; }
 .cc-dlg, .cc-dlg * { user-select: none; -webkit-user-select: none; cursor: default; }
 .cc-dlg button, .cc-dlg a { cursor: pointer; }
-.cc-sp { cursor: help !important; border-bottom: 1px dotted currentColor; font-weight: 700; }
+.cc-sp { cursor: default !important; border-bottom: 1px dotted currentColor; font-weight: 700; }
 .cc-sp:hover { border-bottom-style: solid; }
 .cc-nm { font-weight: 700; }
 .cc-ic { width: 16px; height: 16px; border-radius: 3px; vertical-align: -3px; margin-right: 4px; box-shadow: 0 0 0 1px rgba(0, 0, 0, .55); }
@@ -2670,3 +2670,6 @@ h3.sec, .recent-h { font-size: 17px; font-weight: 700; letter-spacing: 0; }
 .colors-row { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; }
 .color-pick { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
 .color-pick input { width: 34px; height: 26px; padding: 0; border: 1px solid var(--line); border-radius: 6px; background: transparent; cursor: pointer; }
+
+/* Aviso de versión nueva (solo en la web) */
+.newver { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%); z-index: 9999; display: flex; align-items: center; gap: 10px; padding: 8px 12px; max-width: calc(100vw - 24px); background: var(--panel-2); border: 1px solid var(--accent); border-radius: 12px; box-shadow: 0 8px 28px #0009; font-size: 14px; }

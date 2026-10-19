@@ -4,3 +4,4 @@ build/secrets.json
 *.log
 web-dist/
 .esb/
+.e2e-settings.json

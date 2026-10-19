@@ -87,4 +87,5 @@ if (esbuild) {
   const before = bundleFiles.reduce((s, f) => s + fs.statSync(path.join(out, f)).size, 0) + fs.statSync(path.join(out, 'styles.css')).size + fs.statSync(path.join(out, 'fonts.css')).size;
   console.log(`optimizada: ${bundleFiles.length} scripts → app.bundle.js (${(bundle.length / 1024).toFixed(0)} KB), CSS → app.css; ${(before / 1024).toFixed(0)} KB → ${((bundle.length + fs.statSync(path.join(out, 'app.css')).size) / 1024).toFixed(0)} KB`);
 }
+fs.writeFileSync(path.join(out, 'version.json'), JSON.stringify({ version: pkg.version }));
 console.log(`web-dist listo: v${pkg.version}, proxy ${proxy}, ${specKeys.length} specs, ${left} sustituciones`);

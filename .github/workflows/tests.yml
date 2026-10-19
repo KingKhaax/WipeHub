@@ -1,10 +1,14 @@
-# Pruebas automáticas (sintaxis, datos, iconos, mecánicas e idiomas). Se lanzan en cada subida a main y en las propuestas de cambios.
+# Pruebas automáticas. Se lanzan antes de CADA release (la llama el workflow «Release»: si algo falla, no se publica ni la web ni los .exe),
+# en las propuestas de cambios y a mano.
+#  - unit: sintaxis, datos, iconos, mecánicas, idiomas y lógica (node --test)
+#  - e2e: compila la web y la abre en un navegador sin red externa: portada, rutas, ajustes, logo por idioma, ordenar tablas, aviso de versión…
 name: Tests
 
 on:
+  workflow_call:
   push:
     branches: [main]
-    paths: ['src/**', 'tools/**', 'tests/**', 'main.js', 'preload.js', '.github/workflows/tests.yml']
+    paths: ['tests/**', '.github/workflows/tests.yml']
   pull_request:
   workflow_dispatch:
 
@@ -12,11 +16,24 @@ permissions:
   contents: read
 
 jobs:
-  test:
+  unit:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 22
       - run: node --test
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+      - run: npm i --prefix .esb --no-audit --no-fund --no-package-lock esbuild@0.25.10
+      - run: node tools/build-web.mjs
+      - run: npm ci --prefix tests/e2e --no-audit --no-fund
+      - run: npx --prefix tests/e2e playwright-core install --with-deps chromium
+      - run: node tests/e2e/web.e2e.mjs

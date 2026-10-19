@@ -414,8 +414,11 @@ const Guilds = (() => {
     }
     const box = document.getElementById('gdTab');
     if (!box || st.tab !== 'logs') return;
-    const list = st.logs.list;
-    box.innerHTML = list.length ? `<div class="recent">${list.map((r) =>
+    const SORTS = { new: (a, b) => b.startTime - a.startTime, old: (a, b) => a.startTime - b.startTime, long: (a, b) => (b.endTime - b.startTime) - (a.endTime - a.startTime), title: (a, b) => String(a.title).localeCompare(String(b.title), S.lang === 'es' ? 'es' : 'en', { numeric: true, sensitivity: 'base' }) };
+    const cur = SORTS[st.logSort] ? st.logSort : 'new';
+    const list = [...st.logs.list].sort(SORTS[cur]);
+    const chips = list.length > 1 ? `<div class="metricbar"><span class="muted">${LL('Ordenar', 'Sort')}</span>${[['new', LL('Más recientes', 'Newest')], ['old', LL('Más antiguos', 'Oldest')], ['long', LL('Más largos', 'Longest')], ['title', LL('Título A–Z', 'Title A–Z')]].map(([k, l]) => `<button type="button" class="chip ${cur === k ? 'on' : ''}" data-gd="logsort" data-v="${k}">${l}</button>`).join('')}</div>` : '';
+    box.innerHTML = list.length ? `${chips}<div class="recent">${list.map((r) =>
       `<div class="rwrap"><button class="rcard" data-gd="report" data-code="${esc(r.code)}"><b>${esc(r.title)}</b><small>${esc(zoneName(r.zone?.name))}${r.owner?.name ? ' · ' + esc(r.owner.name) : ''} · ${new Date(r.startTime).toLocaleDateString(locale())} · ${clock(r.endTime - r.startTime)}</small></button></div>`).join('')}</div>`
       : `<div class="empty">${LL('Esta guild no tiene logs públicos en Warcraft Logs (o el nombre/reino no coincide con el de Warcraft Logs).', 'This guild has no public logs on Warcraft Logs (or the name/realm does not match the one on Warcraft Logs).')}</div>`;
   }
@@ -623,6 +626,7 @@ const Guilds = (() => {
     }
     else if (a === 'ext') { try { window.api.openExternal(el.dataset.u); } catch { window.open(el.dataset.u, '_blank', 'noopener'); } }
     else if (a === 'tab') { st.tab = el.dataset.tab; render(); }
+    else if (a === 'logsort') { st.logSort = el.dataset.v; const bx = document.getElementById('gdTab'); if (bx) logsTab(bx); }
     else if (a === 'bell') {
       const g = st.sel; if (!g) return;
       const map = alertsMap(), k = guildKey(g), on = !map[k]?.on;

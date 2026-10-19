@@ -11,6 +11,7 @@ const GuildTabs = (() => {
   const fmtShort = (ms) => new Date(ms).toLocaleDateString(locale(), { day: 'numeric', month: 'short' });
   const fmtTime = (ms) => { const m = Math.round(ms / 60000); return m >= 60 ? `${Math.floor(m / 60)} h ${m % 60} min` : `${m} min`; };
   const cache = new Map();
+  let compSort = 'n'; // orden de la composición por clase: número de miembros o A–Z
   const noLogsBox = (g) => `<div class="gc-warn">ⓘ ${LL(`Warcraft Logs no entrega ningún report público de ${esc(g.name)} para esta banda y dificultad (sus logs son privados u ocultos, o no están asociados a la guild), así que no hay datos que mostrar aquí.`, `Warcraft Logs returns no public report for ${esc(g.name)} for this raid and difficulty (its logs are private or hidden, or not linked to the guild), so there is no data to show here.`)}</div>`;
 
   // ---------------------------------------------------------------- Progreso
@@ -108,7 +109,7 @@ const GuildTabs = (() => {
     for (const m of pool) { const c = ctx.classKey(m.classId); if (c) byCls.set(c, (byCls.get(c) || 0) + 1); }
     const list = [...byCls.entries()].sort((a, b) => b[1] - a[1]);
     const top = Math.max(1, ...list.map(([, n]) => n));
-    const comp = list.map(([c, n]) => `<div class="rs-c" style="--cc:${classColor(c)}"><img src="${classIconUrl(c)}" width="26" height="26" alt=""><span>${esc(className(c))}</span><i style="width:${(n / top) * 100}%"></i><b>${n}</b></div>`).join('');
+    const compHTML = () => (compSort === 'az' ? [...list].sort((a, b) => className(a[0]).localeCompare(className(b[0]), S.lang === 'es' ? 'es' : 'en')) : list).map(([c, n]) => `<div class="rs-c" style="--cc:${classColor(c)}"><img src="${classIconUrl(c)}" width="26" height="26" alt=""><span>${esc(className(c))}</span><i style="width:${(n / top) * 100}%"></i><b>${n}</b></div>`).join('');
     const buffs = (Extras.RAID_BUFFS || []).map((b) => {
       const have = b.cls.reduce((s, c) => s + (byCls.get(c) || 0), 0);
       return { b, have };
@@ -117,8 +118,13 @@ const GuildTabs = (() => {
     const bl = buffs.map(({ b, have }) => `<div class="rs-b ${have ? 'ok' : 'no'}" data-spell="${b.id}"><img class="ai" src="${abilityIconUrl(b.icon.replace(/\.jpg$/, ''))}" width="22" height="22" alt=""><span>${esc(S.lang === 'es' ? b.es : b.en)}</span><em>${b.cls.map((c) => esc(className(c))).join(' / ')}</em><b>${have ? have : '✗'}</b></div>`).join('');
     el.innerHTML = `<div class="ov-tiles"><div class="ov-tile"><small>${LL('Miembros de nivel máximo', 'Max-level members')}</small><div>${pool.length}</div></div><div class="ov-tile"><small>${LL('Miembros en total', 'Total members')}</small><div>${members.length}</div></div><div class="ov-tile"><small>${LL('Clases', 'Classes')}</small><div>${list.length} / 13</div></div><div class="ov-tile"><small>${LL('Buffos de banda sin cubrir', 'Uncovered raid buffs')}</small><div class="${missing.length ? 'bad' : 'ok'}">${missing.length}</div></div></div>
       <div class="gc-warn" ${missing.length ? '' : 'hidden'}>ⓘ ${LL('Ninguno de los miembros de nivel máximo aporta:', 'None of the max-level members provides:')} ${missing.map((x) => `<b>${esc(S.lang === 'es' ? x.b.es : x.b.en)}</b> (${x.b.cls.map((c) => esc(className(c))).join(' / ')})`).join(', ')}</div>
-      <div class="rs-grid"><div><h3 class="sec">${LL('Composición por clase', 'Composition by class')}</h3>${comp}</div><div><h3 class="sec">${LL('Buffos y utilidades de banda', 'Raid buffs and utilities')}</h3>${bl}</div></div>
+      <div class="rs-grid"><div><h3 class="sec">${LL('Composición por clase', 'Composition by class')}</h3><div class="rs-sort"><button type="button" class="chip ${compSort === 'n' ? 'on' : ''}" data-compsort="n">${LL('Por número', 'By count')}</button><button type="button" class="chip ${compSort === 'az' ? 'on' : ''}" data-compsort="az">A–Z</button></div><div id="rsComp">${compHTML()}</div></div><div><h3 class="sec">${LL('Buffos y utilidades de banda', 'Raid buffs and utilities')}</h3>${bl}</div></div>
       <p class="foot">${LL('Según el roster de Blizzard (solo miembros de nivel máximo). El rol exacto de cada uno no viene en el roster; mira «Ranking de parses» para ver especializaciones.', 'From the Blizzard roster (max-level members only). Each member’s exact role is not in the roster; see «Parse ranking» for specs.')}</p>`;
+    el.querySelectorAll('[data-compsort]').forEach((btn) => btn.addEventListener('click', () => {
+      compSort = btn.dataset.compsort;
+      el.querySelectorAll('[data-compsort]').forEach((x) => x.classList.toggle('on', x === btn));
+      const box = el.querySelector('#rsComp'); if (box) box.innerHTML = compHTML();
+    }));
   }
 
   async function show(tab, el, ctx) {

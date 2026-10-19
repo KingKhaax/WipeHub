@@ -65,7 +65,8 @@ const TableSort = (() => {
       return { head: h, cols, rows, parent: rows[0].el.parentElement, table };
     }
     const p = h.parentElement;
-    if (!p || p.firstElementChild !== h) return null;
+    if (!p) return null;
+    const first = p.firstElementChild === h;
     const n = h.children.length;
     if (n < 2) return null;
     const rows = [];
@@ -73,9 +74,16 @@ const TableSort = (() => {
       if (el.tagName === h.tagName && el.children.length === n && !el.matches('[class~="th"], [class$="-head"]')) rows.push({ el, attached: [] });
       else if (rows.length) rows[rows.length - 1].attached.push(el); // elementos intercalados (detalles desplegados) van con su fila
     }
-    if (rows.length < 2) return null;
+    // cabecera suelta y filas dentro de un contenedor que viene justo detrás (tabla de progreso de la guild)
+    let parent = p;
+    if ((rows.length < 2 || !first) && h.nextElementSibling && h.nextElementSibling.children.length >= 2) {
+      const box = h.nextElementSibling;
+      const inner = [...box.children].filter((el) => el.children.length === n);
+      if (inner.length >= 2) { rows.length = 0; inner.forEach((el) => rows.push({ el, attached: [] })); parent = box; }
+    }
+    if (rows.length < 2 || (!first && parent === p)) return null;
     const cols = [...h.children].map((el, idx) => ({ el, idx })).filter((c) => tx(c.el));
-    return cols.length ? { head: h, cols, rows, parent: p } : null;
+    return cols.length ? { head: h, cols, rows, parent } : null;
   }
 
   const tableKey = (d, ordinal) => `${location.hash.split('/').slice(0, 3).join('/')}|${d.cols.map((c) => tx(c.el)).join('|')}|${ordinal}`;
