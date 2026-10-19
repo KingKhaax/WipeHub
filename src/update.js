@@ -8,6 +8,7 @@ const WCUpdate = (() => {
 
   // Historial: [versión, es, en]
   const CHANGELOG = [
+    ['2.7.6', 'Daño: el selector de enemigo (y la pestaña Daño a enemigos) muestra el nombre en español de jefes y adds de las bandas de la temporada y, al lado, su icono.', 'Damage: the enemy selector (and the Damage to enemies tab) shows the Spanish name of the season raid bosses and adds, plus their icon next to it.'],
     ['2.7.5', 'Daño: nuevo selector «Enemigo» para ver solo el daño hecho a un jefe o a un add concreto (con sus habilidades), en vez del total de la pelea. «Todos los enemigos» vuelve a la vista general.', 'Damage: new “Enemy” selector to see only the damage done to a specific boss or add (with its abilities) instead of the whole fight total. “All enemies” goes back to the general view.'],
     ['2.7.4', 'Cambios de clase: «Desconcertado» (Pícaro, Timador) ya sale con su icono y su tooltip al pasar el ratón por encima.', 'Class changes: “Fazed” (Rogue, Trickster) now shows its icon and a tooltip on hover.'],
     ['2.7.3', 'Cada vez que copias algo en WipeTime sale un aviso en medio de la pantalla («Se ha copiado al portapapeles»), y el historial de versiones de Ajustes pasa a tarjetas con iconos de World of Warcraft, un resumen y los cambios por secciones.', 'Every time you copy something in WipeTime a notice appears in the middle of the screen (“Copied to the clipboard”), and the version history in Settings becomes cards with World of Warcraft icons, a summary and the changes by section.'],

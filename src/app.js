@@ -143,6 +143,20 @@ function actorName(id) {
   if (id == null || id === -1) return t('environment');
   return S.actors.get(id)?.name || t('unknown');
 }
+// Enemigos de las bandas: nombre en español e icono (tabla de npcs.js, generada con tools/build-npcs.mjs)
+let npcByName = null;
+function npcInfo(id, name) {
+  if (typeof NPC_DATA === 'undefined') return { name, icon: '' };
+  if (!npcByName) {
+    npcByName = new Map();
+    for (const v of Object.values(NPC_DATA)) { npcByName.set(v[0].toLowerCase(), v); npcByName.set(v[1].toLowerCase(), v); }
+  }
+  const gid = S.actors.get(id)?.gameID;
+  const e = NPC_DATA[gid] || npcByName.get(String(name || '').toLowerCase());
+  if (!e) return { name, icon: '' };
+  return { name: LL(e[1], e[0]), icon: e[2] ? `npcicons/${e[2]}.webp` : '' };
+}
+const npcIconImg = (i, size = 22) => (i.icon ? `<img class="npc-ic" src="${i.icon}" width="${size}" height="${size}" alt="" loading="lazy">` : '');
 function ability(id) {
   const ab = S.abilities.get(id);
   // Warcraft Logs llama «Unknown Ability» a las habilidades sin nombre: se muestra en el idioma de la app
@@ -1445,9 +1459,10 @@ const VIEWS = {
     // Enemigo concreto (jefe, add...) para ver solo el daño que se le hizo a él
     const enemies = d.tgt.filter((e) => e.total > 0 && !isPlayer(e.id, e)).sort((x, y) => y.total - x.total);
     const selEnemy = enemies.find((e) => e.id === S.dmgTarget) || null;
+    const eInfo = new Map(enemies.map((e) => [e.id, npcInfo(e.id, e.name)]));
     const enemyPicker = enemies.length ? `<div class="sortbar"><span class="muted">${LL('Enemigo', 'Enemy')}</span>
-      <div class="abdd"><button type="button" class="abdd-btn" data-action="taken-ability-toggle"><span class="abdd-t">${selEnemy ? `${esc(selEnemy.name)} · ${plain(selEnemy.total)}` : esc(LL('Todos los enemigos', 'All enemies'))}</span><span class="abdd-car">▾</span></button>
-      <div class="abdd-list surface-dark" hidden><div class="abdd-i ${selEnemy ? '' : 'on'}" data-action="dmg-target" data-id=""><span class="abdd-t">${esc(LL('Todos los enemigos', 'All enemies'))}</span></div>${enemies.slice(0, 40).map((e) => `<div class="abdd-i ${selEnemy?.id === e.id ? 'on' : ''}" data-action="dmg-target" data-id="${e.id}"><span class="abdd-t">${esc(e.name)} · ${plain(e.total)}</span></div>`).join('')}</div></div></div>` : '';
+      <div class="abdd"><button type="button" class="abdd-btn" data-action="taken-ability-toggle">${selEnemy ? npcIconImg(eInfo.get(selEnemy.id), 20) : ''}<span class="abdd-t">${selEnemy ? `${esc(eInfo.get(selEnemy.id).name)} · ${plain(selEnemy.total)}` : esc(LL('Todos los enemigos', 'All enemies'))}</span><span class="abdd-car">▾</span></button>
+      <div class="abdd-list surface-dark" hidden><div class="abdd-i ${selEnemy ? '' : 'on'}" data-action="dmg-target" data-id=""><span class="abdd-t">${esc(LL('Todos los enemigos', 'All enemies'))}</span></div>${enemies.slice(0, 40).map((e) => `<div class="abdd-i ${selEnemy?.id === e.id ? 'on' : ''}" data-action="dmg-target" data-id="${e.id}">${npcIconImg(eInfo.get(e.id))}<span class="abdd-t">${esc(eInfo.get(e.id).name)} · ${plain(e.total)}</span></div>`).join('')}</div></div></div>` : '';
     if (selEnemy) {
       const entries = await enemyTable(f, selEnemy.id);
       const erows = entries.filter((e) => isPlayer(e.id, e))
@@ -1534,7 +1549,7 @@ const VIEWS = {
     const chips = targets.slice(0, 24).map((e) => {
       const on = ids.includes(e.id);
       return `<button class="chip ${on ? 'on' : ''}" data-action="enemy" data-id="${e.id}" ${on ? `style="--cc:${colorOf(e.id)}"` : ''}>
-        <span class="sq"></span>${esc(e.name)} <span class="muted">${plain(e.total)}</span></button>`;
+        <span class="sq"></span>${npcIconImg(npcInfo(e.id, e.name), 18)}${esc(npcInfo(e.id, e.name).name)} <span class="muted">${plain(e.total)}</span></button>`;
     }).join('');
 
     const tables = await Promise.all(ids.map((id) => enemyTable(f, id)));

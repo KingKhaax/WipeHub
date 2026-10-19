@@ -2712,3 +2712,4 @@ h3.sec, .recent-h { font-size: 17px; font-weight: 700; letter-spacing: 0; }
 .cl-sb li { font-size: 13.5px; line-height: 1.5; color: var(--muted); }
 .cl-sb li::marker { color: var(--accent); }
 @media (prefers-reduced-motion: reduce) { .cl-card { transition: none; } .cl-card:hover { transform: none; } }
+.npc-ic { flex: none; border-radius: 6px; object-fit: cover; box-shadow: 0 0 0 1px rgba(0, 0, 0, .75), 0 0 0 2px rgba(47, 183, 192, .28); }
