@@ -1296,6 +1296,7 @@ ipcMain.handle('rio:guilds', async (_e, term) => {
 });
 
 ipcMain.handle('open:external', (_e, url) => {
+  if (url === 'discord://-/channels/@me' || url === 'battlenet://') { shell.openExternal(url); return; } // abrir Discord / Battle.net al pulsar el nombre en Acerca de
   if (/^https:\/\/(([a-z]+\.)?warcraftlogs\.com|worldofwarcraft\.blizzard\.com|news\.blizzard\.com|(www\.)?raider\.io|(www\.)?raidbots\.com|kingkhaax\.github\.io)\//.test(url)) shell.openExternal(url);
 });
 

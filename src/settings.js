@@ -65,8 +65,8 @@ async function openSettings(tab) {
         <div><h2>WipeTime <span class="v">v${esc(info.version || '')}</span></h2>
           <p class="about-desc">${LL('Plataforma de análisis de combate para World of Warcraft: informes, repeticiones y comparativas de rendimiento a partir de Warcraft Logs.', 'Combat analysis platform for World of Warcraft: reports, replays and performance comparisons built on Warcraft Logs.')} <span class="about-es">${LL('España', 'Spain')} <svg viewBox="0 0 3 2" width="30" height="20" aria-label="ES" style="border-radius:3px"><rect width="3" height="2" fill="#c60b1e"/><rect y=".5" width="3" height="1" fill="#ffc400"/></svg></span></p>
           <p>${t('madeBy')} <b>Drakko</b> <span class="heart-s">♥</span></p>
-          <p class="about-dc" style="margin-top:30px"><svg viewBox="0 0 127.14 96.36" width="26" height="20" aria-hidden="true"><path fill="#5865F2" d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0 105.89 105.89 0 0 0 19.39 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2a75.57 75.57 0 0 0 64.32 0c.87.71 1.76 1.39 2.66 2a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15ZM42.45 65.69C36.18 65.69 31 60 31 53s5-12.74 11.43-12.74S54 46 53.89 53s-5.05 12.69-11.44 12.69Zm42.24 0C78.41 65.69 73.25 60 73.25 53s5-12.74 11.44-12.74S96.23 46 96.12 53s-5.04 12.69-11.43 12.69Z"/></svg> <b>sr.kitkat</b> <span class="muted">${LL('dudas y preguntas', 'questions')}</span></p>
-          <p class="about-dc"><img src="battlenet.png" width="26" height="26" alt="" style="border-radius:6px"> <b>KitKat#21202</b> <span class="muted">${LL('dudas y preguntas', 'questions')}</span></p></div></div>`,
+          <p class="about-dc" style="margin-top:30px"><svg viewBox="0 0 127.14 96.36" width="26" height="20" aria-hidden="true"><path fill="#5865F2" d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0 105.89 105.89 0 0 0 19.39 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2a75.57 75.57 0 0 0 64.32 0c.87.71 1.76 1.39 2.66 2a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15ZM42.45 65.69C36.18 65.69 31 60 31 53s5-12.74 11.43-12.74S54 46 53.89 53s-5.05 12.69-11.44 12.69Zm42.24 0C78.41 65.69 73.25 60 73.25 53s5-12.74 11.44-12.74S96.23 46 96.12 53s-5.04 12.69-11.43 12.69Z"/></svg> <a href="#" class="about-friend" data-friend="discord" data-name="sr.kitkat" title="${LL('Clic: copia el nombre y abre Discord', 'Click: copies the name and opens Discord')}"><b>sr.kitkat</b></a> <span class="muted">${LL('dudas y preguntas', 'questions')}</span></p>
+          <p class="about-dc"><img src="battlenet.png" width="26" height="26" alt="" style="border-radius:6px"> <a href="#" class="about-friend" data-friend="battlenet" data-name="KitKat#21202" title="${LL('Clic: copia el BattleTag y abre Battle.net', 'Click: copies the BattleTag and opens Battle.net')}"><b>KitKat#21202</b></a> <span class="muted">${LL('dudas y preguntas', 'questions')}</span></p></div></div>`,
   };
   const tabs = [['look', LL('Apariencia', 'Appearance')], ['replay', 'Replay'], ['data', LL('Datos', 'Data')], ['version', LL('Versión', 'Version')], ['about', LL('Acerca de', 'About')]];
   dlg.innerHTML = `<form method="dialog" id="settingsForm" class="set-wrap">
@@ -151,4 +151,20 @@ document.addEventListener('keydown', (ev) => {
   ev.preventDefault();
   WCSettings.set('zoom', next);
   toast(`${LL('Tamaño de la interfaz', 'Interface size')}: ${next} %`);
+});
+
+// Pulsar el nombre de Discord o de Battle.net: se copia el nombre y se abre la aplicación para agregarlo como amigo
+// (ninguna de las dos permite enlaces para agregar por nombre, así que se pega en «Agregar amigo»)
+document.addEventListener('click', async (ev) => {
+  const a = ev.target.closest('[data-friend]');
+  if (!a) return;
+  ev.preventDefault();
+  const name = a.dataset.name;
+  let copied = false;
+  try { await navigator.clipboard.writeText(name); copied = true; } catch {
+    try { const t = document.createElement('textarea'); t.value = name; t.style.position = 'fixed'; t.style.opacity = '0'; document.body.appendChild(t); t.select(); copied = document.execCommand('copy'); t.remove(); } catch { /* sin portapapeles */ }
+  }
+  const dc = a.dataset.friend === 'discord';
+  toast(copied ? LL(`«${name}» copiado: pégalo en «Agregar amigo» de ${dc ? 'Discord' : 'Battle.net'}`, `“${name}” copied: paste it in “Add Friend” on ${dc ? 'Discord' : 'Battle.net'}`) : name);
+  try { window.api.openExternal(IS_WEB ? (dc ? 'https://discord.com/channels/@me' : '') : (dc ? 'discord://-/channels/@me' : 'battlenet://')); } catch { /* sin la aplicación */ }
 });

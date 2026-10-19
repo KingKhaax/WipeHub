@@ -8,6 +8,7 @@ const WCUpdate = (() => {
 
   // Historial: [versión, es, en]
   const CHANGELOG = [
+    ['2.6.10', 'En Acerca de, al pulsar el nombre de Discord o de Battle.net se copia el nombre y se abre la aplicación para agregarlo como amigo.', 'In About, clicking the Discord or Battle.net name copies it and opens the app so you can add it as a friend.'],
     ['2.6.9', 'Con la web en español, el logo del parche de la portada pasa a ser el de «La maldición de Ula’tek»; en inglés se sigue viendo «Curse of Ula’tek».', 'With the website in Spanish the home page patch logo is now «La maldición de Ula’tek»; in English it is still «Curse of Ula’tek».'],
     ['2.6.8', 'Limpieza interna: se elimina código de migración de versiones muy antiguas y de nombres de acento obsoletos.', 'Internal clean-up: removed migration code for very old versions and obsolete accent names.'],
     ['2.6.7', 'El puesto de las tarjetas de «All Stars de la expansión» va ahora dentro de una caja con borde, como en Warcraft Logs, y los iconos llevan marco.', 'The rank on the “Expansion All Stars” cards now sits in a bordered box like Warcraft Logs, and the icons have a frame.'],

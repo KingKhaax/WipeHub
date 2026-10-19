@@ -242,7 +242,7 @@
   const spellMem = new Map();
   let talentMem = null;
 
-  const openOk = /^https:\/\/(([a-z]+\.)?warcraftlogs\.com|worldofwarcraft\.blizzard\.com|news\.blizzard\.com|raider\.io|www\.raider\.io|(www\.)?raidbots\.com|kingkhaax\.github\.io)\//;
+  const openOk = /^https:\/\/(([a-z]+\.)?warcraftlogs\.com|worldofwarcraft\.blizzard\.com|news\.blizzard\.com|raider\.io|www\.raider\.io|(www\.)?raidbots\.com|kingkhaax\.github\.io|discord\.com)\//;
 
   window.api = {
     query,
