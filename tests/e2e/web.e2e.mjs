@@ -74,6 +74,7 @@ test('Ajustes: pestañas, restablecer con confirmación, historial recortado y �
   await p.evaluate(() => openSettings());
   const tabs = await p.$$eval('.set-tab', (e) => e.map((x) => x.dataset.setTab));
   assert.deepEqual(tabs, ['general', 'look', 'replay', 'data', 'version']);
+  assert.ok(!(await p.$('#settings [data-seg="lang"]')), 'el idioma ya no está en Ajustes (se cambia desde la barra de arriba)');
   // en la web no salen las opciones de escritorio
   await p.click('[data-set-tab="data"]'); await p.waitForTimeout(250);
   const acts = await p.$$eval('#settings [data-set-act]', (e) => e.map((x) => x.dataset.setAct));
@@ -133,13 +134,19 @@ test('Ajustes: región y dificultad por defecto, colores propios, exportar e imp
   noErrors(p);
 });
 
-test('pulsar el nombre de Discord o Battle.net copia el nombre', async () => {
+test('pulsar el nombre de Discord o Battle.net lo copia y avisa en medio de la pantalla', async () => {
+  const p = await open();
+  await p.evaluate(() => openSettings('version'));
   for (const [k, name] of [['discord', 'sr.kitkat'], ['battlenet', 'KitKat#21202']]) {
-    const p = await open(); // una página por servicio: el navegador pasa el foco a su aviso «¿abrir la aplicación?» al lanzar discord:// o battlenet://
-    await p.evaluate(() => openSettings('version'));
-    await p.click(`.about-friend[data-friend="${k}"]`); await p.waitForTimeout(300);
+    await p.click(`.about-friend[data-friend="${k}"]`); await p.waitForSelector('#copyPop'); 
     assert.equal(await p.evaluate(() => navigator.clipboard.readText()), name);
+    assert.match(await p.$eval('#copyPop', (e) => e.innerText), /copiado al portapapeles/i);
+    assert.match(await p.$eval('#copyPop', (e) => e.innerText), new RegExp(name.replace('.', '\.')));
+    const box = await p.$eval('#copyPop', (e) => { const r = e.getBoundingClientRect(); return { cx: r.x + r.width / 2, cy: r.y + r.height / 2, w: innerWidth, h: innerHeight }; });
+    assert.ok(Math.abs(box.cx - box.w / 2) < 40 && Math.abs(box.cy - box.h / 2) < 40, 'el aviso está en el centro');
+    await p.waitForSelector('#copyPop', { state: 'detached', timeout: 5000 });
   }
+  noErrors(p);
 });
 
 test('avisa cuando hay una versión nueva de la web', async () => {

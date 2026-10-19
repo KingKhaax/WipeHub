@@ -24,11 +24,10 @@ async function openSettings(tab) {
         <div><h2>WipeTime <span class="v">v${esc(info.version || '')}</span></h2>
           <p class="about-desc">${LL('Plataforma de análisis de combate para World of Warcraft: informes, repeticiones y comparativas de rendimiento a partir de Warcraft Logs.', 'Combat analysis platform for World of Warcraft: reports, replays and performance comparisons built on Warcraft Logs.')} <span class="about-es"><svg viewBox="0 0 3 2" width="30" height="20" role="img" aria-label="${LL('España', 'Spain')}" style="border-radius:3px"><title>${LL('España', 'Spain')}</title><rect width="3" height="2" fill="#c60b1e"/><rect y=".5" width="3" height="1" fill="#ffc400"/></svg></span></p>
           <p>${t('madeBy')} <b>Drakko</b> <span class="heart-s">♥</span></p>
-          <p class="about-dc" style="margin-top:30px"><svg viewBox="0 0 127.14 96.36" width="26" height="20" aria-hidden="true"><path fill="#5865F2" d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0 105.89 105.89 0 0 0 19.39 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2a75.57 75.57 0 0 0 64.32 0c.87.71 1.76 1.39 2.66 2a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15ZM42.45 65.69C36.18 65.69 31 60 31 53s5-12.74 11.43-12.74S54 46 53.89 53s-5.05 12.69-11.44 12.69Zm42.24 0C78.41 65.69 73.25 60 73.25 53s5-12.74 11.44-12.74S96.23 46 96.12 53s-5.04 12.69-11.43 12.69Z"/></svg> <a href="#" class="about-friend" data-friend="discord" data-name="sr.kitkat" title="${LL('Clic: copia el nombre y abre Discord', 'Click: copies the name and opens Discord')}"><b>sr.kitkat</b></a> <span class="muted">${LL('dudas y preguntas', 'questions')}</span></p>
-          <p class="about-dc"><img src="battlenet.png" width="26" height="26" alt="" style="border-radius:6px"> <a href="#" class="about-friend" data-friend="battlenet" data-name="KitKat#21202" title="${LL('Clic: copia el BattleTag y abre Battle.net', 'Click: copies the BattleTag and opens Battle.net')}"><b>KitKat#21202</b></a> <span class="muted">${LL('dudas y preguntas', 'questions')}</span></p></div></div>`;
+          <p class="about-dc" style="margin-top:30px"><svg viewBox="0 0 127.14 96.36" width="26" height="20" aria-hidden="true"><path fill="#5865F2" d="M107.7 8.07A105.15 105.15 0 0 0 81.47 0a72.06 72.06 0 0 0-3.36 6.83 97.68 97.68 0 0 0-29.11 0A72.37 72.37 0 0 0 45.64 0 105.89 105.89 0 0 0 19.39 8.09C2.79 32.65-1.71 56.6.54 80.21a105.73 105.73 0 0 0 32.17 16.15 77.7 77.7 0 0 0 6.89-11.11 68.42 68.42 0 0 1-10.85-5.18c.91-.66 1.8-1.34 2.66-2a75.57 75.57 0 0 0 64.32 0c.87.71 1.76 1.39 2.66 2a68.68 68.68 0 0 1-10.87 5.19 77 77 0 0 0 6.89 11.1 105.25 105.25 0 0 0 32.19-16.14c2.64-27.38-4.51-51.11-18.9-72.15ZM42.45 65.69C36.18 65.69 31 60 31 53s5-12.74 11.43-12.74S54 46 53.89 53s-5.05 12.69-11.44 12.69Zm42.24 0C78.41 65.69 73.25 60 73.25 53s5-12.74 11.44-12.74S96.23 46 96.12 53s-5.04 12.69-11.43 12.69Z"/></svg> <a href="#" class="about-friend" data-friend="discord" data-name="sr.kitkat" title="${LL('Clic: copiar el nombre', 'Click: copy the name')}"><b>sr.kitkat</b></a> <span class="muted">${LL('dudas y preguntas', 'questions')}</span></p>
+          <p class="about-dc"><img src="battlenet.png" width="26" height="26" alt="" style="border-radius:6px"> <a href="#" class="about-friend" data-friend="battlenet" data-name="KitKat#21202" title="${LL('Clic: copiar el BattleTag', 'Click: copy the BattleTag')}"><b>KitKat#21202</b></a> <span class="muted">${LL('dudas y preguntas', 'questions')}</span></p></div></div>`;
   const panels = {
     general: `
-      ${row(LL('Idioma', 'Language'), seg('lang', LANGS.map((l) => [l.code, l.name])))}
       ${row(LL('Hora del servidor', 'Server time'), ServerClock.selectHTML(), LL('Reloj de arriba a la izquierda; al pasar el ratón ves cuánto falta para el reinicio semanal', 'Clock at the top left; hover it to see the time left until the weekly reset'))}
       ${row(LL('Región por defecto', 'Default region'), `<select data-set-sel="region">${[['', LL('Automática', 'Automatic')], ['eu', 'EU'], ['us', 'US'], ['kr', 'KR'], ['tw', 'TW']].map(([v, l]) => `<option value="${v}" ${String(G('region')) === v ? 'selected' : ''}>${l}</option>`).join('')}</select>`, LL('La que sale al buscar personajes y guilds (si no has elegido otra antes)', 'The one shown when searching characters and guilds (unless you picked another before)'))}
       ${row(LL('Dificultad por defecto', 'Default difficulty'), `<select data-set-sel="diff">${[[0, LL('La más alta con datos', 'Highest with data')], [5, LL('Mítico', 'Mythic')], [4, LL('Heroico', 'Heroic')], [3, LL('Normal', 'Normal')]].map(([v, l]) => `<option value="${v}" ${Number(G('diff')) === v ? 'selected' : ''}>${l}</option>`).join('')}</select>`, LL('Para las fichas de personaje y la clasificación de guilds', 'For character pages and guild rankings'))}
@@ -106,12 +105,6 @@ document.addEventListener('click', async (ev) => {
     const key = el.dataset.set;
     let v = el.dataset.v;
     if (key === 'rpSpeed') v = Number(v);
-    if (key === 'lang') {
-      setLang(v);
-      await new Promise((r) => setTimeout(r, 60));
-      openSettings('general');
-      return;
-    }
     WCSettings.set(key, v);
     openSettings();
     return;
@@ -181,7 +174,6 @@ document.addEventListener('change', async (ev) => {
     try {
       const n = WCSettings.importJSON(await t0.files[0].text());
       toastSet(LL(`Ajustes importados (${n})`, `Settings imported (${n})`));
-      if (typeof setLang === 'function' && WCSettings.get('lang')) { /* el idioma no forma parte de los ajustes importados */ }
       openSettings();
     } catch { toastSet(LL('Ese archivo no es un archivo de ajustes de WipeTime', 'That is not a WipeTime settings file')); }
     t0.value = '';
@@ -213,8 +205,21 @@ document.addEventListener('keydown', (ev) => {
   toast(`${LL('Tamaño de la interfaz', 'Interface size')}: ${next} %`);
 });
 
-// Pulsar el nombre de Discord o de Battle.net: se copia el nombre y se abre la aplicación para agregarlo como amigo
-// (ninguna de las dos permite enlaces para agregar por nombre, así que se pega en «Agregar amigo»)
+// Aviso en medio de la pantalla: confirma que el texto se ha copiado (desaparece solo)
+function showCopiedPop(text, ok) {
+  document.getElementById('copyPop')?.remove();
+  const el = document.createElement('div');
+  el.id = 'copyPop'; el.className = 'copy-pop' + (ok ? '' : ' err'); el.setAttribute('role', 'status');
+  const ic = document.createElement('span'); ic.className = 'cp-ic'; ic.textContent = ok ? '✓' : '!';
+  const tx = document.createElement('div'); tx.className = 'cp-tx';
+  const b = document.createElement('b'); b.textContent = ok ? LL('Se ha copiado al portapapeles', 'Copied to the clipboard') : LL('No se pudo copiar', 'Could not copy');
+  const sm = document.createElement('small'); sm.textContent = text;
+  tx.append(b, sm); el.append(ic, tx);
+  document.body.appendChild(el);
+  setTimeout(() => { el.classList.add('out'); setTimeout(() => el.remove(), 250); }, 1700);
+}
+
+// Pulsar el nombre de Discord o de Battle.net: se copia al portapapeles y sale un aviso en medio de la pantalla
 document.addEventListener('click', async (ev) => {
   const a = ev.target.closest('[data-friend]');
   if (!a) return;
@@ -224,9 +229,5 @@ document.addEventListener('click', async (ev) => {
   try { await navigator.clipboard.writeText(name); copied = true; } catch {
     try { const t = document.createElement('textarea'); t.value = name; t.style.position = 'fixed'; t.style.opacity = '0'; document.body.appendChild(t); t.select(); copied = document.execCommand('copy'); t.remove(); } catch { /* sin portapapeles */ }
   }
-  const dc = a.dataset.friend === 'discord';
-  toast(copied ? LL(`«${name}» copiado: pégalo en «Agregar amigo» de ${dc ? 'Discord' : 'Battle.net'}`, `“${name}” copied: paste it in “Add Friend” on ${dc ? 'Discord' : 'Battle.net'}`) : name);
-  const scheme = dc ? 'discord://-/channels/@me' : 'battlenet://';
-  // en el programa lo abre el sistema; en la web el navegador pregunta si abre la aplicación instalada (no la versión web de Discord)
-  try { if (IS_WEB) { if (!window.__noScheme) location.href = scheme; } else window.api.openExternal(scheme); } catch { /* sin la aplicación */ }
+  showCopiedPop(name, copied);
 });
