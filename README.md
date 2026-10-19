@@ -1,14 +1,14 @@
 # WipeTime
 
-Programa de Windows para **ver, analizar y comparar logs de World of Warcraft** a partir de un enlace público de [Warcraft Logs](https://www.warcraftlogs.com). Hecho por Drakko · sr.kitkat ♥ · España 🇪🇸
+Programa de Windows para **ver, analizar y comparar logs de World of Warcraft** a partir de un enlace público de [Warcraft Logs](https://www.warcraftlogs.com). Hecho por Drakko · sr.kitkat <img src="docs/icons/inv_valentinescard02.jpg" width="18" height="18" alt="" align="absmiddle"> · España
 
 [![Última versión](https://img.shields.io/github/v/release/KingKhaax/WipeTime?label=versi%C3%B3n)](https://github.com/KingKhaax/WipeTime/releases/latest)
 [![Descargas](https://img.shields.io/github/downloads/KingKhaax/WipeTime/total?label=descargas)](https://github.com/KingKhaax/WipeTime/releases)
 [![Licencia: MIT](https://img.shields.io/github/license/KingKhaax/WipeTime?label=licencia)](LICENSE)
 
-### 🌐 Pruébalo en la web: **[wipetime.vercel.app](https://wipetime.vercel.app)**
+### <img src="docs/icons/inv_misc_net_01.jpg" width="28" height="28" alt="" align="absmiddle"> Pruébalo en la web: **[wipetime.vercel.app](https://wipetime.vercel.app)**
 
-## Web
+## <img src="docs/icons/inv_misc_net_01.jpg" width="28" height="28" alt="" align="absmiddle"> Web
 
 Usa WipeTime directamente en el navegador, sin instalar nada:
 
@@ -16,7 +16,7 @@ Usa WipeTime directamente en el navegador, sin instalar nada:
 
 Alternativa: [https://kingkhaax.github.io/WipeTime/](https://kingkhaax.github.io/WipeTime/)
 
-## Qué hace
+## <img src="docs/icons/inv_misc_book_09.jpg" width="28" height="28" alt="" align="absmiddle"> Qué hace
 
 - **Clasificaciones:** ranking de parses por rol (DPS, tanques y sanadores) de un intento, varios pulls o todos los intentos del jefe, con filtros por clase y orden.
 - **Chivato** (en el Informe general): pociones de salud y piedras de salud que ha usado cada jugador en la noche, por separado y con el total.
@@ -30,7 +30,7 @@ Alternativa: [https://kingkhaax.github.io/WipeTime/](https://kingkhaax.github.io
 - **Buscar personaje:** escribe el nombre (reino opcional) y elige entre los personajes que existen, con su reino y bandera; la ficha al estilo WoWProgress muestra posiciones, tabla por jefe, equipo y modelo en vivo.
 - **Idiomas:** español e inglés desde el botón «Idiomas».
 
-## Cómo usarlo
+## <img src="docs/icons/inv_misc_map_01.jpg" width="28" height="28" alt="" align="absmiddle"> Cómo usarlo
 
 1. **Abre WipeTime**, como prefieras: en el navegador en [wipetime.vercel.app](https://wipetime.vercel.app) (sin instalar nada), instalando `WipeTime.vX.Y.Z.Setup.exe` o abriendo la versión portable `WipeTime.vX.Y.Z.exe` (los dos están en [Releases](https://github.com/KingKhaax/WipeTime/releases/latest)).
 2. **Analiza un log:** pega el enlace de un informe de Warcraft Logs en la barra de arriba y pulsa **Cargar**. Elige tu personaje cuando te lo pida y navega por las pestañas del intento (Daño, Sanación, Muertes, Defensivos, Buffos, Mecánicas, Replay…).
@@ -43,13 +43,13 @@ Alternativa: [https://kingkhaax.github.io/WipeTime/](https://kingkhaax.github.io
 
 > No necesitas cuenta ni claves: WipeTime usa un servidor intermedio propio (`server/vercel`, desplegado en Vercel) que hace las consultas de solo lectura a Warcraft Logs y Blizzard. Tus ajustes y tus personajes se guardan solo en tu equipo (o en tu navegador, si usas la web).
 
-## Requisitos
+## <img src="docs/icons/inv_misc_gear_01.jpg" width="28" height="28" alt="" align="absmiddle"> Requisitos
 
 - Windows 10 u 11 (64 bits) para el programa de escritorio.
 - O cualquier navegador moderno para la [versión web](https://wipetime.vercel.app).
 - Un enlace público de un informe de [Warcraft Logs](https://www.warcraftlogs.com).
 
-## Descarga
+## <img src="docs/icons/inv_misc_gift_05.jpg" width="28" height="28" alt="" align="absmiddle"> Descarga
 
 Descarga la última versión desde [Releases](https://github.com/KingKhaax/WipeTime/releases/latest) (GitHub sustituye los espacios del nombre por puntos). En Releases solo está la última versión:
 
@@ -61,7 +61,7 @@ O sin descargar nada, en la web: [wipetime.vercel.app](https://wipetime.vercel.a
 
 Los ejecutables todavía no llevan firma digital (está en trámite la firma gratuita de SignPath; ver [Code signing policy](#code-signing-policy)), así que Windows SmartScreen puede avisar la primera vez: pulsa *Más información → Ejecutar de todas formas*. Puedes comprobar el archivo con los hashes de `latest.json`.
 
-## Novedades
+## <img src="docs/icons/inv_misc_note_06.jpg" width="28" height="28" alt="" align="absmiddle"> Novedades
 
 El historial de versiones está en el propio programa (Ajustes → Versión) y en [Releases](https://github.com/KingKhaax/WipeTime/releases) (solo se conserva la última).
 
