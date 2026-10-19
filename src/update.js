@@ -8,6 +8,7 @@ const WCUpdate = (() => {
 
   // Historial: [versión, es, en]
   const CHANGELOG = [
+    ['2.7.3', 'Cada vez que copias algo en WipeTime sale un aviso en medio de la pantalla («Se ha copiado al portapapeles»), y el historial de versiones de Ajustes pasa a tarjetas con iconos de World of Warcraft, un resumen y los cambios por secciones.', 'Every time you copy something in WipeTime a notice appears in the middle of the screen (“Copied to the clipboard”), and the version history in Settings becomes cards with World of Warcraft icons, a summary and the changes by section.'],
     ['2.7.2', 'Al pulsar el nombre de Discord o de Battle.net en Acerca de ya no se abre ninguna aplicación: se copia al portapapeles y sale un aviso en medio de la pantalla («Se ha copiado al portapapeles»). El idioma se cambia solo desde la barra de arriba y se quita de Ajustes.', 'Clicking the Discord or Battle.net name in About no longer opens any app: it is copied to the clipboard and a notice appears in the middle of the screen (“Copied to the clipboard”). The language is changed only from the top bar and it is removed from Settings.'],
     ['2.7.1', 'Color de botones: nueve colores más (lima, menta, índigo, magenta, coral, arena, pizarra y plata) y una rueda para elegir cualquier color; se aplica al momento y se guarda con los ajustes.', 'Button color: nine more colors (lime, mint, indigo, magenta, coral, sand, slate and silver) and a color wheel to pick any color; it applies instantly and is saved with the settings.'],
     ['2.7.0', 'Pruebas automáticas de navegador antes de publicar (si algo falla, la web y los .exe no se actualizan), aviso «Hay una versión nueva, Recargar» en la web, chips de orden en las pestañas Logs y Banda de cada guild y Progreso ordenable por columnas, y un comprobador semanal de hotfixes de Blizzard para los cambios de clase. Se quitan las notas de atajos de teclado.', 'Automatic browser tests before publishing (if anything fails, the web and the .exe are not updated), a “New version available, Reload” notice on the web, sort chips on each guild’s Logs and Roster tabs and a Progress table sortable by column, and a weekly check of Blizzard hotfixes for class changes. Keyboard-shortcut notes are removed.'],
@@ -155,6 +156,112 @@ const WCUpdate = (() => {
     ['0.1.0', 'Primera versión: daño, sanación, muertes, buffos, rotación y parses; replay con mapas; analizador y comparador de logs; Resumen, Detalle, Gráficas, Defensivos y Mecánicas con guía por dificultad; Mítica+; informe de la noche con rankings; guilds con Battle.net y ranking por rol; cuenta atrás y contenido del parche 12.1.5; tooltips; iconos de WoW; nueva estética con los colores del logo.', 'First version: damage, healing, deaths, buffs, rotation and parses; replay with maps; log analyzer and comparison; Summary, Detail, Graphs, Defensives and Mechanics with a per-difficulty guide; Mythic+; night report with rankings; guilds with Battle.net and role-based ranking; countdown and content for patch 12.1.5; tooltips; WoW icons; new look with the logo colors.'],
   ];
 
+  // Historial con aspecto de «notas del parche»: cada versión es una tarjeta con icono, un resumen y secciones con iconos de World of Warcraft.
+  // Las versiones que no están aquí se muestran igual, troceando su texto en frases (con un icono según de qué hablan).
+  const RICH = {
+    '2.7.3': {
+      es: { intro: 'Cada vez que copias algo en WipeTime sale un aviso en medio de la pantalla que lo confirma, y el historial de versiones estrena este diseño.', sections: [
+        ['inv_scroll_03', 'Avisos al copiar', ['Al copiar un enlace, un resumen, una imagen, los talentos, el código de SimC o los nombres de Discord y Battle.net sale «Se ha copiado al portapapeles» en el centro de la pantalla.', 'Si no se puede copiar, el aviso sale en rojo y dice qué hacer.']],
+        ['inv_misc_note_06', 'Historial de versiones', ['Cada versión es una tarjeta con iconos de World of Warcraft, un resumen y sus cambios por secciones.', 'Las versiones antiguas se reparten solas en frases, cada una con su icono.']],
+      ] },
+      en: { intro: 'Every time you copy something in WipeTime a notice appears in the middle of the screen to confirm it, and the version history gets this new look.', sections: [
+        ['inv_scroll_03', 'Copy notices', ['Copying a link, a summary, an image, talents, the SimC code or the Discord and Battle.net names shows “Copied to the clipboard” in the center of the screen.', 'If it cannot be copied the notice turns red and says what to do.']],
+        ['inv_misc_note_06', 'Version history', ['Each version is a card with World of Warcraft icons, a summary and its changes by section.', 'Older versions are split into sentences automatically, each with its own icon.']],
+      ] },
+    },
+    '2.7.2': {
+      es: { intro: 'Discord y Battle.net solo copian el nombre, y el idioma se cambia únicamente desde la barra de arriba.', sections: [
+        ['inv_misc_horn_02', 'Contacto', ['Pulsar el nombre de Discord o de Battle.net en Acerca de lo copia al portapapeles con un aviso en medio de la pantalla; ya no se abre ninguna aplicación.']],
+        ['inv_gizmo_02', 'Ajustes', ['El idioma se quita de Ajustes: se cambia con el botón de la barra de arriba.']],
+      ] },
+      en: { intro: 'Discord and Battle.net only copy the name now, and the language is changed only from the top bar.', sections: [
+        ['inv_misc_horn_02', 'Contact', ['Clicking the Discord or Battle.net name in About copies it to the clipboard with a notice in the middle of the screen; no app is opened anymore.']],
+        ['inv_gizmo_02', 'Settings', ['The language is removed from Settings: it is changed with the button on the top bar.']],
+      ] },
+    },
+    '2.7.1': {
+      es: { intro: 'Elige el color de tus botones con más libertad.', sections: [
+        ['inv_misc_gem_diamond_07', 'Color de botones', ['Nueve colores más: lima, menta, índigo, magenta, coral, arena, pizarra y plata.', 'Una rueda para elegir cualquier color; se aplica al momento y se guarda con tus ajustes.']],
+      ] },
+      en: { intro: 'Pick your button color with more freedom.', sections: [
+        ['inv_misc_gem_diamond_07', 'Button color', ['Nine more colors: lime, mint, indigo, magenta, coral, sand, slate and silver.', 'A color wheel to pick any color; it applies instantly and is saved with your settings.']],
+      ] },
+    },
+    '2.7.0': {
+      es: { intro: 'Pruebas automáticas antes de publicar, aviso de versión nueva en la web y más formas de ordenar las guilds.', sections: [
+        ['inv_shield_04', 'Calidad', ['Pruebas de navegador antes de cada versión: si algo falla, no se actualiza ni la web ni los .exe.']],
+        ['inv_misc_net_01', 'Web', ['Aviso «Hay una versión nueva, Recargar» cuando se publica una versión nueva de la web.']],
+        ['inv_shirt_guildtabard_01', 'Guilds', ['Chips de orden en las pestañas Logs y Banda de cada guild.', 'La tabla de Progreso se ordena pulsando el nombre de cada columna.']],
+        ['spell_holy_crusade', 'Cambios de clase', ['Un comprobador semanal avisa cuando Blizzard publica hotfixes nuevos de clases.', 'Se quitan las notas de atajos de teclado.']],
+      ] },
+      en: { intro: 'Automatic tests before publishing, a new-version notice on the web and more ways to sort guilds.', sections: [
+        ['inv_shield_04', 'Quality', ['Browser tests before every version: if anything fails, neither the web nor the .exe are updated.']],
+        ['inv_misc_net_01', 'Web', ['“New version available, Reload” notice when a new version of the web is published.']],
+        ['inv_shirt_guildtabard_01', 'Guilds', ['Sort chips on each guild’s Logs and Roster tabs.', 'The Progress table sorts by clicking each column name.']],
+        ['spell_holy_crusade', 'Class changes', ['A weekly check warns when Blizzard publishes new class hotfixes.', 'Keyboard-shortcut notes are removed.']],
+      ] },
+    },
+    '2.6.9–2.6.11': {
+      es: { intro: 'Ajustes renovados de arriba abajo y logo del parche en español.', sections: [
+        ['inv_gizmo_02', 'Ajustes', ['Nueva pestaña General con la hora del servidor y la región y dificultad por defecto.', 'Colores propios de fondo, paneles y texto.', 'Datos agrupado en Cachés, Mis datos y Restablecer, con exportar e importar tus ajustes y confirmación al restablecer.', 'Las opciones solo de escritorio se ocultan en la web.']],
+        ['inv_misc_note_06', 'Versión y Acerca de', ['Una sola pestaña, con el historial de las últimas 10 versiones y «Ver más».', 'Pulsar Discord o Battle.net copia el nombre.']],
+        ['achievement_boss_kingymiron', 'Portada', ['Con la web en español el logo del parche es «La maldición de Ula’tek».']],
+      ] },
+      en: { intro: 'Settings revamped from top to bottom and a Spanish patch logo.', sections: [
+        ['inv_gizmo_02', 'Settings', ['New General tab with the server time and the default region and difficulty.', 'Custom background, panel and text colors.', 'Data grouped into Caches, My data and Reset, with settings export and import and a confirmation before resetting.', 'Desktop-only options are hidden on the web.']],
+        ['inv_misc_note_06', 'Version and About', ['A single tab, with the history of the latest 10 versions and “Show more”.', 'Clicking Discord or Battle.net copies the name.']],
+        ['achievement_boss_kingymiron', 'Home', ['With the website in Spanish the patch logo is “La maldición de Ula’tek”.']],
+      ] },
+    },
+    '2.6.0–2.6.8': {
+      es: { intro: 'La ficha de personaje se parece cada vez más a la de Warcraft Logs.', sections: [
+        ['achievement_bg_winwsg', 'All Stars', ['Una tira con las bandas y las temporadas de Mítica+ de la expansión elegida: dificultad, puntos, jefes derrotados y puesto, con selector de expansión.', 'Con «Todos» los parches sale el All Star de mejor puesto.']],
+        ['inv_misc_net_01', 'Enlaces', ['La bandera del reino sigue su idioma.', 'Cada guild y cada comparación tienen su propia dirección.']],
+        ['inv_misc_note_06', 'Tablas', ['Las tablas se ordenan pulsando el nombre de cada columna.']],
+      ] },
+      en: { intro: 'The character page looks more and more like Warcraft Logs.', sections: [
+        ['achievement_bg_winwsg', 'All Stars', ['A strip with the raids and Mythic+ seasons of the chosen expansion: difficulty, points, bosses defeated and rank, with an expansion selector.', 'With “All” patches the best-ranked All Star is shown.']],
+        ['inv_misc_net_01', 'Links', ['The realm flag follows its language.', 'Every guild and comparison has its own address.']],
+        ['inv_misc_note_06', 'Tables', ['Tables sort by clicking each column name.']],
+      ] },
+    },
+  };
+  // Icono según de qué habla un texto (para las versiones sin sección propia)
+  const LOG_ICONS = [
+    [/ajustes|settings|tema|color|fuente|densidad/i, 'inv_gizmo_02'], [/guild|banda|roster/i, 'inv_shirt_guildtabard_01'], [/replay|repetici/i, 'inv_misc_spyglass_02'],
+    [/mec[aá]nic|mechanic|jefe|boss/i, 'inv_misc_book_11'], [/talento|talent|equipo|gear|objeto|item|gema|simc/i, 'inv_chest_plate04'],
+    [/ficha|personaje|character|all star|parse|ranking|clasificaci/i, 'achievement_bg_winwsg'], [/rotaci|rotation|buff|debuff|defensiv/i, 'ability_warrior_innerrage'],
+    [/discord|battle\.net|contacto/i, 'inv_misc_horn_02'], [/reloj|clock|servidor|server|hora/i, 'inv_misc_gear_01'], [/arreglo|fix|error|corrig/i, 'inv_hammer_20'],
+    [/seguridad|security|prueba|test/i, 'inv_shield_04'], [/web|navegador|browser|direcci|address|enlace|link/i, 'inv_misc_net_01'], [/copi/i, 'inv_scroll_03'],
+    [/muerte|death|poci[oó]n|pot/i, 'inv_misc_bone_humanskull_01'], [/comparar|compar|mapa|map/i, 'inv_misc_map_01'],
+  ];
+  const logIcon = (t) => (LOG_ICONS.find(([re]) => re.test(t)) || [0, 'inv_scroll_02'])[1];
+  const logEsc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  // Frases de un texto plano (sin partir «2.5.13» ni «v2.0»)
+  const sentences = (t) => String(t).split(/(?<=[.!?])\s+(?=[A-ZÁÉÍÓÚÑ«¿¡“‘(])/).map((x) => x.trim()).filter(Boolean);
+  function logCard(ent, lang, latest, iconUrl) {
+    const [v, es, en] = ent;
+    const rich = RICH[v] && RICH[v][lang === 'es' ? 'es' : 'en'];
+    const text = lang === 'es' ? es : en;
+    let intro, sections;
+    if (rich) { intro = rich.intro; sections = rich.sections; } else {
+      const ss = sentences(text);
+      intro = ss[0] || text;
+      sections = ss.length > 1 ? [[null, null, ss.slice(1)]] : [];
+    }
+    const main = rich && rich.sections[0] ? rich.sections[0][0] : logIcon(text);
+    return `<article class="cl-card${latest ? ' latest' : ''}"><header class="cl-head"><img class="cl-ic" src="${iconUrl(main)}" width="40" height="40" alt="" loading="lazy">`
+      + `<div class="cl-ht"><b class="cl-ver">v${logEsc(v)}</b>${latest ? `<span class="cl-tag">${lang === 'es' ? 'Última versión' : 'Latest version'}</span>` : ''}</div></header>`
+      + `<p class="cl-intro">${logEsc(intro)}</p>`
+      + sections.map(([ic, title, items]) => `<section class="cl-sec">${ic ? `<img class="cl-sic" src="${iconUrl(ic)}" width="26" height="26" alt="" loading="lazy">` : ''}<div class="cl-sb">${title ? `<h4>${logEsc(title)}</h4>` : ''}<ul>${items.map((i) => `<li>${logEsc(i)}</li>`).join('')}</ul></div></section>`).join('')
+      + '</article>';
+  }
+  // Todo el historial (o solo las últimas 10 versiones)
+  function logHTML(lang, all) {
+    const list = all ? CHANGELOG : CHANGELOG.slice(0, 10);
+    return `<div class="cl-list">${list.map((e, i) => logCard(e, lang, i === 0, (n) => `wcicon://i/${n}`)).join('')}</div>`;
+  }
+
   const cls = () => (!res || res.error ? '' : res.outdated ? 'bad' : 'ok');
   const canInstall = () => !!(res && res.outdated && res.canInstall);
 
@@ -240,5 +347,5 @@ const WCUpdate = (() => {
 
   const reset = () => { res = null; paintBadge(); };
   document.addEventListener('DOMContentLoaded', init);
-  return { check, install, updateNow, buttonLabel, init, reset, cls, canInstall, stateHTML, CHANGELOG };
+  return { check, install, updateNow, buttonLabel, init, reset, cls, canInstall, stateHTML, CHANGELOG, logHTML };
 })();

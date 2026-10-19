@@ -833,7 +833,7 @@ const Extras = (() => {
 
   async function copy(text, msg) {
     try { await navigator.clipboard.writeText(text); } catch { const ta = document.createElement('textarea'); ta.value = text; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
-    toast(msg);
+    showCopiedPop(msg);
   }
 
   async function exportPng() {
@@ -878,8 +878,8 @@ const Extras = (() => {
         if (!rows.length) return toast(LL('Esta vista no tiene una tabla que exportar', 'This view has no table to export'));
         const res = await window.api.exportText(csvOf(rows), `${(S.fight?.name || 'wipetime').replace(/[^\w]+/g, '-')}-${S.tab}.csv`, 'csv');
         if (res?.ok) toast(LL('CSV guardado', 'CSV saved'));
-      } else if (k === 'text') copy(summaryText(), LL('Resumen copiado', 'Summary copied'));
-      else if (k === 'wcl') copy(wclLink(), LL('Enlace copiado', 'Link copied'));
+      } else if (k === 'text') copy(summaryText(), LL('Resumen', 'Summary'));
+      else if (k === 'wcl') copy(wclLink(), wclLink());
     });
   }
 

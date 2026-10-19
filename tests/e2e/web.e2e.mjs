@@ -87,9 +87,11 @@ test('Ajustes: pestañas, restablecer con confirmación, historial recortado y �
   assert.equal(await p.evaluate(() => WCSettings.get('zoom')), 100);
   // historial: 10 entradas y «Ver más»
   await p.click('[data-set-tab="version"]'); await p.waitForTimeout(250);
-  assert.equal(await p.$$eval('.changelog > div', (e) => e.length), 10);
+  assert.equal(await p.$$eval('.cl-card', (e) => e.length), 10);
+  assert.ok((await p.$$eval('.cl-card .cl-sic', (e) => e.length)) >= 6, 'secciones con iconos de WoW');
+  assert.ok(await p.$('.cl-card.latest .cl-tag'), 'la última versión lleva su etiqueta');
   await p.click('[data-set-act="toggle-log"]'); await p.waitForTimeout(250);
-  assert.ok((await p.$$eval('.changelog > div', (e) => e.length)) > 10);
+  assert.ok((await p.$$eval('.cl-card', (e) => e.length)) > 10);
   // la bandera de España va sin texto
   assert.ok(!/España/.test(await p.$eval('.about-es', (e) => e.innerText)));
   noErrors(p);
@@ -176,6 +178,18 @@ test('ordenar tablas por columna (TableSort): números, texto y cabecera suelta 
   assert.deepEqual(await p.$$eval('#t1 tbody td:nth-child(1)', (e) => e.map((x) => x.textContent)), ['Alfa', 'Beta', 'Gamma'], 'texto de A a Z');
   await p.click('.gt-head span:nth-child(2)'); await p.waitForTimeout(100);
   assert.deepEqual(await p.$$eval('.gt-tbl .gt-row b', (e) => e.map((x) => x.textContent)), ['20', '5', '1'], 'cabecera suelta + contenedor');
+  noErrors(p);
+});
+
+
+test('todos los avisos de copiar usan el mismo mensaje en medio de la pantalla', async () => {
+  const p = await open();
+  await p.evaluate(() => showCopiedPop('Talentos: pégalos en el juego'));
+  const box = await p.$eval('#copyPop', (e) => { const r = e.getBoundingClientRect(); return { cx: r.x + r.width / 2, cy: r.y + r.height / 2, w: innerWidth, h: innerHeight, t: e.innerText }; });
+  assert.match(box.t, /copiado al portapapeles/i);
+  assert.ok(Math.abs(box.cx - box.w / 2) < 40 && Math.abs(box.cy - box.h / 2) < 40, 'centrado');
+  await p.evaluate(() => showCopiedPop('x', false));
+  assert.ok(await p.$('#copyPop.err'), 'el fallo sale en rojo');
   noErrors(p);
 });
 

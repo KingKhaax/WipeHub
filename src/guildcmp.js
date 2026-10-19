@@ -278,8 +278,8 @@ const GuildCmp = (() => {
     }
     try {
       await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
-      toast(LL('Imagen copiada: ya puedes pegarla', 'Image copied: you can paste it now'));
-    } catch { toast(LL('No se pudo copiar; usa Guardar PNG', 'Could not copy; use Save PNG')); }
+      showCopiedPop(LL('Imagen: ya puedes pegarla', 'Image: you can paste it now'));
+    } catch { showCopiedPop(LL('Usa «Guardar PNG»', 'Use “Save PNG”'), false); }
   }
 
   // Detalle try a try de cada guild (barra = vida que le quedaba al jefe)

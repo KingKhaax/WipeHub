@@ -1197,8 +1197,8 @@ function exportRankedImage(mode) {
     }
     try {
       await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
-      toast(LL('Imagen copiada: ya puedes pegarla', 'Image copied: you can paste it now'));
-    } catch { toast(LL('No se pudo copiar; usa Guardar PNG', 'Could not copy; use Save PNG')); }
+      showCopiedPop(LL('Imagen: ya puedes pegarla', 'Image: you can paste it now'));
+    } catch { showCopiedPop(LL('Usa «Guardar PNG»', 'Use “Save PNG”'), false); }
   })();
 }
 
@@ -2101,8 +2101,8 @@ document.addEventListener('click', async (ev) => {
     case 'toplog-copy':
       try {
         await navigator.clipboard.writeText(el.dataset.u);
-        toast(LL('Enlace copiado', 'Link copied'));
-      } catch { toast(LL('No se pudo copiar el enlace', 'Could not copy the link')); }
+        showCopiedPop(el.dataset.u);
+      } catch { showCopiedPop(LL('No se pudo copiar el enlace', 'Could not copy the link'), false); }
       break;
     case 'toplog-ext':
       try { window.api.openExternal(el.dataset.u); } catch { window.open(el.dataset.u, '_blank', 'noopener'); }
@@ -2112,8 +2112,8 @@ document.addEventListener('click', async (ev) => {
       try {
         const text = await pullSummaryText(S.fight);
         await navigator.clipboard.writeText(text);
-        toast(LL('Resumen copiado: ya puedes pegarlo en Discord', 'Summary copied: you can paste it into Discord now'));
-      } catch (e) { console.warn('summary', e); toast(LL('No se pudo copiar el resumen', 'Could not copy the summary')); }
+        showCopiedPop(LL('Resumen: ya puedes pegarlo en Discord', 'Summary: you can paste it into Discord now'));
+      } catch (e) { console.warn('summary', e); showCopiedPop(LL('No se pudo copiar el resumen', 'Could not copy the summary'), false); }
       break;
     }
     case 'export-img':

@@ -730,7 +730,7 @@ const Extras2 = (() => {
     const el = ev.target.closest('[data-action="night-copy"], [data-action="night-png"]');
     if (!el) return;
     if (el.dataset.action === 'night-copy') {
-      navigator.clipboard?.writeText(window._nightText || '').then(() => toast(LL('Informe copiado', 'Report copied')));
+      navigator.clipboard?.writeText(window._nightText || '').then(() => showCopiedPop(LL('Informe de la noche', 'Night report')));
     } else Extras.exportPng();
   });
 

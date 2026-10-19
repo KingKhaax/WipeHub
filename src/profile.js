@@ -517,8 +517,9 @@ const Profile = (() => {
     try { await navigator.clipboard.writeText(txt); } catch {
       const ta = document.createElement('textarea'); ta.value = txt; ta.style.cssText = 'position:fixed;opacity:0'; document.body.appendChild(ta); ta.select();
       let okc = false; try { okc = document.execCommand('copy'); } catch { /* sin permiso */ } ta.remove();
-      if (!okc) return toast(LL('No se pudo copiar al portapapeles', 'Could not copy to the clipboard'));
+      if (!okc) return showCopiedPop(LL('No se pudo copiar al portapapeles', 'Could not copy to the clipboard'), false);
     }
+    showCopiedPop(LL('Código para SimC', 'SimC code'));
     clearTimeout(simcTimer);
     btn.classList.add('done');
     btn.innerHTML = `<span class="pf-simc-tick">✓</span> ${LL('Copiado para SimC', 'Copied for SimC')}`;
@@ -730,7 +731,7 @@ const Profile = (() => {
       fetchEncLogs(id).finally(() => { encPending.delete(k); repaint(); });
     }
     else if (a === 'log') loadReport(`https://www.warcraftlogs.com/reports/${el.dataset.code}${el.dataset.fight ? `#fight=${el.dataset.fight}` : ''}`);
-    else if (a === 'copytal') { const txt = st.rio?.talents?.text; if (txt) navigator.clipboard.writeText(txt).then(() => toast(LL('Talentos copiados: pégalos en el juego con «Importar»', 'Talents copied: paste them in game with «Import»'))); }
+    else if (a === 'copytal') { const txt = st.rio?.talents?.text; if (txt) navigator.clipboard.writeText(txt).then(() => showCopiedPop(LL('Talentos: pégalos en el juego con «Importar»', 'Talents: paste them in game with “Import”'))); }
     else if (a === 'home') goHome();
     else if (a === 'dd-toggle') {
       const list = el.nextElementSibling;
