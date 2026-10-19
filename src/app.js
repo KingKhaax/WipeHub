@@ -34,6 +34,7 @@ const S = {
     const m = lsGet('sortMode'); // formato anterior (botones)
     return m === 'asc' ? { key: 'amount', dir: 'asc' } : m === 'name' ? { key: 'name', dir: 'asc' } : /^parse-/.test(m || '') ? { key: 'parse', dir: m === 'parse-asc' ? 'asc' : 'desc' } : { key: 'amount', dir: 'desc' };
   })(),
+  dmgTarget: null,   // enemigo elegido en Daño (null = todos)
   takenAbility: '', // habilidad elegida en Daño recibido ('' = todas)
   shieldKind: 'all', // all | boss | allies | adds
   dmgMetric: 'dps',   // dps | boss | active
@@ -1441,6 +1442,19 @@ const VIEWS = {
     const [d, rk] = await Promise.all([fightData(f), rankings(f)]);
     const dur = fightDur(f) / 1000;
     const m = S.dmgMetric === 'rdps' ? 'dps' : S.dmgMetric;
+    // Enemigo concreto (jefe, add...) para ver solo el daño que se le hizo a él
+    const enemies = d.tgt.filter((e) => e.total > 0 && !isPlayer(e.id, e)).sort((x, y) => y.total - x.total);
+    const selEnemy = enemies.find((e) => e.id === S.dmgTarget) || null;
+    const enemyPicker = enemies.length ? `<div class="sortbar"><span class="muted">${LL('Enemigo', 'Enemy')}</span>
+      <div class="abdd"><button type="button" class="abdd-btn" data-action="taken-ability-toggle"><span class="abdd-t">${selEnemy ? `${esc(selEnemy.name)} · ${plain(selEnemy.total)}` : esc(LL('Todos los enemigos', 'All enemies'))}</span><span class="abdd-car">▾</span></button>
+      <div class="abdd-list surface-dark" hidden><div class="abdd-i ${selEnemy ? '' : 'on'}" data-action="dmg-target" data-id=""><span class="abdd-t">${esc(LL('Todos los enemigos', 'All enemies'))}</span></div>${enemies.slice(0, 40).map((e) => `<div class="abdd-i ${selEnemy?.id === e.id ? 'on' : ''}" data-action="dmg-target" data-id="${e.id}"><span class="abdd-t">${esc(e.name)} · ${plain(e.total)}</span></div>`).join('')}</div></div></div>` : '';
+    if (selEnemy) {
+      const entries = await enemyTable(f, selEnemy.id);
+      const erows = entries.filter((e) => isPlayer(e.id, e))
+        .map((e) => ({ ...playerInfo(e.id, e), ilvl: e.itemLevel, active: activeOf(e, dur * 1000), pets: petsOf(e), abil: abilList(e.abilities), total: e.total, rate: e.total / dur }))
+        .filter((r) => r.total > 0).sort((x, y) => y.total - x.total);
+      return headerHTML(f, t('dmgTitle'), leaderSub(erows, f)) + enemyPicker + rankedList(erows, { unit: 'DPS' });
+    }
     const bossOf = (e) => (e.targets || []).filter((x) => x.type === 'Boss').reduce((s, x) => s + x.total, 0);
     const rows = d.dmg.filter((e) => isPlayer(e.id, e))
       .map((e) => {
@@ -1461,7 +1475,7 @@ const VIEWS = {
     </div>`;
     const real = S.parseMode === 'ilvl' ? rk.dpsB : rk.dps;
     const withParse = m === 'dps' || m === 'rdps';
-    return headerHTML(f, t('dmgTitle'), leaderSub(rows, f)) + bar + invalidBannerHTML(rows, rk.invalid) + rankedList(rows, { unit: 'DPS', invalid: rk.invalid, ...(withParse ? parseOptions(f, rows, rk.dps, 'dps', rk.dpsB) : {}) });
+    return headerHTML(f, t('dmgTitle'), leaderSub(rows, f)) + bar + enemyPicker + invalidBannerHTML(rows, rk.invalid) + rankedList(rows, { unit: 'DPS', invalid: rk.invalid, ...(withParse ? parseOptions(f, rows, rk.dps, 'dps', rk.dpsB) : {}) });
   },
 
   async healing(f) {
@@ -2124,6 +2138,10 @@ document.addEventListener('click', async (ev) => {
       list.hidden = !list.hidden;
       break;
     }
+    case 'dmg-target':
+      S.dmgTarget = el.dataset.id ? Number(el.dataset.id) : null;
+      render();
+      break;
     case 'taken-ability':
       S.takenAbility = el.dataset.name;
       render();
