@@ -5,4 +5,3 @@ build/secrets.json
 web-dist/
 .esb/
 .e2e-settings.json
-tools/.npcs-cache.json

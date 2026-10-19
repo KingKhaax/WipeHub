@@ -154,7 +154,7 @@ function npcInfo(id, name) {
   const gid = S.actors.get(id)?.gameID;
   const e = NPC_DATA[gid] || npcByName.get(String(name || '').toLowerCase());
   if (!e) return { name, icon: '' };
-  return { name: LL(e[1], e[0]), icon: e[2] ? `npcicons/${e[2]}.webp` : '' };
+  return { name: LL(e[1], e[0]), icon: e[2] ? `npcicons/${e[2]}` : '' };
 }
 const npcIconImg = (i, size = 22) => (i.icon ? `<img class="npc-ic" src="${i.icon}" width="${size}" height="${size}" alt="" loading="lazy">` : '');
 function ability(id) {

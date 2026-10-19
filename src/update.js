@@ -8,6 +8,7 @@ const WCUpdate = (() => {
 
   // Historial: [versión, es, en]
   const CHANGELOG = [
+    ['2.7.7', 'Los enemigos del selector de Daño llevan un icono en vez de la miniatura del modelo: el del Diario de Mazmorras cuando existe y, si no, uno de WoW según su tipo (bestia, demonio, no-muerto, elemental, humanoide...).', 'Enemies in the Damage selector now use an icon instead of the model thumbnail: the Dungeon Journal one when it exists and otherwise a WoW icon by creature type (beast, demon, undead, elemental, humanoid...).'],
     ['2.7.6', 'Daño: el selector de enemigo (y la pestaña Daño a enemigos) muestra el nombre en español de jefes y adds de las bandas de la temporada y, al lado, su icono.', 'Damage: the enemy selector (and the Damage to enemies tab) shows the Spanish name of the season raid bosses and adds, plus their icon next to it.'],
     ['2.7.5', 'Daño: nuevo selector «Enemigo» para ver solo el daño hecho a un jefe o a un add concreto (con sus habilidades), en vez del total de la pelea. «Todos los enemigos» vuelve a la vista general.', 'Damage: new “Enemy” selector to see only the damage done to a specific boss or add (with its abilities) instead of the whole fight total. “All enemies” goes back to the general view.'],
     ['2.7.4', 'Cambios de clase: «Desconcertado» (Pícaro, Timador) ya sale con su icono y su tooltip al pasar el ratón por encima.', 'Class changes: “Fazed” (Rogue, Trickster) now shows its icon and a tooltip on hover.'],

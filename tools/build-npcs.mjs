@@ -1,6 +1,7 @@
-// Genera src/npcs.js (nombre en español e icono de cada enemigo de las bandas) y src/npcicons/*.webp
-// con datos públicos de Wowhead: las páginas de zona listan sus NPC y cada NPC trae su id de modelo,
-// del que sale la miniatura. Uso:  node tools/build-npcs.mjs
+// Genera src/npcs.js (nombre en español e icono de cada enemigo de las bandas) y src/npcicons/*
+// con datos públicos de Wowhead: las páginas de zona listan sus NPC (con tipo y si son jefe).
+// Icono: los jefes llevan el suyo del Diario de Mazmorras (ui-ej-boss-*); el resto, un icono de WoW según su tipo.
+// Uso:  node tools/build-npcs.mjs
 import fs from 'fs';
 import { execFile } from 'child_process';
 import path from 'path';
@@ -12,9 +13,15 @@ const ICONS = path.join(SRC, 'npcicons');
 const UA = 'Mozilla/5.0';
 // Venomous Abyss, Tidebound Grotto, Unbinding of Kith'ix, Voidspire, Dreamrift, Sporefall
 const ZONES = [16915, 16671, 17059, 16340, 16531, 16279];
+// Tipo de criatura de Wowhead -> icono de WoW
+const TYPE_ICON = {
+  1: 'ability_hunter_beasttraining', 2: 'inv_misc_head_dragon_01', 3: 'spell_shadow_summonfelhunter', 4: 'spell_nature_elementalabsorption',
+  5: 'spell_nature_earthquake', 6: 'spell_shadow_raisedead', 7: 'inv_misc_head_human_01', 9: 'inv_gizmo_01', 11: 'spell_nature_manaregentotem',
+};
+const DEFAULT_ICON = 'inv_misc_bone_humanskull_01';
 
-let blocked = false;
 const pause = (ms) => new Promise((res) => setTimeout(res, ms));
+let blocked = false;
 const get = async (url, bin) => {
   for (let i = 0; i < 3; i++) {
     const r = await new Promise((res) => execFile('curl', ['-s', '-L', '--max-redirs', '5', '-A', UA, '-w', '\n%{http_code}', url], { encoding: 'buffer', maxBuffer: 64 * 1024 * 1024 }, (e, out) => res(out || Buffer.alloc(0))));
@@ -43,62 +50,55 @@ function zoneNpcs(html) {
   return JSON.parse(html.slice(d, j + 1));
 }
 
-// Caché para poder reanudar si Wowhead corta (limita las peticiones): NPC_CACHE=ruta.json
-const CACHE = process.env.NPC_CACHE || path.join(here, '.npcs-cache.json');
-const cache = fs.existsSync(CACHE) ? JSON.parse(fs.readFileSync(CACHE, 'utf8')) : { zones: {}, disp: {} };
-const npcs = new Map(); // id -> { en, es }
+const npcs = new Map(); // id -> { en, es, type, boss }
 for (const z of ZONES) {
-  if (!cache.zones[z]) {
-    const en = await get(`https://www.wowhead.com/zone=${z}`); await pause(500);
-    const es = await get(`https://www.wowhead.com/es/zone=${z}`); await pause(500);
-    if (en && es) cache.zones[z] = { en: zoneNpcs(en), es: zoneNpcs(es) };
-  }
-  const enL = cache.zones[z]?.en || [], esL = cache.zones[z]?.es || [];
-  const esById = new Map(esL.map((n) => [n.id, n.name]));
+  const en = await get(`https://www.wowhead.com/zone=${z}`); await pause(500);
+  const es = await get(`https://www.wowhead.com/es/zone=${z}`); await pause(500);
+  if (!en || !es) { console.log('Wowhead no responde (zona', z, ')'); process.exit(2); }
+  const enL = zoneNpcs(en), esById = new Map(zoneNpcs(es).map((n) => [n.id, n.name]));
   for (const n of enL) {
-    const es0 = esById.get(n.id); if (n.type === 8 || n.type === 12) continue; // críticas y objetos que no son enemigos
-    npcs.set(n.id, { en: n.name, es: (es0 || n.name).replace(/^\[|\]$/g, '') });
+    if (n.type === 8 || n.type === 12) continue; // críticas y mascotas que no son enemigos
+    const es0 = (esById.get(n.id) || n.name).replace(/^\[|\]$/g, ''); // Wowhead pone [..] a lo que no está traducido
+    npcs.set(n.id, { en: n.name, es: es0, type: n.type, boss: !!n.boss });
   }
   console.log('zona', z, enL.length);
 }
 
+fs.rmSync(ICONS, { recursive: true, force: true });
 fs.mkdirSync(ICONS, { recursive: true });
-const ids = [...npcs.keys()];
+const saved = new Set();
+async function save(name, url) {
+  if (saved.has(name)) return true;
+  const img = await get(url, true);
+  if (!img || img.length < 200) return false;
+  fs.writeFileSync(path.join(ICONS, name), img);
+  saved.add(name);
+  return true;
+}
+const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+// El Diario de Mazmorras tiene icono para jefes y algunos adds: se prueba con el nombre completo y con cada palabra
+const ejName = (en) => { const w = en.replace(/['’]/g, '').split(/[s-]+/).map(slug).filter(Boolean); return [slug(en), ...w.slice().reverse().filter((x) => x.length > 4)]; };
 const out = {};
-let k = 0;
-async function work() {
-  while (k < ids.length) {
-    const id = ids[k++];
-    if (blocked) return;
-    if (cache.disp[id] === undefined) {
-      const html = await get(`https://www.wowhead.com/npc=${id}`);
-      await pause(400);
-      if (!html) continue;
-      const m = html.match(/displayId = (\d+)/);
-      cache.disp[id] = m ? Number(m[1]) : 0;
-      if (k % 25 === 0) fs.writeFileSync(CACHE, JSON.stringify(cache));
+const entries = [...npcs];
+let q = 0;
+await Promise.all(Array.from({ length: 8 }, async () => {
+  while (q < entries.length) {
+    const [id, n] = entries[q++];
+    let icon = '';
+    for (const sl of ejName(n.en)) {
+      if (await save(`boss-${sl}.png`, `https://wow.zamimg.com/images/wow/journal/ui-ej-boss-${sl}.png`)) { icon = `boss-${sl}.png`; break; }
     }
-    const disp = cache.disp[id];
-    let icon = 0;
-    if (disp) {
-      const file = path.join(ICONS, `${disp}.webp`);
-      if (fs.existsSync(file)) icon = disp;
-      else {
-        const img = await get(`https://wow.zamimg.com/modelviewer/live/webthumbs/npc/${disp % 256}/${disp}.webp`, true);
-        if (img && img.length > 200) { fs.writeFileSync(file, img); icon = disp; }
-      }
+    if (!icon) {
+      const ic = TYPE_ICON[n.type] || DEFAULT_ICON;
+      if (await save(`${ic}.jpg`, `https://wow.zamimg.com/images/wow/icons/large/${ic}.jpg`)) icon = `${ic}.jpg`;
     }
-    const n = npcs.get(id);
     out[id] = [n.en, n.es, icon];
   }
-}
-await Promise.all(Array.from({ length: 2 }, work));
+}));
+if (blocked) { console.log('Wowhead ha cortado (403): vuelve a ejecutarlo más tarde'); process.exit(2); }
 
-fs.writeFileSync(CACHE, JSON.stringify(cache));
-if (blocked) { console.log('Wowhead ha cortado (403): vuelve a ejecutarlo más tarde, continúa donde se quedó'); process.exit(2); }
 const clean = Object.fromEntries(Object.entries(out).sort((a, b) => a[0] - b[0]));
-const withIcon = Object.values(clean).filter((v) => v[2]).length;
 fs.writeFileSync(path.join(SRC, 'npcs.js'),
-  `'use strict';
-// Generado por tools/build-npcs.mjs — id de NPC: [nombre en inglés, nombre en español, id de modelo para el icono]\nconst NPC_DATA = ${JSON.stringify(clean)};\n`);
-console.log('NPC', ids.length, 'con icono', withIcon);
+  `'use strict';\n// Generado por tools/build-npcs.mjs — id de NPC: [nombre en inglés, nombre en español, archivo del icono en npcicons/]\nconst NPC_DATA = ${JSON.stringify(clean)};\n`);
+console.log('NPC', npcs.size, 'iconos', saved.size, 'jefes', [...saved].filter((s) => s.startsWith('boss-')).length);
