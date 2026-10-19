@@ -567,8 +567,9 @@ const CLASS_SPELLS = {
   "spell_shadow_unstableaffliction_3_purple"
  ],
  "Fazed": [
-  0,
-  "Desconcertado"
+  441224,
+  "Desconcertado",
+  "inv_weapon_shortblade_55"
  ],
  "Fel Blood": [
   215284,

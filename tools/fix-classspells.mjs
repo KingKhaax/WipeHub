@@ -69,8 +69,8 @@ async function wh(id) {
 
 // Palabras sueltas que no son un hechizo concreto (salen de la detección de nombres): se traducen pero sin tooltip
 // Ids oficiales que el filtro por clase no elige bien
-const MANUAL = { Mangle: 33917 };
-const GENERIC = new Set(['Death', 'Pain', 'Healing', 'Melee', 'Protection', 'Strike', 'Shadow', 'Swift', 'Transfer', 'Timewalker', 'Grace', 'Death Knight', 'Discipline', 'Madness', 'Insanity', 'Fazed', 'Splinters', 'Corruption', 'Maelstrom', 'Execute']);
+const MANUAL = { Mangle: 33917, Fazed: 441224 };
+const GENERIC = new Set(['Death', 'Pain', 'Healing', 'Melee', 'Protection', 'Strike', 'Shadow', 'Swift', 'Transfer', 'Timewalker', 'Grace', 'Death Knight', 'Discipline', 'Madness', 'Insanity', 'Splinters', 'Corruption', 'Maelstrom', 'Execute']);
 
 let wagoNames = null;
 async function byName(name) {
