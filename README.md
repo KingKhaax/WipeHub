@@ -6,11 +6,15 @@ Programa de Windows para **ver, analizar y comparar logs de World of Warcraft** 
 [![Descargas](https://img.shields.io/github/downloads/KingKhaax/WipeTime/total?label=descargas)](https://github.com/KingKhaax/WipeTime/releases)
 [![Licencia: MIT](https://img.shields.io/github/license/KingKhaax/WipeTime?label=licencia)](LICENSE)
 
+### 🌐 Pruébalo en la web: **[wipetime.vercel.app](https://wipetime.vercel.app)**
+
 ## Web
 
 Usa WipeTime directamente en el navegador, sin instalar nada:
 
-**[https://kingkhaax.github.io/WipeTime/](https://kingkhaax.github.io/WipeTime/)**
+**[https://wipetime.vercel.app](https://wipetime.vercel.app)**
+
+Alternativa: [https://kingkhaax.github.io/WipeTime/](https://kingkhaax.github.io/WipeTime/)
 
 ## Qué hace
 
@@ -37,7 +41,7 @@ Usa WipeTime directamente en el navegador, sin instalar nada:
 ## Requisitos
 
 - Windows 10 u 11 (64 bits) para el programa de escritorio.
-- O cualquier navegador moderno para la [versión web](https://kingkhaax.github.io/WipeTime/).
+- O cualquier navegador moderno para la [versión web](https://wipetime.vercel.app).
 - Un enlace público de un informe de [Warcraft Logs](https://www.warcraftlogs.com).
 
 ## Descarga
