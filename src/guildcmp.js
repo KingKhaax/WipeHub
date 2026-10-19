@@ -5,7 +5,7 @@
 const GuildCmp = (() => {
   const ASSETS = 'https://assets.rpglogs.com/img/warcraft';
   const MAX_PAGES = 16;
-  const emptyQ = () => ({ name: '', realm: '', region: 'eu' });
+  const emptyQ = () => ({ name: '', realm: '', region: WCSettings.get('region') || 'eu' });
   const st = { q: [emptyQ(), emptyQ()], sel: [null, null], res: [null, null], msg: ['', ''], zones: null, zone: null, diff: 5, cache: new Map(), done: new Map(), meta: new Map(), loading: '', err: '', open: new Set() };
 
   const keyOf = (g) => `${g.region}/${g.realmSlug}/${String(g.name).toLowerCase()}`;

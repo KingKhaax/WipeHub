@@ -2661,3 +2661,12 @@ h3.sec, .recent-h { font-size: 17px; font-weight: 700; letter-spacing: 0; }
 
 .about-friend { color: inherit; text-decoration: none; cursor: pointer; border-bottom: 1px dashed currentColor; }
 .about-friend:hover { color: var(--accent, #8fd14f); }
+
+/* Ajustes: grupos de la pestaña Datos, botón de peligro y colores propios */
+.set-grp { margin: 22px 0 4px; font-size: 14px; }
+.set-grp.danger { color: var(--bad, #ef5f6b); }
+.btn.danger { border-color: color-mix(in srgb, #ef5f6b 55%, var(--line)); color: #ef5f6b; background: color-mix(in srgb, #ef5f6b 10%, transparent); }
+.btn.danger:hover { background: color-mix(in srgb, #ef5f6b 22%, transparent); }
+.colors-row { display: flex; flex-wrap: wrap; gap: 10px 14px; align-items: center; }
+.color-pick { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+.color-pick input { width: 34px; height: 26px; padding: 0; border: 1px solid var(--line); border-radius: 6px; background: transparent; cursor: pointer; }

@@ -246,6 +246,8 @@ const Profile = (() => {
     S.profileOpen = true;
     sidebar.hidden = true;
     st.q = { name: q.name, slug: q.slug, realm: q.realm || q.slug, region: REGIONS.includes(q.region) ? q.region : 'eu', locale: q.locale || '' };
+    const dd = Number(WCSettings.get('diff')) || 0; // dificultad por defecto de los ajustes: se aplica al abrir y al cambiarla allí
+    if (st.diffDef !== dd) { st.diffDef = dd; st.diff = dd; }
     st.arm = null; st.rio = null; st.wcl = null; st.wclErr = ''; st.armErr = '';
     st.xp = null; st.xpc = null; st.xpExp = 0; st.embed = null; st.encLogs = {}; st.openEnc = null; st.boss = 0; st.spec = '';
     const l = recent().filter((x) => !(x.slug === st.q.slug && x.name.toLowerCase() === st.q.name.toLowerCase() && x.region === st.q.region));
@@ -673,7 +675,7 @@ const Profile = (() => {
 
   // ------------------------------------------------------------ buscador (portada)
   function formHTML() {
-    const last = lsGet('prof:region') || 'all';
+    const last = lsGet('prof:region') || WCSettings.get('region') || 'all';
     const rec = recent();
     const reg = [['all', LL('Todas las regiones', 'All regions')], ['eu', 'EU'], ['us', 'US'], ['kr', 'KR'], ['tw', 'TW']];
     return `<form id="pfForm" class="pf-search" autocomplete="off">

@@ -5,7 +5,7 @@ var WCSettings = (function () {
   var KEY = 'settings:v1';
   var DEFAULTS = {
     theme: 'dark', accent: 'teal', zoom: 100, font: 'default', density: 'comfortable', motion: 'full',
-    rpSpeed: 1, rpNames: true, rpTrails: false, rpPets: false, hdIcons: true, bossMaps: true, spellTips: true, updateSource: '', autoUpdateCheck: true,
+    rpSpeed: 1, rpNames: true, rpTrails: false, rpPets: false, hdIcons: true, bossMaps: true, spellTips: true, updateSource: '', autoUpdateCheck: true, region: '', diff: 0, colors: null,
   };
   var ACCENTS = {
     teal: ['#2aa7b5', '#17779f'], gold: ['#e7b84a', '#a9741a'], blue: ['#5b8def', '#3a6fe0'], violet: ['#8b7bff', '#6a56e8'], cyan: ['#2fc4e8', '#0f93b5'], green: ['#3fc08a', '#1f9d6b'],
@@ -73,6 +73,13 @@ var WCSettings = (function () {
     window.UI_FONT = font;
     // precarga los pesos para que también salgan bien los textos pintados en canvas (replay, gráficas)
     try { if (document.fonts) ['400', '500', '600', '700'].forEach(function (w) { document.fonts.load(w + ' 14px "Noto Sans"'); }); } catch (e) { /* sin precarga */ }
+    // colores propios (fondo, paneles y texto); sin ellos se usan los del tema
+    var cs = get('colors');
+    ['bg', 'panel', 'text'].forEach(function (k) {
+      if (cs && cs[k]) root.style.setProperty('--' + k, cs[k]); else root.style.removeProperty('--' + k);
+    });
+    if (cs && cs.bg) root.style.setProperty('--bg-deep', 'color-mix(in srgb, ' + cs.bg + ' 82%, #000)'); else root.style.removeProperty('--bg-deep');
+    if (cs && cs.panel) root.style.setProperty('--panel-2', 'color-mix(in srgb, ' + cs.panel + ' 90%, ' + (cs.text || '#fff') + ' 10%)'); else root.style.removeProperty('--panel-2');
     root.dataset.density = get('density');
     root.dataset.motion = get('motion');
   }
@@ -96,9 +103,27 @@ var WCSettings = (function () {
     applyZoom();
   }
 
+  // Exportar / importar: solo las claves que existen en los ajustes (un archivo ajeno no puede meter otras)
+  function exportJSON() { return JSON.stringify({ app: 'WipeTime', settings: data }, null, 2); }
+  function importJSON(text) {
+    var o = JSON.parse(text);
+    var src = o && o.settings && typeof o.settings === 'object' ? o.settings : null;
+    if (!src) throw new Error('BAD_FILE');
+    var next = {};
+    Object.keys(src).forEach(function (k) { if (k in DEFAULTS && k !== 'updateSource') next[k] = src[k]; });
+    if (next.accent && !ACCENTS[next.accent]) delete next.accent;
+    if (next.font && !FONTS[next.font]) delete next.font;
+    next.ui = 3;
+    data = next;
+    try { localStorage.setItem(KEY, JSON.stringify(data)); } catch (e) { /* sin almacenamiento */ }
+    apply();
+    applyZoom();
+    return Object.keys(next).length;
+  }
+
   if (mq && mq.addEventListener) mq.addEventListener('change', function () { if (get('theme') === 'system') apply(); });
   apply();
   document.addEventListener('DOMContentLoaded', applyZoom);
 
-  return { get: get, set: set, reset: reset, apply: apply, applyZoom: applyZoom, ACCENTS: ACCENTS, FONTS: FONTS, DEFAULTS: DEFAULTS, resolvedTheme: resolvedTheme };
+  return { get: get, set: set, reset: reset, exportJSON: exportJSON, importJSON: importJSON, apply: apply, applyZoom: applyZoom, ACCENTS: ACCENTS, FONTS: FONTS, DEFAULTS: DEFAULTS, resolvedTheme: resolvedTheme };
 }());
