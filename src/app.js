@@ -1953,12 +1953,14 @@ async function setupPatchArt() {
   let found = null;
   try { found = (await window.api.artGet(`patch-${key}`))?.dataUrl || null; } catch { /* sin imagen guardada */ }
   if (!found) {
-    for (const ext of ['png', 'webp']) {
+    // con la web en español se prueba antes el logo traducido (por ejemplo patch/12.1.es.webp)
+    const names = S.lang === 'es' ? [`${key}.es.webp`, `${key}.png`, `${key}.webp`] : [`${key}.png`, `${key}.webp`];
+    for (const file of names) {
       found = await new Promise((resolve) => {
         const probe = new Image();
-        probe.onload = () => resolve(`patch/${key}.${ext}`);
+        probe.onload = () => resolve(`patch/${file}`);
         probe.onerror = () => resolve(null);
-        probe.src = `patch/${key}.${ext}`;
+        probe.src = `patch/${file}`;
       });
       if (found) break;
     }
