@@ -51,31 +51,19 @@ Alternativa: [https://kingkhaax.github.io/WipeTime/](https://kingkhaax.github.io
 
 ## Descarga
 
-Descarga la última versión desde [Releases](https://github.com/KingKhaax/WipeTime/releases/latest) (GitHub sustituye los espacios del nombre por puntos):
+Descarga la última versión desde [Releases](https://github.com/KingKhaax/WipeTime/releases/latest) (GitHub sustituye los espacios del nombre por puntos). En Releases solo está la última versión:
 
-- `WipeTime.vX.Y.Z.Setup.exe`: instalador (se desinstala desde *Configuración → Aplicaciones* de Windows).
+- `WipeTime.vX.Y.Z.Setup.exe`: instalador. Se actualiza solo al abrirlo y se desinstala desde *Configuración → Aplicaciones* de Windows.
 - `WipeTime.vX.Y.Z.exe`: versión portable, no necesita instalación.
 - `latest.json`: versión y hashes SHA-256 (los usa el actualizador del programa).
 
-Los ejecutables están firmados digitalmente (ver [Code signing policy](#code-signing-policy)).
+O sin descargar nada, en la web: [wipetime.vercel.app](https://wipetime.vercel.app).
+
+Los ejecutables todavía no llevan firma digital (está en trámite la firma gratuita de SignPath; ver [Code signing policy](#code-signing-policy)), así que Windows SmartScreen puede avisar la primera vez: pulsa *Más información → Ejecutar de todas formas*. Puedes comprobar el archivo con los hashes de `latest.json`.
 
 ## Novedades
 
 El historial de versiones está en el propio programa (Ajustes → Versión) y en [Releases](https://github.com/KingKhaax/WipeTime/releases) (solo se conserva la última).
-
-## Para desarrollar
-
-Requiere [Node.js](https://nodejs.org/) 20 o superior.
-
-```
-npm install
-npm start         # abrir en desarrollo
-npm run dist      # generar los instaladores en dist/
-```
-
-Las releases oficiales se compilan y firman en GitHub Actions ([`.github/workflows/release.yml`](.github/workflows/release.yml)).
-
-Para desarrollar con claves propias puedes crear `build/secrets.json` (está en `.gitignore` y **nunca se incluye en los instaladores**); sin él se usa el servidor intermedio.
 
 > Las secciones *Code signing policy* y *Privacy policy* están en inglés a propósito (requisito de la firma de código y de las políticas de privacidad).
 
