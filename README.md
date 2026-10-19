@@ -32,11 +32,16 @@ Alternativa: [https://kingkhaax.github.io/WipeTime/](https://kingkhaax.github.io
 
 ## Cómo usarlo
 
-1. Instala `WipeTime.vX.Y.Z.Setup.exe` (o abre la versión portable `WipeTime.vX.Y.Z.exe`).
-2. Pega el enlace de un log de Warcraft Logs y pulsa **Cargar**.
-3. Elige tu personaje cuando te lo pida y navega por las pestañas.
+1. **Abre WipeTime**, como prefieras: en el navegador en [wipetime.vercel.app](https://wipetime.vercel.app) (sin instalar nada), instalando `WipeTime.vX.Y.Z.Setup.exe` o abriendo la versión portable `WipeTime.vX.Y.Z.exe` (los dos están en [Releases](https://github.com/KingKhaax/WipeTime/releases/latest)).
+2. **Analiza un log:** pega el enlace de un informe de Warcraft Logs en la barra de arriba y pulsa **Cargar**. Elige tu personaje cuando te lo pida y navega por las pestañas del intento (Daño, Sanación, Muertes, Defensivos, Buffos, Mecánicas, Replay…).
+3. **Mira más cosas desde la barra superior:**
+   - **Comparar logs:** tu intento contra 1–10 más, con consejos según tu rol.
+   - **Guilds:** ranking, logs recientes, progreso, asistencia, banda y comparación entre dos guilds.
+   - **Personajes:** la ficha de cualquier personaje con sus All Stars de todas las temporadas y bandas, la tabla de jefes, equipo con mejoras y gemas, talentos y modelo 3D.
+4. **Enlaces que se pueden compartir:** cada pantalla tiene su propia dirección (por ejemplo `#/report/…`, `#/guilds/…` o `#/char/…`), así que Atrás, Adelante y F5 funcionan, y con Mayús + clic se abre en otra ventana.
+5. **Ajustes** (la rueda de arriba): tema claro u oscuro, color de botones (con rueda para elegir cualquier color), colores propios, tamaño y fuente, región y dificultad por defecto, y exportar o importar tus ajustes. El idioma se cambia con el botón «Idioma» de la barra de arriba.
 
-> No necesitas claves: por defecto WipeTime usa un servidor intermedio propio (`server/vercel`, desplegado en Vercel) que hace las consultas de solo lectura a Warcraft Logs y Blizzard. Si prefieres usar tus propias claves de la API de Warcraft Logs, ponlas en Ajustes → Cuenta de Warcraft Logs; tienen prioridad sobre el servidor.
+> No necesitas cuenta ni claves: WipeTime usa un servidor intermedio propio (`server/vercel`, desplegado en Vercel) que hace las consultas de solo lectura a Warcraft Logs y Blizzard. Tus ajustes y tus personajes se guardan solo en tu equipo (o en tu navegador, si usas la web).
 
 ## Requisitos
 
