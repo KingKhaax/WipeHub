@@ -14,7 +14,8 @@ async function openSettings(tab) {
   const toggle = (key, label, hint = '') => `<label class="set-toggle"><input type="checkbox" data-set-bool="${key}" ${G(key) ? 'checked' : ''}><span class="sw"></span><span>${label}${hint ? `<small>${hint}</small>` : ''}</span></label>`;
   const row = (label, body, hint = '') => `<div class="set-row"><div class="set-l"><b>${label}</b>${hint ? `<small>${hint}</small>` : ''}</div><div class="set-c">${body}</div></div>`;
   const swatches = Object.keys(WCSettings.ACCENTS).map((k) =>
-    `<button type="button" class="swatch ${G('accent') === k ? 'on' : ''}" data-set="accent" data-v="${k}" style="--sw:${WCSettings.ACCENTS[k][0]}" aria-label="${k}"></button>`).join('');
+    `<button type="button" class="swatch ${G('accent') === k ? 'on' : ''}" data-set="accent" data-v="${k}" style="--sw:${WCSettings.ACCENTS[k][0]}" aria-label="${k}"></button>`).join('')
+    + `<label class="swatch custom ${G('accent') === 'custom' ? 'on' : ''}" style="--sw:${esc(G('accentCustom') || '#2aa7b5')}" title="${LL('Elige tu propio color', 'Pick your own color')}"><input type="color" data-accent-custom value="${esc(G('accentCustom') || '#2aa7b5')}" aria-label="${LL('Color propio', 'Custom color')}"></label>`;
   const colorVal = (k) => { const c = G('colors'); if (c && c[k]) return c[k]; const v = getComputedStyle(document.documentElement).getPropertyValue('--' + k).trim(); return /^#[0-9a-f]{6}$/i.test(v) ? v : (k === 'text' ? '#e8eef8' : '#111c34'); };
   const fonts = Object.entries(WCSettings.FONTS).map(([k, f]) => `<option value="${k}" ${G('font') === k ? 'selected' : ''}>${f.label}</option>`).join('');
 
@@ -158,6 +159,14 @@ document.addEventListener('click', async (ev) => {
 document.addEventListener('input', (ev) => {
   const t0 = ev.target;
   if (!t0.closest || !t0.closest('#settings')) return;
+  if (t0.dataset.accentCustom !== undefined) {
+    WCSettings.set('accentCustom', t0.value);
+    WCSettings.set('accent', 'custom');
+    const lab = t0.closest('.swatch');
+    if (lab) { lab.style.setProperty('--sw', t0.value); lab.classList.add('on'); }
+    document.querySelectorAll('#settings .swatch[data-set="accent"]').forEach((x) => x.classList.remove('on'));
+    return;
+  }
   if (t0.dataset.zoom !== undefined) { WCSettings.set('zoom', Number(t0.value)); const z = $('#zoomVal'); if (z) z.textContent = `${t0.value} %`; }
 });
 

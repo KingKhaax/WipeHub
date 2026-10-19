@@ -106,6 +106,12 @@ test('Ajustes: región y dificultad por defecto, colores propios, exportar e imp
   assert.equal(await p.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()), '#202020');
   await p.click('[data-set-act="reset-colors"]'); await p.waitForTimeout(200);
   assert.notEqual(await p.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--bg').trim()), '#202020');
+  // rueda de color de los botones: el color elegido se aplica en vivo y se guarda
+  await p.$eval('[data-accent-custom]', (e) => { e.value = '#12ab34'; e.dispatchEvent(new Event('input', { bubbles: true })); }); await p.waitForTimeout(200);
+  assert.equal(await p.evaluate(() => WCSettings.get('accent')), 'custom');
+  assert.equal(await p.evaluate(() => getComputedStyle(document.documentElement).getPropertyValue('--accent').trim()), '#12ab34');
+  assert.ok(await p.$('#settings .swatch.custom.on'), 'la rueda sale marcada');
+  assert.ok((await p.$$eval('#settings .swatch[data-set="accent"]', (e) => e.length)) >= 15, 'hay más colores');
   await p.evaluate(() => WCSettings.set('accent', 'pink'));
   await p.click('[data-set-tab="data"]'); await p.waitForTimeout(200);
   // se captura el archivo que se descargaría (una descarga real deja un objetivo sin navegar que hace caer a Playwright al cerrar)

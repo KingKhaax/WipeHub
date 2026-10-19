@@ -5,11 +5,13 @@ var WCSettings = (function () {
   var KEY = 'settings:v1';
   var DEFAULTS = {
     theme: 'dark', accent: 'teal', zoom: 100, font: 'default', density: 'comfortable', motion: 'full',
-    rpSpeed: 1, rpNames: true, rpTrails: false, rpPets: false, hdIcons: true, bossMaps: true, spellTips: true, updateSource: '', autoUpdateCheck: true, region: '', diff: 0, colors: null,
+    rpSpeed: 1, rpNames: true, rpTrails: false, rpPets: false, hdIcons: true, bossMaps: true, spellTips: true, updateSource: '', autoUpdateCheck: true, region: '', diff: 0, colors: null, accentCustom: '#2aa7b5',
   };
   var ACCENTS = {
     teal: ['#2aa7b5', '#17779f'], gold: ['#e7b84a', '#a9741a'], blue: ['#5b8def', '#3a6fe0'], violet: ['#8b7bff', '#6a56e8'], cyan: ['#2fc4e8', '#0f93b5'], green: ['#3fc08a', '#1f9d6b'],
     orange: ['#f0a23b', '#d17f12'], pink: ['#ef5f9a', '#d03a78'], red: ['#ef5f6b', '#d6384a'],
+    lime: ['#9bd33c', '#6e9f1e'], mint: ['#5fe0c1', '#25a58a'], indigo: ['#6c7bff', '#4350d8'], magenta: ['#d65bd8', '#a83aab'],
+    coral: ['#ff7f6b', '#e0523d'], sand: ['#d8c08a', '#a98c4a'], slate: ['#8fa3b8', '#5f7690'], silver: ['#e8eef8', '#3a4660'],
   };
   var CJK = ', "Microsoft YaHei", "Microsoft JhengHei", "Malgun Gothic", "Yu Gothic", "Segoe UI", sans-serif';
   var FONTS = {
@@ -38,7 +40,7 @@ var WCSettings = (function () {
   var data = {};
   try { data = JSON.parse(localStorage.getItem(KEY) || '{}') || {}; } catch (e) { data = {}; }
 
-  if (data.accent && !ACCENTS[data.accent]) delete data.accent; // acento que ya no existe (nombre antiguo del turquesa): vuelve al predeterminado
+  if (data.accent && data.accent !== 'custom' && !ACCENTS[data.accent]) delete data.accent; // acento que ya no existe (nombre antiguo del turquesa): vuelve al predeterminado
   // Rediseño de la interfaz (v2.6): el acento azul antiguo pasa al dorado una sola vez
   if (data.ui !== 3) {
     if (data.accent === 'blue' || data.accent === 'gold') delete data.accent;
@@ -58,7 +60,13 @@ var WCSettings = (function () {
     var root = document.documentElement;
     var theme = resolvedTheme();
     root.dataset.theme = theme;
+    // «custom»: el color que cada uno elige en la rueda; en el tema claro se oscurece un poco para que el texto del botón se lea
     var acc = ACCENTS[get('accent')] || ACCENTS.blue;
+    if (get('accent') === 'custom') {
+      var hx = /^#[0-9a-f]{6}$/i.test(get('accentCustom')) ? get('accentCustom') : '#2aa7b5', k = parseInt(hx.slice(1), 16);
+      var dk = function (v) { return Math.round(v * 0.78).toString(16).padStart(2, '0'); };
+      acc = [hx, '#' + dk(k >> 16) + dk((k >> 8) & 255) + dk(k & 255)];
+    }
     var accent = theme === 'light' ? acc[1] : acc[0];
     root.style.setProperty('--accent', accent);
     var n = parseInt(accent.slice(1), 16);
@@ -111,7 +119,8 @@ var WCSettings = (function () {
     if (!src) throw new Error('BAD_FILE');
     var next = {};
     Object.keys(src).forEach(function (k) { if (k in DEFAULTS && k !== 'updateSource') next[k] = src[k]; });
-    if (next.accent && !ACCENTS[next.accent]) delete next.accent;
+    if (next.accent && next.accent !== 'custom' && !ACCENTS[next.accent]) delete next.accent;
+    if (next.accentCustom && !/^#[0-9a-f]{6}$/i.test(next.accentCustom)) delete next.accentCustom;
     if (next.font && !FONTS[next.font]) delete next.font;
     next.ui = 3;
     data = next;
