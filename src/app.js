@@ -767,11 +767,13 @@ function friendlyError(e) {
   if (msg === 'NO_CREDENTIALS') return t('noCreds');
   if (msg.startsWith('AUTH_FAILED')) return t('authFailed');
   if (msg === 'RATE_LIMIT') return t('rateLimit');
+  if (msg === 'SERVER_BUSY' || /^Failed to fetch$|^NetworkError/i.test(msg)) return t('serverBusy');
   if (/does not exist|permission|private/i.test(msg)) return t('notFound');
   return msg;
 }
 
 async function loadReport(input, opts = {}) {
+  S.lastInput = input;
   const { code, fight } = parseInput(input);
   if (!code) return toast(t('badUrl'));
   if (!S.hasCreds) return toast(t('noCreds'));
@@ -2118,7 +2120,12 @@ async function loadExpansion() {
 const skelRows = (n, cls = '') => Array.from({ length: n }, (_, i) => `<div class="sk-row ${cls}"><i class="sk sk-ic"></i><i class="sk sk-tx" style="width:${38 + ((i * 37) % 38)}%"></i><i class="sk sk-v"></i></div>`).join('');
 const skelCards = (n = 5, rows = 5) => Array.from({ length: n }, () => `<div class="tp-card sk-card"><i class="sk sk-tx" style="width:58%;height:16px;margin-bottom:12px"></i>${skelRows(rows)}</div>`).join('');
 const loadingHTML = () => `<div class="sk-page" role="status" aria-label="${esc(t('loading'))}"><i class="sk sk-eyebrow"></i><i class="sk sk-title"></i><i class="sk sk-sub"></i><div class="sk-table">${skelRows(9)}</div></div>`;
-const errorHTML = (msg) => `<div class="error"><b>${t('error')}</b><p>${esc(msg)}</p></div>`;
+const errorHTML = (msg) => `<div class="error"><b>${t('error')}</b><p>${esc(msg)}</p>${msg === t('serverBusy') || msg === t('rateLimit') ? `<button type="button" class="btn primary" data-action="retry">${esc(t('retry'))}</button>` : ''}</div>`;
+// Botón «Reintentar» de los errores del servidor: vuelve a pedir lo que falló (si hay un log abierto, repinta la pantalla; si no, recarga la dirección)
+document.addEventListener('click', (ev) => {
+  if (!ev.target.closest?.('[data-action="retry"]')) return;
+  if (S.report && S.fight) render(); else loadReport(S.lastInput || $('#urlInput').value);
+});
 
 let toastTimer;
 function toast(msg) {

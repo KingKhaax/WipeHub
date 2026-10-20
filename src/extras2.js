@@ -7,6 +7,7 @@ Object.assign(STRINGS.en.tabs, { night: 'General report', bestcmp: 'Progress', m
 
 const Extras2 = (() => {
   const fw = (raw) => ({ ...raw, fightStart: raw.startTime, fightEnd: raw.endTime, full: true, key: `${raw.id}:${raw.startTime}-${raw.endTime}`, rangeLabel: '' });
+  const pace = () => new Promise((r) => setTimeout(r, 250));
   const POTION_RE = /potion|poci[oó]n|tonic|t[oó]nico/i;
   const FLASK_RE = /flask|frasco|phial|vial/i;
   const sec = (ms) => {
@@ -508,6 +509,7 @@ const Extras2 = (() => {
         return agg.get(e.id);
       };
       for (let i = 0; i < fights.length; i += 6) {
+        if (i) await pace();
         const chunk = fights.slice(i, i + 6);
         const parts = chunk.map((x, j) => `d${j}:table(fightIDs:[${x.id}],dataType:DamageDone,startTime:${x.startTime},endTime:${x.endTime}) h${j}:table(fightIDs:[${x.id}],dataType:Healing,startTime:${x.startTime},endTime:${x.endTime})`).join(' ');
         const d = await gql(`query($code:String!){reportData{report(code:$code){${parts}}}}`, { code: S.code });
@@ -520,6 +522,7 @@ const Extras2 = (() => {
       // muertes: solo las dos primeras de cada intento (el resto suele ser consecuencia del wipe)
       const deaths = new Map();
       for (let i = 0; i < fights.length; i += 4) {
+        if (i) await pace();
         const batch = await Promise.all(fights.slice(i, i + 4).map((x) => allEvents(x, 'Deaths').catch(() => [])));
         for (const ev of batch) {
           const first = ev.filter((q) => q.type === 'death' && isPlayer(q.targetID)).sort((a, b) => a.timestamp - b.timestamp).slice(0, 2);
@@ -529,18 +532,21 @@ const Extras2 = (() => {
       // cortes: interrupciones de jugadores en todos los intentos
       const ints = new Map();
       for (let i = 0; i < fights.length; i += 4) {
+        if (i) await pace();
         const batch = await Promise.all(fights.slice(i, i + 4).map((x) => allEvents(x, 'Interrupts').catch(() => [])));
         for (const ev of batch) for (const q of ev) if (q.type === 'interrupt' && isPlayer(q.sourceID)) ints.set(q.sourceID, (ints.get(q.sourceID) || 0) + 1);
       }
       // dispels: disipaciones de jugadores en todos los intentos
       const disp = new Map();
       for (let i = 0; i < fights.length; i += 4) {
+        if (i) await pace();
         const batch = await Promise.all(fights.slice(i, i + 4).map((x) => allEvents(x, 'Dispels').catch(() => [])));
         for (const ev of batch) for (const q of ev) if (q.type === 'dispel' && isPlayer(q.sourceID)) disp.set(q.sourceID, (disp.get(q.sourceID) || 0) + 1);
       }
       // disfrutones: quién recibe más Infusiones de poder (los sacerdotes no cuentan: ellos siempre se la pueden poner)
       const pis = new Map();
       for (let i = 0; i < fights.length; i += 4) {
+        if (i) await pace();
         const batch = await Promise.all(fights.slice(i, i + 4).map((x) => piData({ ...x, fightStart: x.startTime, fightEnd: x.endTime, full: true, key: `${x.id}:${x.startTime}-${x.endTime}`, rangeLabel: '' }).catch(() => [])));
         for (const l of batch) for (const p of l) if (isPlayer(p.target) && playerInfo(p.target).cls !== 'Priest') pis.set(p.target, (pis.get(p.target) || 0) + 1);
       }
@@ -582,6 +588,7 @@ const Extras2 = (() => {
       const end = Math.max(...fights.map((x) => x.endTime));
       let start = Math.min(...fights.map((x) => x.startTime));
       for (let page = 0; page < 40; page++) {
+          if (page) await pace();
         const d = await gql(`query($code:String!,$f:[Int],$s:Float,$e:Float){reportData{report(code:$code){
           events(fightIDs:$f,startTime:$s,endTime:$e,dataType:Casts,limit:10000,filterExpression:"ability.id in (${ids.join(',')})"){data nextPageTimestamp}}}}`,
         { code: S.code, f: fightIDs, s: start, e: end });
@@ -652,6 +659,7 @@ const Extras2 = (() => {
       const iconOf = new Map();
       const taken = new Map(), defs = new Map(), cons = new Map();
       for (let i = 0; i < fights.length; i += 6) {
+        if (i) await pace();
         const chunk = fights.slice(i, i + 6);
         const parts = chunk.map((x, j) => `t${j}:table(fightIDs:[${x.id}],dataType:DamageTaken,startTime:${x.startTime},endTime:${x.endTime})`).join(' ');
         const d = await gql(`query($code:String!){reportData{report(code:$code){${parts}}}}`, { code: S.code });
@@ -659,6 +667,7 @@ const Extras2 = (() => {
       }
       // defensivos lanzados por cada jugador
       for (let i = 0; i < fights.length; i += 4) {
+        if (i) await pace();
         const batch = await Promise.all(fights.slice(i, i + 4).map((x) => Extras.cooldownData(fw(x)).catch(() => [])));
         for (const ev of batch) for (const q of ev) defs.set(q.sourceID, (defs.get(q.sourceID) || 0) + 1);
       }
@@ -672,6 +681,7 @@ const Extras2 = (() => {
         const fightIDs = fights.map((x) => x.id), end = Math.max(...fights.map((x) => x.endTime));
         let start = Math.min(...fights.map((x) => x.startTime));
         for (let page = 0; page < 40; page++) {
+          if (page) await pace();
           const d = await gql(`query($code:String!,$f:[Int],$s:Float,$e:Float){reportData{report(code:$code){
             events(fightIDs:$f,startTime:$s,endTime:$e,dataType:Casts,limit:10000,filterExpression:"ability.id in (${[...ids].join(',')})"){data nextPageTimestamp}}}}`, { code: S.code, f: fightIDs, s: start, e: end });
           const ev = d.reportData.report.events;
@@ -693,6 +703,7 @@ const Extras2 = (() => {
         const raw = g.list.find((x) => x.kill) || g.best;
         if (!raw) continue;
         const list = await Extras.mechData(fw(raw));
+        await pace();
         const marks = Extras.avoidMarks(raw);
         for (const a of list) {
           if (!(marks[a.guid] != null ? !!marks[a.guid] : a.guess)) continue;
@@ -719,18 +730,18 @@ const Extras2 = (() => {
         + topCard(LL('Top 5 cortes de la noche', 'Top 5 interrupts of the night'), LL('Hechizos enemigos interrumpidos en todos los intentos', 'Enemy spells interrupted across every pull'), d.ints, (v) => `${v} ${v === 1 ? LL('corte', 'interrupt') : LL('cortes', 'interrupts')}`)
         + topCard(LL('Top 5 disfrutones de la noche', 'Top 5 PI enjoyers of the night'), LL('PIs recibidos (sin contar sacerdotes)', 'PIs received (priests excluded)'), d.pi, (v) => `${v} PI`)
         + topCard(LL('Top 5 dispels de la noche', 'Top 5 dispels of the night'), LL('Efectos disipados en todos los intentos', 'Effects dispelled across every pull'), d.disp, (v) => `${v} dispel${v === 1 ? '' : 's'}`);
-      // Tarjetas nuevas: se pintan cuando llegan sus datos, sin retrasar las de arriba
-      nightExtraData().then((x) => {
-        if (seq !== S.seq || !document.getElementById('nightTops')) return;
-        box.insertAdjacentHTML('beforeend',
+      // Tarjetas nuevas: una detrás de otra (con espera), sin retrasar las de arriba
+      try {
+        const x = await nightExtraData();
+        if (seq === S.seq && document.getElementById('nightTops')) box.insertAdjacentHTML('beforeend',
           topCard(LL('Top 5 uso de defensivos', 'Top 5 defensive use'), LL('Defensivos lanzados en todos los intentos', 'Defensives cast across every pull'), x.defs, (v) => `${v} ${v === 1 ? LL('defensivo', 'defensive') : LL('defensivos', 'defensives')}`)
           + topCard(LL('Top 5 daño recibido total', 'Top 5 total damage taken'), LL('Todo el daño recibido en todos los intentos', 'All the damage taken across every pull'), x.taken, (v) => plain(v))
           + topCard(LL('Top 5 consumibles', 'Top 5 consumables'), LL('Pociones de combate, de salud y piedras de salud usadas', 'Combat potions, health potions and healthstones used'), x.cons, (v) => `${v} ${v === 1 ? LL('uso', 'use') : LL('usos', 'uses')}`));
-      }).catch((e) => console.warn('nightExtra', e));
-      nightAvoidData().then((list) => {
-        if (seq !== S.seq || !document.getElementById('nightTops')) return;
-        box.insertAdjacentHTML('beforeend', topCard(LL('Top 5 daño evitable recibido', 'Top 5 avoidable damage taken'), LL('Mecánicas evitables (mejor intento de cada jefe)', 'Avoidable mechanics (best attempt of each boss)'), list.slice(0, 5), (v) => plain(v)));
-      }).catch((e) => console.warn('nightAvoidTop', e));
+      } catch (e2) { console.warn('nightExtra', e2); }
+      try {
+        const list = await nightAvoidData();
+        if (seq === S.seq && document.getElementById('nightTops')) box.insertAdjacentHTML('beforeend', topCard(LL('Top 5 daño evitable recibido', 'Top 5 avoidable damage taken'), LL('Mecánicas evitables (mejor intento de cada jefe)', 'Avoidable mechanics (best attempt of each boss)'), list.slice(0, 5), (v) => plain(v)));
+      } catch (e3) { console.warn('nightAvoidTop', e3); }
     } catch (e) {
       console.warn('nightTops', e);
       if (seq === S.seq && document.getElementById('nightTops')) box.innerHTML = errorHTML(friendlyError(e));
@@ -758,7 +769,7 @@ const Extras2 = (() => {
         <div class="nc-bar"><i style="width:${g.kills ? 100 : 100 - p}%"></i></div>
         <div class="nc-m"><span>${g.list.length} ${g.list.length === 1 ? LL('intento', 'pull') : LL('intentos', 'pulls')}${wipes ? ` · ${wipes} wipes` : ''}</span><span>${LL('Tiempo', 'Time')}: ${clock(g.time)}</span><button class="mini-btn" data-action="fight" data-id="${g.best.id}">${g.kills ? LL('Ver', 'View') : LL('Ver mejor try', 'View best try')} ${esc(fightLabel(g.best))}</button></div></div>`;
     }).join('');
-    S.post = async (seq) => { window._nightText = nightText(rows, r); fillNightTops(seq); fillChivato(seq); };
+    S.post = async (seq) => { window._nightText = nightText(rows, r); await fillNightTops(seq); await fillChivato(seq); };
     return headerHTML(f, t('tabs.night'), `${esc(r.title)} · ${new Date(r.startTime).toLocaleDateString(locale())}`)
       + `<div class="ov-tiles">${tiles}</div>
       <div class="night-tops" id="nightTops">${skelCards(6, 5)}</div>
