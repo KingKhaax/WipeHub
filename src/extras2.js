@@ -645,6 +645,68 @@ const Extras2 = (() => {
     }).join('')}</div>`;
   }
 
+  // Daño recibido total, uso de defensivos y consumibles de toda la noche (todos los intentos de jefe)
+  function nightExtraData() {
+    return cached(`nightextra:v1:${S.code}`, async () => {
+      const fights = S.fights.filter((x) => x.encounterID && !x.keystoneLevel);
+      const iconOf = new Map();
+      const taken = new Map(), defs = new Map(), cons = new Map();
+      for (let i = 0; i < fights.length; i += 6) {
+        const chunk = fights.slice(i, i + 6);
+        const parts = chunk.map((x, j) => `t${j}:table(fightIDs:[${x.id}],dataType:DamageTaken,startTime:${x.startTime},endTime:${x.endTime})`).join(' ');
+        const d = await gql(`query($code:String!){reportData{report(code:$code){${parts}}}}`, { code: S.code });
+        chunk.forEach((x, j) => { for (const e of entriesOf(d.reportData.report[`t${j}`]).filter((q) => isPlayer(q.id, q) && q.total > 0)) { taken.set(e.id, (taken.get(e.id) || 0) + e.total); if (e.icon) iconOf.set(e.id, e.icon); } });
+      }
+      // defensivos lanzados por cada jugador
+      for (let i = 0; i < fights.length; i += 4) {
+        const batch = await Promise.all(fights.slice(i, i + 4).map((x) => Extras.cooldownData(fw(x)).catch(() => [])));
+        for (const ev of batch) for (const q of ev) defs.set(q.sourceID, (defs.get(q.sourceID) || 0) + 1);
+      }
+      // consumibles: pociones de combate, de salud y piedras de salud usadas durante los intentos
+      const ids = new Set(STONE_IDS);
+      for (const [id, ab] of S.abilities) {
+        if (!ab || !ab.name) continue;
+        if (STONE_RE.test(ab.name) || (POTION_RE.test(ab.name) && !FLASK_RE.test(ab.name))) ids.add(id);
+      }
+      if (fights.length && ids.size) {
+        const fightIDs = fights.map((x) => x.id), end = Math.max(...fights.map((x) => x.endTime));
+        let start = Math.min(...fights.map((x) => x.startTime));
+        for (let page = 0; page < 40; page++) {
+          const d = await gql(`query($code:String!,$f:[Int],$s:Float,$e:Float){reportData{report(code:$code){
+            events(fightIDs:$f,startTime:$s,endTime:$e,dataType:Casts,limit:10000,filterExpression:"ability.id in (${[...ids].join(',')})"){data nextPageTimestamp}}}}`, { code: S.code, f: fightIDs, s: start, e: end });
+          const ev = d.reportData.report.events;
+          for (const e of ev?.data || []) if (e.type === 'cast' && !e.fake && isPlayer(e.sourceID)) cons.set(e.sourceID, (cons.get(e.sourceID) || 0) + 1);
+          if (!ev?.nextPageTimestamp || ev.nextPageTimestamp <= start) break;
+          start = ev.nextPageTimestamp;
+        }
+      }
+      const top = (m) => [...m.entries()].map(([id, v]) => ({ id, icon: iconOf.get(id) || playerInfo(id).icon, v })).sort((x, y) => y.v - x.v).slice(0, 5);
+      return { taken: top(taken), defs: top(defs), cons: top(cons) };
+    });
+  }
+
+  // Daño evitable de la noche (mejor intento de cada jefe) repartido por jugador; lo usan la tarjeta grande y el Top 5
+  function nightAvoidData() {
+    return cached(`nightavoid:v1:${S.code}`, async () => {
+      const per = new Map();
+      for (const g of nightData()) {
+        const raw = g.list.find((x) => x.kill) || g.best;
+        if (!raw) continue;
+        const list = await Extras.mechData(fw(raw));
+        const marks = Extras.avoidMarks(raw);
+        for (const a of list) {
+          if (!(marks[a.guid] != null ? !!marks[a.guid] : a.guess)) continue;
+          for (const tg of a.targets) {
+            let p = per.get(tg.id);
+            if (!p) per.set(tg.id, p = { id: tg.id, icon: tg.icon, v: 0 });
+            p.v += tg.total;
+          }
+        }
+      }
+      return [...per.values()].sort((x, y) => y.v - x.v);
+    });
+  }
+
   async function fillNightTops(seq) {
     const box = document.getElementById('nightTops');
     if (!box) return;
@@ -657,42 +719,21 @@ const Extras2 = (() => {
         + topCard(LL('Top 5 cortes de la noche', 'Top 5 interrupts of the night'), LL('Hechizos enemigos interrumpidos en todos los intentos', 'Enemy spells interrupted across every pull'), d.ints, (v) => `${v} ${v === 1 ? LL('corte', 'interrupt') : LL('cortes', 'interrupts')}`)
         + topCard(LL('Top 5 disfrutones de la noche', 'Top 5 PI enjoyers of the night'), LL('PIs recibidos (sin contar sacerdotes)', 'PIs received (priests excluded)'), d.pi, (v) => `${v} PI`)
         + topCard(LL('Top 5 dispels de la noche', 'Top 5 dispels of the night'), LL('Efectos disipados en todos los intentos', 'Effects dispelled across every pull'), d.disp, (v) => `${v} dispel${v === 1 ? '' : 's'}`);
+      // Tarjetas nuevas: se pintan cuando llegan sus datos, sin retrasar las de arriba
+      nightExtraData().then((x) => {
+        if (seq !== S.seq || !document.getElementById('nightTops')) return;
+        box.insertAdjacentHTML('beforeend',
+          topCard(LL('Top 5 uso de defensivos', 'Top 5 defensive use'), LL('Defensivos lanzados en todos los intentos', 'Defensives cast across every pull'), x.defs, (v) => `${v} ${v === 1 ? LL('defensivo', 'defensive') : LL('defensivos', 'defensives')}`)
+          + topCard(LL('Top 5 daño recibido total', 'Top 5 total damage taken'), LL('Todo el daño recibido en todos los intentos', 'All the damage taken across every pull'), x.taken, (v) => plain(v))
+          + topCard(LL('Top 5 consumibles', 'Top 5 consumables'), LL('Pociones de combate, de salud y piedras de salud usadas', 'Combat potions, health potions and healthstones used'), x.cons, (v) => `${v} ${v === 1 ? LL('uso', 'use') : LL('usos', 'uses')}`));
+      }).catch((e) => console.warn('nightExtra', e));
+      nightAvoidData().then((list) => {
+        if (seq !== S.seq || !document.getElementById('nightTops')) return;
+        box.insertAdjacentHTML('beforeend', topCard(LL('Top 5 daño evitable recibido', 'Top 5 avoidable damage taken'), LL('Mecánicas evitables (mejor intento de cada jefe)', 'Avoidable mechanics (best attempt of each boss)'), list.slice(0, 5), (v) => plain(v)));
+      }).catch((e) => console.warn('nightAvoidTop', e));
     } catch (e) {
       console.warn('nightTops', e);
       if (seq === S.seq && document.getElementById('nightTops')) box.innerHTML = errorHTML(friendlyError(e));
-    }
-  }
-
-  // Quién se come más daño evitable: se mira el mejor intento de cada jefe (la kill, o el wipe más avanzado) y se suma por jugador
-  async function fillNightAvoid(seq) {
-    const box = document.getElementById('nightAvoid');
-    if (!box) return;
-    try {
-      const rows = nightData();
-      const per = new Map();
-      for (const g of rows) {
-        const raw = g.list.find((x) => x.kill) || g.best;
-        if (!raw) continue;
-        const fwin = { ...raw, fightStart: raw.startTime, fightEnd: raw.endTime, full: true, key: `${raw.id}:${raw.startTime}-${raw.endTime}`, rangeLabel: '' };
-        const list = await Extras.mechData(fwin);
-        const marks = Extras.avoidMarks(raw);
-        for (const a of list) {
-          if (!(marks[a.guid] != null ? !!marks[a.guid] : a.guess)) continue;
-          for (const tg of a.targets) {
-            let p = per.get(tg.id);
-            if (!p) per.set(tg.id, p = { id: tg.id, icon: tg.icon, v: 0, by: new Map() });
-            p.v += tg.total;
-            p.by.set(a.guid, (p.by.get(a.guid) || 0) + tg.total);
-          }
-        }
-        if (seq !== S.seq || !document.getElementById('nightAvoid')) return;
-      }
-      const top = [...per.values()].sort((a, b) => b.v - a.v).slice(0, 8);
-      if (seq !== S.seq || !document.getElementById('nightAvoid')) return;
-      box.innerHTML = topCard(LL('Daño evitable de la noche', 'Avoidable damage of the night'), LL('Quién se comió más mecánicas evitables (mejor intento de cada jefe)', 'Who took the most avoidable mechanics (best attempt of each boss)'), top, (v) => plain(v));
-    } catch (e) {
-      console.warn('nightAvoid', e);
-      if (seq === S.seq && document.getElementById('nightAvoid')) box.innerHTML = '';
     }
   }
 
@@ -717,11 +758,10 @@ const Extras2 = (() => {
         <div class="nc-bar"><i style="width:${g.kills ? 100 : 100 - p}%"></i></div>
         <div class="nc-m"><span>${g.list.length} ${g.list.length === 1 ? LL('intento', 'pull') : LL('intentos', 'pulls')}${wipes ? ` · ${wipes} wipes` : ''}</span><span>${LL('Tiempo', 'Time')}: ${clock(g.time)}</span><button class="mini-btn" data-action="fight" data-id="${g.best.id}">${g.kills ? LL('Ver', 'View') : LL('Ver mejor try', 'View best try')} ${esc(fightLabel(g.best))}</button></div></div>`;
     }).join('');
-    S.post = async (seq) => { window._nightText = nightText(rows, r); fillNightTops(seq); fillChivato(seq); fillNightAvoid(seq); };
+    S.post = async (seq) => { window._nightText = nightText(rows, r); fillNightTops(seq); fillChivato(seq); };
     return headerHTML(f, t('tabs.night'), `${esc(r.title)} · ${new Date(r.startTime).toLocaleDateString(locale())}`)
       + `<div class="ov-tiles">${tiles}</div>
       <div class="night-tops" id="nightTops">${skelCards(6, 5)}</div>
-      <div class="night-tops" id="nightAvoid">${skelCards(2, 6)}</div>
       <div id="nightChivato"><div class="tp-card sk-card">${skelRows(6)}</div></div>
       <div class="night-grid">${cards}</div>
       <div class="set-actions"><button class="btn" data-action="night-copy">${LL('Copiar informe para Discord', 'Copy report for Discord')}</button><button class="btn" data-action="night-png">${LL('Guardar como imagen', 'Save as image')}</button></div>`;
