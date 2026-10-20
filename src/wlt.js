@@ -93,38 +93,37 @@ function wltTable(f, abilityName, detail, dur) {
   const anyTick = rows.some((r) => r.ticks > 0);
   const anyMiss = rows.some((r) => r.missP != null || r.tmissP != null);
   const missCell = (r) => (r.missP == null && r.tmissP == null ? '-' : wltPair(r.missP == null ? '-' : wltPct(r.missP), r.tmissP == null ? '-' : wltPct(r.tmissP), r.tmissP != null));
+  const cols = ['minmax(150px, 200px)', 'minmax(260px, 1fr)', '64px', '112px', '108px', anyMiss ? '96px' : '', '76px', '84px', '24px'].filter(Boolean).join(' ');
   const detailHTML = (r) => {
     const list = [...r.a.hd.values()].sort((x, y) => y.total - x.total);
-    return `<div class="wlt-det"><table><thead><tr><th>${LL('Tipo', 'Type')}</th><th>${LL('Cantidad', 'Count')}</th><th>${LL('Mín.', 'Min')}</th><th>${LL('Máx.', 'Max')}</th><th>${LL('Medio', 'Avg')}</th><th>${LL('Total', 'Total')}</th></tr></thead><tbody>${
+    return `<div class="wlt-det" hidden><table><thead><tr><th>${LL('Tipo', 'Type')}</th><th>${LL('Cantidad', 'Count')}</th><th>${LL('Mín.', 'Min')}</th><th>${LL('Máx.', 'Max')}</th><th>${LL('Medio', 'Avg')}</th><th>${LL('Total', 'Total')}</th></tr></thead><tbody>${
       list.map((x) => `<tr><td>${esc(wltTypeName(x.type))}</td><td>${num(x.count, 0)}</td><td>${wltShort(x.min === Infinity ? null : x.min)}</td><td>${wltShort(x.max)}</td><td>${wltShort(x.count ? x.total / x.count : null)}</td><td>${wltShort(x.total)}</td></tr>`).join('')
     }</tbody></table></div>`;
   };
+  const head = `<div class="row head"><span class="c-name">${LL('Nombre', 'Name')}</span><span class="c-amt">${LL('Cantidad', 'Amount')}</span><span>${LL('Golpes', 'Hits')}</span><span>${LL('Golpe medio', 'Avg hit')}</span><span>${LL('Tiempo activo %', 'Uptime %')}</span>${anyMiss ? `<span>${LL('Fallos %', 'Miss %')}</span>` : ''}<span>${LL('Mitigado', 'Mitigated')}</span><span>DTPS</span><span></span></div>`;
   const body = rows.map((r) => {
     const cc = classColor(r.cls);
     const dark = Math.min(1, Math.max(0, (r.total - r.a.red) / (r.total || 1)));
-    const w = (r.total / max) * 100;
-    return `<tr class="wlt-row ${isMe(r.name) ? 'me' : ''}">
-      <td class="wlt-name"><div class="wlt-n">${r.icon ? `<img class="spec-ic-sm" src="${specIconUrl(esc(r.icon))}" width="22" height="22" alt="" style="--cc:${cc}">` : ''}<b style="color:${cc}">${esc(r.name)}</b></div></td>
-      <td class="wlt-amt"><div class="wlt-a"><span class="wlt-pct">${wltPct((r.total / sum) * 100)}</span><span class="wlt-bar"><i style="width:${w * (1 - dark)}%;background:${cc}"></i><i style="width:${w * dark}%;background:${cc};opacity:.4"></i></span><b style="color:${cc}">${wltShort(r.total)}</b></div></td>
-      <td class="r">${wltPair(r.hits ? num(r.hits, 0) : '-', r.ticks ? num(r.ticks, 0) : '-', anyTick)}</td>
-      <td class="r">${wltPair(wltShort(r.avgHit), wltShort(r.avgTick), anyTick)}</td>
-      <td class="r">${wltPct(r.uptime)}</td>
-      ${anyMiss ? `<td class="r">${missCell(r)}</td>` : ''}
-      <td class="r">${wltPct(r.mitig)}</td>
-      <td class="r wlt-dtps">${num(r.dtps, 1)}</td>
-      <td class="wlt-x"><button type="button" class="wlt-plus" data-action="wlt-exp" title="${esc(LL('Ver desglose', 'Show breakdown'))}">+</button></td>
-    </tr><tr class="wlt-detrow" hidden><td colspan="${anyMiss ? 9 : 8}">${detailHTML(r)}</td></tr>`;
+    const w = (r.total / max).toFixed(4);
+    return `<div class="row ${isMe(r.name) ? 'me' : ''}">
+      <div class="r-name">${r.icon ? `<img class="spec-ic-sm" src="${specIconUrl(esc(r.icon))}" width="22" height="22" alt="" style="--cc:${cc}">` : `<span class="dot" style="background:${cc}"></span>`}<span class="name" style="color:${cc}">${esc(r.name)}</span></div>
+      <div class="r-bar"><span class="r-pct">${wltPct((r.total / sum) * 100)}</span><div class="bar-wrap"><div class="bar"><div class="bar-in" style="width:calc((100% - 74px) * ${w})"><span class="seg" style="flex:${1 - dark} 1 0;background:${cc};--c:${cc}"></span><span class="seg" style="flex:${dark} 1 0;background:${cc};opacity:.4;--c:${cc}"></span></div><span class="r-amt">${wltShort(r.total)}</span></div></div></div>
+      <span class="c-n">${wltPair(r.hits ? num(r.hits, 0) : '-', r.ticks ? num(r.ticks, 0) : '-', anyTick)}</span>
+      <span class="c-n">${wltPair(wltShort(r.avgHit), wltShort(r.avgTick), anyTick)}</span>
+      <span class="c-n">${wltPct(r.uptime)}</span>
+      ${anyMiss ? `<span class="c-n">${missCell(r)}</span>` : ''}
+      <span class="c-n">${wltPct(r.mitig)}</span>
+      <span class="c-rate">${num(r.dtps, 1)}</span>
+      <button type="button" class="wlt-plus" data-action="wlt-exp" title="${esc(LL('Ver desglose', 'Show breakdown'))}">+</button>
+    </div>${detailHTML(r)}`;
   }).join('');
   const T = rows.reduce((s, r) => { s.hit += r.hits; s.tick += r.ticks; s.mit += r.a.mit; s.hv += (r.avgHit || 0) * r.hits; s.tv += (r.avgTick || 0) * r.ticks; return s; }, { hit: 0, tick: 0, mit: 0, hv: 0, tv: 0 });
   const totMit = (sum + T.mit) > 0 ? (T.mit / (sum + T.mit)) * 100 : null;
-  return `<div class="wlt-wrap"><table class="wlt"><thead><tr>
-      <th class="l">${LL('Nombre', 'Name')}</th><th class="l">${LL('Cantidad', 'Amount')}</th><th class="r">${LL('Golpes', 'Hits')}</th><th class="r">${LL('Golpe medio', 'Avg hit')}</th>
-      <th class="r">${LL('Tiempo activo %', 'Uptime %')}</th>${anyMiss ? `<th class="r">${LL('Fallos %', 'Miss %')}</th>` : ''}<th class="r">${LL('Mitigado', 'Mitigated')}</th><th class="r">DTPS</th><th></th></tr></thead>
-    <tbody>${body}</tbody>
-    <tfoot><tr><td class="l">${LL('Total', 'Total')}</td><td class="wlt-amt"><div class="wlt-a"><span class="wlt-pct">100%</span><span class="wlt-bar wlt-bar-t"></span><b>${wltShort(sum)}</b></div></td>
-      <td class="r">${wltPair(num(T.hit, 0), num(T.tick, 0), anyTick)}</td><td class="r">${wltPair(wltShort(T.hit ? T.hv / T.hit : null), wltShort(T.tick ? T.tv / T.tick : null), anyTick)}</td><td class="r">-</td>${anyMiss ? '<td class="r">-</td>' : ''}
-      <td class="r">${wltPct(totMit)}</td><td class="r wlt-dtps">${num(sum / dur, 1)}</td><td></td></tr></tfoot></table>
-    <div class="wlt-foot"><button type="button" class="btn small" data-action="wlt-csv">CSV</button></div></div>`;
+  const foot = `<div class="row wlt-total"><div class="r-name"><span class="name">${LL('Total', 'Total')}</span></div><div class="r-bar"><span class="r-pct">100%</span><div class="bar-wrap"><div class="bar"><span class="r-amt">${wltShort(sum)}</span></div></div></div>
+      <span class="c-n">${wltPair(num(T.hit, 0), num(T.tick, 0), anyTick)}</span><span class="c-n">${wltPair(wltShort(T.hit ? T.hv / T.hit : null), wltShort(T.tick ? T.tv / T.tick : null), anyTick)}</span><span class="c-n">-</span>${anyMiss ? '<span class="c-n">-</span>' : ''}
+      <span class="c-n">${wltPct(totMit)}</span><span class="c-rate">${num(sum / dur, 1)}</span><span></span></div>`;
+  const bar = `<div class="sortbar" data-no-shot><span class="grow"></span><button type="button" class="chip" data-action="wlt-csv" title="${esc(LL('Descargar la tabla en CSV', 'Download the table as CSV'))}">CSV</button><button type="button" class="chip" data-action="shot" data-m="copy" title="${esc(LL('Copiar esta pantalla como imagen', 'Copy this screen as an image'))}">📋 ${LL('Copiar imagen', 'Copy image')}</button><button type="button" class="chip" data-action="shot" data-m="save" title="${esc(LL('Guardar esta pantalla como imagen PNG', 'Save this screen as a PNG image'))}">💾 ${LL('Guardar PNG', 'Save PNG')}</button></div>`;
+  return `${bar}<div class="ranked wlt-r" style="--cols:${cols}">${head}${body}${foot}</div>`;
 }
 
 function wltCsv() {
@@ -147,6 +146,6 @@ document.addEventListener('click', (ev) => {
   const el = ev.target.closest('[data-action="wlt-exp"],[data-action="wlt-csv"]');
   if (!el) return;
   if (el.dataset.action === 'wlt-csv') { wltCsv(); return; }
-  const tr = el.closest('tr')?.nextElementSibling;
-  if (tr) { tr.hidden = !tr.hidden; el.textContent = tr.hidden ? '+' : '–'; }
+  const det = el.closest('.row')?.nextElementSibling;
+  if (det?.classList.contains('wlt-det')) { det.hidden = !det.hidden; el.textContent = det.hidden ? '+' : '–'; }
 });

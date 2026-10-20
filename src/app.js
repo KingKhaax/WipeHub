@@ -102,6 +102,22 @@ const pctOf = (v) => (v == null ? null : v > 100 ? v / 100 : v);
 const fightDur = (f) => f.dur ?? (f.endTime - f.startTime);
 
 // ============================================================ actores y habilidades
+// Nivel de objeto exacto: Warcraft Logs lo da redondeado, así que se calcula con el equipo (media de 16 ranuras sin camisa ni tabardo;
+// con un arma a dos manos cuenta dos veces) y se muestra con todos sus decimales
+function exactIlvl(e) {
+  const gear = e?.gear;
+  if (!Array.isArray(gear) || !gear.length) return e?.itemLevel;
+  let sum = 0, main = 0, off = false;
+  for (const it of gear) {
+    if (!it || !(it.itemLevel > 0) || it.slot === 3 || it.slot >= 17) continue;
+    sum += it.itemLevel;
+    if (it.slot === 15) main = it.itemLevel;
+    if (it.slot === 16) off = true;
+  }
+  if (main && !off) sum += main;
+  return sum > 0 ? sum / 16 : e.itemLevel;
+}
+const fmtIlvl = (v) => (v > 0 ? new Intl.NumberFormat(locale(), { minimumFractionDigits: 0, maximumFractionDigits: 4 }).format(v) : '–');
 function playerInfo(id, entry) {
   const a = S.actors.get(id) || {};
   const cands = [entry?.icon, S.specById.get(id), a.icon];
@@ -1069,7 +1085,7 @@ function rankedList(rows, { parse, parseIlvl, slots, slotsIlvl, clickable = !S.v
   const hasActive = rows.some((r) => r.active != null);
   const hasRate = rows.some((r) => r.rate != null);
   const hasNote = rows.some((r) => r.note);
-  const cols = [hasParse && '60px', 'minmax(170px, 250px)', 'minmax(240px, 1fr)', hasNote && 'auto', hasIlvl && '54px', hasParseI && '62px', hasActive && '70px', hasRate && '124px'].filter(Boolean).join(' ');
+  const cols = [hasParse && '60px', 'minmax(170px, 250px)', 'minmax(240px, 1fr)', hasNote && 'auto', hasIlvl && '76px', hasParseI && '62px', hasActive && '70px', hasRate && '124px'].filter(Boolean).join(' ');
   const tags = (h) => String(h ?? '').replace(/<[^>]*>/g, '').trim();
   const pill = (map, slotSet, cls, r) => {
     const v = map?.get(r.name);
@@ -1106,9 +1122,9 @@ function rankedList(rows, { parse, parseIlvl, slots, slotsIlvl, clickable = !S.v
         <span class="name" style="color:${color}">${esc(r.name)}</span>
         ${me ? `<span class="you">${t('you')}</span>` : ''}
       </div>
-      <div class="r-bar"><span class="r-pct">${num((r.total / sum) * 100, 2)}%</span><div class="bar-wrap"><div class="bar"><div class="bar-in" style="width:calc((100% - 74px) * ${(r.total / max).toFixed(4)})">${bar}</div><span class="r-amt" style="color:${color}">${amountFmt(r.total)}</span></div></div></div>
+      <div class="r-bar"><span class="r-pct">${num((r.total / sum) * 100, 2)}%</span><div class="bar-wrap"><div class="bar"><div class="bar-in" style="width:calc((100% - 74px) * ${(r.total / max).toFixed(4)})">${bar}</div><span class="r-amt">${amountFmt(r.total)}</span></div></div></div>
       ${hasNote ? `<span class="note">${r.note || ''}</span>` : ''}
-      ${hasIlvl ? `<span class="c-ilvl">${r.ilvl > 0 ? Math.round(r.ilvl) : '–'}</span>` : ''}
+      ${hasIlvl ? `<span class="c-ilvl">${fmtIlvl(r.ilvl)}</span>` : ''}
       ${hasParseI ? `<span class="c-parsei">${pill(parseIlvl, slotsIlvl, 'pill-slot-i', r)}</span>` : ''}
       ${hasActive ? `<span class="c-active">${r.active != null ? `${num(r.active, 2)}%` : '–'}</span>` : ''}
       ${hasRate ? `<span class="c-rate">${r.rate != null ? num(r.rate, 1) : ''}</span>` : ''}
@@ -1126,7 +1142,7 @@ function exportRankedImage(mode) {
   const draw = (withIcons) => new Promise((resolve) => {
     const rowH = 30, headH = 100 + (sub ? 26 : 0), pad = 24, scale = 2;
     const parseW = rows.some((r) => r.parse != null) || m.hasParse ? 60 : 0;
-    const ilvlW = m.hasIlvl ? 56 : 0, parseIW = rows.some((r) => r.parseI != null) || m.hasParseI ? 64 : 0, actW = m.hasActive ? 72 : 0, rateW = m.hasRate ? 128 : 0;
+    const ilvlW = m.hasIlvl ? 76 : 0, parseIW = rows.some((r) => r.parseI != null) || m.hasParseI ? 64 : 0, actW = m.hasActive ? 72 : 0, rateW = m.hasRate ? 128 : 0;
     const nameW = 230;
     const W = 1180;
     const x0 = pad;
@@ -1185,13 +1201,13 @@ function exportRankedImage(mode) {
         const tot = r.segs.reduce((x, q) => x + q.v, 0) || 1;
         let sx = bx;
         for (const q of r.segs) { const w = bw * (q.v / tot); g.fillStyle = q.color; g.fillRect(sx, y + 7, Math.max(1, w), rowH - 14); sx += w; }
-        g.fillStyle = color; g.font = `700 13px ${font}`; g.fillText(r.amount, bx + bw + 8, cy);
+        g.fillStyle = '#ffffff'; g.font = `700 13px ${font}`; g.fillText(r.amount, bx + bw + 8, cy);
         let px = xRight;
         g.textAlign = 'center'; g.font = `13px ${font}`;
-        if (ilvlW) { g.fillStyle = '#9aa3b2'; if (r.ilvl != null) g.fillText(String(Math.round(r.ilvl)), px + ilvlW / 2, cy); px += ilvlW; }
+        if (ilvlW) { g.fillStyle = '#ffffff'; if (r.ilvl != null) g.fillText(fmtIlvl(r.ilvl), px + ilvlW / 2, cy); px += ilvlW; }
         if (parseIW) { if (r.parseI != null) { g.fillStyle = parseColor(r.parseI); g.font = `700 14px ${font}`; g.fillText(String(r.parseI), px + parseIW / 2, cy); } px += parseIW; }
         g.font = `13px ${font}`;
-        if (actW) { g.fillStyle = '#9aa3b2'; if (r.active != null) g.fillText(`${num(r.active, 2)}%`, px + actW / 2, cy); px += actW; }
+        if (actW) { g.fillStyle = '#ffffff'; if (r.active != null) g.fillText(`${num(r.active, 2)}%`, px + actW / 2, cy); px += actW; }
         g.textAlign = 'right';
         if (rateW) { g.fillStyle = '#a8e060'; g.font = `700 13px ${font}`; g.fillText(r.rate, W - pad, cy); }
         g.textAlign = 'left';
@@ -1468,14 +1484,14 @@ const VIEWS = {
     if (selEnemy) {
       const entries = await enemyTable(f, selEnemy.id);
       const erows = entries.filter((e) => isPlayer(e.id, e))
-        .map((e) => ({ ...playerInfo(e.id, e), ilvl: e.itemLevel, active: activeOf(e, dur * 1000), pets: petsOf(e), abil: abilList(e.abilities), total: e.total, rate: e.total / dur }))
+        .map((e) => ({ ...playerInfo(e.id, e), ilvl: exactIlvl(e), active: activeOf(e, dur * 1000), pets: petsOf(e), abil: abilList(e.abilities), total: e.total, rate: e.total / dur }))
         .filter((r) => r.total > 0).sort((x, y) => y.total - x.total);
       return headerHTML(f, t('dmgTitle'), leaderSub(erows, f)) + enemyPicker + rankedList(erows, { unit: 'DPS' });
     }
     const bossOf = (e) => (e.targets || []).filter((x) => x.type === 'Boss').reduce((s, x) => s + x.total, 0);
     const rows = d.dmg.filter((e) => isPlayer(e.id, e))
       .map((e) => {
-        const base = { ...playerInfo(e.id, e), ilvl: e.itemLevel, active: activeOf(e, dur * 1000), pets: petsOf(e), abil: abilList(e.abilities) };
+        const base = { ...playerInfo(e.id, e), ilvl: exactIlvl(e), active: activeOf(e, dur * 1000), pets: petsOf(e), abil: abilList(e.abilities) };
         if (m === 'rdps') { const v = Math.max(0, e.total - (e.totalRDPSTaken || 0) + (e.totalRDPSGiven || 0)); return { ...base, pets: 0, total: v, rate: v / dur }; }
         if (m === 'boss') { const v = bossOf(e); return { ...base, pets: 0, total: v, rate: v / dur }; }
         if (m === 'active') return { ...base, total: e.total, rate: e.total / Math.max(1, (e.activeTime || dur * 1000) / 1000) };
@@ -1502,7 +1518,7 @@ const VIEWS = {
       .map((e) => {
         const oh = e.overheal || 0;
         const ohp = oh > 0 ? (oh / (oh + e.total)) * 100 : 0;
-        return { ...playerInfo(e.id, e), ilvl: e.itemLevel, active: activeOf(e, dur * 1000), pets: petsOf(e), total: e.total, rate: e.total / dur, abil: abilList(e.abilities), note: ohp ? t('overheal', { p: num(ohp, 0) }) : '' };
+        return { ...playerInfo(e.id, e), ilvl: exactIlvl(e), active: activeOf(e, dur * 1000), pets: petsOf(e), total: e.total, rate: e.total / dur, abil: abilList(e.abilities), note: ohp ? t('overheal', { p: num(ohp, 0) }) : '' };
       })
       .sort((a, b) => b.total - a.total);
     return headerHTML(f, t('healTitle'), leaderSub(rows, f)) + invalidBannerHTML(rows, rk.invalid) + rankedList(rows, { unit: 'HPS', invalid: rk.invalid, ...parseOptions(f, rows, rk.hps, 'hps', rk.hpsB) });

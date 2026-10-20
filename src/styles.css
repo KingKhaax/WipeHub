@@ -2713,31 +2713,23 @@ h3.sec, .recent-h { font-size: 17px; font-weight: 700; letter-spacing: 0; }
 .cl-sb li::marker { color: var(--accent); }
 @media (prefers-reduced-motion: reduce) { .cl-card { transition: none; } .cl-card:hover { transform: none; } }
 
-/* ---------- Daño recibido por habilidad: tabla como la de Warcraft Logs ---------- */
-.wlt-wrap { margin-top: 6px; overflow-x: auto; }
-.wlt { width: 100%; border-collapse: collapse; font-size: 12.5px; line-height: 1.2; background: #000; color: #e6e6e6; }
-.wlt th { background: #222; color: #e6e6e6; font-weight: 600; padding: 4px 8px; border: 1px solid #2c2c2c; white-space: nowrap; }
-.wlt td { padding: 0 8px; height: 26px; border: 1px solid #1f1f1f; white-space: nowrap; background: #000; }
-.wlt th.l, .wlt td.l, .wlt td.wlt-name, .wlt td.wlt-amt { text-align: left; }
-.wlt th.r, .wlt td.r { text-align: right; }
-.wlt tbody tr.wlt-row:hover td { background: #101010; }
-.wlt tr.me td { background: rgba(47, 183, 192, .10); }
-.wlt-n { display: flex; align-items: center; gap: 6px; }
-.wlt-n .spec-ic-sm { border-radius: 3px; flex: none; width: 20px; height: 20px; }
-.wlt-n b { font-weight: 600; }
-.wlt-a { display: flex; align-items: center; gap: 8px; }
-.wlt-pct { width: 50px; text-align: right; color: #bbb; flex: none; }
-.wlt-bar { flex: 1; display: flex; height: 14px; min-width: 140px; }
-.wlt-bar i { display: block; height: 100%; }
-.wlt-a > b { flex: none; min-width: 52px; text-align: right; font-weight: 600; }
-.wlt-par { color: #aaa; }
-.wlt-dtps { color: #b6e35a; }
-.wlt tfoot td { background: #1a1a1a; font-weight: 600; border-top: 1px solid #444; }
-.wlt-x { width: 28px; text-align: center; }
-.wlt-plus { background: transparent; border: 0; color: #ddd; cursor: pointer; font: inherit; font-size: 14px; padding: 0 4px; }
+/* ---------- Daño recibido por habilidad: mismas filas que la lista de Daño, con las columnas de Warcraft Logs ---------- */
+.wlt-r .row > .c-n { text-align: right; font-variant-numeric: tabular-nums; font-size: 13px; color: var(--text); white-space: nowrap; }
+.wlt-r .row.head > span { text-align: right; }
+.wlt-r .row.head > span.c-name, .wlt-r .row.head > span.c-amt { text-align: left; }
+.wlt-r .row > .c-rate { text-align: right; }
+.wlt-r .wlt-par { color: var(--muted); }
+.wlt-r .wlt-total { border-top: 1px solid var(--line); font-weight: 600; background: var(--panel); }
+.wlt-r .wlt-total .name { color: var(--text); }
+.wlt-plus { background: transparent; border: 0; color: var(--muted); cursor: pointer; font: inherit; font-size: 15px; padding: 0; line-height: 1; }
 .wlt-plus:hover { color: #2fb7c0; }
-.wlt-det { padding: 4px 8px 8px; }
+.wlt-det { padding: 4px 12px 10px 48px; }
+.wlt-det[hidden] { display: none; }
 .wlt-det table { border-collapse: collapse; font-size: 12px; }
-.wlt-det th, .wlt-det td { padding: 2px 12px; height: auto; border: 0; border-bottom: 1px solid #222; text-align: right; background: transparent; }
+.wlt-det th, .wlt-det td { padding: 2px 14px; border-bottom: 1px solid var(--line); text-align: right; font-variant-numeric: tabular-nums; }
+.wlt-det th { color: var(--muted); font-weight: 600; }
 .wlt-det th:first-child, .wlt-det td:first-child { text-align: left; }
-.wlt-foot { display: flex; justify-content: flex-end; padding: 6px 0; }
+/* Números de las listas en blanco, como en Warcraft Logs (cantidad, nivel de objeto y activo) */
+.row .c-ilvl, .row .c-active { color: var(--text); }
+.r-amt { color: var(--text) !important; }
+.wlt-r .row.head > span { white-space: nowrap; }

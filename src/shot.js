@@ -7,7 +7,7 @@ const SHOT_SKIP = 'script,style,.shot-bar,.sortbar-export,[data-no-shot],.wlt-fo
 
 // Pestañas que no son una tabla o un reparto de barras (no llevan botones de imagen)
 function shotWanted(view) {
-  if (!view || view.querySelector('[data-action="export-img"],[data-action="export-wcl"]')) return false;
+  if (!view || view.querySelector('[data-action="export-img"],[data-action="export-wcl"],[data-action="shot"]')) return false;
   if (view.querySelector('.empty,.error-box') && !view.querySelector('table,.ranked,.wlt,.bars,.chart,.rk-table,.legend')) return false;
   return !!view.querySelector('table,.ranked,.wlt,.bars,.chart,.rk-table,.deaths,.legend,svg,canvas');
 }
