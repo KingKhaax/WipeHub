@@ -574,8 +574,21 @@ const Extras = (() => {
   }
 
   async function viewCooldowns(f) {
-    const [events, tkn] = await Promise.all([cooldownData(f), graphData(f, 'DamageTaken').catch(() => null)]);
-    if (!events.length) return headerHTML(f, t('tabs.cooldowns')) + `<div class="empty">${LL('Nadie usó defensivos de la lista en este intento.', 'Nobody used any of the listed defensives in this pull.')}</div>`;
+    const [allEv, tkn] = await Promise.all([cooldownData(f), graphData(f, 'DamageTaken').catch(() => null)]);
+    // Jugador elegido: se ve solo lo que ha lanzado él y sobre quién
+    const casterCount = new Map();
+    for (const e of allEv) casterCount.set(e.sourceID, (casterCount.get(e.sourceID) || 0) + 1);
+    if (S.defPlayer != null && !casterCount.has(S.defPlayer)) S.defPlayer = null;
+    const events = S.defPlayer != null ? allEv.filter((e) => e.sourceID === S.defPlayer) : allEv;
+    const pickerHTML = () => {
+      const chips = [...casterCount.entries()].map(([id, n]) => ({ id, n, p: playerInfo(id) })).sort((x, y) => y.n - x.n).map(({ id, n, p }) => {
+        const cc = classColor(p.cls);
+        return `<button type="button" class="chip ${S.defPlayer === id ? 'on' : ''}" data-action="def-player" data-id="${id}" style="--cc:${cc}"><img class="spec-ic-sm" src="${p.icon && p.icon.includes('-') ? specIconUrl(esc(p.icon)) : classIconUrl(p.cls)}" width="18" height="18" alt="" style="--cc:${cc}"><b style="color:${cc}">${esc(p.name)}</b> <span class="muted">${n}</span></button>`;
+      }).join('');
+      return `<div class="sortbar def-pick"><span class="muted">${LL('Jugador', 'Player')}</span><button type="button" class="chip ${S.defPlayer == null ? 'on' : ''}" data-action="def-player" data-id="">${LL('Todos', 'Everyone')} <span class="muted">${allEv.length}</span></button>${chips}</div>`;
+    };
+    if (!allEv.length) return headerHTML(f, t('tabs.cooldowns')) + `<div class="empty">${LL('Nadie usó defensivos de la lista en este intento.', 'Nobody used any of the listed defensives in this pull.')}</div>`;
+    if (!events.length) return headerHTML(f, t('tabs.cooldowns')) + pickerHTML() + `<div class="empty">${LL('Este jugador no ha usado defensivos de la lista.', 'This player did not use any listed defensives.')}</div>`;
     const total = dur(f);
     const byAb = new Map();
     for (const e of events) {
@@ -587,7 +600,7 @@ const Extras = (() => {
     const ruler = [];
     for (let ms = 0; ms <= total; ms += tick) ruler.push(`<span style="left:${(ms / total) * 100}%">${clock(ms)}</span>`);
     let html = headerHTML(f, t('tabs.cooldowns'), LL(`<b>${events.length}</b> usos de defensivos durante el pull. Pasa el ratón por un icono para ver quién lo usó y cuándo.`, `<b>${events.length}</b> defensive uses during the pull. Hover an icon to see who used it and when.`))
-      + `<div class="cd-wrap"><div class="cd-ruler">${ruler.join('')}</div>`;
+      + pickerHTML() + `<div class="cd-wrap"><div class="cd-ruler">${ruler.join('')}</div>`;
     if (tkn?.pts.length) {
       const sm = smooth(tkn.pts, 2);
       const mx = Math.max(...sm, 1);
@@ -914,4 +927,11 @@ const Extras = (() => {
   });
 
   return { RAID_BUFFS, roleIcon, raidBuffsView, rolesData, summaryData, deathTimes, graphData, smooth, mechEvents, exportPng, exportMenu, wcLink, wclLink, summaryText, cooldownData, mechData, avoidMarks, isAvoidable, DEF_BY_ID };
+  document.addEventListener('click', (ev) => {
+    const el = ev.target.closest?.('[data-action="def-player"]');
+    if (!el) return;
+    S.defPlayer = el.dataset.id === '' ? null : Number(el.dataset.id);
+    render();
+  });
+
 })();
