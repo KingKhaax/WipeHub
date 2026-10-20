@@ -2762,19 +2762,15 @@ h3.sec, .recent-h { font-size: 17px; font-weight: 700; letter-spacing: 0; }
 .wtt-b { height: 12px; display: flex; }
 .wtt-b i { display: block; height: 100%; }
 
-/* Pestañas de arriba con animación: el subrayado crece desde el centro, la pestaña se eleva al pasar el ratón y se hunde al pulsar */
-.tab { position: relative; transition: color .25s ease, transform .22s cubic-bezier(.2, .8, .2, 1), text-shadow .25s ease; border-bottom-color: transparent !important; }
-.tab::after { content: ''; position: absolute; left: 8px; right: 8px; bottom: -2px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); transform: scaleX(0); transform-origin: center; transition: transform .3s cubic-bezier(.2, .8, .2, 1), opacity .25s ease; opacity: .9; box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 70%, transparent); }
-.tab::before { content: ''; position: absolute; inset: 4px 2px; border-radius: 8px; background: radial-gradient(ellipse at 50% 100%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%); opacity: 0; transition: opacity .3s ease; pointer-events: none; z-index: -1; }
-.tab:hover { transform: translateY(-2px); }
-.tab:hover::after { transform: scaleX(.55); }
-.tab:hover::before { opacity: 1; }
-.tab:active { transform: translateY(0) scale(.96); }
-.tab.active::after { transform: scaleX(1); animation: tabLine .45s cubic-bezier(.2, .8, .2, 1) both; }
-.tab.active::before { opacity: 1; }
+/* Pestañas del informe: subrayado viajero. Una línea con brillo recorre la barra hasta la pestaña elegida */
+.tabs { position: relative; }
+.tab { position: relative; transition: color .2s ease, transform .2s ease; border-bottom-color: transparent !important; }
+.tab:hover { transform: translateY(-1px); }
+.tab:active { transform: translateY(0) scale(.98); }
 .tab.active { text-shadow: 0 0 14px color-mix(in srgb, var(--accent) 45%, transparent); }
-@keyframes tabLine { from { transform: scaleX(0); opacity: 0; } to { transform: scaleX(1); opacity: .9; } }
-@media (prefers-reduced-motion: reduce) { .tab, .tab::after, .tab::before { transition: none; animation: none !important; } .tab:hover { transform: none; } }
+.tab-ind { position: absolute; left: 0; top: 0; height: 3px; width: 0; border-radius: 3px; pointer-events: none; z-index: 1; background: linear-gradient(90deg, var(--accent), #5b8cff); box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 70%, transparent); }
+.tab-ind.go { transition: transform .42s cubic-bezier(.5, 0, .15, 1), width .42s cubic-bezier(.5, 0, .15, 1); }
+@media (prefers-reduced-motion: reduce) { .tab, .tab-ind.go { transition: none; } .tab:hover { transform: none; } }
 
 /* ---------- Defensivos: líneas de tiempo más cuidadas ---------- */
 .cd-kind { position: relative; border-radius: 16px; border: 1px solid color-mix(in srgb, var(--k) 22%, var(--line)); border-left: 4px solid var(--k);

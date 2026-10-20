@@ -973,6 +973,7 @@ async function render() {
     `<a class="tab ${S.tab === k ? 'active' : ''}" href="${reportHash(S.code, raw.id, k)}" data-action="tab" data-tab="${k}">${t('tabs.' + k)}</a>`).join('')}</nav>`;
   const banner = S.combine.length > 1 ? `<div class="combine-banner">${LL(`Combinando ${S.combine.length} pulls`, `Combining ${S.combine.length} pulls`)}${combined ? '' : ` · <span class="muted">${LL('esta pestaña muestra solo el pull seleccionado', 'this tab only shows the selected pull')}</span>`}<span class="grow"></span><button class="chip" data-action="combine-clear">${LL('Salir', 'Exit')}</button></div>` : '';
   main.innerHTML = `${nav}${banner}${combined ? '' : raw.encounterID || fightDur(raw) > 20000 ? rangeBar(raw) : ''}<section id="view">${loadingHTML()}</section>`;
+  tabLine();
   S.post = null;
   try {
     const html = S.player ? await viewPlayer(f, S.player) : await VIEWS[S.tab](f);
@@ -999,6 +1000,26 @@ function enterAnim(root) {
   setTimeout(() => root.querySelectorAll(':scope > .enter').forEach((el) => el.classList.remove('enter')), 1100);
 }
 
+// Subrayado viajero de las pestañas: nace donde estaba la pestaña anterior y viaja hasta la nueva
+let tabPrev = null;
+function tabLine() {
+  const nav = document.querySelector('#main nav.tabs');
+  const on = nav?.querySelector('.tab.active');
+  if (!on) { tabPrev = null; return; }
+  const ind = document.createElement('i');
+  ind.className = 'tab-ind';
+  nav.appendChild(ind);
+  const to = { x: on.offsetLeft, y: on.offsetTop + on.offsetHeight - 2, w: on.offsetWidth };
+  const put = (p) => { ind.style.width = p.w + 'px'; ind.style.transform = 'translate(' + p.x + 'px,' + p.y + 'px)'; };
+  put(tabPrev || to);
+  if (tabPrev && (tabPrev.x !== to.x || tabPrev.y !== to.y || tabPrev.w !== to.w)) {
+    void ind.offsetWidth; // fija el punto de partida antes de animar
+    ind.classList.add('go');
+    put(to);
+  }
+  tabPrev = to;
+}
+window.addEventListener('resize', () => { const nav = document.querySelector('#main nav.tabs'); if (nav) { nav.querySelectorAll('.tab-ind').forEach((n) => n.remove()); tabPrev = null; tabLine(); } });
 function afterRender() {
   const track = $('.rot-scroll');
   if (track && S._rotScroll != null) { track.scrollLeft = S._rotScroll; S._rotScroll = null; }
