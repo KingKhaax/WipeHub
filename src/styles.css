@@ -2813,3 +2813,15 @@ h3.sec, .recent-h { font-size: 17px; font-weight: 700; letter-spacing: 0; }
 .cdm.hi::after { opacity: 1; width: 3px; margin-left: -1.5px; }
 .cdt.hi { z-index: 41; box-shadow: inset 0 0 0 1px #fff, 0 0 14px var(--cc); background: color-mix(in srgb, var(--cc) 55%, #14161a); }
 .cdd.hi { z-index: 41; transform: scale(1.8); box-shadow: 0 0 14px var(--cc), 0 0 0 2px #fff; }
+
+/* Clasificación de jugadores por jefe: filas y celdas más juntas, con el icono de la especialización junto al nombre */
+.wl-mx .wl-row > span { padding: 3px 5px; border-left-color: color-mix(in srgb, var(--line) 55%, transparent); }
+.wl-mx .wl-row.th > span { padding: 6px 5px; gap: 2px; font-size: 12px; }
+.wl-mx .wl-row.th > .wl-l { font-size: 11px; }
+.wl-mx .wl-row { font-size: 13px; }
+.wl-mx .wl-cell { gap: 4px; }
+.wl-mx .wl-nm { display: flex; align-items: center; gap: 7px; padding-left: 8px; }
+.wl-spec { border-radius: 5px; flex: none; }
+.wl-mx .wl-pct { font-size: 14px; }
+.wl-mx .wl-bh { gap: 5px; }
+.wl-mx .wl-bh b { font-size: 12px; }

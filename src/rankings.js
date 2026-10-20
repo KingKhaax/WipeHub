@@ -318,8 +318,8 @@
     });
     const chip = (attr, v, label, on) => `<button class="chip ${on ? 'on' : ''}" data-rk="${attr}" data-v="${esc(v)}">${label}</button>`;
     const n = list.length;
-    const cols = `190px 62px repeat(${n}, minmax(150px, 1fr))`;
-    const head = `<div class="wl-row th"><span class="wl-l">${LL('Nombre', 'Name')}</span><span>Avg</span>${list.map((x) => `<span title="${esc(x.name)}"><span class="wl-bh"><img src="https://assets.rpglogs.com/img/warcraft/bosses/${x.encounterID}-icon.jpg" width="26" height="26" alt=""><b>${esc(x.name)}</b></span><span class="wl-bt">${clock(x.endTime - x.startTime)}</span></span>`).join('')}</div>`;
+    const cols = `176px 52px repeat(${n}, minmax(112px, 1fr))`;
+    const head = `<div class="wl-row th"><span class="wl-l">${LL('Nombre', 'Name')}</span><span>Avg</span>${list.map((x) => `<span title="${esc(x.name)}"><span class="wl-bh"><img src="https://assets.rpglogs.com/img/warcraft/bosses/${x.encounterID}-icon.jpg" width="22" height="22" alt=""><b>${esc(x.name)}</b></span><span class="wl-bt">${clock(x.endTime - x.startTime)}</span></span>`).join('')}</div>`;
     const blocks = ROLE_ORDER.map((role) => {
       const rows = [...players[role].values()].map((p) => {
         const ps = Object.values(p.cells).map((c) => c.p).filter((v) => v != null);
@@ -328,9 +328,13 @@
       if (!rows.length) return '';
       const body = rows.map((p) => {
         const color = classColor(p.cls);
-        return `<div class="wl-row ${isMe(p.name) ? 'me' : ''}"><span class="wl-nm" style="color:${color}">${esc(p.name)}</span><span class="wl-c">${pctCell(p.avg)}</span>${list.map((x, i) => {
+        // spec con la que más veces ha jugado en estos jefes: su icono va junto al nombre
+        const cnt = new Map();
+        for (const x of Object.values(p.cells)) { const k = x.spec ? `${x.cls}-${x.spec}` : x.cls; cnt.set(k, (cnt.get(k) || 0) + 1); }
+        const main = [...cnt.entries()].sort((u, v) => v[1] - u[1])[0]?.[0] || p.cls;
+        return `<div class="wl-row ${isMe(p.name) ? 'me' : ''}"><span class="wl-nm" style="color:${color}"><img class="wl-spec" src="${specIconUrl(main)}" width="20" height="20" alt="" title="${esc(main.split('-')[1] || '')}">${esc(p.name)}</span><span class="wl-c">${pctCell(p.avg)}</span>${list.map((x, i) => {
           const c = p.cells[i];
-          return `<span>${c ? `<span class="wl-cell">${pctCell(c.p)}<img src="${specIconUrl(c.spec ? `${c.cls}-${c.spec}` : c.cls)}" width="18" height="18" alt="" title="${esc(c.spec || '')}"></span>` : '<span class="wl-muted">-</span>'}</span>`;
+          return `<span>${c ? `<span class="wl-cell">${pctCell(c.p)}<img src="${specIconUrl(c.spec ? `${c.cls}-${c.spec}` : c.cls)}" width="16" height="16" alt="" title="${esc(c.spec || '')}"></span>` : '<span class="wl-muted">-</span>'}</span>`;
         }).join('')}</div>`;
       }).join('');
       return `<h4 class="wl-sec">${Extras.roleIcon(ROLE_KEY[role])}<span>${ROLE_TITLE[role]}</span><small>${rows.length}</small></h4><div class="wl-wrap"><div class="wl-table wl-mx" style="--wl-cols:${cols}">${head}${body}</div></div>`;
