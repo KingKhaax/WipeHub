@@ -1101,6 +1101,7 @@ function rankedList(rows, { parse, parseIlvl, slots, slotsIlvl, clickable = !S.v
       rate: r.rate != null ? num(r.rate, 1) : tags(r.note), ilvl: r.ilvl > 0 ? r.ilvl : null, active: r.active ?? null,
       parse: parse?.get(r.name) ?? null, parseI: parseIlvl?.get(r.name) ?? null,
       segs: pets > 0 ? [{ v: r.total - pets, color }, { v: pets, color: PET_TEAL }] : [{ v: r.total, color }], abil: r.abil || null,
+      petList: r.petList || null, selfMs: r.selfMs ?? null, fightMs: r.fightMs ?? null, pets,
     };
   });
   S.lastRankedMeta = { unit, hasParse, hasParseI, hasIlvl, hasActive, hasRate: hasRate || hasNote };
@@ -1484,14 +1485,14 @@ const VIEWS = {
     if (selEnemy) {
       const entries = await enemyTable(f, selEnemy.id);
       const erows = entries.filter((e) => isPlayer(e.id, e))
-        .map((e) => ({ ...playerInfo(e.id, e), ilvl: exactIlvl(e), active: activeOf(e, dur * 1000), pets: petsOf(e), abil: abilList(e.abilities), total: e.total, rate: e.total / dur }))
+        .map((e) => ({ ...playerInfo(e.id, e), ilvl: exactIlvl(e), active: activeOf(e, dur * 1000), pets: petsOf(e), petList: e.pets || [], selfMs: e.activeTime ?? null, fightMs: dur * 1000, abil: abilList(e.abilities), total: e.total, rate: e.total / dur }))
         .filter((r) => r.total > 0).sort((x, y) => y.total - x.total);
       return headerHTML(f, t('dmgTitle'), leaderSub(erows, f)) + enemyPicker + rankedList(erows, { unit: 'DPS' });
     }
     const bossOf = (e) => (e.targets || []).filter((x) => x.type === 'Boss').reduce((s, x) => s + x.total, 0);
     const rows = d.dmg.filter((e) => isPlayer(e.id, e))
       .map((e) => {
-        const base = { ...playerInfo(e.id, e), ilvl: exactIlvl(e), active: activeOf(e, dur * 1000), pets: petsOf(e), abil: abilList(e.abilities) };
+        const base = { ...playerInfo(e.id, e), ilvl: exactIlvl(e), active: activeOf(e, dur * 1000), pets: petsOf(e), petList: e.pets || [], selfMs: e.activeTime ?? null, fightMs: dur * 1000, abil: abilList(e.abilities) };
         if (m === 'rdps') { const v = Math.max(0, e.total - (e.totalRDPSTaken || 0) + (e.totalRDPSGiven || 0)); return { ...base, pets: 0, total: v, rate: v / dur }; }
         if (m === 'boss') { const v = bossOf(e); return { ...base, pets: 0, total: v, rate: v / dur }; }
         if (m === 'active') return { ...base, total: e.total, rate: e.total / Math.max(1, (e.activeTime || dur * 1000) / 1000) };
@@ -1518,7 +1519,7 @@ const VIEWS = {
       .map((e) => {
         const oh = e.overheal || 0;
         const ohp = oh > 0 ? (oh / (oh + e.total)) * 100 : 0;
-        return { ...playerInfo(e.id, e), ilvl: exactIlvl(e), active: activeOf(e, dur * 1000), pets: petsOf(e), total: e.total, rate: e.total / dur, abil: abilList(e.abilities), note: ohp ? t('overheal', { p: num(ohp, 0) }) : '' };
+        return { ...playerInfo(e.id, e), ilvl: exactIlvl(e), active: activeOf(e, dur * 1000), pets: petsOf(e), petList: e.pets || [], selfMs: e.activeTime ?? null, fightMs: dur * 1000, total: e.total, rate: e.total / dur, abil: abilList(e.abilities), note: ohp ? t('overheal', { p: num(ohp, 0) }) : '' };
       })
       .sort((a, b) => b.total - a.total);
     return headerHTML(f, t('healTitle'), leaderSub(rows, f)) + invalidBannerHTML(rows, rk.invalid) + rankedList(rows, { unit: 'HPS', invalid: rk.invalid, ...parseOptions(f, rows, rk.hps, 'hps', rk.hpsB) });
@@ -2633,8 +2634,23 @@ document.addEventListener('change', (ev) => {
   document.addEventListener('mouseover', (ev) => {
     const row = ev.target.closest?.('.ranked .row[data-ri], .tk-src[data-si], .mini[data-ut]');
     const r = row && (row.dataset.ut != null ? S.lastUtil?.[Number(row.dataset.ut)] : row.dataset.si != null ? S.lastTakenSrc?.[Number(row.dataset.si)] : S.lastRanked?.[Number(row.dataset.ri)]);
-    if (!r || !r.abil?.length) return hide();
+    if (!r || (!r.abil?.length && !r.petList)) return hide();
     if (!tip) { tip = document.createElement('div'); tip.className = 'bartip surface-dark'; document.body.appendChild(tip); }
+    // Daño y sanación: tu parte y la de cada mascota, como en Warcraft Logs (Jugador/Mascota, Cantidad, Activo)
+    if (r.petList) {
+      const pc = (v, ms) => (ms > 0 && v != null ? `${num(Math.min(100, (v / ms) * 100), 2)}%` : '–');
+      const selfTotal = Math.max(0, r.total - (r.pets || 0));
+      const lines = [{ name: r.name, total: selfTotal, act: pc(r.selfMs, r.fightMs), color: r.segs?.[0]?.color || '#9aa3b2', pet: false }]
+        .concat(r.petList.filter((p) => p.total > 0).sort((x, y) => y.total - x.total).map((p) => ({ name: p.name, total: p.total, act: pc(p.activeTime, r.fightMs), color: PET_TEAL, pet: true })));
+      const all = r.total || 1;
+      const top = Math.max(...lines.map((l) => l.total), 1);
+      tip.innerHTML = `<div class="pt-t"><span>${LL('Jugador/Mascota', 'Player/Pet')}</span><span></span><span>${LL('Cantidad', 'Amount')}</span><span></span><span>${LL('Activo', 'Active')}</span></div>${lines.map((l) =>
+        `<div class="pt-r"><span class="pt-n" style="color:${l.color}">${esc(l.name)}</span><span class="pt-p">${num((l.total / all) * 100, 2)}%</span><span class="pt-b"><i style="width:${(l.total / top) * 100}%;background:${l.color}"></i></span><span class="pt-a">${amountFmt(l.total)}</span><span class="pt-c">${l.act}</span></div>`).join('')}`;
+      tip.classList.add('pt');
+      tip.hidden = false;
+      return;
+    }
+    tip.classList.remove('pt');
     const sum = r.abil.reduce((x, a) => x + a.total, 0) || 1;
     const color = r.segs?.[0]?.color || '#9aa3b2';
     const shown = r.abil.slice(0, 14);

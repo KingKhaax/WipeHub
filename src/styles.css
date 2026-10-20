@@ -2733,3 +2733,15 @@ h3.sec, .recent-h { font-size: 17px; font-weight: 700; letter-spacing: 0; }
 .row .c-ilvl, .row .c-active { color: var(--text); }
 .r-amt { color: var(--text) !important; }
 .wlt-r .row.head > span { white-space: nowrap; }
+
+/* Tooltip de las barras de Daño y Sanación: tu parte y la de cada mascota (Jugador/Mascota, Cantidad, Activo) */
+.bartip.pt { max-width: none; min-width: 460px; padding: 0; overflow: hidden; background: #0d0e11; }
+.pt-t, .pt-r { display: grid; grid-template-columns: minmax(150px, 1.6fr) 58px minmax(70px, 1fr) 62px 62px; align-items: center; gap: 8px; padding: 3px 10px; }
+.pt-t { background: #1c1d22; color: #e8eaee; font-size: 12px; font-weight: 600; padding-top: 5px; padding-bottom: 5px; }
+.pt-t span:nth-child(3) { text-align: center; }
+.pt-t span:last-child { text-align: right; }
+.pt-r { font-size: 12.5px; border-top: 1px solid #1a1b1f; }
+.pt-n { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pt-p, .pt-a, .pt-c { text-align: right; font-variant-numeric: tabular-nums; color: var(--text); }
+.pt-b { height: 12px; display: block; }
+.pt-b i { display: block; height: 100%; }
