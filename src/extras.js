@@ -615,7 +615,7 @@ const Extras = (() => {
       if (!evs.length) continue;
       // una sola línea por tipo: los iconos que caen muy juntos se apilan en un segundo nivel
       const lastLeft = [];
-      const marks = evs.map((e) => {
+      const marks = evs.map((e, ci) => {
         const ab = ability(e.abilityGameID);
         const p = playerInfo(e.sourceID);
         const left = ((e.timestamp - f.startTime) / total) * 100;
@@ -623,17 +623,17 @@ const Extras = (() => {
         if (lv < 0) lv = lastLeft.length;
         lastLeft[lv] = left;
         const tg = defTarget(e);
-        return `<span class="cdm" style="left:${left}%;top:${5 + lv * 29}px;--mt:${5 + lv * 29}px;--cc:${classColor(p.cls)}" data-spell="${e.abilityGameID}" data-spell-extra="${esc(p.name)} → ${esc(tg.name)} · ${clockMs(e.timestamp - f.startTime)}">${iconImg(ab.icon, 24)}</span>`;
+        return `<span class="cdm" data-ci="${ci}" style="left:${left}%;top:${5 + lv * 29}px;--mt:${5 + lv * 29}px;--cc:${classColor(p.cls)}" data-spell="${e.abilityGameID}" data-spell-extra="${esc(p.name)} → ${esc(tg.name)} · ${clockMs(e.timestamp - f.startTime)}">${iconImg(ab.icon, 24)}</span>`;
       }).join('');
       // Segundo exacto de cada uso, justo donde la línea de cada icono toca el riel (en dos filas si caen muy juntos)
       const lblLeft = [];
-      const times = evs.map((e) => {
+      const times = evs.map((e, ci) => {
         const left = ((e.timestamp - f.startTime) / total) * 100;
         let lv = lblLeft.findIndex((x) => left - x >= 4.6);
         if (lv < 0) lv = Math.min(lblLeft.length, 2);
         lblLeft[lv] = left;
         const p = playerInfo(e.sourceID);
-        return `<span class="cdt" style="left:${left}%;bottom:${2 + lv * 15}px;--cc:${classColor(p.cls)}">${clockMs(e.timestamp - f.startTime)}</span><i class="cdd" style="left:${left}%;--cc:${classColor(p.cls)}"></i>`;
+        return `<span class="cdt" data-ci="${ci}" style="left:${left}%;bottom:${2 + lv * 15}px;--cc:${classColor(p.cls)}">${clockMs(e.timestamp - f.startTime)}</span><i class="cdd" data-ci="${ci}" style="left:${left}%;--cc:${classColor(p.cls)}"></i>`;
       }).join('');
       const strip = lblLeft.length * 15 + 6;
       const items = [...byAb.entries()].filter(([id]) => DEF_BY_ID.get(id)?.kind === kind).sort((a, b) => b[1].length - a[1].length);
@@ -936,6 +936,18 @@ const Extras = (() => {
       render();
     }
   });
+
+  // Defensivos: al pasar el ratón por un icono (aunque haya varios solapados) ese sube por encima, se ilumina y atenúa a los demás
+  const cdLight = (on, ev) => {
+    const m = ev.target.closest?.('.cdm');
+    if (!m) return;
+    const lane = m.closest('.cd-lane');
+    if (!lane) return;
+    lane.classList.toggle('hov', on);
+    lane.querySelectorAll('[data-ci="' + m.dataset.ci + '"]').forEach((n) => n.classList.toggle('hi', on));
+  };
+  document.addEventListener('mouseover', (ev) => cdLight(true, ev));
+  document.addEventListener('mouseout', (ev) => cdLight(false, ev));
 
   // Selector de jugador de Defensivos
   document.addEventListener('click', (ev) => {
