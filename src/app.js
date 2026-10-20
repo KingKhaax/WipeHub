@@ -60,6 +60,8 @@ const main = $('#main');
 const sidebar = $('#sidebar');
 
 const IS_WEB = /^https?:$/.test(location.protocol);
+// La web de Vercel se actualiza sola al recargar (F5): ahí no tiene sentido el botón de actualizar
+const IS_VERCEL = IS_WEB && /(^|.)vercel.app$/i.test(location.hostname);
 // clic normal = se navega aquí; con Mayús / Ctrl / Cmd / Alt (o clic central) se deja al navegador abrir el enlace aparte.
 // En la app de escritorio no hay ventanas nuevas: cualquier clic izquierdo es normal.
 const plainClick = (ev) => ev.button === 0 && (!IS_WEB || !(ev.shiftKey || ev.ctrlKey || ev.metaKey || ev.altKey));

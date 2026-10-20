@@ -76,11 +76,11 @@ async function openSettings(tab) {
         <div class="ver-now"><small class="muted">${LL('Tu versión', 'Your version')}</small><b class="ver-num ${WCUpdate.cls()}">v${esc(info.version || '?')}</b></div>
         <div class="ver-state" id="verState">${WCUpdate.stateHTML()}</div>
       </div>
-      <div class="set-actions">
+      ${IS_VERCEL ? '' : `<div class="set-actions">
         <button type="button" class="btn primary" data-set-act="update-now" id="doUpdate">${WCUpdate.buttonLabel()}</button>
       </div>
       <div class="ver-prog" id="verProg" hidden><i></i></div>
-      ${toggle('autoUpdateCheck', LL('Buscar actualizaciones al abrir', 'Check for updates on startup'))}
+      ${toggle('autoUpdateCheck', LL('Buscar actualizaciones al abrir', 'Check for updates on startup'))}`}
       ${aboutHTML}
       <h3>${LL('Historial de versiones', 'Version history')}</h3>
       ${(() => { const all = dlg.dataset.log === 'all'; return `${WCUpdate.logHTML(S.lang, all)}${WCUpdate.CHANGELOG.length > 10 ? `<div class="set-actions"><button type="button" class="btn ghost" data-set-act="toggle-log">${all ? LL('Ver menos', 'Show less') : LL(`Ver más (${WCUpdate.CHANGELOG.length - 10} versiones anteriores)`, `Show more (${WCUpdate.CHANGELOG.length - 10} older versions)`)}</button></div>` : ''}`; })()}`,
