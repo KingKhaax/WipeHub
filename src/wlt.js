@@ -1,7 +1,7 @@
 'use strict';
 // Daño recibido por una habilidad concreta, con el aspecto de la tabla de Warcraft Logs:
-// Nombre, Cantidad (barra), Golpes (pulsos), Golpe medio, Tiempo activo %, Fallos %, Mitigado, DTPS y un «+» con el desglose.
-// Los datos salen de la misma tabla de Warcraft Logs pedida jugador a jugador (golpes, pulsos, fallos, tiempo activo y detalle de golpes).
+// Nombre, Cantidad (barra), Golpes (ticks), Golpe medio, Tiempo activo %, Fallos %, Mitigado, DTPS y un «+» con el desglose.
+// Los datos salen de la misma tabla de Warcraft Logs pedida jugador a jugador (golpes, ticks, fallos, tiempo activo y detalle de golpes).
 
 function wltAgg(entries) {
   const a = { mit: 0, total: 0, red: 0, hasRed: false, hit: 0, tick: 0, miss: 0, tmiss: 0, uptime: 0, hasUp: false, absorbed: 0, hd: new Map() };
@@ -45,9 +45,9 @@ function takenAbilityDetail(f, ids, name) {
 }
 
 const WLT_TYPES = {
-  hit: ['Golpe', 'Hit'], crit: ['Crítico', 'Crit'], tick: ['Pulso', 'Tick'], 'crit tick': ['Pulso crítico', 'Critical tick'], absorbed: ['Absorbido', 'Absorbed'],
+  hit: ['Golpe', 'Hit'], crit: ['Crítico', 'Crit'], tick: ['Tick', 'Tick'], 'crit tick': ['Tick crítico', 'Critical tick'], 'critical tick': ['Tick crítico', 'Critical tick'], absorbed: ['Absorbido', 'Absorbed'],
   miss: ['Fallo', 'Miss'], dodge: ['Esquivado', 'Dodge'], parry: ['Parado', 'Parry'], block: ['Bloqueado', 'Block'], resist: ['Resistido', 'Resist'],
-  immune: ['Inmune', 'Immune'], 'immune (tick)': ['Inmune (pulso)', 'Immune (tick)'], evade: ['Evadido', 'Evade'], reflect: ['Reflejado', 'Reflect'],
+  immune: ['Inmune', 'Immune'], 'immune (tick)': ['Inmune (tick)', 'Immune (tick)'], evade: ['Evadido', 'Evade'], reflect: ['Reflejado', 'Reflect'],
 };
 const wltTypeName = (type) => { const v = WLT_TYPES[String(type).toLowerCase()]; return v ? LL(v[0], v[1]) : type; };
 
@@ -136,7 +136,7 @@ function wltCsv() {
   const d = S.wltCsv;
   if (!d) return;
   const q = (v) => `"${String(v ?? '').replace(/"/g, '""')}"`;
-  const head = [LL('Nombre', 'Name'), LL('Cantidad', 'Amount'), LL('Golpes', 'Hits'), LL('Pulsos', 'Ticks'), LL('Golpe medio', 'Avg hit'), LL('Pulso medio', 'Avg tick'),
+  const head = [LL('Nombre', 'Name'), LL('Cantidad', 'Amount'), LL('Golpes', 'Hits'), LL('Ticks', 'Ticks'), LL('Golpe medio', 'Avg hit'), LL('Tick medio', 'Avg tick'),
     LL('Tiempo activo %', 'Uptime %'), LL('Fallos %', 'Miss %'), LL('Mitigado %', 'Mitigated %'), 'DTPS'];
   const n = (v, d2 = 2) => (v == null ? '' : (Math.round(v * 10 ** d2) / 10 ** d2).toString());
   const lines = [head.map(q).join(',')].concat(d.rows.map((r) => [r.name, Math.round(r.total), r.hits, r.ticks, n(r.avgHit, 0), n(r.avgTick, 0), n(r.uptime), n(r.missP), n(r.mitig), n(r.dtps, 1)].map(q).join(',')));
