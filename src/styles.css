@@ -2857,3 +2857,9 @@ h3.sec, .recent-h { font-size: 17px; font-weight: 700; letter-spacing: 0; }
 .chv-row .who { gap: 7px; }
 .chv-row .who img { width: 22px; height: 22px; }
 .chv-row.tot { padding-top: 5px; padding-bottom: 5px; }
+
+/* Clasificación por jefe: las cabeceras se pueden pulsar para ordenar */
+.wl-mx .wl-row.th > .wl-srt, .wl-mx .wl-row.th > span[data-rk="msort"] { cursor: pointer; transition: background .15s ease; user-select: none; }
+.wl-mx .wl-row.th > span[data-rk="msort"]:hover { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.wl-mx .wl-row.th > span.on { background: color-mix(in srgb, var(--accent) 16%, transparent); }
+.wl-arr { color: var(--accent); font-style: normal; font-size: 10px; }

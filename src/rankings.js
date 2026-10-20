@@ -319,12 +319,20 @@
     const chip = (attr, v, label, on) => `<button class="chip ${on ? 'on' : ''}" data-rk="${attr}" data-v="${esc(v)}">${label}</button>`;
     const n = list.length;
     const cols = `176px 52px repeat(${n}, minmax(112px, 1fr))`;
-    const head = `<div class="wl-row th"><span class="wl-l">${LL('Nombre', 'Name')}</span><span>Avg</span>${list.map((x) => `<span title="${esc(x.name)}"><span class="wl-bh"><img src="https://assets.rpglogs.com/img/warcraft/bosses/${x.encounterID}-icon.jpg" width="22" height="22" alt=""><b>${esc(x.name)}</b></span><span class="wl-bt">${clock(x.endTime - x.startTime)}</span></span>`).join('')}</div>`;
+    // Orden de la tabla: por la media (por defecto), por el nombre o por un jefe concreto (pulsa la cabecera; otra vez para volver a la media)
+    const ms = String(rk.msort || 'avg');
+    const sortHd = (key, label, on, extra = '') => `data-rk="msort" data-v="${on ? 'avg' : key}" role="button" tabindex="0" title="${esc(LL('Pulsa para ordenar por esta columna', 'Click to sort by this column'))}"${extra}`;
+    const head = `<div class="wl-row th"><span class="wl-l${ms === 'name' ? ' on' : ''}" ${sortHd('name', '', ms === 'name')}>${LL('Nombre', 'Name')}${ms === 'name' ? ' ▲' : ''}</span><span class="${ms === 'avg' ? 'on' : ''}" ${sortHd('avg', '', ms === 'avg')}>Avg${ms === 'avg' ? ' ▼' : ''}</span>${list.map((x, bi) => `<span class="${ms === String(bi) ? 'on' : ''}" title="${esc(x.name)}" ${sortHd(String(bi), '', ms === String(bi))}><span class="wl-bh"><img src="https://assets.rpglogs.com/img/warcraft/bosses/${x.encounterID}-icon.jpg" width="22" height="22" alt=""><b>${esc(x.name)}</b>${ms === String(bi) ? ' <em class="wl-arr">▼</em>' : ''}</span><span class="wl-bt">${clock(x.endTime - x.startTime)}</span></span>`).join('')}</div>`;
     const blocks = ROLE_ORDER.map((role) => {
       const rows = [...players[role].values()].map((p) => {
         const ps = Object.values(p.cells).map((c) => c.p).filter((v) => v != null);
         return { ...p, avg: avgOf(ps) };
-      }).sort((a, b) => (b.avg ?? -1) - (a.avg ?? -1) || a.name.localeCompare(b.name, locale()));
+      }).sort((a, b) => {
+        const byAvg = (b.avg ?? -1) - (a.avg ?? -1) || a.name.localeCompare(b.name, locale());
+        if (ms === 'name') return a.name.localeCompare(b.name, locale());
+        if (/^d+$/.test(ms)) return (b.cells[ms]?.p ?? -1) - (a.cells[ms]?.p ?? -1) || byAvg;
+        return byAvg;
+      });
       if (!rows.length) return '';
       const body = rows.map((p) => {
         const color = classColor(p.cls);
