@@ -98,6 +98,12 @@ function clockPrecise(ms) {
   const m = Math.floor(s / 60);
   return `${m}:${(s - m * 60).toFixed(1).padStart(4, '0')}`;
 }
+// m:ss.mmm (minutos, segundos y milésimas)
+function clockMs(ms) {
+  const t = Math.max(0, Math.round(ms));
+  const m = Math.floor(t / 60000);
+  return `${m}:${String(Math.floor((t % 60000) / 1000)).padStart(2, '0')}.${String(t % 1000).padStart(3, '0')}`;
+}
 const pctOf = (v) => (v == null ? null : v > 100 ? v / 100 : v);
 const fightDur = (f) => f.dur ?? (f.endTime - f.startTime);
 

@@ -623,17 +623,17 @@ const Extras = (() => {
         if (lv < 0) lv = lastLeft.length;
         lastLeft[lv] = left;
         const tg = defTarget(e);
-        return `<span class="cdm" style="left:${left}%;top:${5 + lv * 29}px;--mt:${5 + lv * 29}px;--cc:${classColor(p.cls)}" data-spell="${e.abilityGameID}" data-spell-extra="${esc(p.name)} → ${esc(tg.name)} · ${clockPrecise(e.timestamp - f.startTime)}">${iconImg(ab.icon, 24)}</span>`;
+        return `<span class="cdm" style="left:${left}%;top:${5 + lv * 29}px;--mt:${5 + lv * 29}px;--cc:${classColor(p.cls)}" data-spell="${e.abilityGameID}" data-spell-extra="${esc(p.name)} → ${esc(tg.name)} · ${clockMs(e.timestamp - f.startTime)}">${iconImg(ab.icon, 24)}</span>`;
       }).join('');
       // Segundo exacto de cada uso, justo donde la línea de cada icono toca el riel (en dos filas si caen muy juntos)
       const lblLeft = [];
       const times = evs.map((e) => {
         const left = ((e.timestamp - f.startTime) / total) * 100;
-        let lv = lblLeft.findIndex((x) => left - x >= 3.2);
-        if (lv < 0) lv = Math.min(lblLeft.length, 1);
+        let lv = lblLeft.findIndex((x) => left - x >= 4.6);
+        if (lv < 0) lv = Math.min(lblLeft.length, 2);
         lblLeft[lv] = left;
         const p = playerInfo(e.sourceID);
-        return `<span class="cdt" style="left:${left}%;bottom:${2 + lv * 15}px;--cc:${classColor(p.cls)}">${clock(e.timestamp - f.startTime)}</span><i class="cdd" style="left:${left}%;--cc:${classColor(p.cls)}"></i>`;
+        return `<span class="cdt" style="left:${left}%;bottom:${2 + lv * 15}px;--cc:${classColor(p.cls)}">${clockMs(e.timestamp - f.startTime)}</span><i class="cdd" style="left:${left}%;--cc:${classColor(p.cls)}"></i>`;
       }).join('');
       const strip = lblLeft.length * 15 + 6;
       const items = [...byAb.entries()].filter(([id]) => DEF_BY_ID.get(id)?.kind === kind).sort((a, b) => b[1].length - a[1].length);
@@ -654,7 +654,7 @@ const Extras = (() => {
       const tg = defTarget(ev);
       const tp = tg.id != null ? playerInfo(tg.id) : null;
       const kind = DEF_BY_ID.get(ev.abilityGameID)?.kind || 'self';
-      return `<div class="dl-row"><span class="dl-t">${clockPrecise(ev.timestamp - f.startTime)}</span>
+      return `<div class="dl-row"><span class="dl-t">${clockMs(ev.timestamp - f.startTime)}</span>
         <span class="dl-ab" data-spell="${ev.abilityGameID}">${iconImg(ab.icon, 24)}<b>${esc(nm)}</b></span>
         <span class="dl-k dl-${kind}">${kind === 'raid' ? LL('Banda', 'Raid') : kind === 'ext' ? LL('Externo', 'External') : LL('Personal', 'Personal')}</span>
         <span class="dl-who"><img class="spec-ic-sm" src="${src.icon && src.icon.includes('-') ? specIconUrl(esc(src.icon)) : classIconUrl(src.cls)}" width="20" height="20" alt="" style="--cc:${classColor(src.cls)}"><b style="color:${classColor(src.cls)}">${esc(src.name)}</b></span>
