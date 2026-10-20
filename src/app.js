@@ -2120,7 +2120,12 @@ async function loadExpansion() {
 const skelRows = (n, cls = '') => Array.from({ length: n }, (_, i) => `<div class="sk-row ${cls}"><i class="sk sk-ic"></i><i class="sk sk-tx" style="width:${38 + ((i * 37) % 38)}%"></i><i class="sk sk-v"></i></div>`).join('');
 const skelCards = (n = 5, rows = 5) => Array.from({ length: n }, () => `<div class="tp-card sk-card"><i class="sk sk-tx" style="width:58%;height:16px;margin-bottom:12px"></i>${skelRows(rows)}</div>`).join('');
 const loadingHTML = () => `<div class="sk-page" role="status" aria-label="${esc(t('loading'))}"><i class="sk sk-eyebrow"></i><i class="sk sk-title"></i><i class="sk sk-sub"></i><div class="sk-table">${skelRows(9)}</div></div>`;
-const errorHTML = (msg) => `<div class="error"><b>${t('error')}</b><p>${esc(msg)}</p>${msg === t('serverBusy') || msg === t('rateLimit') ? `<button type="button" class="btn primary" data-action="retry">${esc(t('retry'))}</button>` : ''}</div>`;
+// Errores del servidor (saturado o límite de la API): bloque con icono, título, explicación y botón «Reintentar»; el resto, el aviso sencillo de siempre
+const errorHTML = (msg) => {
+  const busy = msg === t('serverBusy'), limit = msg === t('rateLimit');
+  if (!busy && !limit) return `<div class="error"><b>${t('error')}</b><p>${esc(msg)}</p></div>`;
+  return `<div class="error srv" role="alert"><span class="srv-ic" aria-hidden="true">!</span><div class="srv-tx"><b>${esc(t(busy ? 'busyTitle' : 'limitTitle'))}</b><p>${esc(msg)}</p><small>${esc(t(busy ? 'busyHint' : 'limitHint'))}</small></div><button type="button" class="btn primary srv-btn" data-action="retry">${esc(t('retry'))}</button></div>`;
+};
 // Botón «Reintentar» de los errores del servidor: vuelve a pedir lo que falló (si hay un log abierto, repinta la pantalla; si no, recarga la dirección)
 document.addEventListener('click', (ev) => {
   if (!ev.target.closest?.('[data-action="retry"]')) return;

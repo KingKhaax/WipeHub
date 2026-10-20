@@ -2863,3 +2863,12 @@ h3.sec, .recent-h { font-size: 17px; font-weight: 700; letter-spacing: 0; }
 .wl-mx .wl-row.th > span[data-rk="msort"]:hover { background: color-mix(in srgb, var(--accent) 12%, transparent); }
 .wl-mx .wl-row.th > span.on { background: color-mix(in srgb, var(--accent) 16%, transparent); }
 .wl-arr { color: var(--accent); font-style: normal; font-size: 10px; }
+
+/* Errores del servidor: icono, título y explicación a la izquierda, botón a la derecha */
+.error.srv { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; max-width: 760px; padding: 16px 20px; }
+.srv-ic { flex: none; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 20px; color: #fff; background: #d62f3a; box-shadow: 0 0 0 5px color-mix(in srgb, #d62f3a 22%, transparent); }
+.srv-tx { flex: 1 1 280px; min-width: 0; }
+.srv-tx b { font-size: 16px; color: var(--title, var(--text)); }
+.srv-tx p { margin: 3px 0 4px; color: var(--neg-text); line-height: 1.45; }
+.srv-tx small { display: block; color: var(--muted); line-height: 1.45; }
+.srv-btn { flex: none; padding: 9px 20px; }
