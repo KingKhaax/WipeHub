@@ -2775,3 +2775,29 @@ h3.sec, .recent-h { font-size: 17px; font-weight: 700; letter-spacing: 0; }
 .tab.active { text-shadow: 0 0 14px color-mix(in srgb, var(--accent) 45%, transparent); }
 @keyframes tabLine { from { transform: scaleX(0); opacity: 0; } to { transform: scaleX(1); opacity: .9; } }
 @media (prefers-reduced-motion: reduce) { .tab, .tab::after, .tab::before { transition: none; animation: none !important; } .tab:hover { transform: none; } }
+
+/* ---------- Defensivos: líneas de tiempo más cuidadas ---------- */
+.cd-kind { position: relative; border-radius: 16px; border: 1px solid color-mix(in srgb, var(--k) 22%, var(--line)); border-left: 4px solid var(--k);
+  background: radial-gradient(120% 140% at 0% 0%, color-mix(in srgb, var(--k) 12%, var(--panel)), var(--panel) 55%); box-shadow: 0 8px 24px -14px color-mix(in srgb, var(--k) 55%, transparent); }
+.cd-kh { gap: 10px; align-items: center; margin-bottom: 10px; }
+.cd-kh .cd-n { box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--k) 45%, transparent); }
+.cd-lane { border-radius: 12px; overflow: hidden; padding-bottom: 0;
+  background: linear-gradient(180deg, rgba(0, 0, 0, .10), rgba(0, 0, 0, .34)), repeating-linear-gradient(90deg, transparent 0, transparent calc(100% / 24 - 1px), rgba(255, 255, 255, .025) calc(100% / 24 - 1px), rgba(255, 255, 255, .025) calc(100% / 24));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--k) 18%, var(--line)), inset 0 -10px 18px -14px color-mix(in srgb, var(--k) 40%, transparent); }
+.cd-lane::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: linear-gradient(90deg, color-mix(in srgb, var(--k) 10%, transparent), var(--k), color-mix(in srgb, var(--k) 10%, transparent)); opacity: .8; z-index: 0; }
+.cd-g { background: repeating-linear-gradient(180deg, color-mix(in srgb, var(--k) 40%, transparent) 0 3px, transparent 3px 7px); width: 1px; opacity: .45; }
+.cdm { z-index: 2; animation: cdmPop .45s cubic-bezier(.2, .9, .25, 1.25) both; }
+.cdm:nth-child(2n) { animation-delay: .05s; } .cdm:nth-child(3n) { animation-delay: .1s; } .cdm:nth-child(4n) { animation-delay: .15s; }
+.cdm::after { content: ''; position: absolute; left: 50%; top: 100%; width: 2px; height: 400px; margin-left: -1px; background: linear-gradient(180deg, var(--cc), transparent 70%); opacity: .55; z-index: -1; pointer-events: none; }
+.cdm img { border-radius: 8px; box-shadow: 0 0 0 2px var(--cc), 0 0 12px -1px var(--cc), 0 3px 8px #000a; transition: box-shadow .2s ease; }
+.cdm:hover { transform: translateX(-50%) translateY(-2px) scale(1.28); filter: none; z-index: 6; }
+.cdm:hover img { box-shadow: 0 0 0 2px #fff, 0 0 18px 1px var(--cc), 0 6px 14px #000b; }
+.cdm:hover::after { opacity: 1; }
+@keyframes cdmPop { from { opacity: 0; transform: translateX(-50%) translateY(8px) scale(.6); } to { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); } }
+.cd-legend { gap: 8px 10px; margin-top: 12px; }
+.cd-chip { border-radius: 12px; padding: 5px 12px 5px 6px; background: linear-gradient(180deg, rgba(255, 255, 255, .05), rgba(255, 255, 255, .02)); border-color: color-mix(in srgb, var(--k) 20%, var(--line)); }
+.cd-chip:hover { box-shadow: 0 6px 16px -8px var(--k); }
+.cd-chip img { border-radius: 7px; box-shadow: 0 0 0 1px color-mix(in srgb, var(--k) 40%, transparent); }
+.cd-ruler span { padding: 1px 6px; border-radius: 6px; background: rgba(255, 255, 255, .04); }
+:root[data-theme="light"] .cd-lane { background: linear-gradient(180deg, rgba(20, 40, 70, .03), rgba(20, 40, 70, .09)); }
+@media (prefers-reduced-motion: reduce) { .cdm { animation: none; } }
