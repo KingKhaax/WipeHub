@@ -23,6 +23,16 @@ function addShotBar() {
 }
 
 const shotBlobToData = (blob) => new Promise((ok) => { const r = new FileReader(); r.onload = () => ok(r.result); r.onerror = () => ok(null); r.readAsDataURL(blob); });
+// Una imagen ya cargada en pantalla, pasada a datos con un lienzo (sirve cuando la red no deja pedirla otra vez)
+function shotImgToData(img) {
+  try {
+    if (!img.complete || !img.naturalWidth) return null;
+    const cv = document.createElement('canvas');
+    cv.width = img.naturalWidth; cv.height = img.naturalHeight;
+    cv.getContext('2d').drawImage(img, 0, 0);
+    return cv.toDataURL('image/png');
+  } catch { return null; }
+}
 async function shotInlineUrl(url) {
   try {
     if (!url || url.startsWith('data:')) return url;
@@ -64,7 +74,19 @@ async function shotClone(src) {
     let css = '';
     for (let k = 0; k < cs.length; k++) { const p = cs[k]; css += `${p}:${cs.getPropertyValue(p)};`; }
     c.setAttribute('style', css);
-    if (c.tagName === 'IMG') jobs.push(shotInlineUrl(el.currentSrc || el.src).then((d) => { if (d) c.setAttribute('src', d); else c.removeAttribute('src'); c.removeAttribute('srcset'); c.removeAttribute('loading'); }));
+    if (c.tagName === 'IMG') jobs.push(shotInlineUrl(el.currentSrc || el.src).then((d) => { d = d || shotImgToData(el); if (d) c.setAttribute('src', d); else c.removeAttribute('src'); c.removeAttribute('srcset'); c.removeAttribute('loading'); }));
+    const bg = cs.backgroundImage;
+    if (bg && bg.includes('url(')) {
+      jobs.push((async () => {
+        let out = bg;
+        for (const m of bg.matchAll(/url\(["']?([^"')]+)["']?\)/g)) {
+          if (m[1].startsWith('data:')) continue;
+          const d = await shotInlineUrl(m[1]);
+          out = d ? out.replace(m[0], `url("${d}")`) : out.replace(m[0], 'url("data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=")');
+        }
+        c.style.backgroundImage = out;
+      })());
+    }
     if (c.tagName === 'CANVAS') { try { const im = document.createElement('img'); im.setAttribute('src', el.toDataURL()); im.setAttribute('style', c.getAttribute('style')); c.replaceWith(im); } catch { /* lienzo manchado */ } }
   });
   clone.querySelectorAll(SHOT_SKIP).forEach((n) => n.remove());

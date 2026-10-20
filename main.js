@@ -340,7 +340,7 @@ ipcMain.handle('art:save', (_e, key, dataUrl) => {
 // No se incluyen en el programa: se leen bajo demanda del zip publicado en GitHub con peticiones por rango
 // (solo los iconos que se usan), se convierten a PNG y se guardan en la carpeta de datos del usuario.
 protocol.registerSchemesAsPrivileged([
-  { scheme: 'wcicon', privileges: { standard: true, secure: true, supportFetchAPI: true } },
+  { scheme: 'wcicon', privileges: { standard: true, secure: true, supportFetchAPI: true, corsEnabled: true } },
   { scheme: 'wcmap', privileges: { standard: true, secure: true, supportFetchAPI: true, corsEnabled: true } },
   { scheme: 'wcmedia', privileges: { standard: true, secure: true, supportFetchAPI: true, corsEnabled: true } },
 ]);
@@ -562,7 +562,7 @@ function registerIconProtocol() {
       if (!/^[a-z0-9_\-+. ']{1,120}$/.test(name)) return new Response('bad', { status: 400 });
       if (!inflight.has(name)) inflight.set(name, resolveIcon(name).finally(() => inflight.delete(name)));
       const { buf, type } = await inflight.get(name);
-      return new Response(buf, { headers: { 'content-type': type, 'cache-control': 'max-age=86400' } });
+      return new Response(buf, { headers: { 'content-type': type, 'cache-control': 'max-age=86400', 'access-control-allow-origin': '*' } });
     } catch { return new Response('not found', { status: 404 }); }
   });
 }
