@@ -104,8 +104,8 @@ function wltTable(f, abilityName, detail, dur) {
     const dark = Math.min(1, Math.max(0, (r.total - r.a.red) / (r.total || 1)));
     const w = (r.total / max) * 100;
     return `<tr class="wlt-row ${isMe(r.name) ? 'me' : ''}">
-      <td class="wlt-name">${r.icon ? `<img class="spec-ic-sm" src="${specIconUrl(esc(r.icon))}" width="22" height="22" alt="" style="--cc:${cc}">` : ''}<b style="color:${cc}">${esc(r.name)}</b></td>
-      <td class="wlt-amt"><span class="wlt-pct">${wltPct((r.total / sum) * 100)}</span><span class="wlt-bar"><i style="width:${w * (1 - dark)}%;background:${cc}"></i><i style="width:${w * dark}%;background:${cc};opacity:.4"></i></span><b style="color:${cc}">${wltShort(r.total)}</b></td>
+      <td class="wlt-name"><div class="wlt-n">${r.icon ? `<img class="spec-ic-sm" src="${specIconUrl(esc(r.icon))}" width="22" height="22" alt="" style="--cc:${cc}">` : ''}<b style="color:${cc}">${esc(r.name)}</b></div></td>
+      <td class="wlt-amt"><div class="wlt-a"><span class="wlt-pct">${wltPct((r.total / sum) * 100)}</span><span class="wlt-bar"><i style="width:${w * (1 - dark)}%;background:${cc}"></i><i style="width:${w * dark}%;background:${cc};opacity:.4"></i></span><b style="color:${cc}">${wltShort(r.total)}</b></div></td>
       <td class="r">${wltPair(r.hits ? num(r.hits, 0) : '-', r.ticks ? num(r.ticks, 0) : '-', anyTick)}</td>
       <td class="r">${wltPair(wltShort(r.avgHit), wltShort(r.avgTick), anyTick)}</td>
       <td class="r">${wltPct(r.uptime)}</td>
@@ -121,7 +121,7 @@ function wltTable(f, abilityName, detail, dur) {
       <th class="l">${LL('Nombre', 'Name')}</th><th class="l">${LL('Cantidad', 'Amount')}</th><th class="r">${LL('Golpes', 'Hits')}</th><th class="r">${LL('Golpe medio', 'Avg hit')}</th>
       <th class="r">${LL('Tiempo activo %', 'Uptime %')}</th>${anyMiss ? `<th class="r">${LL('Fallos %', 'Miss %')}</th>` : ''}<th class="r">${LL('Mitigado', 'Mitigated')}</th><th class="r">DTPS</th><th></th></tr></thead>
     <tbody>${body}</tbody>
-    <tfoot><tr><td class="l">${LL('Total', 'Total')}</td><td class="wlt-amt"><span class="wlt-pct">100%</span><span class="wlt-bar wlt-bar-t"></span><b>${wltShort(sum)}</b></td>
+    <tfoot><tr><td class="l">${LL('Total', 'Total')}</td><td class="wlt-amt"><div class="wlt-a"><span class="wlt-pct">100%</span><span class="wlt-bar wlt-bar-t"></span><b>${wltShort(sum)}</b></div></td>
       <td class="r">${wltPair(num(T.hit, 0), num(T.tick, 0), anyTick)}</td><td class="r">${wltPair(wltShort(T.hit ? T.hv / T.hit : null), wltShort(T.tick ? T.tv / T.tick : null), anyTick)}</td><td class="r">-</td>${anyMiss ? '<td class="r">-</td>' : ''}
       <td class="r">${wltPct(totMit)}</td><td class="r wlt-dtps">${num(sum / dur, 1)}</td><td></td></tr></tfoot></table>
     <div class="wlt-foot"><button type="button" class="btn small" data-action="wlt-csv">CSV</button></div></div>`;

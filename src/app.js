@@ -959,6 +959,7 @@ async function render() {
     const animKey = `${S.code}:${raw.id}:${S.tab}:${S.player || ''}`;
     if (S._animKey !== animKey) { S._animKey = animKey; enterAnim($('#view')); }
     afterRender();
+    addShotBar();
     const post = S.post;
     S.post = null;
     if (post) post(seq).catch((e) => console.warn(e));
