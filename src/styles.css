@@ -2745,3 +2745,19 @@ h3.sec, .recent-h { font-size: 17px; font-weight: 700; letter-spacing: 0; }
 .pt-p, .pt-a, .pt-c { text-align: right; font-variant-numeric: tabular-nums; color: var(--text); }
 .pt-b { height: 12px; display: block; }
 .pt-b i { display: block; height: 100%; }
+
+/* Tooltips de las tablas de daño recibido: tipos de golpe (una habilidad) o de daño (todas) */
+.bartip.wtt { max-width: none; min-width: 0; padding: 0; overflow: hidden; background: #0d0e11; }
+.wtt-t, .wtt-r { display: grid; align-items: center; gap: 10px; padding: 3px 10px; font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.wtt-t { background: #1c1d22; color: #e8eaee; font-weight: 600; padding-top: 5px; padding-bottom: 5px; }
+.wtt-r { border-top: 1px solid #1a1b1f; color: var(--text); }
+.wtt-t6, .wtt-r6 { grid-template-columns: 64px 250px 92px 66px 66px 90px; }
+.wtt-r2, .wtt-t:not(.wtt-t6) { grid-template-columns: 130px 1fr; }
+.wtt-r2 { grid-template-columns: 130px 58px 170px 64px; }
+.wtt-t:not(.wtt-t6) { grid-template-columns: 130px 1fr; }
+.wtt-am { display: grid; grid-template-columns: 54px 1fr 58px; align-items: center; gap: 8px; }
+.wtt-r6 > span:not(.wtt-am) { text-align: right; }
+.wtt-t6 > span:nth-child(n+3) { text-align: right; }
+.wtt-p, .wtt-a { text-align: right; }
+.wtt-b { height: 12px; display: flex; }
+.wtt-b i { display: block; height: 100%; }

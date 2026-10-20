@@ -1560,7 +1560,7 @@ const VIEWS = {
       const detail = await takenAbilityDetail(f, players.map((e) => e.id), sel);
       return headerHTML(f, title, leaderSub(rows)) + picker + wltTable(f, sel, detail, dur);
     }
-    return headerHTML(f, title, leaderSub(rows)) + picker + rankedList(rows, { unit: 'DTPS' });
+    return headerHTML(f, title, leaderSub(rows)) + picker + takenTable(f, players, dur);
   },
 
   async enemies(f) {
