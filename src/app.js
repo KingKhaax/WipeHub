@@ -396,24 +396,25 @@ function mergeRankings(a, b) {
 
 function rankings(f) {
   return cached(`rank:${f.id}`, async () => {
-    if (!f.kill || !f.encounterID || !f.full || f.combined) return { dps: new Map(), hps: new Map(), dpsB: new Map(), hpsB: new Map(), invalid: new Set() };
+    if (!f.kill || !f.encounterID || !f.full || f.combined) return { dps: new Map(), hps: new Map(), dpsB: new Map(), hpsB: new Map(), bdps: new Map(), bdpsB: new Map(), invalid: new Set() };
     try {
       // sin caché en disco: Warcraft Logs recalcula los parses de un log (al subirlo da valores provisionales y luego
       // los ajusta al entrar más logs), y guardarlos horas hacía que WipeTime enseñara un número y la web otro
       const d = await gql(`query($code:String!,$f:[Int]){reportData{report(code:$code){
         dps:rankings(fightIDs:$f,playerMetric:dps) hps:rankings(fightIDs:$f,playerMetric:hps)
-        dpsP:rankings(fightIDs:$f,playerMetric:dps,compare:Parses) hpsP:rankings(fightIDs:$f,playerMetric:hps,compare:Parses)}}}`, { code: S.code, f: [f.id] }, true);
+        dpsP:rankings(fightIDs:$f,playerMetric:dps,compare:Parses) hpsP:rankings(fightIDs:$f,playerMetric:hps,compare:Parses)
+        bdps:rankings(fightIDs:$f,playerMetric:bossdps) bdpsP:rankings(fightIDs:$f,playerMetric:bossdps,compare:Parses)}}}`, { code: S.code, f: [f.id] }, true);
       const raw = d.reportData.report;
-      const r = { dps: mergeRankings(raw.dps, raw.dpsP), hps: mergeRankings(raw.hps, raw.hpsP) };
+      const r = { dps: mergeRankings(raw.dps, raw.dpsP), hps: mergeRankings(raw.hps, raw.hpsP), bdps: mergeRankings(raw.bdps, raw.bdpsP) };
       const chars = [r.dps, r.hps].flatMap((x) => (x?.data || []).flatMap((fd) => Object.values(fd.roles || {}).flatMap((ro) => ro?.characters || [])));
       // provisional = sin ranking calculado todavía (sin total de parses): no se da por bueno, la próxima vez se vuelve a pedir
       if (!chars.length || chars.some((x) => !x.totalParses)) setTimeout(() => S.cache.delete(`rank:${f.id}`), 0);
       else if (S.liveReport) setTimeout(() => S.cache.delete(`rank:${f.id}`), 60000); // log reciente: Warcraft Logs ajusta los parses
-      return { dps: rankMap(r.dps), hps: rankMap(r.hps), dpsB: rankMap(r.dps, 'bracketPercent'), hpsB: rankMap(r.hps, 'bracketPercent'), invalid: new Set([...invalidNames(r.dps), ...invalidNames(r.hps)]) };
+      return { dps: rankMap(r.dps), hps: rankMap(r.hps), dpsB: rankMap(r.dps, 'bracketPercent'), hpsB: rankMap(r.hps, 'bracketPercent'), bdps: rankMap(r.bdps), bdpsB: rankMap(r.bdps, 'bracketPercent'), invalid: new Set([...invalidNames(r.dps), ...invalidNames(r.hps)]) };
     } catch (e) {
       console.warn('rankings', e);
       setTimeout(() => S.cache.delete(`rank:${f.id}`), 0);
-      return { dps: new Map(), hps: new Map(), dpsB: new Map(), hpsB: new Map(), invalid: new Set() };
+      return { dps: new Map(), hps: new Map(), dpsB: new Map(), hpsB: new Map(), bdps: new Map(), bdpsB: new Map(), invalid: new Set() };
     }
   });
 }
@@ -1516,12 +1517,22 @@ const VIEWS = {
         .filter((r) => r.total > 0).sort((x, y) => y.total - x.total);
       return headerHTML(f, t('dmgTitle'), leaderSub(erows, f)) + enemyPicker + rankedList(erows, { unit: 'DPS' });
     }
-    const bossOf = (e) => (e.targets || []).filter((x) => x.type === 'Boss').reduce((s, x) => s + x.total, 0);
+    // Daño al jefe exacto (como el «Damage to Bosses» de Warcraft Logs): la tabla general solo trae los 5 objetivos con más daño de cada
+    // jugador, así que se pide el daño a cada objetivo de tipo jefe y se suma por jugador
+    let bossMap = null;
+    if (m === 'boss') {
+      bossMap = new Map();
+      const bossTargets = d.tgt.filter((x) => x.type === 'Boss' && x.total > 0);
+      const tabs = await Promise.all(bossTargets.map((b) => enemyTable(f, b.id).catch(() => null)));
+      if (tabs.some((x) => !x)) bossMap = null; // si algún jefe no se pudo pedir, se usa el cálculo aproximado
+      else for (const entries of tabs) for (const x of entries) bossMap.set(x.id, (bossMap.get(x.id) || 0) + x.total);
+    }
+    const bossOf = (e) => (bossMap ? bossMap.get(e.id) || 0 : (e.targets || []).filter((x) => x.type === 'Boss').reduce((s, x) => s + x.total, 0));
     const rows = d.dmg.filter((e) => isPlayer(e.id, e))
       .map((e) => {
         const base = { ...playerInfo(e.id, e), ilvl: exactIlvl(e), active: activeOf(e, dur * 1000), pets: petsOf(e), petList: e.pets || [], selfMs: e.activeTime ?? null, fightMs: dur * 1000, abil: abilList(e.abilities) };
         if (m === 'rdps') { const v = Math.max(0, e.total - (e.totalRDPSTaken || 0) + (e.totalRDPSGiven || 0)); return { ...base, pets: 0, total: v, rate: v / dur }; }
-        if (m === 'boss') { const v = bossOf(e); return { ...base, pets: 0, total: v, rate: v / dur }; }
+        if (m === 'boss') { const v = bossOf(e); return { ...base, pets: 0, petList: [], total: v, rate: v / dur }; }
         if (m === 'active') return { ...base, total: e.total, rate: e.total / Math.max(1, (e.activeTime || dur * 1000) / 1000) };
         return { ...base, total: e.total, rate: e.total / dur };
       })
@@ -1535,8 +1546,9 @@ const VIEWS = {
       ${mchip('active', LL('DPS activo', 'Active DPS'), LL('Daño dividido por el tiempo que estuviste lanzando, no por toda la pelea', 'Damage divided by the time you were actually casting'))}
     </div>`;
     const real = S.parseMode === 'ilvl' ? rk.dpsB : rk.dps;
-    const withParse = m === 'dps' || m === 'rdps';
-    return headerHTML(f, t('dmgTitle'), leaderSub(rows, f)) + bar + enemyPicker + invalidBannerHTML(rows, rk.invalid) + rankedList(rows, { unit: 'DPS', invalid: rk.invalid, ...(withParse ? parseOptions(f, rows, rk.dps, 'dps', rk.dpsB) : {}) });
+    const withParse = m === 'dps' || m === 'rdps' || m === 'boss';
+    const boss = m === 'boss';
+    return headerHTML(f, t('dmgTitle'), leaderSub(rows, f)) + bar + enemyPicker + invalidBannerHTML(rows, rk.invalid) + rankedList(rows, { unit: 'DPS', invalid: rk.invalid, ...(withParse ? (boss ? parseOptions(f, rows, rk.bdps, 'bossdps', rk.bdpsB) : parseOptions(f, rows, rk.dps, 'dps', rk.dpsB)) : {}) });
   },
 
   async healing(f) {
