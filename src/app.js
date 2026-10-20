@@ -803,6 +803,13 @@ async function loadReport(input, opts = {}) {
     S.fights = numberTries(r.fights || []);
     rememberReport(r);
     $('#urlInput').value = `https://www.warcraftlogs.com/reports/${code}`;
+    // Log sin ningún combate: aviso en rojo en vez de una pantalla vacía
+    if (!S.fights.length) {
+      S.fight = null;
+      if (typeof sidebar !== 'undefined' && sidebar) sidebar.innerHTML = '';
+      main.innerHTML = `<div class="empty-log" role="alert"><div class="el-ic" aria-hidden="true">!</div><div><b>${esc(LL('Este log está vacío', 'This log is empty'))}</b><p>${esc(LL('No contiene ningún combate, así que no hay nada que analizar. Puede que se subiera sin grabar nada o que Warcraft Logs aún no lo haya procesado.', 'It contains no fights, so there is nothing to analyse. It may have been uploaded without recording anything or Warcraft Logs may not have processed it yet.'))}</p><small>${esc(r.title || '')}${r.owner?.name ? ' · ' + esc(r.owner.name) : ''}</small></div></div>`;
+      return;
+    }
 
     S.specById = new Map();
     try {

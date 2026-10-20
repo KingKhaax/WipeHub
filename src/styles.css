@@ -2825,3 +2825,14 @@ h3.sec, .recent-h { font-size: 17px; font-weight: 700; letter-spacing: 0; }
 .wl-mx .wl-pct { font-size: 14px; }
 .wl-mx .wl-bh { gap: 5px; }
 .wl-mx .wl-bh b { font-size: 12px; }
+
+/* Log sin combates: aviso en rojo */
+.empty-log { display: flex; gap: 16px; align-items: flex-start; max-width: 760px; margin: 40px auto; padding: 18px 22px; border-radius: 14px; border: 1px solid #8f1d25; background: linear-gradient(135deg, #3a0b10, #230709); color: #ffdfe1; box-shadow: 0 10px 34px -18px #e5333f; }
+.empty-log .el-ic { flex: none; width: 38px; height: 38px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 22px; color: #fff; background: #d62f3a; }
+.empty-log b { font-size: 18px; color: #fff; }
+.empty-log p { margin: 6px 0 8px; line-height: 1.5; color: #f3c4c7; }
+.empty-log small { color: #d99a9e; }
+:root[data-theme="light"] .empty-log { background: #fdecee; border-color: #e08a91; color: #6b1119; }
+:root[data-theme="light"] .empty-log b { color: #a3121d; } :root[data-theme="light"] .empty-log p { color: #7b2028; }
+/* La barra superior se queda arriba al bajar con la rueda */
+.topbar { position: sticky; top: 0; z-index: 30; }
