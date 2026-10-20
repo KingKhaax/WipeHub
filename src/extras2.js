@@ -599,6 +599,7 @@ const Extras2 = (() => {
     });
   }
 
+  const chvIcon = (n) => '<img class="chv-ic" src="' + abilityIconUrl(n) + '" width="20" height="20" alt="">';
   async function fillChivato(seq) {
     const box = document.getElementById('nightChivato');
     if (!box) return;
@@ -623,7 +624,7 @@ const Extras2 = (() => {
       const sub = LL('Pociones de salud y piedras de salud que ha usado cada jugador en ' + c.pulls + ' intentos', 'Health potions and healthstones each player used over ' + c.pulls + ' pulls');
       box.innerHTML = '<div class="chv">'
         + '<div class="chv-h"><h3>' + LL('Chivato', 'Snitch') + '</h3><small class="muted">' + sub + '</small></div>'
-        + '<div class="chv-row th"><span>' + LL('Jugador', 'Player') + '</span><span class="r">' + LL('Pociones de salud', 'Health potions') + '</span><span class="r">' + LL('Piedras de salud', 'Healthstones') + '</span></div>'
+        + '<div class="chv-row th"><span>' + LL('Jugador', 'Player') + '</span><span class="r chv-col" title="' + LL('Pociones de salud', 'Health potions') + '">' + chvIcon('inv_potion_54') + LL('Pociones', 'Potions') + '</span><span class="r chv-col" title="' + LL('Piedras de salud', 'Healthstones') + '">' + chvIcon('warlock_-healthstone') + LL('Piedras', 'Stones') + '</span></div>'
         + body
         + '<div class="chv-row tot"><span>' + LL('Total', 'Total') + '</span><span class="r"><b>' + totPot + '</b></span><span class="r"><b>' + totStone + '</b></span></div>'
         + '</div>';

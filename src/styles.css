@@ -2836,3 +2836,24 @@ h3.sec, .recent-h { font-size: 17px; font-weight: 700; letter-spacing: 0; }
 :root[data-theme="light"] .empty-log b { color: #a3121d; } :root[data-theme="light"] .empty-log p { color: #7b2028; }
 /* La barra superior se queda arriba al bajar con la rueda */
 .topbar { position: sticky; top: 0; z-index: 30; }
+
+/* Chivato: más junto, con el icono de la poción y de la piedra de salud en las cabeceras */
+.chv { max-width: 580px; }
+.chv-row { grid-template-columns: minmax(120px, 1fr) 150px 150px; gap: 8px; padding: 4px 14px; }
+.chv-row.th { padding-top: 6px; padding-bottom: 6px; font-size: 11px; letter-spacing: .5px; }
+.chv-h { padding: 9px 14px; }
+.chv-col { display: inline-flex; align-items: center; justify-content: flex-end; gap: 6px; }
+.chv-ic { border-radius: 5px; box-shadow: 0 0 0 1px var(--line-strong, var(--line)); flex: none; }
+.chv-row .who img { width: 20px; height: 20px; }
+
+/* Chivato: tabla pequeña, del mismo tamaño que las tarjetas de arriba */
+.chv { max-width: 440px; border-radius: 12px; }
+.chv-h { padding: 8px 12px; gap: 8px; }
+.chv-h h3 { font-size: 15px; }
+.chv-h small { font-size: 11px; }
+.chv-row { grid-template-columns: minmax(110px, 1fr) 82px 82px; gap: 6px; padding: 3px 12px; font-size: 13px; }
+.chv-row.th { padding-top: 5px; padding-bottom: 5px; font-size: 10.5px; }
+.chv-ic { width: 18px; height: 18px; }
+.chv-row .who { gap: 7px; }
+.chv-row .who img { width: 22px; height: 22px; }
+.chv-row.tot { padding-top: 5px; padding-bottom: 5px; }
