@@ -1535,6 +1535,11 @@ const VIEWS = {
       .filter((r) => r.total > 0)
       .sort((x, y) => y.total - x.total);
     const title = sel ? `${t('takenTitle')} · ${sel}` : t('takenTitle');
+    // Una habilidad concreta: tabla como la de Warcraft Logs (golpes, golpe medio, tiempo activo, fallos, mitigado, DTPS)
+    if (sel) {
+      const detail = await takenAbilityDetail(f, players.map((e) => e.id), sel);
+      return headerHTML(f, title, leaderSub(rows)) + picker + wltTable(f, sel, detail, dur);
+    }
     return headerHTML(f, title, leaderSub(rows)) + picker + rankedList(rows, { unit: 'DTPS' });
   },
 
