@@ -926,12 +926,14 @@ const Extras = (() => {
     }
   });
 
-  return { RAID_BUFFS, roleIcon, raidBuffsView, rolesData, summaryData, deathTimes, graphData, smooth, mechEvents, exportPng, exportMenu, wcLink, wclLink, summaryText, cooldownData, mechData, avoidMarks, isAvoidable, DEF_BY_ID };
+  // Selector de jugador de Defensivos
   document.addEventListener('click', (ev) => {
     const el = ev.target.closest?.('[data-action="def-player"]');
     if (!el) return;
     S.defPlayer = el.dataset.id === '' ? null : Number(el.dataset.id);
     render();
   });
+
+  return { RAID_BUFFS, roleIcon, raidBuffsView, rolesData, summaryData, deathTimes, graphData, smooth, mechEvents, exportPng, exportMenu, wcLink, wclLink, summaryText, cooldownData, mechData, avoidMarks, isAvoidable, DEF_BY_ID };
 
 })();

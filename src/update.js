@@ -8,6 +8,7 @@ const WCUpdate = (() => {
 
   // Historial: [versión, es, en]
   const CHANGELOG = [
+    ['2.9.1', 'Defensivos: arreglado el selector de jugador, que no reaccionaba al pulsar un nombre.', 'Defensives: fixed the player selector, which did not react when clicking a name.'],
     ['2.9.0', 'Defensivos: nuevo selector de jugador encima de la línea de tiempo. Eliges a un jugador y la línea de tiempo y el registro exacto muestran solo lo que ha lanzado él y sobre quién lo ha tirado. «Todos» vuelve a la vista completa.', 'Defensives: new player selector above the timeline. Pick a player and the timeline and the exact log show only what they cast and on whom. “Everyone” goes back to the full view.'],
     ['2.8.9', 'Las pestañas del informe cambian de orden (Daño recibido va antes que Sanación) y todas tienen animación: el subrayado crece desde el centro, la pestaña se eleva al pasar el ratón y se hunde al pulsar.', 'The report tabs change order (Damage taken now comes before Healing) and all have an animation: the underline grows from the center, the tab lifts on hover and presses down on click.'],
     ['2.8.8', 'Copiar imagen y Guardar PNG: el icono del jefe de la cabecera ya sale en la imagen (el navegador lo guardaba sin permiso para copiarlo y salía en negro).', 'Copy image and Save PNG: the boss icon in the header now appears in the image (the browser had it cached without permission to copy it, so it came out black).'],
