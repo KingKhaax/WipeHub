@@ -40,14 +40,15 @@ function shotLoadCors(url) {
     im.crossOrigin = 'anonymous';
     im.onload = () => ok(shotImgToData(im));
     im.onerror = () => ok(null);
-    im.src = url;
+    im.src = /^https?:/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}wtshot=1` : url; // otra dirección: evita la copia guardada sin CORS
     setTimeout(() => ok(null), 8000);
   });
 }
 async function shotInlineUrl(url) {
   if (!url || url.startsWith('data:')) return url;
   try {
-    const r = await fetch(url);
+    // «reload»: si el navegador ya guardó la imagen sin permiso CORS (al mostrarla en pantalla), esa copia no sirve; se pide de nuevo
+    const r = await fetch(url, { cache: 'reload' });
     if (r.ok) return await shotBlobToData(await r.blob());
   } catch { /* se prueba el otro camino */ }
   return shotLoadCors(url);

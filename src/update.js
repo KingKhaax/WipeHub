@@ -8,6 +8,7 @@ const WCUpdate = (() => {
 
   // Historial: [versión, es, en]
   const CHANGELOG = [
+    ['2.8.8', 'Copiar imagen y Guardar PNG: el icono del jefe de la cabecera ya sale en la imagen (el navegador lo guardaba sin permiso para copiarlo y salía en negro).', 'Copy image and Save PNG: the boss icon in the header now appears in the image (the browser had it cached without permission to copy it, so it came out black).'],
     ['2.8.7', 'En las tablas de daño recibido la palabra «pulso» pasa a ser «tick» (Tick, Tick crítico, Tick medio).', 'In the damage taken tables the word “pulso” becomes “tick” (Tick, Critical tick, Avg tick).'],
     ['2.8.6', 'Daño recibido en general con el estilo de Warcraft Logs (Nombre, Cantidad, Mitigado, Ilvl, Activo, DTPS, «+» con las habilidades y fila de Total). Al pasar el ratón por un jugador sale el reparto Normal / Absorbido / Bloqueado, y en la tabla de una habilidad el desglose por tipo de golpe (cantidad, absorbido, mín., máx. y medio).', 'Overall damage taken in the Warcraft Logs style (Name, Amount, Mitigated, Ilvl, Active, DTPS, “+” with the abilities and a Total row). Hovering a player shows the Normal / Absorbed / Blocked split, and in a single ability table the breakdown by hit type (amount, absorbed, min, max and average).'],
     ['2.8.5', 'Copiar imagen y Guardar PNG: los iconos de jefes y de habilidades ya salen también en la web, donde se cargan de otros servidores.', 'Copy image and Save PNG: boss and ability icons now also show on the web, where they load from other servers.'],
