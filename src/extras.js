@@ -623,8 +623,19 @@ const Extras = (() => {
         if (lv < 0) lv = lastLeft.length;
         lastLeft[lv] = left;
         const tg = defTarget(e);
-        return `<span class="cdm" style="left:${left}%;top:${5 + lv * 29}px;--cc:${classColor(p.cls)}" data-spell="${e.abilityGameID}" data-spell-extra="${esc(p.name)} → ${esc(tg.name)} · ${clockPrecise(e.timestamp - f.startTime)}">${iconImg(ab.icon, 24)}</span>`;
+        return `<span class="cdm" style="left:${left}%;top:${5 + lv * 29}px;--mt:${5 + lv * 29}px;--cc:${classColor(p.cls)}" data-spell="${e.abilityGameID}" data-spell-extra="${esc(p.name)} → ${esc(tg.name)} · ${clockPrecise(e.timestamp - f.startTime)}">${iconImg(ab.icon, 24)}</span>`;
       }).join('');
+      // Segundo exacto de cada uso, justo donde la línea de cada icono toca el riel (en dos filas si caen muy juntos)
+      const lblLeft = [];
+      const times = evs.map((e) => {
+        const left = ((e.timestamp - f.startTime) / total) * 100;
+        let lv = lblLeft.findIndex((x) => left - x >= 3.2);
+        if (lv < 0) lv = Math.min(lblLeft.length, 1);
+        lblLeft[lv] = left;
+        const p = playerInfo(e.sourceID);
+        return `<span class="cdt" style="left:${left}%;bottom:${2 + lv * 15}px;--cc:${classColor(p.cls)}">${clock(e.timestamp - f.startTime)}</span><i class="cdd" style="left:${left}%;--cc:${classColor(p.cls)}"></i>`;
+      }).join('');
+      const strip = lblLeft.length * 15 + 6;
       const items = [...byAb.entries()].filter(([id]) => DEF_BY_ID.get(id)?.kind === kind).sort((a, b) => b[1].length - a[1].length);
       const chips = items.map(([id, list]) => {
         const ab = ability(id);
@@ -633,7 +644,7 @@ const Extras = (() => {
         return `<span class="cd-chip" data-spell="${id}">${iconImg(ab.icon, 20)}<span><b>${esc(nm)}</b> <em>×${list.length}</em><small>${esc(who)}</small></span></span>`;
       }).join('');
       html += `<section class="cd-kind" style="--k:${KCOL[kind]}"><div class="cd-kh"><b>${label}</b><span class="cd-n">${evs.length}</span><small>${KDESC[kind]}</small></div>
-        <div class="cd-lane" style="height:${lastLeft.length * 29 + 10}px">${guides}${marks}</div><div class="cd-legend">${chips}</div></section>`;
+        <div class="cd-lane" style="height:${lastLeft.length * 29 + 10 + strip}px;--lh:${lastLeft.length * 29 + 10 + strip}px;--strip:${strip}px">${guides}${marks}${times}</div><div class="cd-legend">${chips}</div></section>`;
     }
     // registro exacto, ordenado por tiempo: cuándo, qué defensivo, quién lo lanzó y sobre quién
     const log = [...events].sort((a, b) => a.timestamp - b.timestamp).map((ev) => {
