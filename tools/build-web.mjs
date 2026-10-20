@@ -46,7 +46,7 @@ for (const f of fs.readdirSync(out)) {
   s = swap(s, 'wcmap://m/${e.path}', '${window.WT_PROXY}/map?p=${encodeURIComponent(e.path)}');
   if (f === 'index.html') {
     s = s.replace(/<meta http-equiv="Content-Security-Policy"[\s\S]*?>/,
-      `<meta http-equiv="Content-Security-Policy"\n        content="default-src 'self'; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' ${proxy} https://raider.io https://nether.wowhead.com https://www.raidbots.com https://assets.rpglogs.com https://render.worldofwarcraft.com; worker-src 'self'; frame-src 'self'">`);
+      `<meta http-equiv="Content-Security-Policy"\n        content="default-src 'self'; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' ${proxy} https://raider.io https://nether.wowhead.com https://www.raidbots.com https://assets.rpglogs.com https://wow.zamimg.com https://render.worldofwarcraft.com; worker-src 'self'; frame-src 'self'">`);
     s = s.replace('<script src="boot.js"></script>', '<script src="web-api.js"></script>\n  <script src="boot.js"></script>');
     s = s.replace('<title>WipeTime</title>', '<title>WipeTime</title>\n  <link rel="icon" href="icon.png">');
   }

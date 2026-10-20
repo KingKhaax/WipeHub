@@ -33,13 +33,24 @@ function shotImgToData(img) {
     return cv.toDataURL('image/png');
   } catch { return null; }
 }
+// Segundo camino: cargar la imagen como imagen (con CORS) y pasarla a datos; no depende de lo que la política de seguridad deje pedir con fetch
+function shotLoadCors(url) {
+  return new Promise((ok) => {
+    const im = new Image();
+    im.crossOrigin = 'anonymous';
+    im.onload = () => ok(shotImgToData(im));
+    im.onerror = () => ok(null);
+    im.src = url;
+    setTimeout(() => ok(null), 8000);
+  });
+}
 async function shotInlineUrl(url) {
+  if (!url || url.startsWith('data:')) return url;
   try {
-    if (!url || url.startsWith('data:')) return url;
     const r = await fetch(url);
-    if (!r.ok) return null;
-    return await shotBlobToData(await r.blob());
-  } catch { return null; }
+    if (r.ok) return await shotBlobToData(await r.blob());
+  } catch { /* se prueba el otro camino */ }
+  return shotLoadCors(url);
 }
 
 // Fuentes del documento en uso, con los archivos incrustados (un SVG usado como imagen no puede cargar nada de fuera)
