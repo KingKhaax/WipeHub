@@ -2761,3 +2761,17 @@ h3.sec, .recent-h { font-size: 17px; font-weight: 700; letter-spacing: 0; }
 .wtt-p, .wtt-a { text-align: right; }
 .wtt-b { height: 12px; display: flex; }
 .wtt-b i { display: block; height: 100%; }
+
+/* Pestañas de arriba con animación: el subrayado crece desde el centro, la pestaña se eleva al pasar el ratón y se hunde al pulsar */
+.tab { position: relative; transition: color .25s ease, transform .22s cubic-bezier(.2, .8, .2, 1), text-shadow .25s ease; border-bottom-color: transparent !important; }
+.tab::after { content: ''; position: absolute; left: 8px; right: 8px; bottom: -2px; height: 2px; border-radius: 2px; background: linear-gradient(90deg, transparent, var(--accent), transparent); transform: scaleX(0); transform-origin: center; transition: transform .3s cubic-bezier(.2, .8, .2, 1), opacity .25s ease; opacity: .9; box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 70%, transparent); }
+.tab::before { content: ''; position: absolute; inset: 4px 2px; border-radius: 8px; background: radial-gradient(ellipse at 50% 100%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%); opacity: 0; transition: opacity .3s ease; pointer-events: none; z-index: -1; }
+.tab:hover { transform: translateY(-2px); }
+.tab:hover::after { transform: scaleX(.55); }
+.tab:hover::before { opacity: 1; }
+.tab:active { transform: translateY(0) scale(.96); }
+.tab.active::after { transform: scaleX(1); animation: tabLine .45s cubic-bezier(.2, .8, .2, 1) both; }
+.tab.active::before { opacity: 1; }
+.tab.active { text-shadow: 0 0 14px color-mix(in srgb, var(--accent) 45%, transparent); }
+@keyframes tabLine { from { transform: scaleX(0); opacity: 0; } to { transform: scaleX(1); opacity: .9; } }
+@media (prefers-reduced-motion: reduce) { .tab, .tab::after, .tab::before { transition: none; animation: none !important; } .tab:hover { transform: none; } }

@@ -924,7 +924,7 @@ function renderSidebar() {
 }
 
 // ============================================================ render principal
-const TABS = ['damage', 'healing', 'taken', 'enemies', 'shields', 'deaths', 'utility', 'buffs', 'debuffs', 'rotation'];
+const TABS = ['damage', 'taken', 'healing', 'enemies', 'shields', 'deaths', 'utility', 'buffs', 'debuffs', 'rotation'];
 
 function parseClock(s) {
   const m = String(s || '').trim().replace(',', '.').match(/^(?:(\d+):)?(\d+(?:\.\d+)?)$/);

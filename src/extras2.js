@@ -879,7 +879,7 @@ const Extras2 = (() => {
   VIEWS.night = viewNight;
   VIEWS.mana = viewMana;
   TABS.length = 0;
-  TABS.push('night', 'summary', 'damage', 'healing', 'taken', 'deaths', 'avoidable', 'mechanics', 'cooldowns', 'utility', 'buffs', 'debuffs', 'mana', 'rotation', 'detail', 'enemies', 'shields', 'graphs', 'mplus', 'replay');
+  TABS.push('night', 'summary', 'damage', 'taken', 'healing', 'deaths', 'avoidable', 'mechanics', 'cooldowns', 'utility', 'buffs', 'debuffs', 'mana', 'rotation', 'detail', 'enemies', 'shields', 'graphs', 'mplus', 'replay');
   const prevHidden = window.tabHidden;
   window.tabHidden = (k) => {
     if (prevHidden?.(k)) return true;
