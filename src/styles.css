@@ -3089,3 +3089,11 @@ a:focus-visible, button:focus-visible, select:focus-visible, summary:focus-visib
 .btn.ghost.cmp-cta { display: inline-flex; align-items: center; gap: 9px; }
 .btn.ghost.cmp-cta .navic { color: var(--accent); }
 .btn.ghost.cmp-cta:hover .navic { transform: translateY(-1px); }
+.p22-wh li { margin-bottom: 10px; }
+.p22-wh a { font-size: 12.5px; word-break: break-word; }
+.p22-road { list-style: none; counter-reset: rd; margin: 8px 0 14px; padding: 0 0 0 4px; display: grid; gap: 10px; position: relative; }
+.p22-road li { counter-increment: rd; position: relative; display: grid; gap: 3px; padding: 12px 14px 12px 52px; border: 1px solid var(--line); border-radius: 12px; background: var(--panel); }
+.p22-road li::before { content: counter(rd); position: absolute; left: 12px; top: 12px; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-weight: 800; font-size: 13px; color: var(--on-accent, #fff); background: var(--accent); }
+.p22-road b { color: var(--strong); }
+.p22-road span { color: var(--text-2); line-height: 1.5; font-size: 13.5px; }
+
