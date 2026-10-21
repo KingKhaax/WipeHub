@@ -415,7 +415,7 @@
     {
       "slug": "nymrissa",
       "name": "Nymrissa Clamaolas",
-      "wing": "Guarida: La Gruta de las Mareas",
+      "wing": "Guarida: La Gruta Mareal",
       "order": 9,
       "phases": [
         {
@@ -493,5 +493,5 @@
       ]
     }
   ],
-  "raid": "Abismo Venenoso (Midnight S2 / 12.1) + La Gruta de las Mareas + La liberación de Kith'ix (12.1.5)"
+  "raid": "Abismo Venenoso (Midnight S2 / 12.1) + La Gruta Mareal + La liberación de Kith'ix (12.1.5)"
 }
