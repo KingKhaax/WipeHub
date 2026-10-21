@@ -59,16 +59,17 @@
   // El servidor intermedio limita las peticiones por visitante: cuando se pasa, responde 403/429 sin permisos CORS (el navegador solo ve «Failed to fetch»).
   // Se reintenta con espera y, si sigue igual, se avisa con un error claro (SERVER_BUSY) en vez del fallo genérico.
   async function wclFetch(gql, variables, lang) {
-    let last = null;
+    let last = null, down = false;
     for (let i = 0; i < 3; i++) {
       let res = null;
       try { res = await fetch(`${PROXY}/wcl`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ query: gql, variables, lang }) }); } catch { res = null; }
       if (res && res.ok) return res.json();
       if (res && ![403, 429, 502, 503].includes(res.status)) throw new Error(`HTTP_${res.status}`);
       last = res ? res.status : 0;
+      if (res && (res.status === 502 || res.status === 503)) { const b = await res.clone().json().catch(() => ({})); down = /^auth/.test(String(b.error || '')); }
       if (i < 2) await new Promise((r) => setTimeout(r, 1500 * (i + 1)));
     }
-    throw new Error(last === 429 ? 'RATE_LIMIT' : 'SERVER_BUSY');
+    throw new Error(last === 429 ? 'RATE_LIMIT' : down ? 'WCL_DOWN' : 'SERVER_BUSY');
   }
   async function query(gql, variables, lang, noCache) {
     try {

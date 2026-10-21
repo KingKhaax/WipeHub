@@ -193,4 +193,18 @@ test('todos los avisos de copiar usan el mismo mensaje en medio de la pantalla',
   noErrors(p);
 });
 
+test('si Warcraft Logs no da acceso (auth 503) sale «Warcraft Logs no responde» y no «Servidor saturado»', async () => {
+  const p = await newPage(browser);
+  await p.route(/wipetime-proxy/, (r) => r.fulfill({ status: 502, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify({ error: 'auth 503' }) }));
+  await p.goto(url, { waitUntil: 'load' }); await p.waitForTimeout(900);
+  await p.evaluate(() => { S.hasCreds = true; });
+  await p.fill('#urlInput', 'https://www.warcraftlogs.com/reports/aBcDeFgHiJkLmNoP');
+  await p.click('#loadBtn');
+  await p.waitForSelector('.error.srv', { timeout: 20000 });
+  const txt = await p.$eval('.error.srv', (e) => e.textContent);
+  assert.match(txt, /Warcraft Logs no responde/, 'título correcto: ' + txt);
+  assert.ok(!/Servidor saturado/.test(txt), 'no dice servidor saturado');
+  assert.ok(await p.$('[data-action="retry"]'), 'hay botón Reintentar');
+});
+
 await runAll();
