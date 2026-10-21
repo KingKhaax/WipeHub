@@ -233,8 +233,32 @@ document.addEventListener('error', (e) => {
 
 // ============================================================ API
 // fresh = true salta la caché en disco (rankings públicos, que cambian de un momento a otro)
+let wclProbe = null;
+function wclStatus(down) {
+  const old = document.getElementById('wclBanner');
+  if (!down) { old?.remove(); clearTimeout(wclProbe); wclProbe = null; return; }
+  if (old) return;
+  const el = document.createElement('div');
+  el.id = 'wclBanner';
+  el.className = 'wcl-banner';
+  el.setAttribute('role', 'alert');
+  el.innerHTML = `<span class="wb-ic" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 0 0-5 5L3 18l3 3 6.7-6.7a4 4 0 0 0 5-5l-2.4 2.4-2.6-.6-.6-2.6z"/></svg></span><div class="wb-tx"><b>${esc(t('wclBannerTitle'))}</b><span>${esc(t('wclBannerText'))}</span></div>`;
+  const bar = document.querySelector('.topbar');
+  if (bar) bar.after(el); else document.body.prepend(el);
+  const again = () => { wclProbe = setTimeout(() => { gql('query { rateLimitData { limitPerHour } }', {}, true).catch(() => {}).finally(() => { if (document.getElementById('wclBanner')) again(); }); }, 60000); };
+  again();
+}
+
 async function gql(query, variables, fresh = false) {
-  const res = await window.api.query(query, variables, S.lang, fresh || S.liveReport);
+  let res;
+  try {
+    res = await window.api.query(query, variables, S.lang, fresh || S.liveReport);
+  } catch (e) {
+    if (e?.message === 'WCL_DOWN') wclStatus(true);
+    throw e;
+  }
+  if (res.error === 'WCL_DOWN') wclStatus(true);
+  else if (!res.error) wclStatus(false);
   if (res.error) throw new Error(res.error);
   if (!res.data && res.errors) throw new Error(res.errors.map((e) => e.message).join(' · '));
   if (res.errors) console.warn('GraphQL', res.errors);
@@ -2169,6 +2193,10 @@ async function refreshConfig() {
   S.hasCreds = !!cfg.bundled || !!(cfg.clientId && cfg.hasSecret);
   S.meDefault = cfg.me;
   if (!S.code) S.me = cfg.me;
+  if (S.hasCreds && !refreshConfig.probed) {
+    refreshConfig.probed = true;
+    setTimeout(() => { gql('query { rateLimitData { limitPerHour } }', {}, true).catch(() => {}); }, 1500);
+  }
 }
 
 // ---- "¿Qué personaje eres tú?" (se recuerda por reporte)

@@ -202,9 +202,24 @@ test('si Warcraft Logs no da acceso (auth 503) sale «Warcraft Logs no responde�
   await p.click('#loadBtn');
   await p.waitForSelector('.error.srv', { timeout: 20000 });
   const txt = await p.$eval('.error.srv', (e) => e.textContent);
-  assert.match(txt, /Warcraft Logs no responde/, 'título correcto: ' + txt);
+  assert.match(txt, /Warcraft Logs en mantenimiento/, 'título correcto: ' + txt);
   assert.ok(!/Servidor saturado/.test(txt), 'no dice servidor saturado');
   assert.ok(await p.$('[data-action="retry"]'), 'hay botón Reintentar');
+  assert.match(await p.$eval('#wclBanner', (e) => e.textContent), /mantenimiento.*solucionando lo antes posible/s, 'franja de aviso visible');
+});
+
+test('al abrir WipeTime con Warcraft Logs en mantenimiento sale el aviso y desaparece solo cuando vuelve', async () => {
+  const p = await newPage(browser);
+  let down = true;
+  await p.route(/wipetime-proxy/, (r) => (down
+    ? r.fulfill({ status: 502, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify({ error: 'auth 503' }) })
+    : r.fulfill({ status: 200, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify({ data: { rateLimitData: { limitPerHour: 18000 } } }) })));
+  await p.goto(url, { waitUntil: 'load' });
+  await p.waitForSelector('#wclBanner', { timeout: 20000 });
+  assert.ok(await p.isVisible('#wclBanner'));
+  down = false;
+  await p.evaluate(() => gql('query { rateLimitData { limitPerHour } }', {}, true));
+  assert.equal(await p.$('#wclBanner'), null, 'la franja se quita cuando Warcraft Logs responde');
 });
 
 await runAll();
