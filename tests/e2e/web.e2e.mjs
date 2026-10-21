@@ -246,4 +246,16 @@ test('la etiqueta de la portada: en la web sin «en local» y en GitHub con «v�
   assert.match(gh, /ANÁLISIS DE LOGS · VÍA GITHUB$/, 'en GitHub: ' + gh);
 });
 
+test('Móvil (390 px): viewport correcto, navegación abajo y ninguna pantalla se sale por los lados', async () => {
+  const p = await newPage(browser, { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  for (const h of ['', '#/compare', '#/guilds', '#/characters']) {
+    await p.goto(url + h, { waitUntil: 'load' }); await p.waitForTimeout(700);
+    const m = await p.evaluate(() => { const b = document.querySelector('.navtabs').getBoundingClientRect(); return { sw: document.documentElement.scrollWidth, vw: document.documentElement.clientWidth, nav: [Math.round(b.bottom), innerHeight, getComputedStyle(document.querySelector('.navtabs')).position] }; });
+    assert.equal(m.vw, 390, 'la página usa el ancho real del teléfono');
+    assert.equal(m.sw, m.vw, `la pantalla ${h || 'inicio'} no debe desbordar: ${m.sw} > ${m.vw}`);
+    assert.deepEqual(m.nav, [844, 844, 'fixed'], 'la barra de pestañas está pegada abajo');
+  }
+  noErrors(p);
+});
+
 await runAll();
