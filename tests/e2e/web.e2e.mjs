@@ -258,4 +258,22 @@ test('Móvil (390 px): viewport correcto, navegación abajo y ninguna pantalla s
   noErrors(p);
 });
 
+test('Parche 12.2: apartados a la izquierda que muestran solo sus cambios, con enlaces de Blizzard y Wowhead', async () => {
+  const p = await open();
+  await p.click('[data-p22="open"]'); await p.waitForSelector('#patch122Dlg .p22-tab');
+  const tabs = await p.$$eval('#patch122Dlg .p22-tab', (e) => e.map((x) => x.dataset.p22Tab));
+  for (const k of ['overview', 'raids', 'mplus', 'delves', 'pvp', 'housing', 'roadmap', 'sources']) assert.ok(tabs.includes(k), 'falta el apartado ' + k);
+  const shown = () => p.$$eval('#patch122Dlg [data-p22-pane]:not([hidden])', (e) => e.map((x) => x.dataset.p22Pane));
+  assert.deepEqual(await shown(), ['overview']);
+  await p.click('[data-p22-tab="pvp"]');
+  assert.deepEqual(await shown(), ['pvp']);
+  assert.match(await p.$eval('[data-p22-pane="pvp"]', (e) => e.textContent), /JcJ/);
+  await p.click('[data-p22-tab="housing"]');
+  assert.match(await p.$eval('[data-p22-pane="housing"]', (e) => e.textContent), /maniquíes/);
+  const links = await p.$$eval('#patch122Dlg [data-p22-link]', (e) => e.map((a) => a.dataset.p22Link));
+  assert.ok(links.some((u) => u.startsWith('https://news.blizzard.com/')), 'enlace oficial de Blizzard');
+  assert.ok(links.filter((u) => u.startsWith('https://www.wowhead.com/')).length >= 4, 'enlaces de Wowhead');
+  noErrors(p);
+});
+
 await runAll();
