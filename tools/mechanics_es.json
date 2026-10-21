@@ -415,7 +415,7 @@
     {
       "slug": "nymrissa",
       "name": "Nymrissa Clamaolas",
-      "wing": "Guarida: Gruta Ligada a la Marea",
+      "wing": "Guarida: La Gruta de las Mareas",
       "order": 9,
       "phases": [
         {
@@ -444,7 +444,7 @@
     {
       "slug": "kithix",
       "name": "Kith'ix",
-      "wing": "El Desatamiento de Kith'ix (Parche 12.1.5)",
+      "wing": "La liberación de Kith'ix (Parche 12.1.5)",
       "order": 10,
       "phases": [
         {
@@ -493,5 +493,5 @@
       ]
     }
   ],
-  "raid": "El Abismo Venenoso (Midnight S2 / 12.1) + Gruta Ligada a la Marea + El Desatamiento de Kith'ix (12.1.5)"
+  "raid": "Abismo Venenoso (Midnight S2 / 12.1) + La Gruta de las Mareas + La liberación de Kith'ix (12.1.5)"
 }
