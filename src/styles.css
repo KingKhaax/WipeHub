@@ -3086,3 +3086,6 @@ a:focus-visible, button:focus-visible, select:focus-visible, summary:focus-visib
   .exp-info { width: 100%; }
 }
 @media (max-width: 760px) { .ranked > .row { min-width: 600px; } }
+.btn.ghost.cmp-cta { display: inline-flex; align-items: center; gap: 9px; }
+.btn.ghost.cmp-cta .navic { color: var(--accent); }
+.btn.ghost.cmp-cta:hover .navic { transform: translateY(-1px); }
