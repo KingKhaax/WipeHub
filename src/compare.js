@@ -4,6 +4,7 @@
 const Compare = (() => {
   const { L, fmt, pct, avg, ic, tp } = Analysis;
   const MAX_LOGS = 10;
+  const AB_COLORS = ['#5b8def', '#e0a43a', '#46c28e', '#c77dff', '#f0646f', '#2ec4d6', '#f08a4b', '#9bd23c', '#e86aa8', '#8d99ae', '#d4b483'];
   let st = null;
   const metaCache = new Map();
 
@@ -111,7 +112,7 @@ const Compare = (() => {
 
   function rowHTML(r, i) {
     const chip = { idle: '', loading: `<span class="cmp-chip">${t('loading')}</span>`, ready: `<span class="cmp-chip ok">✓ ${esc(r.meta?.title || '')}</span>`, error: `<span class="cmp-chip err">${esc(r.err)}</span>` }[r.state];
-    return `<div class="cmp-row"><span class="cmp-n ${i < 0 ? 'mine' : ''}">${i < 0 ? '★' : i + 2}</span>
+    return `<div class="cmp-row"><span class="cmp-n ${i < 0 ? 'mine' : ''}" style="--ab:${AB_COLORS[(i + 1) % AB_COLORS.length]}">${String.fromCharCode(65 + i + 1)}</span>
       <input data-cmp-url="${i}" value="${esc(r.url)}" spellcheck="false" autocomplete="off" placeholder="https://www.warcraftlogs.com/reports/…#fight=12">
       ${i >= 0 && st.rows.length > 1 ? `<button class="btn ghost sm" data-cmp="remove" data-i="${i}" aria-label="remove">✕</button>` : '<span class="cmp-sp"></span>'}
       <div class="cmp-info">${chip}${r.state === 'ready' ? pickersHTML(r, i) : ''}</div></div>`;
@@ -150,7 +151,7 @@ const Compare = (() => {
         <span>${p.kill ? `<span class="sc-kill">${t('kill')}</span>` : p.bossPct != null ? `${num(p.bossPct, 1)} %` : '—'}</span>
         <span class="r">${clock(p.durationMs)}</span>
         <span class="r"><b>${plain(p.rate)}</b>${t('perSec')}</span>
-        <span class="r ${i && ratio > 1.03 ? 'neg' : i && ratio < 0.97 ? 'pos' : ''}">${i ? `${ratio >= 1 ? '+' : ''}${num((ratio - 1) * 100, 0)} %` : '—'}</span>
+        <span class="r delta ${i && ratio > 1.03 ? 'neg' : i && ratio < 0.97 ? 'pos' : ''}">${i ? `<i class="dbar"><b style="--d:${Math.max(-1, Math.min(1, ratio - 1)).toFixed(3)}"></b></i><span>${ratio > 1.03 ? '▲ ' : ratio < 0.97 ? '▼ ' : ''}${ratio >= 1 ? '+' : ''}${num((ratio - 1) * 100, 0)} %</span>` : '—'}</span>
         <span class="r">${pct(p.activeMs / p.durationMs)}</span>
         <span class="r">${fmt(p.casts.length / (p.durationMs / 60000))}</span>
         <span class="r">${p.deaths.length}</span></div>`;

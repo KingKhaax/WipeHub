@@ -873,7 +873,8 @@ function rememberReport(r) {
   let list = [];
   try { list = JSON.parse(lsGet('recent') || '[]'); } catch { /* vacío */ }
   list = list.filter((x) => x.code !== r.code);
-  list.unshift({ code: r.code, title: r.title, zone: r.zone?.name || '', date: r.startTime });
+  const fl = (r.fights || []).filter((f) => f.encounterID);
+  list.unshift({ code: r.code, title: r.title, zone: r.zone?.name || '', zid: r.zone?.id || null, date: r.startTime, kills: fl.filter((f) => f.kill).length, wipes: fl.filter((f) => !f.kill).length });
   lsSet('recent', JSON.stringify(list.slice(0, 8)));
 }
 
@@ -892,6 +893,10 @@ function zoneName(n) {
   if (/^the venomous abyss$/i.test(n)) return 'Abismo Venenoso';
   const m = n.match(/^Mythic\+ Season (\d+)/i);
   return m ? `Mítica+ Temporada ${m[1]}` : n;
+}
+
+function chipSelect(name, opts, current) {
+  return `<span class="chipsel" role="group"><input type="hidden" name="${name}" value="${esc(String(current))}">${opts.map(([v, l]) => `<button type="button" data-chip="${esc(String(v))}" class="${String(v) === String(current) ? 'on' : ''}">${l}</button>`).join('')}</span>`;
 }
 
 function renderSidebar() {
@@ -924,10 +929,17 @@ function renderSidebar() {
     <div class="rep-title">${esc(r.title)}</div>
     <div class="rep-sub">${esc(zoneName(r.zone?.name))}${r.owner?.name ? ' · ' + esc(r.owner.name) : ''}<br>${new Date(r.startTime).toLocaleString(locale())}</div>
     <div class="combine-bar"><button class="chip refresh-btn ${S.refreshing ? 'busy' : ''}" data-action="refresh-report" title="${esc(LL('Vuelve a cargar el log para ver nuevos pulls y kills', 'Reload the log to see new pulls and kills'))}">${S.refreshing ? '<span class="spinner sm"></span> ' : ''}${LL('Actualizar', 'Refresh')}</button><button class="chip" data-action="combine-all" title="${esc(LL('Combinar todos los trys de todos los jefes del log', 'Combine every try of every boss in the log'))}">${LL('Todo el log', 'Whole log')}</button><button class="chip ${S.combineMode ? 'on' : ''}" data-action="combine-toggle" title="${esc(LL('Marca varios pulls y mira sus cifras sumadas', 'Tick several pulls and see their combined numbers'))}">${LL('Combinar pulls', 'Combine pulls')}</button>${S.combineMode ? `<small class="muted">${S.combine.length < 2 ? LL('Marca al menos 2 pulls', 'Tick at least 2 pulls') : LL(`${S.combine.length} pulls`, `${S.combine.length} pulls`)}</small>` : ''}</div>`;
+  const spark = (fights) => {
+    const pts = fights.map((f) => (f.kill ? 0 : pctOf(f.fightPercentage ?? f.bossPercentage))).filter((v) => v != null);
+    if (pts.length < 2) return '';
+    const w = 54, h = 16, step = w / (pts.length - 1);
+    const d = pts.map((v, i) => `${i ? 'L' : 'M'}${(i * step).toFixed(1)} ${(1 + (Math.min(100, v) / 100) * (h - 2)).toFixed(1)}`).join('');
+    return `<svg class="spark" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" aria-hidden="true"><path d="${d}" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
+  };
   for (const fights of groups.values()) {
     const f0 = fights[0];
     const kills = fights.filter((f) => f.kill).length;
-    html += `<div class="enc"><div class="enc-h"><span class="enc-n"><img class="enc-ic" src="https://assets.rpglogs.com/img/warcraft/bosses/${f0.encounterID}-icon.jpg" width="22" height="22" alt="" loading="lazy" onerror="this.remove()">${esc(f0.name)}</span><span class="enc-d">${esc(diffName(f0.difficulty))} · ${fights.length}${kills ? ' · ✓' : ''} <button class="mini-btn" data-action="combine-group" data-key="${esc(f0.groupKey)}" title="${esc(LL('Combinar todos los trys de este jefe', 'Combine every try of this boss'))}">${LL('Todos los trys', 'All tries')}</button></span></div>
+    html += `<div class="enc"><div class="enc-h"><span class="enc-n"><img class="enc-ic" src="https://assets.rpglogs.com/img/warcraft/bosses/${f0.encounterID}-icon.jpg" width="22" height="22" alt="" loading="lazy" onerror="this.remove()">${esc(f0.name)}</span>${spark(fights)}<span class="enc-d">${esc(diffName(f0.difficulty))} · ${fights.length}${kills ? ' · ✓' : ''} <button class="mini-btn" data-action="combine-group" data-key="${esc(f0.groupKey)}" title="${esc(LL('Combinar todos los trys de este jefe', 'Combine every try of this boss'))}">${LL('Todos los trys', 'All tries')}</button></span></div>
       ${fights.map(fightBtn).join('')}</div>`;
   }
   if (trash.length) {
@@ -1055,6 +1067,15 @@ function headerHTML(f, title, sub = '') {
   return `<div class="hdr"${zid ? ` style="--art:url(https://assets.rpglogs.com/img/warcraft/zones/zone-${zid}.png)"` : ''}>${boss}<div class="hdr-t"><div class="eyebrow">${eyebrow(f)}</div><h1>${esc(title)}</h1>${sub ? `<div class="sub">${sub}</div>` : ''}</div></div>`;
 }
 
+function fightTiles(f, rows, unit) {
+  const dur = fightDur(f);
+  const total = rows.reduce((x, r) => x + r.total, 0);
+  const p = pctOf(f.fightPercentage ?? f.bossPercentage);
+  const tile = (k, v, cls = '') => `<div class="kpi ${cls}"><small>${k}</small><b>${v}</b></div>`;
+  const res = !f.encounterID ? '' : f.kill ? tile(LL('Resultado', 'Result'), t('kill'), 'ok') : p != null ? tile(LL('Vida del jefe', 'Boss health'), `${num(p, 1)} %`, 'bad') : '';
+  return `<div class="kpis">${tile(LL('Duración', 'Duration'), clock(dur))}${res}${total > 0 && dur > 0 ? tile(`${unit} ${LL('de la banda', 'raid')}`, plain(total / (dur / 1000)) + t('perSec')) : ''}${tile(LL('Jugadores', 'Players'), num(rows.length, 0))}${rows[0] ? tile(LL('Líder', 'Leader'), `<span style="color:${rowColor(rows[0])}">${esc(rows[0].name)}</span>`, 'lead') : ''}</div>`;
+}
+
 function parsePill(p, estimated = false, low = false) {
   if (p == null) return '';
   const c = parseColor(p);
@@ -1146,14 +1167,14 @@ function rankedList(rows, { parse, parseIlvl, slots, slotsIlvl, clickable = !S.v
     const on = rs.key === key;
     return `<span class="${cls} sortable${on ? ' sorted' : ''}" data-action="rsort" data-k="${key}" role="button" tabindex="0" ${on ? `data-dir="${rs.dir}" aria-sort="${rs.dir === 'asc' ? 'ascending' : 'descending'}"` : ''} title="${esc(LL('Pulsa para ordenar por esta columna', 'Click to sort by this column'))}">${label}</span>`;
   };
-  const head = `<div class="row head">${hasParse ? hc('parse', 'Parse %') : ''}${hc('name', LL('Nombre', 'Name'), 'c-name')}${hc('amount', LL('Cantidad', 'Amount'), 'c-amt')}${hasNote ? '<span></span>' : ''}${hasIlvl ? hc('ilvl', 'Ilvl') : ''}${hasParseI ? hc('parseI', 'Ilvl %') : ''}${hasActive ? hc('active', LL('Activo', 'Active')) : ''}${hasRate ? hc('rate', unit, 'c-rate') : ''}</div>`;
+  const head = `<div class="row head">${hasParse ? hc('parse', 'Parse %') : ''}${hc('name', LL('Nombre', 'Name'), 'c-name')}${hc('amount', LL('Cantidad', 'Amount'), 'c-amt')}${hasNote ? '<span></span>' : ''}${hasIlvl ? hc('ilvl', 'Ilvl', 'c-ilvl') : ''}${hasParseI ? hc('parseI', 'Ilvl %', 'c-parsei') : ''}${hasActive ? hc('active', LL('Activo', 'Active'), 'c-active') : ''}${hasRate ? hc('rate', unit, 'c-rate') : ''}</div>`;
   return `${exportBarHTML()}<div class="ranked" style="--cols:${cols}">${head}${list.map((r, i) => {
     const color = rowColor(r);
     const me = isMe(r.name);
     const pets = Math.min(r.pets || 0, r.total);
     const segs = pets > 0 ? [[r.total - pets, color], [pets, PET_TEAL]] : [[r.total, color]];
     const bar = segs.map(([v, c]) => `<span class="seg" style="flex:${v} 1 0;background:${c};--c:${c}"></span>`).join('');
-    return `<div class="row ${me ? 'me' : ''} ${invalid?.has(r.name) ? 'invalid' : ''} ${clickable ? 'click' : ''}" data-ri="${i}" ${clickable ? `data-action="player" data-id="${r.id}" data-href="${esc(playerHref(r.id))}"` : ''}>
+    return `<div class="row ${me ? 'me' : ''} ${invalid?.has(r.name) ? 'invalid' : ''} ${clickable ? 'click' : ''}" style="--rc:${color}" data-ri="${i}" ${clickable ? `data-action="player" data-id="${r.id}" data-href="${esc(playerHref(r.id))}"` : ''}>
       ${hasParse ? `<span class="c-parse">${pill(parse, slots, 'pill-slot', r)}</span>` : ''}
       <div class="r-name">
         ${r.icon ? `<img class="spec-ic-sm" src="${specIconUrl(esc(r.icon))}" width="22" height="22" alt="" style="--cc:${color}">` : `<span class="dot" style="background:${color}"></span>`}
@@ -1557,7 +1578,7 @@ const VIEWS = {
     const real = S.parseMode === 'ilvl' ? rk.dpsB : rk.dps;
     const withParse = m === 'dps' || m === 'rdps' || m === 'boss';
     const boss = m === 'boss';
-    return headerHTML(f, t('dmgTitle'), leaderSub(rows, f)) + bar + enemyPicker + invalidBannerHTML(rows, rk.invalid) + rankedList(rows, { unit: 'DPS', invalid: rk.invalid, ...(withParse ? (boss ? parseOptions(f, rows, rk.bdps, 'bossdps', rk.bdpsB) : parseOptions(f, rows, rk.dps, 'dps', rk.dpsB)) : {}) });
+    return headerHTML(f, t('dmgTitle'), leaderSub(rows, f)) + fightTiles(f, rows, 'DPS') + bar + enemyPicker + invalidBannerHTML(rows, rk.invalid) + rankedList(rows, { unit: 'DPS', invalid: rk.invalid, ...(withParse ? (boss ? parseOptions(f, rows, rk.bdps, 'bossdps', rk.bdpsB) : parseOptions(f, rows, rk.dps, 'dps', rk.dpsB)) : {}) });
   },
 
   async healing(f) {
@@ -1570,7 +1591,7 @@ const VIEWS = {
         return { ...playerInfo(e.id, e), ilvl: exactIlvl(e), active: activeOf(e, dur * 1000), pets: petsOf(e), petList: e.pets || [], selfMs: e.activeTime ?? null, fightMs: dur * 1000, total: e.total, rate: e.total / dur, abil: abilList(e.abilities), note: ohp ? t('overheal', { p: num(ohp, 0) }) : '' };
       })
       .sort((a, b) => b.total - a.total);
-    return headerHTML(f, t('healTitle'), leaderSub(rows, f)) + invalidBannerHTML(rows, rk.invalid) + rankedList(rows, { unit: 'HPS', invalid: rk.invalid, ...parseOptions(f, rows, rk.hps, 'hps', rk.hpsB) });
+    return headerHTML(f, t('healTitle'), leaderSub(rows, f)) + fightTiles(f, rows, 'HPS') + invalidBannerHTML(rows, rk.invalid) + rankedList(rows, { unit: 'HPS', invalid: rk.invalid, ...parseOptions(f, rows, rk.hps, 'hps', rk.hpsB) });
   },
 
   async taken(f) {
@@ -2036,7 +2057,7 @@ function renderWelcome() {
       <span class="feat-ic"><img src="wcicon://i/${icon}" width="48" height="48" alt=""></span>
       <div><b>${t(h)}</b><span>${t(p)}</span></div></div>`).join('')}</div>
     ${recent.length ? `<h3 class="recent-h">${t('recent')}<button class="mini-btn" data-action="recent-clear">${LL('Borrar todos', 'Clear all')}</button></h3><div class="recent">${recent.map((r) =>
-      `<div class="rwrap"><button class="rcard" data-action="recent" data-code="${esc(r.code)}" data-href="#/report/${esc(r.code)}"><b>${esc(r.title)}</b><small>${esc(zoneName(r.zone))} · ${new Date(r.date).toLocaleDateString(locale())}</small></button><button class="rdel" data-action="recent-del" data-code="${esc(r.code)}" title="${esc(LL('Quitar de la lista', 'Remove from list'))}" aria-label="${esc(LL('Quitar', 'Remove'))}">✕</button></div>`).join('')}</div>` : ''}
+      `<div class="rwrap"><button class="rcard" data-action="recent" data-code="${esc(r.code)}" data-href="#/report/${esc(r.code)}">${r.zid ? `<img class="rc-ic" src="https://assets.rpglogs.com/img/warcraft/zones/zone-${r.zid}.png" width="44" height="44" alt="" loading="lazy" onerror="this.remove()">` : '<span class="rc-ic ph"></span>'}<span class="rc-tx"><b>${esc(r.title)}</b><small>${esc(zoneName(r.zone))} · ${new Date(r.date).toLocaleDateString(locale())}</small>${r.kills != null ? `<span class="rc-res"><i class="ok">${r.kills} kill${r.kills === 1 ? '' : 's'}</i><i class="bad">${r.wipes} wipe${r.wipes === 1 ? '' : 's'}</i></span>` : ''}</span></button><button class="rdel" data-action="recent-del" data-code="${esc(r.code)}" title="${esc(LL('Quitar de la lista', 'Remove from list'))}" aria-label="${esc(LL('Quitar', 'Remove'))}">✕</button></div>`).join('')}</div>` : `<div class="recent-empty"><div class="empty-art"><svg viewBox="0 0 96 96" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="16" y="14" width="64" height="68" rx="8" fill="currentColor" fill-opacity=".12"/><path d="M30 34h36M30 48h36M30 62h20"/><circle cx="68" cy="66" r="9" fill="currentColor" fill-opacity=".3"/><path d="m64.500 66 2.500 2.500 4.500-5"/></svg></div><b>${LL('Aún no has abierto ningún log', 'You have not opened any log yet')}</b><span>${LL('Pega el enlace de un reporte de Warcraft Logs arriba y aparecerá aquí.', 'Paste a Warcraft Logs report link above and it will show up here.')}</span></div>`}
     <footer class="made-by">${t('madeBy')} <b>Drakko</b>
       <svg class="heart" viewBox="0 0 24 24" width="16" height="16" aria-label="love"><path d="M12 21s-7.5-4.6-9.6-9.3C.9 8.2 2.8 4.5 6.3 4.5c2 0 3.6 1.1 4.4 2.6l1.3 2.2 1.3-2.2c.8-1.5 2.4-2.6 4.4-2.6 3.5 0 5.4 3.7 3.9 7.2C19.500 16.400 12 21 12 21z" fill="currentColor"/></svg>
     </footer>
@@ -2460,9 +2481,9 @@ $('#homeBtn').addEventListener('click', navClick(goHome));
 function markNav() {
   const home = S.home && !S.cmpOpen && !S.guildOpen && !S.profileOpen && !!main.querySelector('.welcome');
   $('#homeBtn').classList.toggle('on', home);
-  $('#cmpBtn').classList.toggle('on', !!S.cmpOpen);
-  $('#guildBtn').classList.toggle('on', !!S.guildOpen && !S.cmpOpen);
-  $('#profBtn').classList.toggle('on', !!main.querySelector('.charsearch') || (!!S.profileOpen && !S.cmpOpen && !S.guildOpen));
+  $('#cmpBtn').classList.toggle('on', !!S.cmpOpen && !S.guildOpen && !S.profileOpen);
+  $('#guildBtn').classList.toggle('on', !!S.guildOpen);
+  $('#profBtn').classList.toggle('on', !!main.querySelector('.charsearch') || (!!S.profileOpen && !S.guildOpen));
 }
 new MutationObserver(markNav).observe(main, { childList: true });
 

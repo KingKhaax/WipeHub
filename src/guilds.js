@@ -75,7 +75,7 @@ const Guilds = (() => {
     const last = (() => { try { return JSON.parse(lsGet('guild:last') || 'null') || {}; } catch { return {}; } })();
     const manual = `<form id="gdForm" class="gd-form"><input name="guild" placeholder="${esc(LL('Nombre de la guild', 'Guild name'))}" value="${esc(last.name || '')}" spellcheck="false" autocomplete="off">
       <input name="realm" placeholder="${esc(LL('Reino (opcional, ej. twisting-nether)', 'Realm (optional, e.g. twisting-nether)'))}" value="${esc(last.realmSlug || '')}" spellcheck="false" autocomplete="off">
-      <select name="region">${['eu', 'us', 'kr', 'tw'].map((r) => `<option value="${r}" ${r === (last.region || WCSettings.get('region') || s.region) ? 'selected' : ''}>${r.toUpperCase()}</option>`).join('')}</select>
+      ${chipSelect('region', ['eu', 'us', 'kr', 'tw'].map((r) => [r, r.toUpperCase()]), last.region || WCSettings.get('region') || s.region)}
       <button class="btn" type="submit">${LL('Buscar guild', 'Find guild')}</button></form>
       <small class="muted gd-hint">${LL('Si no sabes el reino, déjalo vacío y te mostraremos las guilds con ese nombre.', 'If you do not know the realm, leave it empty and we will list the guilds with that name.')}</small>${resultsHTML()}`;
     // el desplegable de una de tus guilds aparece justo debajo de ellas; el de una búsqueda a mano, al final
@@ -258,7 +258,7 @@ const Guilds = (() => {
     const last = lsGet('gd:guildRegion') || WCSettings.get('region') || st.status?.region || 'eu';
     return `<form id="gdAddGuildForm" class="gd-form"><input name="name" placeholder="${esc(LL('Nombre de la guild', 'Guild name'))}" spellcheck="false" autocomplete="off" required>
       <input name="realm" placeholder="${esc(LL('Reino (ej. Zul’jin)', 'Realm (e.g. Zul’jin)'))}" spellcheck="false" autocomplete="off" required>
-      <select name="region">${['eu', 'us', 'kr', 'tw'].map((r) => `<option value="${r}" ${r === last ? 'selected' : ''}>${r.toUpperCase()}</option>`).join('')}</select>
+      ${chipSelect('region', ['eu', 'us', 'kr', 'tw'].map((r) => [r, r.toUpperCase()]), last)}
       <button class="btn" type="submit">${LL('Añadir guild', 'Add guild')}</button></form>
       ${st.guildMsg ? `<div class="error sm"><p>${esc(st.guildMsg)}</p></div>` : ''}`;
   }
@@ -268,7 +268,7 @@ const Guilds = (() => {
     const last = lsGet('gd:charRegion') || WCSettings.get('region') || st.status?.region || 'eu';
     return `<form id="gdCharForm" class="gd-form"><input name="name" placeholder="${esc(LL('Nombre del personaje', 'Character name'))}" spellcheck="false" autocomplete="off" required>
       <input name="realm" placeholder="${esc(LL('Reino (ej. Zul’jin)', 'Realm (e.g. Zul’jin)'))}" spellcheck="false" autocomplete="off" required>
-      <select name="region">${['eu', 'us', 'kr', 'tw'].map((r) => `<option value="${r}" ${r === last ? 'selected' : ''}>${r.toUpperCase()}</option>`).join('')}</select>
+      ${chipSelect('region', ['eu', 'us', 'kr', 'tw'].map((r) => [r, r.toUpperCase()]), last)}
       <button class="btn" type="submit">${LL('Añadir personaje', 'Add character')}</button></form>
       ${st.charMsg ? `<div class="error sm"><p>${esc(st.charMsg)}</p></div>` : ''}`;
   }

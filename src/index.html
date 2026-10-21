@@ -13,15 +13,18 @@
   <header class="topbar">
     <button class="btn ghost icon side-toggle" id="sideToggle" aria-label="Lista de intentos" title="Lista de intentos" hidden>☰</button>
     <a class="brand" id="brandHome" href="#/" title="Inicio"><img class="brand-logo" src="logo.png" alt="">WipeTime</a>
+    <nav class="navtabs" aria-label="Navigation"><span class="nav-ind" aria-hidden="true"></span>
     <a class="btn ghost home-btn" id="homeBtn" href="#/" aria-label="Inicio / Home"><img class="wi" src="icons/inv_misc_rune_01.jpg" width="20" height="20" alt=""><span id="homeLabel">Inicio</span></a>
     <a class="btn ghost home-btn" id="cmpBtn" href="#/compare"><img class="wi" src="icons/spell_holy_crusade.jpg" width="20" height="20" alt=""><span id="cmpLabel">Comparar logs</span></a>
     <a class="btn ghost home-btn" id="guildBtn" href="#/guilds" title="Guilds"><img class="wi" src="icons/inv_shirt_guildtabard_01.jpg" width="20" height="20" alt=""><span id="guildLabel">Guilds</span></a>
     <a class="btn ghost home-btn" id="profBtn" href="#/characters"><img class="wi" src="icons/inv_misc_head_human_01.jpg" width="20" height="20" alt=""><span id="profLabel">Personajes</span></a>
+    </nav>
     <form id="loadForm" class="load">
       <input id="urlInput" type="text" spellcheck="false" autocomplete="off">
       <button id="loadBtn" type="submit" class="btn primary"></button>
     </form>
     <div class="top-actions">
+      <span class="top-sep" aria-hidden="true"></span>
       <div class="lang-menu">
         <button id="langBtn" class="btn ghost home-btn" aria-haspopup="true" aria-expanded="false"><img class="wi" src="icons/inv_misc_book_09.jpg" width="20" height="20" alt=""><span id="langLabel">Idioma</span></button>
         <div id="langList" class="lang-list" role="menu" hidden></div>
@@ -71,6 +74,7 @@
   <script src="tablesort.js"></script>
   <script src="tooltip.js"></script>
   <script src="update.js"></script>
+  <script src="polish.js"></script>
   <script src="guard.js"></script>
 </body>
 </html>
