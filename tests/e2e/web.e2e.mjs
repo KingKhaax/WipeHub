@@ -222,4 +222,28 @@ test('al abrir WipeTime con Warcraft Logs en mantenimiento sale el aviso y desap
   assert.equal(await p.$('#wclBanner'), null, 'la franja se quita cuando Warcraft Logs responde');
 });
 
+test('la etiqueta de la portada: en la web sin «en local» y en GitHub con «vía GitHub»', async () => {
+  const MIME = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.woff2': 'font/woff2' };
+  const tag = async (host) => {
+    const p = await newPage(browser);
+    await p.route('**/*', (r) => {
+      const u = new URL(r.request().url());
+      if (u.hostname !== host) return r.abort().catch(() => {});
+      let f = new URL('.' + (u.pathname.endsWith('/') ? u.pathname + 'index.html' : u.pathname), DIST);
+      if (!fs.existsSync(f) || fs.statSync(f).isDirectory()) return r.fulfill({ status: 404, body: '404' }).catch(() => {});
+      return r.fulfill({ status: 200, contentType: MIME[f.pathname.slice(f.pathname.lastIndexOf('.'))] || 'application/octet-stream', body: fs.readFileSync(f) }).catch(() => {});
+    });
+    await p.goto(`https://${host}/`, { waitUntil: 'load' });
+    await p.waitForSelector('.hero .eyebrow');
+    return p.$eval('.hero .eyebrow', (e) => e.textContent.trim());
+  };
+  const local = await (async () => { const p = await open(); return p.$eval('.hero .eyebrow', (e) => e.textContent.trim()); })();
+  assert.ok(!/LOCAL/i.test(local), 'en la web no pone «en local»: ' + local);
+  assert.match(local, /ANÁLISIS DE LOGS$/);
+  const vercel = await tag('wipetime.vercel.app');
+  assert.ok(!/LOCAL|GITHUB/i.test(vercel), 'en Vercel solo «Análisis de logs»: ' + vercel);
+  const gh = await tag('kingkhaax.github.io');
+  assert.match(gh, /ANÁLISIS DE LOGS · VÍA GITHUB$/, 'en GitHub: ' + gh);
+});
+
 await runAll();

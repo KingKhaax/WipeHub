@@ -2987,3 +2987,10 @@ a:focus-visible, button:focus-visible, select:focus-visible, summary:focus-visib
 .navtabs .home-btn.on .navic { color: var(--accent); }
 #settingsBtn.btn.icon { padding: 7px 9px; }
 
+.topbar .navtabs a.home-btn { background: transparent; border: 1px solid transparent; box-shadow: none; filter: none; transform: none; text-shadow: none; color: var(--muted); font-weight: 500; }
+.topbar .navtabs a.home-btn:hover { color: var(--text); background: color-mix(in srgb, var(--accent) 8%, transparent); border-color: transparent; box-shadow: none; }
+.topbar .navtabs a.home-btn.on, .topbar .navtabs a.home-btn.on:hover { color: var(--strong); font-weight: 600; background: color-mix(in srgb, var(--accent) 12%, transparent); border-color: transparent; box-shadow: none; }
+.topbar .top-actions .btn.ghost { background: transparent; border-color: transparent; box-shadow: none; color: var(--muted); }
+.topbar .top-actions .btn.ghost:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); border-color: transparent; box-shadow: none; color: var(--text); }
+@media (max-width: 1500px) { .topbar { gap: 10px; } .topbar .navtabs a.home-btn { padding: 8px 11px; gap: 7px; } }
+.topbar .home-btn::after, .topbar .btn.ghost::after { display: none; animation: none; }
