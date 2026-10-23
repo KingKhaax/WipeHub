@@ -3198,3 +3198,10 @@ a:focus-visible, button:focus-visible, select:focus-visible, summary:focus-visib
 .gc-bar::after { content: ""; position: absolute; inset: 0; width: var(--w, 0%); border-radius: 2px; background: linear-gradient(90deg, color-mix(in srgb, var(--gc) 65%, #fff), var(--gc)); }
 .gc-chip { display: inline-block; padding: 1px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap; color: var(--gc, var(--muted)); background: color-mix(in srgb, var(--gc, var(--muted)) 14%, transparent); border: 1px solid color-mix(in srgb, var(--gc, var(--muted)) 40%, transparent); }
 @media (prefers-reduced-motion: reduce) { .gc-row::after { display: none; } .gc-row::before, .gc-boss, .gc-c { transition: none; } }
+.gc-c.win { overflow: hidden; background: linear-gradient(135deg, color-mix(in srgb, var(--gc) 16%, transparent), transparent); box-shadow: none; }
+.gc-c.win .gc-n { text-shadow: none; }
+.gc-c.win::before { content: ""; position: absolute; right: 0; top: 0; width: 38px; height: 38px; background: linear-gradient(225deg, var(--gc) 0 50%, transparent 50%); opacity: .95; pointer-events: none; }
+.gc-c.win::after { content: "★"; position: absolute; right: 5px; top: 1px; font-size: 12px; line-height: 1.2; color: #111; pointer-events: none; animation: gc-star 2s ease-in-out infinite; }
+.gc-n { font-size: 20px; }
+@keyframes gc-star { 50% { transform: scale(1.35) rotate(18deg); } }
+@media (prefers-reduced-motion: reduce) { .gc-c.win::after { animation: none; } }
