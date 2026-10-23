@@ -112,7 +112,7 @@ var WCSettings = (function () {
   }
 
   // Exportar / importar: solo las claves que existen en los ajustes (un archivo ajeno no puede meter otras)
-  function exportJSON() { return JSON.stringify({ app: 'WipeTime', settings: data }, null, 2); }
+  function exportJSON() { return JSON.stringify({ app: 'WipeHub', settings: data }, null, 2); }
   function importJSON(text) {
     var o = JSON.parse(text);
     var src = o && o.settings && typeof o.settings === 'object' ? o.settings : null;

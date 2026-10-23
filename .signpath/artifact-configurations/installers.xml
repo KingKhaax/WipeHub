@@ -5,10 +5,10 @@
     <parameter name="version" required="true" />
   </parameters>
   <zip-file>
-    <pe-file path="WipeTime v${version} Setup.exe" product-name="WipeTime" product-version="${version}">
+    <pe-file path="WipeHub v${version} Setup.exe" product-name="WipeHub" product-version="${version}">
       <authenticode-sign />
     </pe-file>
-    <pe-file path="WipeTime v${version}.exe" product-name="WipeTime" product-version="${version}">
+    <pe-file path="WipeHub v${version}.exe" product-name="WipeHub" product-version="${version}">
       <authenticode-sign />
     </pe-file>
   </zip-file>

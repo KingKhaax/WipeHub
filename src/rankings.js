@@ -160,7 +160,7 @@
           });
           y += 14;
         }
-        g.fillStyle = '#5d6572'; g.font = `11px ${font}`; g.textAlign = 'right'; g.fillText('WipeTime · datos de Warcraft Logs', W - pad, H - 10);
+        g.fillStyle = '#5d6572'; g.font = `11px ${font}`; g.textAlign = 'right'; g.fillText('WipeHub · datos de Warcraft Logs', W - pad, H - 10);
         try { cv.toBlob((b) => resolve(b), 'image/png'); } catch { resolve(null); }
       });
     });
@@ -171,7 +171,7 @@
       if (mode === 'save') {
         const a = document.createElement('a');
         a.href = URL.createObjectURL(blob);
-        a.download = `WipeTime - ${D.title}.png`.replace(/[\\/:*?"<>|]/g, '-');
+        a.download = `WipeHub - ${D.title}.png`.replace(/[\\/:*?"<>|]/g, '-');
         a.click();
         setTimeout(() => URL.revokeObjectURL(a.href), 4000);
         return toast(LL('Imagen guardada', 'Image saved'));

@@ -1,9 +1,9 @@
-// Genera dist/latest.json para el sistema de actualización de WipeTime.
+// Genera dist/latest.json para el sistema de actualización de WipeHub.
 // Uso:  node tools/make-update.mjs <url-base>  [notas]
-//   <url-base> = carpeta pública donde subirás los .exe, p. ej. https://miservidor.com/wipetime
+//   <url-base> = carpeta pública donde subirás los .exe, p. ej. https://miservidor.com/wipehub
 //                (en GitHub Releases no hace falta: el programa lee las Releases directamente con "usuario/repositorio")
-// Después sube a esa carpeta los dos .exe de dist/ y el latest.json, y en WipeTime > Ajustes > Versión
-// pon como fuente la dirección de latest.json (https://miservidor.com/wipetime/latest.json).
+// Después sube a esa carpeta los dos .exe de dist/ y el latest.json, y en WipeHub > Ajustes > Versión
+// pon como fuente la dirección de latest.json (https://miservidor.com/wipehub/latest.json).
 import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -13,10 +13,10 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
 const base = (process.argv[2] || '').replace(/\/$/, '');
 const notes = process.argv.slice(3).join(' ');
-if (!base) { console.error('Falta la URL base. Ejemplo: node tools/make-update.mjs https://miservidor.com/wipetime'); process.exit(1); }
+if (!base) { console.error('Falta la URL base. Ejemplo: node tools/make-update.mjs https://miservidor.com/wipehub'); process.exit(1); }
 
-const setup = `WipeTime v${pkg.version} Setup.exe`;
-const portable = `WipeTime v${pkg.version}.exe`;
+const setup = `WipeHub v${pkg.version} Setup.exe`;
+const portable = `WipeHub v${pkg.version}.exe`;
 const sha = (f) => createHash('sha256').update(readFileSync(join(root, 'dist', f))).digest('hex');
 for (const f of [setup, portable]) if (!existsSync(join(root, 'dist', f))) { console.error(`No existe dist/${f}: ejecuta antes "npm run dist".`); process.exit(1); }
 

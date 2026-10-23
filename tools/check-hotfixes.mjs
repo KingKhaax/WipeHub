@@ -10,7 +10,7 @@ const src = fs.readFileSync(new URL('../src/classchanges.js', import.meta.url), 
 const dates = [...src.matchAll(/\['(\d{4}-\d{2}-\d{2})'/g)].map((m) => m[1]).sort();
 const latestData = dates[dates.length - 1] || '';
 
-const res = await fetch(ARTICLE, { headers: { 'user-agent': 'Mozilla/5.0 (WipeTime hotfix check)' }, redirect: 'follow' });
+const res = await fetch(ARTICLE, { headers: { 'user-agent': 'Mozilla/5.0 (WipeHub hotfix check)' }, redirect: 'follow' });
 if (!res.ok) { console.log(JSON.stringify({ latestData, error: `HTTP ${res.status}` })); process.exit(0); }
 const html = await res.text();
 const body = html.slice(html.indexOf('<body'));

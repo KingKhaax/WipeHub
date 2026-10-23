@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
   try {
     const p = String((req.query || {}).p || '');
     if (!/^[A-Za-z0-9_\-./]{1,200}\.(jpg|jpeg|png|webp)$/i.test(p) || p.includes('..')) return send(res, 403, { error: 'path not allowed' });
-    const r = await fetch('https://cdn.raidplan.io/' + p, { headers: { 'user-agent': 'Mozilla/5.0 WipeTime' } });
+    const r = await fetch('https://cdn.raidplan.io/' + p, { headers: { 'user-agent': 'Mozilla/5.0 WipeHub' } });
     if (!r.ok) return send(res, r.status === 404 ? 404 : 502, { error: 'upstream ' + r.status });
     res.status(200).setHeader('content-type', r.headers.get('content-type') || 'image/jpeg');
     res.setHeader('cache-control', 'public, max-age=604800, s-maxage=604800');

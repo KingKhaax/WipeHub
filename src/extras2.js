@@ -487,7 +487,7 @@ const Extras2 = (() => {
   }
 
   function nightText(rows, r) {
-    const lines = [`WipeTime — ${r.title}`, `${zoneName(r.zone?.name)} · ${new Date(r.startTime).toLocaleDateString(locale())}`, ''];
+    const lines = [`WipeHub — ${r.title}`, `${zoneName(r.zone?.name)} · ${new Date(r.startTime).toLocaleDateString(locale())}`, ''];
     for (const g of rows) lines.push(`${g.name} (${diffName(g.diff)}): ${g.kills ? LL('KILL en try ', 'KILL on try ') + g.best.tryNo : LL('mejor try ', 'best try ') + num(pctOf(g.best.fightPercentage ?? g.best.bossPercentage) ?? 0, 1) + ' %'} · ${g.list.length} ${LL('intentos', 'pulls')} · ${clock(g.time)}`);
     lines.push('', `https://www.warcraftlogs.com/reports/${S.code}`);
     return lines.join('\n');

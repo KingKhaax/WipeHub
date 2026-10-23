@@ -476,7 +476,7 @@ const Analysis = (() => {
     const auraTable = rows.length ? `<div class="mn-table tk"><div class="mn-r th"><span>${L('Pasiva / mitigación', 'Passive / mitigation')}</span>${names.map((n) => `<span>${esc(n)}</span>`).join('')}</div>
       ${rows.map((r) => `<div class="mn-r"><span class="ab">${ic(r.icon, 22)}${esc(r.name)}</span>${r.per.map((b, i) => `<span>${cellA(b, profs[i])}</span>`).join('')}</div>`).join('')}</div>`
       : `<div class="empty sm">${L('No he detectado mitigación activa ni pasivas conocidas de tanque en estos logs.', 'No active mitigation or known tank passives detected in these logs.')}</div>`;
-    // defensivos personales lanzados (de la lista de WipeTime)
+    // defensivos personales lanzados (de la lista de WipeHub)
     const defs = typeof Extras !== 'undefined' ? Extras.DEF_BY_ID : new Map();
     const defRows = new Map();
     profs.forEach((p, i) => {
@@ -552,7 +552,7 @@ const Analysis = (() => {
           const u = topLogUrl(x, metric);
           const wt = `https://www.warcraftlogs.com/reports/${x.code}?fight=${x.fightId}`;
           return `<div class="an-top"><b>#${x.rankPos}</b><span class="an-top-n">${esc(x.label)}</span><span class="muted">${x.rankAmount ? plain(x.rankAmount) + ' ' + (metric === 'hps' ? 'HPS' : 'DPS') : ''}</span>
-            <button class="btn ghost sm" data-action="toplog-open" data-u="${esc(wt)}" title="${L('Abre este log dentro de WipeTime', 'Open this log inside WipeTime')}">${L('Abrir aquí', 'Open here')}</button>
+            <button class="btn ghost sm" data-action="toplog-open" data-u="${esc(wt)}" title="${L('Abre este log dentro de WipeHub', 'Open this log inside WipeHub')}">${L('Abrir aquí', 'Open here')}</button>
             <button class="btn ghost sm" data-action="toplog-copy" data-u="${esc(u)}" title="${esc(u)}">${L('Copiar enlace', 'Copy link')}</button>
             <button class="btn ghost sm" data-action="toplog-ext" data-u="${esc(u)}">Warcraft Logs ↗</button></div>`;
         }).join('')}</div></div>

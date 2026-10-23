@@ -663,7 +663,7 @@ const Extras = (() => {
     }).join('');
     html += `</div><h3 class="sec">${LL('Registro exacto de defensivos', 'Exact defensive log')} <span class="rb-count">${events.length}</span></h3>
       <div class="dl-table"><div class="dl-row th"><span>${LL('Tiempo', 'Time')}</span><span>${LL('Defensivo', 'Defensive')}</span><span>${LL('Tipo', 'Type')}</span><span>${LL('Lo lanzó', 'Cast by')}</span><span></span><span>${LL('Sobre', 'On')}</span></div>${log}</div>`;
-    return html + `<p class="foot">${LL('Se muestran las habilidades defensivas más habituales (lista propia de WipeTime). Una habilidad que no aparezca puede no estar en la lista o haberse renombrado en este parche.', 'Shows the most common defensive abilities (WipeTime\'s own list). A missing ability may not be on the list or may have been renamed this patch.')}</p>`;
+    return html + `<p class="foot">${LL('Se muestran las habilidades defensivas más habituales (lista propia de WipeHub). Una habilidad que no aparezca puede no estar en la lista o haberse renombrado en este parche.', 'Shows the most common defensive abilities (WipeHub\'s own list). A missing ability may not be on the list or may have been renamed this patch.')}</p>`;
   }
 
   // ============================================================ MECÁNICAS
@@ -762,7 +762,7 @@ const Extras = (() => {
     return headerHTML(f, t('tabs.avoidable'), LL(`<b>${avoid.length}</b> de ${list.length} habilidades enemigas marcadas como evitables`, `<b>${avoid.length}</b> of ${list.length} enemy abilities marked avoidable`))
       + `<div class="mech-grid"><div><h3 class="sec">${LL('Habilidades enemigas', 'Enemy abilities')}</h3><div class="mtable">${tr}</div></div>
       <div><h3 class="sec">${LL('Quién recibió más daño evitable', 'Who took the most avoidable damage')}</h3>${rows.length ? rankedList(rows, { clickable: false }) : `<div class="empty">${LL('No hay habilidades marcadas como evitables.', 'No abilities are marked avoidable.')}</div>`}</div></div>
-      <p class="foot">${LL('WCL no indica qué mecánicas se pueden esquivar. WipeTime sugiere (con "?") las que golpean a pocos jugadores y no sobre todo a tanques; tú decides pulsando el botón y se recuerda para este jefe.', 'WCL does not say which mechanics can be dodged. WipeTime suggests (with "?") abilities that hit few players and not mostly tanks; you decide with the button and it is remembered for this boss.')}</p>`;
+      <p class="foot">${LL('WCL no indica qué mecánicas se pueden esquivar. WipeHub sugiere (con "?") las que golpean a pocos jugadores y no sobre todo a tanques; tú decides pulsando el botón y se recuerda para este jefe.', 'WCL does not say which mechanics can be dodged. WipeHub suggests (with "?") abilities that hit few players and not mostly tanks; you decide with the button and it is remembered for this boss.')}</p>`;
   }
 
   // ============================================================ MÍTICA+
@@ -845,14 +845,14 @@ const Extras = (() => {
   }
   const csvOf = (rows) => '﻿' + rows.map((r) => r.map((c) => `"${String(c ?? '').replace(/"/g, '""')}"`).join(';')).join('\r\n');
   const wclLink = () => `https://www.warcraftlogs.com/reports/${S.code}${S.fight ? `#fight=${S.fight.id}` : ''}`;
-  const wcLink = () => `wipetime://report/${S.code}${S.fight ? `?fight=${S.fight.id}` : ''}`;
+  const wcLink = () => `wipehub://report/${S.code}${S.fight ? `?fight=${S.fight.id}` : ''}`;
 
   function summaryText() {
     const f = S.fight;
     const rows = viewRows().slice(1, 11);
     const head = `${f.name} · ${diffName(f.difficulty)} · ${fightLabel(f)} · ${clock(fightDur(f))}`;
     const label = t('tabs.' + S.tab);
-    return [`WipeTime — ${S.report.title}`, head, `${label}:`, ...rows.map((r) => `${r[0]}. ${r[1]}${r[3] ? ` (${r[3]})` : ''} — ${r[4]}  ${r[5]}`), wclLink()].join('\n');
+    return [`WipeHub — ${S.report.title}`, head, `${label}:`, ...rows.map((r) => `${r[0]}. ${r[1]}${r[3] ? ` (${r[3]})` : ''} — ${r[4]}  ${r[5]}`), wclLink()].join('\n');
   }
 
   async function copy(text, msg) {
@@ -866,7 +866,7 @@ const Extras = (() => {
     const m = document.getElementById('main');
     const r = m.getBoundingClientRect();
     const rect = { x: Math.floor(r.left), y: Math.floor(r.top), width: Math.ceil(m.scrollWidth), height: Math.ceil(Math.max(m.scrollHeight, r.height)) };
-    const name = `${(S.fight?.name || 'wipetime').replace(/[^\w]+/g, '-')}-${S.tab}.png`;
+    const name = `${(S.fight?.name || 'wipehub').replace(/[^\w]+/g, '-')}-${S.tab}.png`;
     const res = await window.api.exportPng(rect, name);
     document.body.classList.remove('capturing');
     if (res?.ok) toast(LL('Captura guardada', 'Screenshot saved'));
@@ -900,7 +900,7 @@ const Extras = (() => {
       else if (k === 'csv') {
         const rows = viewRows();
         if (!rows.length) return toast(LL('Esta vista no tiene una tabla que exportar', 'This view has no table to export'));
-        const res = await window.api.exportText(csvOf(rows), `${(S.fight?.name || 'wipetime').replace(/[^\w]+/g, '-')}-${S.tab}.csv`, 'csv');
+        const res = await window.api.exportText(csvOf(rows), `${(S.fight?.name || 'wipehub').replace(/[^\w]+/g, '-')}-${S.tab}.csv`, 'csv');
         if (res?.ok) toast(LL('CSV guardado', 'CSV saved'));
       } else if (k === 'text') copy(summaryText(), LL('Resumen', 'Summary'));
       else if (k === 'wcl') copy(wclLink(), wclLink());

@@ -1,8 +1,8 @@
 {
-  "name": "wipetime",
-  "productName": "WipeTime",
-  "version": "2.11.5",
-  "description": "WipeTime: visor, replay y analizador local de reportes de Warcraft Logs",
+  "name": "wipehub",
+  "productName": "WipeHub",
+  "version": "2.12.0",
+  "description": "WipeHub: visor, replay y analizador local de reportes de Warcraft Logs",
   "main": "main.js",
   "author": "sr.kitkat",
   "copyright": "Copyright © sr.kitkat",
@@ -18,7 +18,7 @@
   },
   "build": {
     "appId": "com.kingkhaax.wipetime",
-    "productName": "WipeTime",
+    "productName": "WipeHub",
     "files": [
       "main.js",
       "preload.js",
@@ -46,15 +46,15 @@
       "allowToChangeInstallationDirectory": true,
       "createDesktopShortcut": true,
       "guid": "e683fbfb-6c7a-5984-ab36-67880b4d5c2c",
-      "artifactName": "WipeTime v${version} Setup.${ext}"
+      "artifactName": "WipeHub v${version} Setup.${ext}"
     },
     "portable": {
-      "artifactName": "WipeTime v${version}.${ext}"
+      "artifactName": "WipeHub v${version}.${ext}"
     },
     "publish": {
       "provider": "github",
       "owner": "KingKhaax",
-      "repo": "WipeTime"
+      "repo": "WipeHub"
     }
   },
   "dependencies": {

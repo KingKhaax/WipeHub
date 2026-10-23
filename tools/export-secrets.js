@@ -6,7 +6,7 @@ const { app, safeStorage } = require('electron');
 const path = require('path');
 const fs = require('fs');
 
-app.setPath('userData', path.join(process.env.APPDATA, 'WipeTime'));
+app.setPath('userData', path.join(process.env.APPDATA, 'WipeHub'));
 app.whenReady().then(() => {
   const cfg = JSON.parse(fs.readFileSync(path.join(app.getPath('userData'), 'config.json'), 'utf8'));
   const dec = (s) => {

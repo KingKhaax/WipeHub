@@ -261,7 +261,7 @@ const GuildCmp = (() => {
           const d = diffTxt(r, a, b);
           g.fillStyle = d.c || '#9a9aa3'; g.font = `600 12.5px ${font}`; g.fillText(d.t, cx[3], cy, W - cx[3] - pad);
         });
-        g.fillStyle = '#5d6572'; g.font = `11px ${font}`; g.textAlign = 'right'; g.fillText('WipeTime', W - pad, H - 12);
+        g.fillStyle = '#5d6572'; g.font = `11px ${font}`; g.textAlign = 'right'; g.fillText('WipeHub', W - pad, H - 12);
         try { cv.toBlob((bl) => resolve(bl), 'image/png'); } catch { resolve(null); }
       });
     });
@@ -271,7 +271,7 @@ const GuildCmp = (() => {
     if (mode === 'save') {
       const el = document.createElement('a');
       el.href = URL.createObjectURL(blob);
-      el.download = `WipeTime - ${a.name} vs ${b.name} - ${zone.name}.png`.replace(/[\\/:*?"<>|]/g, '-');
+      el.download = `WipeHub - ${a.name} vs ${b.name} - ${zone.name}.png`.replace(/[\\/:*?"<>|]/g, '-');
       el.click();
       setTimeout(() => URL.revokeObjectURL(el.href), 4000);
       return toast(LL('Imagen guardada', 'Image saved'));

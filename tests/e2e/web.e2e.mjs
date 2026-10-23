@@ -1,4 +1,4 @@
-// Pruebas de navegador de la web de WipeTime (se lanzan en el CI antes de publicar). Uso: node tests/e2e/web.e2e.mjs
+// Pruebas de navegador de la web de WipeHub (se lanzan en el CI antes de publicar). Uso: node tests/e2e/web.e2e.mjs
 // Requisitos: haber ejecutado «node tools/build-web.mjs» (carpeta web-dist) y tener Chromium para Playwright (o E2E_BROWSER).
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -30,7 +30,7 @@ test('la web compilada está completa y es de la versión del package.json', () 
 test('la portada carga sin errores y con su logo de parche', async () => {
   const p = await open();
   assert.ok(await p.$('.welcome'), 'portada');
-  assert.match(await p.title(), /WipeTime/);
+  assert.match(await p.title(), /WipeHub/);
   await p.waitForFunction(() => document.querySelector('#expImg')?.classList.contains('art'), null, { timeout: 8000 });
   noErrors(p);
 });
@@ -121,7 +121,7 @@ test('Ajustes: región y dificultad por defecto, colores propios, exportar e imp
   await p.evaluate(() => { URL.createObjectURL = (b) => { window.__dl = b; return 'blob:test'; }; HTMLAnchorElement.prototype.click = function () { window.__dlName = this.download; }; });
   await p.click('[data-set-act="export-settings"]'); await p.waitForTimeout(200);
   const exported = await p.evaluate(() => window.__dl.text());
-  assert.equal(await p.evaluate(() => window.__dlName), 'wipetime-ajustes.json');
+  assert.equal(await p.evaluate(() => window.__dlName), 'wipehub-ajustes.json');
   assert.match(exported, /"accent": "pink"/);
   const file = new URL('../../.e2e-settings.json', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1');
   fs.writeFileSync(file, exported);
@@ -195,7 +195,7 @@ test('todos los avisos de copiar usan el mismo mensaje en medio de la pantalla',
 
 test('si Warcraft Logs no da acceso (auth 503) sale «Warcraft Logs no responde» y no «Servidor saturado»', async () => {
   const p = await newPage(browser);
-  await p.route(/wipetime-proxy/, (r) => r.fulfill({ status: 502, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify({ error: 'auth 503' }) }));
+  await p.route(/wipehub-proxy/, (r) => r.fulfill({ status: 502, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify({ error: 'auth 503' }) }));
   await p.goto(url, { waitUntil: 'load' }); await p.waitForTimeout(900);
   await p.evaluate(() => { S.hasCreds = true; });
   await p.fill('#urlInput', 'https://www.warcraftlogs.com/reports/aBcDeFgHiJkLmNoP');
@@ -208,10 +208,10 @@ test('si Warcraft Logs no da acceso (auth 503) sale «Warcraft Logs no responde�
   assert.match(await p.$eval('#wclBanner', (e) => e.textContent), /mantenimiento.*solucionando lo antes posible/s, 'franja de aviso visible');
 });
 
-test('al abrir WipeTime con Warcraft Logs en mantenimiento sale el aviso y desaparece solo cuando vuelve', async () => {
+test('al abrir WipeHub con Warcraft Logs en mantenimiento sale el aviso y desaparece solo cuando vuelve', async () => {
   const p = await newPage(browser);
   let down = true;
-  await p.route(/wipetime-proxy/, (r) => (down
+  await p.route(/wipehub-proxy/, (r) => (down
     ? r.fulfill({ status: 502, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify({ error: 'auth 503' }) })
     : r.fulfill({ status: 200, contentType: 'application/json', headers: { 'access-control-allow-origin': '*' }, body: JSON.stringify({ data: { rateLimitData: { limitPerHour: 18000 } } }) })));
   await p.goto(url, { waitUntil: 'load' });
@@ -240,7 +240,7 @@ test('la etiqueta de la portada: en la web sin «en local» y en GitHub con «v�
   const local = await (async () => { const p = await open(); return p.$eval('.hero .eyebrow', (e) => e.textContent.trim()); })();
   assert.ok(!/LOCAL/i.test(local), 'en la web no pone «en local»: ' + local);
   assert.match(local, /ANÁLISIS DE LOGS$/);
-  const vercel = await tag('wipetime.vercel.app');
+  const vercel = await tag('wipehub.vercel.app');
   assert.ok(!/LOCAL|GITHUB/i.test(vercel), 'en Vercel solo «Análisis de logs»: ' + vercel);
   const gh = await tag('kingkhaax.github.io');
   assert.match(gh, /ANÁLISIS DE LOGS · VÍA GITHUB$/, 'en GitHub: ' + gh);

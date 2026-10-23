@@ -1,20 +1,20 @@
-# WipeTime
+# WipeHub
 
 Programa de Windows para **ver, analizar y comparar logs de World of Warcraft** a partir de un enlace público de [Warcraft Logs](https://www.warcraftlogs.com). Hecho por Drakko · sr.kitkat <img src="docs/icons/inv_valentinescard02.jpg" width="18" height="18" alt="" align="absmiddle"> · España
 
-[![Última versión](https://img.shields.io/github/v/release/KingKhaax/WipeTime?label=versi%C3%B3n)](https://github.com/KingKhaax/WipeTime/releases/latest)
-[![Descargas](https://img.shields.io/github/downloads/KingKhaax/WipeTime/total?label=descargas)](https://github.com/KingKhaax/WipeTime/releases)
-[![Licencia: MIT](https://img.shields.io/github/license/KingKhaax/WipeTime?label=licencia)](LICENSE)
+[![Última versión](https://img.shields.io/github/v/release/KingKhaax/WipeHub?label=versi%C3%B3n)](https://github.com/KingKhaax/WipeHub/releases/latest)
+[![Descargas](https://img.shields.io/github/downloads/KingKhaax/WipeHub/total?label=descargas)](https://github.com/KingKhaax/WipeHub/releases)
+[![Licencia: MIT](https://img.shields.io/github/license/KingKhaax/WipeHub?label=licencia)](LICENSE)
 
-### <img src="docs/icons/inv_misc_net_01.jpg" width="28" height="28" alt="" align="absmiddle"> Pruébalo en la web: **[wipetime.vercel.app](https://wipetime.vercel.app)**
+### <img src="docs/icons/inv_misc_net_01.jpg" width="28" height="28" alt="" align="absmiddle"> Pruébalo en la web: **[wipehub.vercel.app](https://wipehub.vercel.app)**
 
 ## <img src="docs/icons/inv_misc_net_01.jpg" width="28" height="28" alt="" align="absmiddle"> Web
 
-Usa WipeTime directamente en el navegador, sin instalar nada:
+Usa WipeHub directamente en el navegador, sin instalar nada:
 
-**[https://wipetime.vercel.app](https://wipetime.vercel.app)**
+**[https://wipehub.vercel.app](https://wipehub.vercel.app)**
 
-Alternativa: [https://kingkhaax.github.io/WipeTime/](https://kingkhaax.github.io/WipeTime/)
+Alternativa: [https://kingkhaax.github.io/WipeHub/](https://kingkhaax.github.io/WipeHub/)
 
 ## <img src="docs/icons/inv_misc_book_09.jpg" width="28" height="28" alt="" align="absmiddle"> Qué hace
 
@@ -32,7 +32,7 @@ Alternativa: [https://kingkhaax.github.io/WipeTime/](https://kingkhaax.github.io
 
 ## <img src="docs/icons/inv_misc_map_01.jpg" width="28" height="28" alt="" align="absmiddle"> Cómo usarlo
 
-1. **Abre WipeTime**, como prefieras: en el navegador en [wipetime.vercel.app](https://wipetime.vercel.app) (sin instalar nada), instalando `WipeTime.vX.Y.Z.Setup.exe` o abriendo la versión portable `WipeTime.vX.Y.Z.exe` (los dos están en [Releases](https://github.com/KingKhaax/WipeTime/releases/latest)).
+1. **Abre WipeHub**, como prefieras: en el navegador en [wipehub.vercel.app](https://wipehub.vercel.app) (sin instalar nada), instalando `WipeHub.vX.Y.Z.Setup.exe` o abriendo la versión portable `WipeHub.vX.Y.Z.exe` (los dos están en [Releases](https://github.com/KingKhaax/WipeHub/releases/latest)).
 2. **Analiza un log:** pega el enlace de un informe de Warcraft Logs en la barra de arriba y pulsa **Cargar**. Elige tu personaje cuando te lo pida y navega por las pestañas del intento (Daño, Sanación, Muertes, Defensivos, Buffos, Mecánicas, Replay…).
 3. **Mira más cosas desde la barra superior:**
    - **Comparar logs:** tu intento contra 1–10 más, con consejos según tu rol.
@@ -41,29 +41,29 @@ Alternativa: [https://kingkhaax.github.io/WipeTime/](https://kingkhaax.github.io
 4. **Enlaces que se pueden compartir:** cada pantalla tiene su propia dirección (por ejemplo `#/report/…`, `#/guilds/…` o `#/char/…`), así que Atrás, Adelante y F5 funcionan, y con Mayús + clic se abre en otra ventana.
 5. **Ajustes** (la rueda de arriba): tema claro u oscuro, color de botones (con rueda para elegir cualquier color), colores propios, tamaño y fuente, región y dificultad por defecto, y exportar o importar tus ajustes. El idioma se cambia con el botón «Idioma» de la barra de arriba.
 
-> No necesitas cuenta ni claves: WipeTime usa un servidor intermedio propio (`server/vercel`, desplegado en Vercel) que hace las consultas de solo lectura a Warcraft Logs y Blizzard. Tus ajustes y tus personajes se guardan solo en tu equipo (o en tu navegador, si usas la web).
+> No necesitas cuenta ni claves: WipeHub usa un servidor intermedio propio (`server/vercel`, desplegado en Vercel) que hace las consultas de solo lectura a Warcraft Logs y Blizzard. Tus ajustes y tus personajes se guardan solo en tu equipo (o en tu navegador, si usas la web).
 
 ## <img src="docs/icons/inv_misc_gear_01.jpg" width="28" height="28" alt="" align="absmiddle"> Requisitos
 
 - Windows 10 u 11 (64 bits) para el programa de escritorio.
-- O cualquier navegador moderno para la [versión web](https://wipetime.vercel.app).
+- O cualquier navegador moderno para la [versión web](https://wipehub.vercel.app).
 - Un enlace público de un informe de [Warcraft Logs](https://www.warcraftlogs.com).
 
 ## <img src="docs/icons/inv_misc_gift_05.jpg" width="28" height="28" alt="" align="absmiddle"> Descarga
 
-Descarga la última versión desde [Releases](https://github.com/KingKhaax/WipeTime/releases/latest) (GitHub sustituye los espacios del nombre por puntos). En Releases solo está la última versión:
+Descarga la última versión desde [Releases](https://github.com/KingKhaax/WipeHub/releases/latest) (GitHub sustituye los espacios del nombre por puntos). En Releases solo está la última versión:
 
-- `WipeTime.vX.Y.Z.Setup.exe`: instalador. Se actualiza solo al abrirlo y se desinstala desde *Configuración → Aplicaciones* de Windows.
-- `WipeTime.vX.Y.Z.exe`: versión portable, no necesita instalación.
+- `WipeHub.vX.Y.Z.Setup.exe`: instalador. Se actualiza solo al abrirlo y se desinstala desde *Configuración → Aplicaciones* de Windows.
+- `WipeHub.vX.Y.Z.exe`: versión portable, no necesita instalación.
 - `latest.json`: versión y hashes SHA-256 (los usa el actualizador del programa).
 
-O sin descargar nada, en la web: [wipetime.vercel.app](https://wipetime.vercel.app).
+O sin descargar nada, en la web: [wipehub.vercel.app](https://wipehub.vercel.app).
 
 Los ejecutables no llevan firma digital, así que Windows SmartScreen puede avisar la primera vez: pulsa *Más información → Ejecutar de todas formas*. Puedes comprobar el archivo con los hashes de `latest.json`.
 
 ## <img src="docs/icons/inv_misc_note_06.jpg" width="28" height="28" alt="" align="absmiddle"> Novedades
 
-El historial de versiones está en el propio programa (Ajustes → Versión) y en [Releases](https://github.com/KingKhaax/WipeTime/releases) (solo se conserva la última).
+El historial de versiones está en el propio programa (Ajustes → Versión) y en [Releases](https://github.com/KingKhaax/WipeHub/releases) (solo se conserva la última).
 
 > Las secciones *Code signing policy* y *Privacy policy* están en inglés a propósito (requisito de la firma de código y de las políticas de privacidad).
 
@@ -78,16 +78,16 @@ Release binaries are built from this repository's source code by GitHub Actions 
 
 ## Privacy policy
 
-WipeTime does not collect telemetry and has no user accounts of its own. Settings, API keys you enter and the Battle.net login token are stored only on your computer (encrypted with Windows when available). To work, it makes these requests:
+WipeHub does not collect telemetry and has no user accounts of its own. Settings, API keys you enter and the Battle.net login token are stored only on your computer (encrypted with Windows when available). To work, it makes these requests:
 
 | Service | When | What is sent |
 |---|---|---|
 | [Warcraft Logs](https://www.warcraftlogs.com/) | When you load a log or rankings | The report code and the data queried |
-| WipeTime proxy (`wipetime-proxy.vercel.app`, run by the WipeTime developer on [Vercel](https://vercel.com/)) | When you haven't entered your own API keys | Forwards read-only Warcraft Logs and Blizzard queries (report codes, character/guild names). Nothing is stored; Vercel may keep standard request logs (IP address, time). |
-| [Blizzard Battle.net](https://www.blizzard.com/) | Only if you choose to log in, or look up characters/guilds | Login happens on Blizzard's own page; WipeTime receives your BattleTag and a read-only `wow.profile` token |
+| WipeHub proxy (`wipehub-proxy.vercel.app`, run by the WipeHub developer on [Vercel](https://vercel.com/)) | When you haven't entered your own API keys | Forwards read-only Warcraft Logs and Blizzard queries (report codes, character/guild names). Nothing is stored; Vercel may keep standard request logs (IP address, time). |
+| [Blizzard Battle.net](https://www.blizzard.com/) | Only if you choose to log in, or look up characters/guilds | Login happens on Blizzard's own page; WipeHub receives your BattleTag and a read-only `wow.profile` token |
 | [Raider.IO](https://raider.io/) | When you search characters/guilds or view Mythic+ rankings | The names searched |
 | [Wowhead](https://www.wowhead.com/), [Raidbots](https://www.raidbots.com/), assets.rpglogs.com, cdn.raidplan.io | When spells, talents, icons or boss maps are shown | Spell IDs and image requests |
-| [YouTube](https://www.youtube.com/) (modo de privacidad ampliada, `youtube-nocookie.com`) | Solo al abrir el panel del 12.1.5, donde se muestra el tráiler oficial | La petición del vídeo y tu dirección IP; el reproductor se carga desde la página de la web de WipeTime |
+| [YouTube](https://www.youtube.com/) (modo de privacidad ampliada, `youtube-nocookie.com`) | Solo al abrir el panel del 12.1.5, donde se muestra el tráiler oficial | La petición del vídeo y tu dirección IP; el reproductor se carga desde la página de la web de WipeHub |
 | [GitHub Pages](https://pages.github.com/) | Only if you use the web version | Serves the page; your settings, chosen character and uploaded maps stay in your browser (localStorage/IndexedDB) |
 | [GitHub](https://github.com/) | At startup and when you click update; first run downloads an icon pack | Checks for a new version and downloads updates |
 

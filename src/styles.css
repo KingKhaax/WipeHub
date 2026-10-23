@@ -694,7 +694,7 @@ button.brand:hover { background: var(--panel); }
 .cmp-win { display: inline-flex; margin-bottom: 12px; }
 .cmp-cta { margin-top: 12px; }
 
-/* ---------- WipeTime: logo, arte del parche, reinicio, arrastrar imagen ---------- */
+/* ---------- WipeHub: logo, arte del parche, reinicio, arrastrar imagen ---------- */
 .brand-logo { width: 28px; height: 28px; border-radius: 7px; }
 .exp-card { position: relative; }
 .exp-card.has-art { padding: 14px 24px 14px 14px; gap: 14px; }
@@ -1835,7 +1835,7 @@ select option { background: #17171a; color: var(--text); }
 @media (prefers-reduced-motion: reduce) { .exp-card::before, .exp-card::after, .exp-card .exp-img, .pn-box::after { animation: none; } }
 
 /* Portada: aurora que se mueve detrás del panel y borde de luz que gira alrededor, como en NinjaLoot pero en el color de acento de
-   WipeTime (sigue al acento elegido en Ajustes). Se desactiva con «Animaciones reducidas». */
+   WipeHub (sigue al acento elegido en Ajustes). Se desactiva con «Animaciones reducidas». */
 @property --wt-a { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
 .hero { isolation: isolate; }
 .hero::before {
@@ -2185,7 +2185,7 @@ button.brand .brand-logo { width: 36px; height: 36px; border-radius: 9px; }
 @media (max-width: 640px) { .chv-row { grid-template-columns: minmax(110px, 1fr) 90px 90px; padding: 7px 10px; } }
 
 /* Inicio: efecto al pasar el ratón como en las tarjetas de NinjaLoot (se eleva, borde y halo de luz, brillo que lo cruza y el icono
-   se inclina), en el color de acento de WipeTime. Vale para las tarjetas de funciones, los reportes recientes, el buscador de
+   se inclina), en el color de acento de WipeHub. Vale para las tarjetas de funciones, los reportes recientes, el buscador de
    personajes y sus botones pequeños. El botón «Buscar» conserva el suyo. */
 .feat, .rcard, .pf-search input, .pf-search select, .pf-rec .chip, .pf-rec-x, .recent-h .mini-btn, .pf-find .mini-btn {
   transition: transform .2s cubic-bezier(.2, .8, .2, 1), border-color .2s, box-shadow .2s, background .2s, color .2s;
@@ -3127,7 +3127,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, summary:focus-visib
 .pn-void .pn-fx::before { content: ''; position: absolute; width: 110px; height: 110px; right: -26px; top: 50%; margin-top: -55px; border-radius: 50%; background: conic-gradient(from 0deg, transparent 0 40%, #c58bff77 60%, transparent 85%); animation: pn-sw 5s linear infinite; }
 .pn-void .pn-fx::after { content: ''; position: absolute; width: 26px; height: 26px; right: 16px; top: 50%; margin-top: -13px; border-radius: 50%; background: radial-gradient(circle, #14052f 40%, #7c3ad8 70%, transparent 74%); box-shadow: 0 0 14px 3px #8a4ae6aa; animation: pn-pulse-v 3s ease-in-out infinite; }
 /* 12.1.7 · Núcleo del Mundo, oro */
-.pn-gold { background: linear-gradient(115deg, transparent 30%, #fff6c855 45%, transparent 60%) 0 0 / 250% 100%, linear-gradient(135deg, #f7d56a, #c88a1a 48%, #8a5a0e 62%, #e0a63a); color: #2b1a02; text-shadow: 0 1px 0 #fff4c0aa; box-shadow: 0 3px 14px #e0a63a66, inset 0 1px 0 #fff8d8, inset 0 -2px 0 #8a5a0e66; animation: pn-gsheen 4.5s ease-in-out infinite; }
+.pn-gold { background: linear-gradient(115deg, transparent 30%, #fff6c855 45%, transparent 60%) 0 0 / 250% 100%, linear-gradient(135deg, #f7d56a, #c88a1a 48%, #8a5a0e 62%, #e0a63a); color: #fff; text-shadow: 0 0 2px #000, 0 0 2px #000, 0 1px 3px #000, 1px 0 0 #000, -1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000; box-shadow: 0 3px 14px #e0a63a66, inset 0 1px 0 #fff8d8, inset 0 -2px 0 #8a5a0e66; animation: pn-gsheen 4.5s ease-in-out infinite; }
 .pn-gold:hover, .pn-gold:focus-visible { box-shadow: 0 6px 24px #ffd45a99, inset 0 1px 0 #fffbe5, inset 0 -2px 0 #8a5a0e66; }
 .pn-gold .pn-fx i { width: 7px; height: 7px; border-radius: 0; background: #fffbe0; clip-path: polygon(50% 0, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0 50%, 38% 38%); filter: drop-shadow(0 0 3px #fff3a0); animation: pn-spark 2.8s ease-in-out infinite; }
 .pn-gold .pn-fx i:nth-child(1) { left: 12%; top: 22%; } .pn-gold .pn-fx i:nth-child(2) { left: 30%; top: 66%; animation-delay: .8s; width: 5px; height: 5px; } .pn-gold .pn-fx i:nth-child(3) { left: 52%; top: 20%; animation-delay: 1.6s; } .pn-gold .pn-fx i:nth-child(4) { left: 72%; top: 62%; animation-delay: .4s; width: 5px; height: 5px; } .pn-gold .pn-fx i:nth-child(5) { left: 88%; top: 26%; animation-delay: 2.1s; }

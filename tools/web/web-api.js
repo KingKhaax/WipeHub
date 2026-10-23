@@ -1,6 +1,6 @@
 'use strict';
 
-// Versión web de WipeTime (GitHub Pages): sustituye al preload.js de Electron.
+// Versión web de WipeHub (GitHub Pages): sustituye al preload.js de Electron.
 // Expone el mismo `window.api` que la app de escritorio, pero hablando con el servidor intermedio (Vercel, que guarda las claves)
 // y con las APIs públicas que permiten CORS (Raider.IO, Wowhead, Raidbots). Lo que se guarda va al navegador (localStorage / IndexedDB).
 (function () {
@@ -24,7 +24,7 @@
   function db() {
     if (!dbp) {
       dbp = new Promise((resolve, reject) => {
-        const req = indexedDB.open('wipetime', 1);
+        const req = indexedDB.open('wipehub', 1);
         req.onupgradeneeded = () => req.result.createObjectStore('kv');
         req.onsuccess = () => resolve(req.result);
         req.onerror = () => reject(req.error);
@@ -291,7 +291,7 @@
     exportText: async (text, name) => {
       const a = document.createElement('a');
       a.href = URL.createObjectURL(new Blob(['﻿' + text], { type: 'text/csv;charset=utf-8' }));
-      a.download = String(name || 'wipetime.csv');
+      a.download = String(name || 'wipehub.csv');
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -305,7 +305,7 @@
       const code = q.get('report') || (fromLog && fromLog[1]);
       const fight = q.get('fight') || (fromLog && fromLog[2]);
       if (!code || !/^[A-Za-z0-9]+$/.test(code)) return null;
-      return `wipetime://report/${code}${fight && /^\d+$/.test(fight) ? `?fight=${fight}` : ''}`;
+      return `wipehub://report/${code}${fight && /^\d+$/.test(fight) ? `?fight=${fight}` : ''}`;
     },
     onDeepLink: () => {},
     rioGuilds: wrap(async (term) => {
@@ -504,7 +504,7 @@
     const bar = document.createElement('div');
     bar.id = 'newVer'; bar.className = 'newver'; bar.setAttribute('role', 'status');
     bar.innerHTML = '<span></span><button type="button" class="btn primary sm" data-nv="go"></button><button type="button" class="btn ghost sm" data-nv="x" aria-label="×">×</button>';
-    bar.firstChild.textContent = es ? 'Hay una versión nueva de WipeTime (v' + latest + ').' : 'There is a new version of WipeTime (v' + latest + ').';
+    bar.firstChild.textContent = es ? 'Hay una versión nueva de WipeHub (v' + latest + ').' : 'There is a new version of WipeHub (v' + latest + ').';
     bar.querySelector('[data-nv="go"]').textContent = es ? 'Recargar' : 'Reload';
     bar.addEventListener('click', (ev) => { const b = ev.target.closest('[data-nv]'); if (!b) return; if (b.dataset.nv === 'go') hardReload(); else bar.remove(); });
     document.body.appendChild(bar);

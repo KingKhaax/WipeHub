@@ -42,7 +42,7 @@ const HINT = { Lifebloom: ['druid'], 'Blade Flurry': ['rogue'], 'Kill Command': 
 for (const [n, cs] of Object.entries(HINT)) { if (!usage.has(n)) usage.set(n, new Map()); for (const c of cs) if (!usage.get(n).has(c)) usage.get(n).set(c, new Set()); }
 
 // Árboles de talentos (Raidbots): clase -> nombre -> [{ spec, spellId, icon }]
-const rb = await (await fetch('https://www.raidbots.com/static/data/live/talents.json', { headers: { 'user-agent': 'WipeTime' } })).json();
+const rb = await (await fetch('https://www.raidbots.com/static/data/live/talents.json', { headers: { 'user-agent': 'WipeHub' } })).json();
 const tree = new Map();
 for (const t of rb) {
   const cls = Object.keys(CLASS_RB).find((k) => CLASS_RB[k] === t.className);

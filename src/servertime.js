@@ -1,6 +1,6 @@
 'use strict';
 
-// Reloj del servidor (barra superior, a la derecha del logo de WipeTime): hora de la región elegida en horas, minutos y segundos.
+// Reloj del servidor (barra superior, a la derecha del logo de WipeHub): hora de la región elegida en horas, minutos y segundos.
 // Al pasar el ratón por encima muestra cuánto queda para el reinicio semanal de esa región.
 // Reinicios semanales (UTC): América, Latinoamérica y Oceanía martes 15:00; Europa miércoles 04:00; Corea y Taiwán jueves 02:00.
 const ServerClock = (() => {
@@ -171,7 +171,7 @@ const ServerClock = (() => {
     root.className = 'sc';
     root.setAttribute('role', 'timer');
     root.innerHTML = '<span class="sc-time"><b class="sc-h">--</b><em>:</em><b class="sc-m">--</b><em>:</em><b class="sc-s">--</b></span><span class="sc-reg">EU</span>';
-    el.after(root); // el reloj va a la derecha del logo de WipeTime
+    el.after(root); // el reloj va a la derecha del logo de WipeHub
     root.addEventListener('mouseenter', showTip);
     root.addEventListener('mouseleave', hideTip);
     tick();
@@ -199,7 +199,7 @@ const ServerClock = (() => {
   return { init, selectHTML, REGIONS };
 })();
 
-// WipeTime: este script se carga después de app.js, así que arranca aquí (S y WCSettings ya existen)
+// WipeHub: este script se carga después de app.js, así que arranca aquí (S y WCSettings ya existen)
 try {
   ServerClock.init({ before: document.getElementById('brandHome'), lang: () => (typeof S !== 'undefined' && S.lang) || 'es', region: () => WCSettings.get('serverRegion') || 'eu', setRegion: (v) => WCSettings.set('serverRegion', v) });
 } catch (e) { console.error('reloj del servidor', e); }

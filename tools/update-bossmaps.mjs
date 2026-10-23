@@ -1,6 +1,6 @@
 // Genera src/bossmaps.json y src/bossmaps.js con el catálogo de mapas de jefes publicado por RaidPlan.io
 // (datos públicos de su página: jefe, mapa, tamaño en yardas y posición/rotación en el mundo).
-// Las imágenes NO se incluyen en el programa: WipeTime las descarga bajo demanda a la carpeta de datos del usuario.
+// Las imágenes NO se incluyen en el programa: WipeHub las descarga bajo demanda a la carpeta de datos del usuario.
 // Uso:  node tools/update-bossmaps.mjs
 import fs from 'fs';
 import path from 'path';

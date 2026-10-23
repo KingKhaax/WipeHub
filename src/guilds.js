@@ -65,7 +65,7 @@ const Guilds = (() => {
             <p>${LL('Detectamos tus guilds automáticamente y abrimos sus logs y rankings con un clic.', 'We detect your guilds automatically and open their logs and rankings in one click.')}</p>
             <ul class="bn-feats"><li>${LL('Tus guilds al instante', 'Your guilds instantly')}</li><li>${LL('Logs recientes', 'Recent logs')}</li><li>${LL('Ranking de parses', 'Parse ranking')}</li></ul></div>
           ${hasClient ? `<button class="bn-btn" data-gd="login">${glyph}<span>${LL('Iniciar sesión con Battle.net', 'Sign in with Battle.net')}</span></button>` : ''}
-          <small class="bn-note">${LL('Solo leemos los nombres de tus personajes y guilds. Tu contraseña nunca pasa por WipeTime.', 'We only read your character and guild names. Your password never goes through WipeTime.')}</small></div>`;
+          <small class="bn-note">${LL('Solo leemos los nombres de tus personajes y guilds. Tu contraseña nunca pasa por WipeHub.', 'We only read your character and guild names. Your password never goes through WipeHub.')}</small></div>`;
     let mine = '';
     if (st.busy === 'mine') mine = `<div class="loading"><span class="spinner"></span>${LL('Buscando tus guilds…', 'Finding your guilds…')}</div>`;
     else if (st.mineErr) mine = `<div class="error"><p>${esc(st.mineErr)}</p></div>`;
@@ -385,7 +385,7 @@ const Guilds = (() => {
   function bodyHTML() {
     const g = st.sel;
     const tab = (k, l) => `<button class="chip ${st.tab === k ? 'on' : ''}" data-gd="tab" data-tab="${k}">${l}</button>`;
-    return `${st.tab === 'rank' ? '' : `<div class="gd-head"><span data-crest data-realm="${esc(g.realmSlug)}" data-guild="${esc(g.name)}" data-size="56"></span><h2>${esc(g.name)}</h2><span class="muted">${esc(g.realmName || g.realmSlug)} · ${region()}</span><button type="button" class="btn ghost sm bell ${alertOn(g) ? 'on' : ''}" data-gd="bell" title="${esc(LL('Avisarme cuando suba un log nuevo o mate un jefe (mientras WipeTime esté abierto)', 'Notify me when it uploads a new log or kills a boss (while WipeTime is open)'))}">${alertOn(g) ? '🔔' : '🔕'} ${alertOn(g) ? LL('Avisos activados', 'Alerts on') : LL('Avisarme', 'Notify me')}</button>${guildSaved(g) ? `<button type="button" class="btn ghost sm" data-gd="unsaveguild">${LL('Quitar de mis guilds', 'Remove from my guilds')}</button>` : `<button type="button" class="btn sm" data-gd="saveguild">★ ${LL('Guardar guild', 'Save guild')}</button>`}</div>`}
+    return `${st.tab === 'rank' ? '' : `<div class="gd-head"><span data-crest data-realm="${esc(g.realmSlug)}" data-guild="${esc(g.name)}" data-size="56"></span><h2>${esc(g.name)}</h2><span class="muted">${esc(g.realmName || g.realmSlug)} · ${region()}</span><button type="button" class="btn ghost sm bell ${alertOn(g) ? 'on' : ''}" data-gd="bell" title="${esc(LL('Avisarme cuando suba un log nuevo o mate un jefe (mientras WipeHub esté abierto)', 'Notify me when it uploads a new log or kills a boss (while WipeHub is open)'))}">${alertOn(g) ? '🔔' : '🔕'} ${alertOn(g) ? LL('Avisos activados', 'Alerts on') : LL('Avisarme', 'Notify me')}</button>${guildSaved(g) ? `<button type="button" class="btn ghost sm" data-gd="unsaveguild">${LL('Quitar de mis guilds', 'Remove from my guilds')}</button>` : `<button type="button" class="btn sm" data-gd="saveguild">★ ${LL('Guardar guild', 'Save guild')}</button>`}</div>`}
       <div class="metricbar">${tabsBar()}</div>
       <div id="gdTab"><div class="loading"><span class="spinner"></span>${t('loading')}</div></div>`;
   }
@@ -647,7 +647,7 @@ const Guilds = (() => {
         if (!guildSaved(g)) saveList('gd:guilds', [...savedGuilds(), { name: g.name, realmSlug: g.realmSlug, realmName: g.realmName || g.realmSlug, region: g.region || st.status?.region || 'eu' }]);
         try { if ('Notification' in window && Notification.permission === 'default') Notification.requestPermission(); } catch { /* sin notificaciones */ }
         pollAlerts();
-        toast(LL('Avisos activados: te diré cuando suba un log nuevo o mate un jefe mientras WipeTime esté abierto', 'Alerts on: I will tell you when it uploads a new log or kills a boss while WipeTime is open'));
+        toast(LL('Avisos activados: te diré cuando suba un log nuevo o mate un jefe mientras WipeHub esté abierto', 'Alerts on: I will tell you when it uploads a new log or kills a boss while WipeHub is open'));
       } else toast(LL('Avisos desactivados', 'Alerts off'));
       rebuild(); render();
     }

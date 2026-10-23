@@ -491,7 +491,7 @@ const Profile = (() => {
     const race = SIMC_RACE[a.raceId] || String(a.race || '').toLowerCase().replace(/[^a-z']+/g, '_');
     const d = new Date();
     const stamp = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
-    const lines = [`# ${a.name} - ${spec ? spec[0].toUpperCase() + spec.slice(1) : a.spec} - ${stamp} - ${st.q.region.toUpperCase()}/${a.realmName || st.q.realm}`, '# Exportado por WipeTime', '',
+    const lines = [`# ${a.name} - ${spec ? spec[0].toUpperCase() + spec.slice(1) : a.spec} - ${stamp} - ${st.q.region.toUpperCase()}/${a.realmName || st.q.realm}`, '# Exportado por WipeHub', '',
       `${cls}="${a.name}"`, `level=${a.level}`, `race=${race}`, `region=${st.q.region}`, `server=${st.q.slug}`, `role=${simcRole(cls, spec)}`];
     if (st.rio?.talents?.text) lines.push(`talents=${st.rio.talents.text}`);
     if (spec) lines.push(`spec=${spec}`);
@@ -777,7 +777,7 @@ const Profile = (() => {
   }
   const embedHTML = () => (st.embed ? `<div class="pf pf-embed"><div class="pf-tiles">${tilesHTML()}</div>${controlsHTML()}${tableHTML()}${xpHTML()}</div>` : '');
 
-  // Enlace directo: …/WipeTime/#char=eu/zuljin/okita abre directamente la ficha de ese personaje
+  // Enlace directo: …/WipeHub/#char=eu/zuljin/okita abre directamente la ficha de ese personaje
   setTimeout(() => {
     const m = /#char=([a-z]{2})\/([^/]+)\/(.+)$/i.exec(location.hash || '');
     if (!m) return;

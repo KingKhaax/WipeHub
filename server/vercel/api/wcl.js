@@ -38,7 +38,7 @@ module.exports = async (req, res) => {
     const hit = useCache && CACHE.get(key);
     if (hit && Date.now() - hit.at < TTL) {
       res.status(hit.status).setHeader('content-type', 'application/json');
-      res.setHeader('x-wipetime-cache', 'hit');
+      res.setHeader('x-wipehub-cache', 'hit');
       return res.send(hit.body);
     }
     let job = useCache && INFLIGHT.get(key);
@@ -58,7 +58,7 @@ module.exports = async (req, res) => {
     }
     const out = await job;
     res.status(out.status).setHeader('content-type', 'application/json');
-    res.setHeader('x-wipetime-cache', 'miss');
+    res.setHeader('x-wipehub-cache', 'miss');
     res.send(out.body);
   } catch (e) {
     send(res, 502, { error: String(e.message || e) });

@@ -1,4 +1,4 @@
-# Publica la web en Vercel (https://wipetime.vercel.app) con la misma versión que la release y GitHub Pages.
+# Publica la web en Vercel (https://wipehub.vercel.app) con la misma versión que la release y GitHub Pages.
 # La lanza el workflow «Release» justo después de publicar la release (solo si pasaron las pruebas), o a mano desde Actions.
 # Necesita un secreto del repositorio llamado VERCEL_TOKEN (Vercel → Settings → Tokens). Si no existe, este paso se salta con un aviso.
 

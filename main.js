@@ -9,7 +9,7 @@ const fs = require('fs');
   try {
     const newDir = app.getPath('userData');
     if (fs.existsSync(path.join(newDir, 'config.json'))) return;
-    for (const old of ['LogLens']) {
+    for (const old of ['LogLens', 'WipeTime']) {
       const oldDir = path.join(app.getPath('appData'), old);
       if (oldDir.toLowerCase() === newDir.toLowerCase() || !fs.existsSync(path.join(oldDir, 'config.json'))) continue;
       fs.mkdirSync(newDir, { recursive: true });
@@ -616,7 +616,7 @@ async function resolveBossMap(rel) {
   if (!bossMapAllowed().has(rel)) throw new Error('NOT_ALLOWED'); // solo rutas del catálogo
   const file = path.join(bossMapDir(), rel.split('/').pop());
   if (fs.existsSync(file)) return fs.readFileSync(file);
-  const res = await fetch(BOSSMAP_CDN + rel, { headers: { 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) WipeTime' } });
+  const res = await fetch(BOSSMAP_CDN + rel, { headers: { 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) WipeHub' } });
   if (!res.ok) throw new Error('HTTP_' + res.status);
   const buf = Buffer.from(await res.arrayBuffer());
   fs.mkdirSync(bossMapDir(), { recursive: true });
@@ -677,7 +677,7 @@ ipcMain.handle('spell:tip', async (_e, id, lang) => {
   } catch { /* sin caché */ }
   try {
     const res = await fetch(`https://nether.wowhead.com/tooltip/spell/${id}?dataEnv=1&locale=${loc}`, {
-      headers: { 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) WipeTime', accept: 'application/json' },
+      headers: { 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) WipeHub', accept: 'application/json' },
     });
     if (!res.ok) return { error: 'HTTP_' + res.status };
     const j = await res.json();
@@ -697,7 +697,7 @@ ipcMain.handle('talents:map', async () => {
     if (Date.now() - fs.statSync(file).mtimeMs < 7 * 24 * 3600 * 1000) { talentMapMem = JSON.parse(fs.readFileSync(file, 'utf8')); return talentMapMem; }
   } catch { /* sin caché */ }
   try {
-    const res = await fetch('https://www.raidbots.com/static/data/live/talents.json', { headers: { 'user-agent': 'WipeTime' } });
+    const res = await fetch('https://www.raidbots.com/static/data/live/talents.json', { headers: { 'user-agent': 'WipeHub' } });
     if (!res.ok) throw new Error('HTTP_' + res.status);
     const j = await res.json();
     const map = {};
@@ -735,7 +735,7 @@ let pendingUpdate = null;
 async function fetchManifest(source) {
   source = String(source || '').trim();
   if (!source) throw new Error('NO_SOURCE');
-  const headers = { 'user-agent': 'WipeTime-updater', accept: 'application/json' };
+  const headers = { 'user-agent': 'WipeHub-updater', accept: 'application/json' };
   if (/^[\w.-]+\/[\w.-]+$/.test(source)) {
     // Primero latest.json de la última release (descarga normal de github.com, sin el límite de 60 consultas/hora de la API)
     try {
@@ -744,7 +744,7 @@ async function fetchManifest(source) {
         const lj = await r.json(), v = String(lj.version || '').replace(/^v/i, '');
         if (v) {
           const base = `https://github.com/${source}/releases/download/v${v}/`;
-          return { version: v, notes: '', setup: `${base}WipeTime.v${v}.Setup.exe`, portable: `${base}WipeTime.v${v}.exe`, sha256: lj.sha256 || '', sha256Portable: lj.sha256Portable || '' };
+          return { version: v, notes: '', setup: `${base}WipeHub.v${v}.Setup.exe`, portable: `${base}WipeHub.v${v}.exe`, sha256: lj.sha256 || '', sha256Portable: lj.sha256Portable || '' };
         }
       }
     } catch { /* se intenta con la API */ }
@@ -765,8 +765,8 @@ async function fetchManifest(source) {
   return res.json();
 }
 
-// Fuente fija: las Releases del repositorio de WipeTime (no hay que escribir ninguna dirección)
-const UPDATE_SOURCE = 'KingKhaax/WipeTime';
+// Fuente fija: las Releases del repositorio de WipeHub (no hay que escribir ninguna dirección)
+const UPDATE_SOURCE = 'KingKhaax/WipeHub';
 
 ipcMain.handle('update:check', async () => {
   const current = app.getVersion();
@@ -810,7 +810,7 @@ ipcMain.handle('update:install', async (e) => {
   const url = portable ? mf.portable : mf.setup;
   if (!url || !/^https:\/\//i.test(url)) return { error: 'NO_ASSET' };
   try {
-    const res = await fetch(url, { headers: { 'user-agent': 'WipeTime-updater' } });
+    const res = await fetch(url, { headers: { 'user-agent': 'WipeHub-updater' } });
     if (!res.ok) throw new Error('HTTP_' + res.status);
     const total = Number(res.headers.get('content-length')) || 0;
     const chunks = [];
@@ -826,9 +826,9 @@ ipcMain.handle('update:install', async (e) => {
     const buf = Buffer.concat(chunks);
     const want = String((portable ? mf.sha256Portable || mf.sha256 : mf.sha256) || '').toLowerCase();
     if (want && require('crypto').createHash('sha256').update(buf).digest('hex') !== want) throw new Error('BAD_HASH');
-    const dir = path.join(app.getPath('temp'), 'wipetime-update');
+    const dir = path.join(app.getPath('temp'), 'wipehub-update');
     fs.mkdirSync(dir, { recursive: true });
-    const file = path.join(dir, portable ? 'WipeTime-new.exe' : 'WipeTime-Setup.exe');
+    const file = path.join(dir, portable ? 'WipeHub-new.exe' : 'WipeHub-Setup.exe');
     fs.writeFileSync(file, buf);
     if (portable) {
       const target = process.env.PORTABLE_EXECUTABLE_FILE;
@@ -850,7 +850,7 @@ ipcMain.handle('export:png', async (e, rect, name) => {
   try {
     const { dialog } = require('electron');
     const win = BrowserWindow.fromWebContents(wc);
-    const pick = await dialog.showSaveDialog(win, { defaultPath: path.join(app.getPath('pictures'), String(name || 'wipetime.png')), filters: [{ name: 'PNG', extensions: ['png'] }] });
+    const pick = await dialog.showSaveDialog(win, { defaultPath: path.join(app.getPath('pictures'), String(name || 'wipehub.png')), filters: [{ name: 'PNG', extensions: ['png'] }] });
     if (pick.canceled || !pick.filePath) return { canceled: true };
     wc.debugger.attach('1.3');
     try {
@@ -867,16 +867,16 @@ ipcMain.handle('export:text', async (e, text, name, ext) => {
   try {
     const { dialog } = require('electron');
     const win = BrowserWindow.fromWebContents(e.sender);
-    const pick = await dialog.showSaveDialog(win, { defaultPath: path.join(app.getPath('documents'), String(name || 'wipetime.' + ext)), filters: [{ name: String(ext).toUpperCase(), extensions: [ext] }] });
+    const pick = await dialog.showSaveDialog(win, { defaultPath: path.join(app.getPath('documents'), String(name || 'wipehub.' + ext)), filters: [{ name: String(ext).toUpperCase(), extensions: [ext] }] });
     if (pick.canceled || !pick.filePath) return { canceled: true };
     fs.writeFileSync(pick.filePath, String(text), 'utf8');
     return { ok: true, file: pick.filePath };
   } catch (err) { return { error: String(err.message || err) }; }
 });
 
-// ---- Enlaces wipetime://report/<código>?fight=<n>
+// ---- Enlaces wipehub://report/<código>?fight=<n>
 let pendingLink = null;
-const linkFrom = (argv) => (argv || []).find((a) => /^wipetime:\/\//i.test(a)) || null;
+const linkFrom = (argv) => (argv || []).find((a) => /^(wipehub|wipetime):\/\//i.test(a)) || null;
 function sendLink(link) {
   const win = BrowserWindow.getAllWindows()[0];
   if (win && !win.webContents.isLoading()) { win.webContents.send('deeplink', link); if (win.isMinimized()) win.restore(); win.focus(); } else pendingLink = link;
@@ -1032,7 +1032,7 @@ function wowheadItem(id, bonus, level, loc) {
     whItemMem.set(key, (async () => {
       try {
         const q = bonus && bonus.length ? `&bonus=${bonus.join(':')}` : '';
-        const res = await fetch(`https://nether.wowhead.com/tooltip/item/${Number(id)}?dataEnv=1&locale=${loc}&lvl=${Number(level) || 90}${q}`, { headers: { 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) WipeTime', accept: 'application/json' } });
+        const res = await fetch(`https://nether.wowhead.com/tooltip/item/${Number(id)}?dataEnv=1&locale=${loc}&lvl=${Number(level) || 90}${q}`, { headers: { 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) WipeHub', accept: 'application/json' } });
         if (!res.ok) return null;
         const j = await res.json();
         return { name: j.name || '', icon: j.icon || '', quality: j.quality ?? 0, tooltip: j.tooltip || '' };
@@ -1196,7 +1196,7 @@ ipcMain.handle('rio:rank', async (_e, { raid, difficulty, region, realmSlug, gui
     const norm = (s) => String(s || '').toLowerCase();
     const slugs = (r) => [norm(r.slug), norm(r.altSlug)].filter(Boolean);
     const page = async (reg, n) => {
-      const res = await fetch(`https://raider.io/api/v1/raiding/raid-rankings?raid=${raid}&difficulty=${diffOk}&region=${reg}&limit=100&page=${n}`, { headers: { 'user-agent': 'WipeTime' } });
+      const res = await fetch(`https://raider.io/api/v1/raiding/raid-rankings?raid=${raid}&difficulty=${diffOk}&region=${reg}&limit=100&page=${n}`, { headers: { 'user-agent': 'WipeHub' } });
       if (!res.ok) throw new Error('HTTP_' + res.status);
       return (await res.json()).raidRankings || [];
     };
@@ -1237,7 +1237,7 @@ ipcMain.handle('rio:search', async (_e, term) => {
   try {
     const q = String(term || '').trim();
     if (q.length < 2) return { list: [], hidden: 0 };
-    const res = await fetch(`https://raider.io/api/search?term=${encodeURIComponent(q)}&type=character`, { headers: { 'user-agent': 'WipeTime', accept: 'application/json' } });
+    const res = await fetch(`https://raider.io/api/search?term=${encodeURIComponent(q)}&type=character`, { headers: { 'user-agent': 'WipeHub', accept: 'application/json' } });
     if (!res.ok) return { error: 'HTTP_' + res.status };
     const j = await res.json();
     const low = q.toLowerCase();
@@ -1263,7 +1263,7 @@ ipcMain.handle('rio:char', async (_e, region, realmSlug, name) => {
   try {
     if (!['eu', 'us', 'kr', 'tw'].includes(region)) region = 'eu';
     const fields = 'mythic_plus_scores_by_season:current,mythic_plus_ranks,gear,talents';
-    const res = await fetch(`https://raider.io/api/v1/characters/profile?region=${region}&realm=${encodeURIComponent(realmSlug)}&name=${encodeURIComponent(name)}&fields=${encodeURIComponent(fields)}`, { headers: { 'user-agent': 'WipeTime', accept: 'application/json' } });
+    const res = await fetch(`https://raider.io/api/v1/characters/profile?region=${region}&realm=${encodeURIComponent(realmSlug)}&name=${encodeURIComponent(name)}&fields=${encodeURIComponent(fields)}`, { headers: { 'user-agent': 'WipeHub', accept: 'application/json' } });
     if (!res.ok) return { error: 'HTTP_' + res.status };
     const j = await res.json();
     // Talentos que lleva ahora (los gratuitos del árbol no se muestran) y el texto para importarlos en el juego
@@ -1280,7 +1280,7 @@ ipcMain.handle('rio:char', async (_e, region, realmSlug, name) => {
 ipcMain.handle('rio:spec', async (_e, region, realmSlug, name) => {
   try {
     if (!['eu', 'us', 'kr', 'tw'].includes(region)) region = 'eu';
-    const res = await fetch(`https://raider.io/api/v1/characters/profile?region=${region}&realm=${encodeURIComponent(realmSlug)}&name=${encodeURIComponent(name)}`, { headers: { 'user-agent': 'WipeTime', accept: 'application/json' } });
+    const res = await fetch(`https://raider.io/api/v1/characters/profile?region=${region}&realm=${encodeURIComponent(realmSlug)}&name=${encodeURIComponent(name)}`, { headers: { 'user-agent': 'WipeHub', accept: 'application/json' } });
     if (!res.ok) return { error: 'HTTP_' + res.status };
     const j = await res.json();
     return { spec: j.active_spec_name || '', cls: j.class || '' };
@@ -1291,7 +1291,7 @@ ipcMain.handle('rio:guilds', async (_e, term) => {
   try {
     const q = String(term || '').trim();
     if (q.length < 2) return { list: [] };
-    const res = await fetch(`https://raider.io/api/search?term=${encodeURIComponent(q)}&type=guild`, { headers: { 'user-agent': 'WipeTime', accept: 'application/json' } });
+    const res = await fetch(`https://raider.io/api/search?term=${encodeURIComponent(q)}&type=guild`, { headers: { 'user-agent': 'WipeHub', accept: 'application/json' } });
     if (!res.ok) return { error: 'HTTP_' + res.status };
     const j = await res.json();
     const low = q.toLowerCase();
@@ -1307,8 +1307,8 @@ ipcMain.handle('open:external', (_e, url) => {
   if (/^https:\/\/(([a-z]+\.)?warcraftlogs\.com|worldofwarcraft\.blizzard\.com|news\.blizzard\.com|(www\.)?raider\.io|(www\.)?raidbots\.com|kingkhaax\.github\.io)\//.test(url)) shell.openExternal(url);
 });
 
-// Modo silencioso para pruebas automáticas: con WIPETIME_QUIET=1 la ventana no se muestra ni roba el foco.
-const QUIET = process.env.WIPETIME_QUIET === '1';
+// Modo silencioso para pruebas automáticas: con WIPEHUB_QUIET=1 la ventana no se muestra ni roba el foco.
+const QUIET = process.env.WIPEHUB_QUIET === '1';
 
 function createWindow() {
   const win = new BrowserWindow({
@@ -1318,7 +1318,7 @@ function createWindow() {
     minWidth: 960,
     minHeight: 600,
     backgroundColor: '#0e1117',
-    title: 'WipeTime',
+    title: 'WipeHub',
     icon: path.join(__dirname, 'src', 'icon.png'),
     autoHideMenuBar: true,
     webPreferences: {
@@ -1332,7 +1332,7 @@ function createWindow() {
   win.loadFile(path.join(__dirname, 'src', 'index.html'));
 }
 
-// Una sola instancia (solo instalada): un enlace wipetime:// abre el reporte en la ventana que ya existe
+// Una sola instancia (solo instalada): un enlace wipehub:// abre el reporte en la ventana que ya existe
 if (app.isPackaged) {
   if (!app.requestSingleInstanceLock()) app.quit();
   else {
@@ -1342,7 +1342,7 @@ if (app.isPackaged) {
       if (win) { if (win.isMinimized()) win.restore(); win.focus(); }
       if (l) sendLink(l);
     });
-    app.setAsDefaultProtocolClient('wipetime', process.env.PORTABLE_EXECUTABLE_FILE || process.execPath, []);
+    for (const proto of ['wipehub', 'wipetime']) app.setAsDefaultProtocolClient(proto, process.env.PORTABLE_EXECUTABLE_FILE || process.execPath, []);
   }
 }
 pendingLink = linkFrom(process.argv);

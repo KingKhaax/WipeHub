@@ -99,7 +99,7 @@ const Patch122 = (() => {
         ${ul([
           L('<b>Estado:</b> anunciado en la BlizzCon el 12 de septiembre de 2026. Blizzard no ha dado fecha de salida, por eso sale como «Próximamente».', '<b>Status:</b> announced at BlizzCon on September 12, 2026. Blizzard has not given a release date, so it is shown as “Coming soon”.'),
           L('<b>Temporada 3:</b> empieza «poco después del lanzamiento de Eclipse», sin fecha.', '<b>Season 3:</b> starts “shortly after the launch of Eclipse”, no date.'),
-          L('<b>Cambios de clase:</b> Blizzard y Wowhead no han publicado ninguno para el 12.2 en las fuentes consultadas; WipeTime los añadirá cuando salgan.', '<b>Class changes:</b> Blizzard and Wowhead have not published any for 12.2 in the sources consulted; WipeTime will add them when they appear.'),
+          L('<b>Cambios de clase:</b> Blizzard y Wowhead no han publicado ninguno para el 12.2 en las fuentes consultadas; WipeHub los añadirá cuando salgan.', '<b>Class changes:</b> Blizzard and Wowhead have not published any for 12.2 in the sources consulted; WipeHub will add them when they appear.'),
         ])}
         ${bz()}
         <div class="p22-grid">${cards}</div>
@@ -171,7 +171,7 @@ const Patch122 = (() => {
         <ul class="pn-list">${[W.announce(), W.worldcore(), W.top5(), W.noctinaxx(), W.recap(), W.overview()].map((w) => `<li>${lnk(w[0], w[2])}</li>`).join('')}<li>${lnk(WH.talebound, 'Talebound: A New Game Mode in Patch 12.1.7')}</li></ul>
         <h3 class="pn-h">${L('Avance en redes', 'Preview on social media')}</h3>
         <ul class="pn-list"><li>${lnk(LINK, L('Avance del parche 12.2 · @Warcraft_ES en X', 'Patch 12.2 preview · @Warcraft_ES on X'))}</li></ul>
-        <p class="foot">${L('Los textos están traducidos y resumidos por WipeTime; los nombres en español son los de la página oficial de Blizzard en español. De las noticias de Wowhead solo se pudo leer el titular y la fecha, por eso cada una se resume con eso y enlaza al artículo.', 'Texts are translated and summarized by WipeTime; Spanish names are those of Blizzard\'s official Spanish page. Only the headline and date of the Wowhead news could be read, so each is summarized with that and links to the article.')}</p>`],
+        <p class="foot">${L('Los textos están traducidos y resumidos por WipeHub; los nombres en español son los de la página oficial de Blizzard en español. De las noticias de Wowhead solo se pudo leer el titular y la fecha, por eso cada una se resume con eso y enlaza al artículo.', 'Texts are translated and summarized by WipeHub; Spanish names are those of Blizzard\'s official Spanish page. Only the headline and date of the Wowhead news could be read, so each is summarized with that and links to the article.')}</p>`],
     ];
   };
 

@@ -3,7 +3,7 @@
 //   node tools/stats.mjs --mine 3   (resta de las visitas únicas las tuyas, si sabes cuántas son)
 import { execFileSync } from 'node:child_process';
 
-const repo = 'KingKhaax/WipeTime';
+const repo = 'KingKhaax/WipeHub';
 const gh = (p) => JSON.parse(execFileSync('gh', ['api', `repos/${repo}/${p}`], { encoding: 'utf8' }));
 const mine = Number(process.argv[process.argv.indexOf('--mine') + 1]) || 0;
 

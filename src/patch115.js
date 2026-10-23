@@ -14,7 +14,7 @@ const Patch115 = (() => {
   // Tráiler oficial «12.1.5 Content Update» en cada idioma de la web (canales oficiales de World of Warcraft en YouTube)
   const VIDEOS = { es: 'p2mAOys5pAU', en: 'phxy5Gat_Gs' };
   // El panel se abre desde file://, donde YouTube rechaza la incrustación: se usa la misma página de la web publicada (https)
-  const videoSrc = (id) => `${location.protocol === 'file:' ? 'https://kingkhaax.github.io/WipeTime/' : ''}video.html?v=${id}`;
+  const videoSrc = (id) => `${location.protocol === 'file:' ? 'https://kingkhaax.github.io/WipeHub/' : ''}video.html?v=${id}`;
   let timer = null;
 
   const pad = (n) => String(n).padStart(2, '0');
@@ -62,7 +62,7 @@ const Patch115 = (() => {
     const boss = typeof MECH_DATA !== 'undefined' ? MECH_DATA.bosses.find((b) => b.slug === 'kithix') : null;
     if (!boss) return '';
     return h(L('Mecánicas de Kith\'ix', 'Kith\'ix mechanics'))
-      + p(L('Resumen de WipeTime a partir de las guías de Method, wow.gg y Skycoach. Cada habilidad tiene su icono y las dificultades en las que aparece en la pestaña Mecánicas del jefe. Las marcadas «sin verificar» solo las cuenta una guía y pueden cambiar.', 'WipeTime summary built from the Method, wow.gg and Skycoach guides. Each ability has its icon and the difficulties it appears in on the boss\'s Mechanics tab. Those marked «unverified» are only reported by one guide and may change.'))
+      + p(L('Resumen de WipeHub a partir de las guías de Method, wow.gg y Skycoach. Cada habilidad tiene su icono y las dificultades en las que aparece en la pestaña Mecánicas del jefe. Las marcadas «sin verificar» solo las cuenta una guía y pueden cambiar.', 'WipeHub summary built from the Method, wow.gg and Skycoach guides. Each ability has its icon and the difficulties it appears in on the boss\'s Mechanics tab. Those marked «unverified» are only reported by one guide and may change.'))
       + boss.phases.map((ph) => `<h4>${esc(ph.phase)}</h4>${ul(ph.mechanics.map((m) => `<b>${esc(m.name)}</b> — ${esc(m.note)}`))}`).join('');
   }
 
@@ -244,7 +244,7 @@ const Patch115 = (() => {
         `<a href="#" data-pn-link="${LINK_NEWS}">${L('Anuncio: "Midnight\'s 12.1.5 Content Update Arrives October 13"', 'Announcement: "Midnight\'s 12.1.5 Content Update Arrives October 13"')}</a>`,
         `<a href="#" data-pn-link="${LINK_NOTES}">${L('Notas de la actualización 12.1.5 (Midnight)', '12.1.5 Content Update Notes (Midnight)')}</a>`,
       ])
-      + p(L('Los textos están resumidos y traducidos por WipeTime; los nombres de talentos y hechizos se dejan en inglés. La fecha del miércoles 14 en Europa viene de la prensa especializada. Si Blizzard cambia algo, manda su web.', 'Texts are summarised and translated by WipeTime; talent and spell names are kept in English. The Wednesday 14 European date comes from the specialist press. If Blizzard changes anything, its website prevails.'))],
+      + p(L('Los textos están resumidos y traducidos por WipeHub; los nombres de talentos y hechizos se dejan en inglés. La fecha del miércoles 14 en Europa viene de la prensa especializada. Si Blizzard cambia algo, manda su web.', 'Texts are summarised and translated by WipeHub; talent and spell names are kept in English. The Wednesday 14 European date comes from the specialist press. If Blizzard changes anything, its website prevails.'))],
   ];
 
 
@@ -395,7 +395,7 @@ const Patch115 = (() => {
         lk('https://mamytwink.com/actualite/patch-12-1-7-les-elements-de-decoration-chez-les-marchands-dazeroth', L('Mamytwink: adornos de hogar en los mercaderes (en francés)', 'Mamytwink: decor sold by merchants (in French)')),
         lk(LINK117.mounts, L('Monturas encontradas en los datos del 12.1.7', 'Mounts found in the 12.1.7 data')),
       ])
-      + p(L('Los textos están resumidos y traducidos por WipeTime. Los nombres de objetos, logros y hechizos sin traducción confirmada se dejan en inglés. Todo es contenido del RPP: puede cambiar antes de que el parche salga.', 'Texts are summarized and translated by WipeTime. Item, achievement and spell names without a confirmed translation are left in English. Everything is PTR content and may change before the patch goes live.'))],
+      + p(L('Los textos están resumidos y traducidos por WipeHub. Los nombres de objetos, logros y hechizos sin traducción confirmada se dejan en inglés. Todo es contenido del RPP: puede cambiar antes de que el parche salga.', 'Texts are summarized and translated by WipeHub. Item, achievement and spell names without a confirmed translation are left in English. Everything is PTR content and may change before the patch goes live.'))],
   ];
 
   const PATCHES = () => ({

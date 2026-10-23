@@ -1,4 +1,4 @@
-# Compila WipeTime en GitHub, lo firma con SignPath (si está configurado) y publica la release.
+# Compila WipeHub en GitHub, lo firma con SignPath (si está configurado) y publica la release.
 # Se lanza solo al subir a main un cambio de la app (src/, main.js, package.json…) o a mano: Actions -> "Release" -> Run workflow.
 # Si cambia la app sin subir la "version", avisa con una advertencia: ni la web ni los .exe se actualizan (así siempre son la misma versión).
 # Al terminar la release publica también la web (GitHub Pages) con el mismo commit.
@@ -96,19 +96,19 @@ jobs:
 
       - run: npm ci
 
-      # 1) Empaquetar la app (sin instalador) y firmar WipeTime.exe
+      # 1) Empaquetar la app (sin instalador) y firmar WipeHub.exe
       - name: Empaquetar app
         run: npx electron-builder --win dir --publish never
 
-      - name: Subir WipeTime.exe sin firmar
+      - name: Subir WipeHub.exe sin firmar
         if: steps.sign.outputs.on == 'true'
         id: upload-app
         uses: actions/upload-artifact@v7
         with:
           name: app-unsigned
-          path: dist/win-unpacked/WipeTime.exe
+          path: dist/win-unpacked/WipeHub.exe
 
-      - name: Firmar WipeTime.exe (SignPath)
+      - name: Firmar WipeHub.exe (SignPath)
         if: steps.sign.outputs.on == 'true'
         uses: signpath/github-action-submit-signing-request@v3
         with:
@@ -124,10 +124,10 @@ jobs:
           parameters: |
             version: ${{ toJSON(steps.ver.outputs.version) }}
 
-      - name: Sustituir por el WipeTime.exe firmado
+      - name: Sustituir por el WipeHub.exe firmado
         if: steps.sign.outputs.on == 'true'
         shell: pwsh
-        run: Copy-Item signed-app/WipeTime.exe dist/win-unpacked/WipeTime.exe -Force
+        run: Copy-Item signed-app/WipeHub.exe dist/win-unpacked/WipeHub.exe -Force
 
       # 2) Instalador y portable a partir de la app ya firmada, y firmarlos
       - name: Crear instalador y portable
@@ -140,8 +140,8 @@ jobs:
         with:
           name: installers-unsigned
           path: |
-            dist/WipeTime v${{ steps.ver.outputs.version }} Setup.exe
-            dist/WipeTime v${{ steps.ver.outputs.version }}.exe
+            dist/WipeHub v${{ steps.ver.outputs.version }} Setup.exe
+            dist/WipeHub v${{ steps.ver.outputs.version }}.exe
 
       - name: Firmar instalador y portable (SignPath)
         if: steps.sign.outputs.on == 'true'
@@ -168,10 +168,12 @@ jobs:
           $src = if ('${{ steps.sign.outputs.on }}' -eq 'true') { 'signed-installers' } else { 'dist' }
           New-Item -ItemType Directory -Force out | Out-Null
           # Mismos nombres que GitHub da a los assets (espacios -> puntos): latest.yml tiene que coincidir
-          $setup = "WipeTime.v$v.Setup.exe"
-          $portable = "WipeTime.v$v.exe"
-          Copy-Item "$src/WipeTime v$v Setup.exe" "out/$setup"
-          Copy-Item "$src/WipeTime v$v.exe" "out/$portable"
+          $setup = "WipeHub.v$v.Setup.exe"
+          $portable = "WipeHub.v$v.exe"
+          Copy-Item "$src/WipeHub v$v Setup.exe" "out/$setup"
+          Copy-Item "$src/WipeHub v$v.exe" "out/$portable"
+          Copy-Item "out/$setup" "out/WipeTime.v$v.Setup.exe"
+          Copy-Item "out/$portable" "out/WipeTime.v$v.exe"
           node tools/update-info.js out $setup $v
           if ($LASTEXITCODE) { throw "No se pudo generar latest.yml" }
           $hash = { param($f) (Get-FileHash $f -Algorithm SHA256).Hash.ToLower() }
@@ -185,7 +187,7 @@ jobs:
         with:
           tag_name: v${{ steps.ver.outputs.version }}
           target_commitish: ${{ github.sha }}
-          name: WipeTime v${{ steps.ver.outputs.version }}
+          name: WipeHub v${{ steps.ver.outputs.version }}
           body: ${{ github.event.head_commit.message }}
           draft: false
           make_latest: true

@@ -1,4 +1,4 @@
-# Publica la versión web de WipeTime en GitHub Pages (https://kingkhaax.github.io/WipeTime/).
+# Publica la versión web de WipeHub en GitHub Pages (https://kingkhaax.github.io/WipeHub/).
 # La lanza el workflow «Release» justo después de publicar la release (misma versión que el instalador y el portable), o a mano desde Actions.
 # Antes hay que activar Pages una vez: Settings -> Pages -> Source: "GitHub Actions".
 

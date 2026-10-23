@@ -90,7 +90,7 @@ const SpellTip = (() => {
     const m = typeof MechGuide !== 'undefined' ? MechGuide.forSpell(id, name) : null;
     if (!m) return '';
     const c = MechGuide.ringColor(m.type);
-    return `<div class="st-mech" style="--mc:${c}"><b>${tr('Guía de WipeTime', 'WipeTime guide')} · ${esc(MECH_DATA.types[m.type].label)}</b><p>${esc(m.note)}</p></div>`;
+    return `<div class="st-mech" style="--mc:${c}"><b>${tr('Guía de WipeHub', 'WipeHub guide')} · ${esc(MECH_DATA.types[m.type].label)}</b><p>${esc(m.note)}</p></div>`;
   }
 
   function render(id, data, fallbackName, extra) {

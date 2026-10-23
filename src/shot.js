@@ -129,14 +129,14 @@ async function shotRender(el) {
 async function shotExport(mode) {
   const view = document.getElementById('view');
   if (!view) return;
-  const title = (view.querySelector('.hdr h1')?.textContent || 'WipeTime').replace(/\s+/g, ' ').trim();
+  const title = (view.querySelector('.hdr h1')?.textContent || 'WipeHub').replace(/\s+/g, ' ').trim();
   let blob = null;
   try { blob = await shotRender(view); } catch (e) { console.warn('shot', e); }
   if (!blob) return toast(LL('No se pudo crear la imagen', 'Could not create the image'));
   if (mode === 'save') {
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `WipeTime - ${title}.png`.replace(/[\\/:*?"<>|]/g, '-');
+    a.download = `WipeHub - ${title}.png`.replace(/[\\/:*?"<>|]/g, '-');
     document.body.appendChild(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 4000);
     return toast(LL('Imagen guardada', 'Image saved'));

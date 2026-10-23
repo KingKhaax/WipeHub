@@ -425,7 +425,7 @@ function rankings(f) {
     if (!f.kill || !f.encounterID || !f.full || f.combined) return { dps: new Map(), hps: new Map(), dpsB: new Map(), hpsB: new Map(), bdps: new Map(), bdpsB: new Map(), invalid: new Set() };
     try {
       // sin caché en disco: Warcraft Logs recalcula los parses de un log (al subirlo da valores provisionales y luego
-      // los ajusta al entrar más logs), y guardarlos horas hacía que WipeTime enseñara un número y la web otro
+      // los ajusta al entrar más logs), y guardarlos horas hacía que WipeHub enseñara un número y la web otro
       const d = await gql(`query($code:String!,$f:[Int]){reportData{report(code:$code){
         dps:rankings(fightIDs:$f,playerMetric:dps) hps:rankings(fightIDs:$f,playerMetric:hps)
         dpsP:rankings(fightIDs:$f,playerMetric:dps,compare:Parses) hpsP:rankings(fightIDs:$f,playerMetric:hps,compare:Parses)
@@ -1298,7 +1298,7 @@ function exportRankedImage(mode) {
         if (rateW) { g.fillStyle = '#a8e060'; g.font = `700 13px ${font}`; g.fillText(r.rate, W - pad, cy); }
         g.textAlign = 'left';
       });
-      g.fillStyle = '#5d6572'; g.font = `11px ${font}`; g.textAlign = 'right'; g.fillText('WipeTime', W - pad, cv.height / scale - 10); g.textAlign = 'left';
+      g.fillStyle = '#5d6572'; g.font = `11px ${font}`; g.textAlign = 'right'; g.fillText('WipeHub', W - pad, cv.height / scale - 10); g.textAlign = 'left';
       try { cv.toBlob((b) => resolve(b), 'image/png'); } catch { resolve(null); }
     });
   });
@@ -1309,7 +1309,7 @@ function exportRankedImage(mode) {
     if (mode === 'save') {
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
-      a.download = `WipeTime - ${title || 'log'}.png`.replace(/[\\/:*?"<>|]/g, '-');
+      a.download = `WipeHub - ${title || 'log'}.png`.replace(/[\\/:*?"<>|]/g, '-');
       a.click();
       setTimeout(() => URL.revokeObjectURL(a.href), 4000);
       return toast(LL('Imagen guardada', 'Image saved'));
@@ -2055,8 +2055,8 @@ function renderWelcome() {
       <div class="hero-stars"></div>
       <div class="hero-in">
         <div class="hero-text">
-          <div class="eyebrow">WIPETIME · ${heroTag()}</div>
-          <h1 class="hero-title">${t('welcomeHello')}<br><span class="grad">WipeTime</span></h1>
+          <div class="eyebrow">WIPEHUB · ${heroTag()}</div>
+          <h1 class="hero-title">${t('welcomeHello')}<br><span class="grad">WipeHub</span></h1>
           <p class="sub">${t('welcomeText')}</p>
           <form id="heroForm" class="hero-form">
             <input id="heroInput" type="text" spellcheck="false" autocomplete="off" placeholder="${esc(t('urlPlaceholder'))}">
@@ -2628,10 +2628,10 @@ let routeLock = 0;
 function routeTitle() {
   const rt = routeFromState();
   const sec = { '#/compare': LL('Comparar logs', 'Compare logs'), '#/guilds': 'Guilds', '#/characters': LL('Personajes', 'Characters') }[rt] || (/^#\/compare\//.test(rt) ? LL('Comparar logs', 'Compare logs') : /^#\/guilds\//.test(rt) ? 'Guilds' : '');
-  if (sec) return `WipeTime · ${sec}`;
-  if (S.profileOpen && typeof Profile !== 'undefined' && Profile.route?.()) return `WipeTime · ${decodeURIComponent(Profile.route().split('/').pop())}`;
-  if (!S.home && S.report && S.fight) return `${S.fight.encounterID ? `${S.fight.name} · ` : ''}${S.report.title} · WipeTime`;
-  return 'WipeTime';
+  if (sec) return `WipeHub · ${sec}`;
+  if (S.profileOpen && typeof Profile !== 'undefined' && Profile.route?.()) return `WipeHub · ${decodeURIComponent(Profile.route().split('/').pop())}`;
+  if (!S.home && S.report && S.fight) return `${S.fight.encounterID ? `${S.fight.name} · ` : ''}${S.report.title} · WipeHub`;
+  return 'WipeHub';
 }
 // Lleva la URL a donde está la pantalla: la primera vez la sustituye y después añade una entrada al historial
 function syncRoute(replace = false) {
@@ -2716,9 +2716,9 @@ document.addEventListener('auxclick', (ev) => {
   if (!S.report && S.expansion?.id !== before && main.querySelector('.welcome') && S.home && !S.cmpOpen) renderWelcome();
 })();
 
-// Enlaces wipetime://report/<código>?fight=<n>
+// Enlaces wipehub://report/<código>?fight=<n>
 function openDeepLink(link) {
-  const m = String(link || '').match(/^wipetime:\/\/report\/([A-Za-z0-9]+)(?:\?fight=(\d+))?/i);
+  const m = String(link || '').match(/^wipehub:\/\/report\/([A-Za-z0-9]+)(?:\?fight=(\d+))?/i);
   if (m) loadReport(`https://www.warcraftlogs.com/reports/${m[1]}${m[2] ? `#fight=${m[2]}` : ''}`);
 }
 window.api.onDeepLink?.(openDeepLink);

@@ -120,7 +120,7 @@ const MechGuide = (() => {
       <div class="mg-intro"><b>${esc(boss.wing)}</b> · ${boss.phases.length} ${L('bloques de pelea', 'fight blocks')} · ${all.length} ${L('mecánicas', 'mechanics')} (${esc(counts)})</div>
       ${keyBlocks ? `<div class="mg-key"><div class="mg-key-h">${L('Lo importante de este jefe', 'What matters on this boss')}</div>${keyBlocks}</div>` : ''}
       ${legend}${phases}
-      <p class="foot">${L('Guía propia de WipeTime (tools/mechanics_es.json): las marcadas "sin verificar" pueden contener errores. El icono es el de la habilidad real cuando aparece en los logs; si no, un icono del juego según el tipo.', 'WipeTime\'s own guide (tools/mechanics_es.json): items marked "unverified" may contain errors. The icon is the real ability\'s when it appears in logs; otherwise a game icon by type.')}</p>`;
+      <p class="foot">${L('Guía propia de WipeHub (tools/mechanics_es.json): las marcadas "sin verificar" pueden contener errores. El icono es el de la habilidad real cuando aparece en los logs; si no, un icono del juego según el tipo.', 'WipeHub\'s own guide (tools/mechanics_es.json): items marked "unverified" may contain errors. The icon is the real ability\'s when it appears in logs; otherwise a game icon by type.')}</p>`;
   }
 
   // mecánicas que añade heroico/mítico para la dificultad de la pelea (resumen para el fight overview)

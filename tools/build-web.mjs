@@ -1,4 +1,4 @@
-// Genera la versión web de WipeTime (carpeta web-dist/) para publicarla en GitHub Pages.
+// Genera la versión web de WipeHub (carpeta web-dist/) para publicarla en GitHub Pages.
 // Copia src/, cambia los protocolos propios de Electron (wcicon://, wcmap://, wcmedia://) por rutas web, añade web-api.js
 // (el equivalente web de preload.js/main.js) y un service worker para los iconos.
 //   node tools/build-web.mjs
@@ -48,7 +48,7 @@ for (const f of fs.readdirSync(out)) {
     s = s.replace(/<meta http-equiv="Content-Security-Policy"[\s\S]*?>/,
       `<meta http-equiv="Content-Security-Policy"\n        content="default-src 'self'; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' ${proxy} https://raider.io https://nether.wowhead.com https://www.raidbots.com https://assets.rpglogs.com https://wow.zamimg.com https://render.worldofwarcraft.com; worker-src 'self'; frame-src 'self'">`);
     s = s.replace('<script src="boot.js"></script>', '<script src="web-api.js"></script>\n  <script src="boot.js"></script>');
-    s = s.replace('<title>WipeTime</title>', '<title>WipeTime</title>\n  <link rel="icon" href="icon.png">');
+    s = s.replace('<title>WipeHub</title>', '<title>WipeHub</title>\n  <link rel="icon" href="icon.png">');
   }
   fs.writeFileSync(p, s);
 }
