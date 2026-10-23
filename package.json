@@ -1,7 +1,7 @@
 {
   "name": "wipehub",
   "productName": "WipeHub",
-  "version": "2.12.3",
+  "version": "2.12.4",
   "description": "WipeHub: visor, replay y analizador local de reportes de Warcraft Logs",
   "main": "main.js",
   "author": "sr.kitkat",

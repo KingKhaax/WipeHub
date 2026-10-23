@@ -8,6 +8,7 @@ const WCUpdate = (() => {
 
   // Historial: [versión, es, en]
   const CHANGELOG = [
+    ['2.12.4', 'Menú de idioma: la opción activa y los efectos al pasar el ratón usan el mismo color de acento de la web (antes la activa salía en verde).', 'Language menu: the active option and the hover effects use the same accent color as the rest of the site (the active one used to be green).'],
     ['2.12.3', 'Portada: la caja de «Hub» del logotipo pasa al cian de WipeHub y lleva un destello que la cruza de forma automática.', 'Home: the “Hub” box in the logo is now WipeHub cyan and has a light sweep that crosses it automatically.'],
     ['2.12.2', 'Portada: el nombre «WipeHub» ahora tiene logotipo propio, con «Wipe» en blanco y negrita y «Hub» en negro sobre una caja naranja.', 'Home: the “WipeHub” name now has its own logo, with “Wipe” in bold white and “Hub” in black on an orange box.'],
     ['2.12.1', 'Panel del 12.1.5: ahora usa los colores morados del vacío de su botón (cabecera, títulos, viñetas y pestaña activa), igual que el del 12.1.7 usa el dorado.', '12.1.5 panel: it now uses the purple void colors of its button (banner, headings, bullets and active tab), just like the 12.1.7 one uses gold.'],
