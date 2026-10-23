@@ -3166,5 +3166,8 @@ a:focus-visible, button:focus-visible, select:focus-visible, summary:focus-visib
 .pn-body code { padding: 1px 5px; border-radius: 5px; background: var(--panel-2, rgba(255, 255, 255, .06)); font-size: .92em; }
 .wh-logo { display: inline-flex; align-items: center; font-weight: 800; text-shadow: none; }
 .wh-logo .wh-w { color: #fff; text-shadow: 0 2px 16px rgba(0, 0, 0, .4); }
-.wh-logo .wh-h { color: #000; background: #ff9000; padding: 0 .22em .06em; margin-left: .08em; border-radius: .16em; line-height: 1.05; }
+.wh-logo .wh-h { position: relative; overflow: hidden; isolation: isolate; color: #06242a; background: #2fb7c0; padding: 0 .22em .06em; margin-left: .08em; border-radius: .16em; line-height: 1.05; }
+.wh-logo .wh-h::after { content: ""; position: absolute; top: 0; bottom: 0; width: 38%; left: -60%; transform: skewX(-18deg); background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .6), transparent); animation: wh-sheen 2.8s ease-in-out infinite; }
+@keyframes wh-sheen { 0%, 20% { left: -60%; } 70%, 100% { left: 130%; } }
+@media (prefers-reduced-motion: reduce) { .wh-logo .wh-h::after { animation: none; } }
 :root[data-theme="light"] .wh-logo .wh-w { color: #10223a; text-shadow: none; }

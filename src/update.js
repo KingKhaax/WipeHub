@@ -8,6 +8,7 @@ const WCUpdate = (() => {
 
   // Historial: [versión, es, en]
   const CHANGELOG = [
+    ['2.12.3', 'Portada: la caja de «Hub» del logotipo pasa al cian de WipeHub y lleva un destello que la cruza de forma automática.', 'Home: the “Hub” box in the logo is now WipeHub cyan and has a light sweep that crosses it automatically.'],
     ['2.12.2', 'Portada: el nombre «WipeHub» ahora tiene logotipo propio, con «Wipe» en blanco y negrita y «Hub» en negro sobre una caja naranja.', 'Home: the “WipeHub” name now has its own logo, with “Wipe” in bold white and “Hub” in black on an orange box.'],
     ['2.12.1', 'Panel del 12.1.5: ahora usa los colores morados del vacío de su botón (cabecera, títulos, viñetas y pestaña activa), igual que el del 12.1.7 usa el dorado.', '12.1.5 panel: it now uses the purple void colors of its button (banner, headings, bullets and active tab), just like the 12.1.7 one uses gold.'],
     ['2.12.0', 'WipeTime ahora se llama WipeHub: nuevo nombre en la aplicación, los instaladores, la web y los repositorios. Tus ajustes, personajes y claves se conservan, y los enlaces wipetime:// siguen funcionando. Además, el texto del botón «Contenido del 12.1.7» vuelve a verse bien: blanco con contorno negro, igual que el del 12.1.5.', 'WipeTime is now called WipeHub: new name in the app, the installers, the website and the repositories. Your settings, characters and keys are kept, and wipetime:// links keep working. The text of the “12.1.7 content” button is readable again: white with a black outline, like the 12.1.5 one.'],
