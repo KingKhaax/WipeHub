@@ -265,50 +265,89 @@ const GuildCmp = (() => {
     if (!cd) return;
     const { zone, a, b, rows, both, totA, totB } = cd;
     const font = 'Segoe UI, system-ui, sans-serif';
-    const W = 920, pad = 16, headH = 58, th = 26, rowH = 40;
-    const cx = [pad, 250, 480, 710]; // columnas: jefe, A, B, diferencia
-    const H = headH + th + rows.length * rowH + 30;
+    const anyMin = rows.some((r) => r.sA?.min || r.sB?.min);
+    const W = 980, pad = 16, headH = 66, th = 30, rowH = anyMin ? 58 : 48, cw = 292;
+    const cx = [pad, 262, 262 + cw, 262 + cw * 2];
+    const dW = W - cx[3] - pad;
+    const H = headH + th + rows.length * rowH + 34;
     const scale = 2;
+    const rgba = (hex, al) => { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16}, ${(n >> 8) & 255}, ${n & 255}, ${al})`; };
+    const rr = (g, x, y, w, h, r) => { g.beginPath(); if (g.roundRect) g.roundRect(x, y, w, h, r); else g.rect(x, y, w, h); };
     const draw = (withIcons) => new Promise((resolve) => {
       const cv = document.createElement('canvas');
       cv.width = W * scale; cv.height = H * scale;
       const g = cv.getContext('2d');
       g.scale(scale, scale);
       g.textBaseline = 'middle';
-      g.fillStyle = '#0f1013'; g.fillRect(0, 0, W, H);
-      g.fillStyle = '#e8e8ec'; g.font = `700 17px ${font}`; g.textAlign = 'left';
+      g.fillStyle = '#0b1013'; g.fillRect(0, 0, W, H);
+      g.fillStyle = '#e8eef0'; g.font = `700 17px ${font}`; g.textAlign = 'left';
       g.fillText(`${zone.name} · ${diffName(st.diff)}`, pad, 20);
       g.font = `700 15px ${font}`;
       let x = pad;
-      g.fillStyle = NAME_COL[0]; g.fillText(a.name, x, 44); x += g.measureText(a.name).width;
-      g.fillStyle = '#6b6b74'; g.fillText('  VS  ', x, 44); x += g.measureText('  VS  ').width;
-      g.fillStyle = NAME_COL[1]; g.fillText(b.name, x, 44);
-      if (both) { g.textAlign = 'right'; g.fillStyle = '#9a9aa3'; g.font = `12.5px ${font}`; g.fillText(`${LL('Trys en los jefes que mataron las dos', 'Tries on the bosses both killed')}: ${a.name} ${num(totA, 0)} · ${b.name} ${num(totB, 0)}`, W - pad, 44); g.textAlign = 'left'; }
-      // cabecera
-      g.fillStyle = '#17191f'; g.fillRect(0, headH, W, th);
-      g.fillStyle = '#9aa3b2'; g.font = `600 12px ${font}`;
-      g.fillText(LL('Jefe', 'Boss'), cx[0], headH + th / 2);
-      g.fillText(a.name, cx[1], headH + th / 2); g.fillText(b.name, cx[2], headH + th / 2); g.fillText(LL('Diferencia', 'Difference'), cx[3], headH + th / 2);
+      g.fillStyle = NAME_COL[0]; g.fillText(a.name, x, 46); x += g.measureText(a.name).width;
+      g.fillStyle = '#6b7a80'; g.fillText('  VS  ', x, 46); x += g.measureText('  VS  ').width;
+      g.fillStyle = NAME_COL[1]; g.fillText(b.name, x, 46);
+      if (both) { g.textAlign = 'right'; g.fillStyle = '#8da2a6'; g.font = `12.5px ${font}`; g.fillText(`${LL('Trys en los jefes que mataron las dos', 'Tries on the bosses both killed')}: ${a.name} ${num(totA, 0)} · ${b.name} ${num(totB, 0)}`, W - pad, 46); g.textAlign = 'left'; }
+      const hg = g.createLinearGradient(0, 0, W, 0);
+      hg.addColorStop(0, rgba(NAME_COL[0], 0.24)); hg.addColorStop(0.5, '#11191d'); hg.addColorStop(1, rgba(NAME_COL[1], 0.24));
+      g.fillStyle = hg; g.fillRect(0, headH, W, th);
+      g.font = `700 12px ${font}`; g.textAlign = 'left'; g.fillStyle = '#8da2a6';
+      g.fillText(LL('Jefe', 'Boss'), cx[0] + 4, headH + th / 2);
+      g.textAlign = 'center';
+      g.fillStyle = NAME_COL[0]; g.fillText(a.name, cx[1] + cw / 2, headH + th / 2);
+      g.fillStyle = NAME_COL[1]; g.fillText(b.name, cx[2] + cw / 2, headH + th / 2);
+      g.fillStyle = '#8da2a6'; g.fillText(LL('Diferencia', 'Difference'), cx[3] + dW / 2, headH + th / 2);
       const imgs = rows.map((r) => (withIcons ? new Promise((ok) => { const im = new Image(); im.crossOrigin = 'anonymous'; im.onload = () => ok(im); im.onerror = () => ok(null); im.src = `${ASSETS}/bosses/${r.e.id}-icon.jpg`; }) : Promise.resolve(null)));
       Promise.all(imgs).then((ims) => {
         rows.forEach((r, i) => {
           const y = headH + th + i * rowH, cy = y + rowH / 2;
-          g.fillStyle = i % 2 ? '#13151a' : '#0f1013'; g.fillRect(0, y, W, rowH);
-          g.strokeStyle = '#2a2a30'; g.beginPath(); g.moveTo(0, y); g.lineTo(W, y); g.stroke();
-          if (ims[i]) g.drawImage(ims[i], cx[0], y + 8, 24, 24);
-          g.fillStyle = '#8fb7ff'; g.font = `600 13px ${font}`; g.textAlign = 'left';
-          g.fillText(r.e.name, cx[0] + (ims[i] ? 32 : 0), cy, cx[1] - cx[0] - 40);
-          [[r.sA, 1, 0, a], [r.sB, 2, 1, b]].forEach(([sm, ci, k, gg]) => {
-            if (!sm) { g.fillStyle = '#6b6b74'; g.font = `700 18px ${font}`; g.fillText('—', cx[ci], cy - 6); g.font = `11px ${font}`; g.fillText(noLogs(gg) ? LL('sin logs públicos', 'no public logs') : LL('sin pulls', 'no pulls'), cx[ci], cy + 11); return; }
-            g.fillStyle = NAME_COL[k]; g.font = `700 19px ${font}`; g.fillText((sm.min ? '≥' : '') + num(sm.n, 0), cx[ci], cy - 6);
-            const nw = g.measureText((sm.min ? '≥' : '') + num(sm.n, 0)).width;
-            g.fillStyle = '#c9c9d1'; g.font = `12px ${font}`; g.fillText(sm.killed ? LL('trys', 'tries') : LL('trys, sin kill', 'tries, no kill'), cx[ci] + nw + 6, cy - 5);
-            g.fillStyle = '#9a9aa3'; g.font = `11px ${font}`; g.fillText(cellTxt(sm), cx[ci], cy + 11, 222);
+          g.fillStyle = i % 2 ? '#0e171a' : '#101a1e'; g.fillRect(0, y, W, rowH);
+          g.strokeStyle = '#243238'; g.lineWidth = 1; g.beginPath(); g.moveTo(0, y + 0.5); g.lineTo(W, y + 0.5); g.stroke();
+          if (ims[i]) { g.save(); rr(g, cx[0], cy - 13, 26, 26, 7); g.clip(); g.drawImage(ims[i], cx[0], cy - 13, 26, 26); g.restore(); }
+          g.fillStyle = '#e9f0f2'; g.font = `700 13px ${font}`; g.textAlign = 'left';
+          g.fillText(r.e.name, cx[0] + (ims[i] ? 36 : 4), cy, cx[1] - cx[0] - 46);
+          const bothK = r.sA?.killed && r.sB?.killed;
+          [[r.sA, 1, 0, a, !!r.diff && r.diff.d < 0], [r.sB, 2, 1, b, !!r.diff && r.diff.d > 0]].forEach(([sm, ci, k, gg, win]) => {
+            const x0 = cx[ci], mid = x0 + cw / 2, col = NAME_COL[k];
+            g.strokeStyle = '#243238'; g.beginPath(); g.moveTo(x0 + 0.5, y); g.lineTo(x0 + 0.5, y + rowH); g.stroke();
+            if (win) {
+              const lg = g.createLinearGradient(x0, y, x0 + cw, y + rowH);
+              lg.addColorStop(0, rgba(col, 0.18)); lg.addColorStop(1, rgba(col, 0));
+              g.fillStyle = lg; g.fillRect(x0 + 1, y + 1, cw - 1, rowH - 1);
+              g.fillStyle = col; g.beginPath(); g.moveTo(x0 + cw - 34, y + 1); g.lineTo(x0 + cw, y + 1); g.lineTo(x0 + cw, y + 35); g.closePath(); g.fill();
+              g.fillStyle = '#111'; g.font = `700 12px ${font}`; g.textAlign = 'right'; g.fillText('★', x0 + cw - 4, y + 10);
+            }
+            g.textAlign = 'center';
+            if (!sm) {
+              g.fillStyle = '#6b7a80'; g.font = `800 20px ${font}`; g.fillText('—', mid, y + 17);
+              g.font = `11px ${font}`; g.fillText(noLogs(gg) ? LL('sin logs públicos', 'no public logs') : LL('sin pulls', 'no pulls'), mid, y + 34);
+              return;
+            }
+            const num0 = (sm.min ? '≥' : '') + num(sm.n, 0);
+            const lbl = sm.killed ? LL('trys', 'tries') : LL('trys, sin kill', 'tries, no kill');
+            g.font = `800 20px ${font}`; const nw = g.measureText(num0).width;
+            g.font = `12px ${font}`; const lw = g.measureText(lbl).width;
+            const sx = mid - (nw + 6 + lw) / 2;
+            g.textAlign = 'left';
+            g.fillStyle = col; g.font = `800 20px ${font}`; g.fillText(num0, sx, y + 17);
+            g.fillStyle = '#8da2a6'; g.font = `12px ${font}`; g.fillText(lbl, sx + nw + 6, y + 18);
+            g.textAlign = 'center';
+            g.fillStyle = '#8da2a6'; g.font = `11px ${font}`; g.fillText(cellTxt(sm), mid, y + 34, cw - 16);
+            if (bothK) {
+              const bw = cw * 0.7, bx = mid - bw / 2, frac = Math.max(0.06, sm.n / Math.max(r.sA.n, r.sB.n));
+              g.fillStyle = rgba(col, 0.18); rr(g, bx, y + 41, bw, 3, 1.5); g.fill();
+              g.fillStyle = col; rr(g, bx, y + 41, bw * frac, 3, 1.5); g.fill();
+            }
+            if (sm.min) { g.fillStyle = '#f0c777'; g.font = `10.5px ${font}`; g.fillText(`ⓘ ${LL('Raider.IO: kill el ', 'Raider.IO: kill on ')}${fmtDate(sm.min)}`, mid, y + 50); }
           });
           const d = diffTxt(r, a, b);
-          g.fillStyle = d.c || '#9a9aa3'; g.font = `600 12.5px ${font}`; g.fillText(d.t, cx[3], cy, W - cx[3] - pad);
+          const dc = d.c || '#8da2a6';
+          g.font = `700 12px ${font}`; const tw = g.measureText(d.t).width, pw = tw + 22, px = cx[3] + dW / 2 - pw / 2;
+          g.fillStyle = rgba(dc, 0.14); rr(g, px, cy - 10, pw, 20, 10); g.fill();
+          g.strokeStyle = rgba(dc, 0.4); rr(g, px, cy - 10, pw, 20, 10); g.stroke();
+          g.fillStyle = dc; g.textAlign = 'center'; g.fillText(d.t, cx[3] + dW / 2, cy + 0.5, dW - 8);
         });
-        g.fillStyle = '#5d6572'; g.font = `11px ${font}`; g.textAlign = 'right'; g.fillText('WipeHub', W - pad, H - 12);
+        g.fillStyle = '#5d6572'; g.font = `11px ${font}`; g.textAlign = 'right'; g.fillText('WipeHub', W - pad, H - 14);
         try { cv.toBlob((bl) => resolve(bl), 'image/png'); } catch { resolve(null); }
       });
     });
