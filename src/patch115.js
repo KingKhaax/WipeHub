@@ -1,6 +1,7 @@
 'use strict';
 
-// Parche 12.1.5 de Midnight: cuenta atrás y panel con el contenido que Blizzard ha hecho público.
+// Parches 12.1.5 y 12.1.7 de Midnight: cuenta atrás del 12.1.5 y paneles con el contenido que Blizzard ha hecho público.
+// El botón del inicio abre un desplegable (hacia arriba) para elegir el parche.
 // Fuentes oficiales: artículo del 29 de septiembre y notas de actualización 12.1.5 (enlaces al final del panel).
 // Los nombres de talentos y hechizos se dejan en inglés (nombre oficial); las descripciones están traducidas.
 const Patch115 = (() => {
@@ -21,7 +22,7 @@ const Patch115 = (() => {
 
   function homeHTML() {
     const count = live() ? '' : `<div class="pn-count"><small>${L('Parche 12.1.5 en', 'Patch 12.1.5 in')}</small><div id="pnTimer" class="pn-boxes"></div><small>${L('miércoles 14 de octubre · Kith\'ix', 'Wednesday, October 14 · Kith\'ix')}</small></div>`;
-    return `${count}<button type="button" class="pn-btn" data-pn="open">${L('Contenido del 12.1.5', '12.1.5 content')}</button>`;
+    return `${count}<button type="button" class="pn-btn pn-menu-btn" data-pn="menu" aria-haspopup="menu" aria-expanded="false"><span>${L('Contenido del 12.1.5 / 12.1.7', '12.1.5 / 12.1.7 content')}</span><i class="pn-chev" aria-hidden="true">▴</i></button>`;
   }
 
   function tick() {
@@ -55,6 +56,7 @@ const Patch115 = (() => {
   const h = (t) => `<h3 class="pn-h">${t}</h3>`;
   const p = (t) => `<p>${t}</p>`;
   const tag = (t) => `<span class="pn-tag">${t}</span>`;
+  const h4 = (t) => `<h4>${t}</h4>`;
 
   function kithixMechanics() {
     const boss = typeof MECH_DATA !== 'undefined' ? MECH_DATA.bosses.find((b) => b.slug === 'kithix') : null;
@@ -245,7 +247,163 @@ const Patch115 = (() => {
       + p(L('Los textos están resumidos y traducidos por WipeTime; los nombres de talentos y hechizos se dejan en inglés. La fecha del miércoles 14 en Europa viene de la prensa especializada. Si Blizzard cambia algo, manda su web.', 'Texts are summarised and translated by WipeTime; talent and spell names are kept in English. The Wednesday 14 European date comes from the specialist press. If Blizzard changes anything, its website prevails.'))],
   ];
 
-  function open(tabId) {
+
+  // ------------------------------------------------------------ parche 12.1.7 «Ecos del Núcleo del Mundo» (en el RPP)
+  // Fuentes: resumen oficial de Blizzard del 15 de octubre, guía de Wowhead, Warcraft Wiki, notas de desarrollo del RPP e Icy Veins.
+  // Los nombres se traducen como en el artículo oficial en castellano; los que no tienen traducción confirmada llevan el original entre paréntesis.
+  const LINK117 = {
+    blizz: 'https://worldofwarcraft.blizzard.com/en-us/news/24310659/midnight-echoes-of-the-worldcore-overview',
+    blizzEs: 'https://worldofwarcraft.blizzard.com/es-es/news/24310659/midnight-echoes-of-the-worldcore-overview',
+    wowhead: 'https://www.wowhead.com/guide/midnight/patch-12-1-7-overview-features-activities-rewards',
+    wowheadEs: 'https://www.wowhead.com/es/guide/midnight/patch-12-1-7-overview-features-activities-rewards',
+    wiki: 'https://warcraft.wiki.gg/wiki/Patch_12.1.7',
+    api: 'https://warcraft.wiki.gg/wiki/Patch_12.1.7/API_changes',
+    icy: 'https://www.icy-veins.com/wow/news/patch-12-1-7-echoes-of-the-worldcore-ptr-development-notes/',
+    mounts: 'https://www.wowsaga.com/news/all-new-mounts-coming-in-patch-1217-echoes-of-the-worldcore',
+  };
+  const note = (t) => `<p class="pn-note">${t}</p>`;
+  const lk = (u, t) => `<a href="#" data-pn-link="${u}">${t}</a>`;
+
+  const SECTIONS117 = () => [
+    ['resumen', L('Resumen', 'Overview'), () =>
+      h(L('Ecos del Núcleo del Mundo', 'Echoes of the Worldcore'))
+      + p(L('Próxima actualización de contenido de tamaño medio de Midnight. Devuelve a los jugadores a <b>Dornogal</b> para encontrar la forma de entrar en la <b>Vía del Núcleo</b> (Coreway) y, más allá, en el <b>Núcleo del Mundo</b> (Worldcore).', 'The next medium content update for Midnight. It sends players back to <b>Dornogal</b> to find a way into the <b>Coreway</b> and, beyond it, the <b>Worldcore</b>.'))
+      + h(L('Estado y fecha', 'Status and date'))
+      + ul([
+        L('<b>En el RPP</b> desde el <b>15 de octubre de 2026</b>. Todo lo que se cuenta aquí es el contenido del RPP y puede cambiar antes de salir.', '<b>On the PTR</b> since <b>October 15, 2026</b>. Everything here is PTR content and may change before release.'),
+        L('Blizzard <b>no ha anunciado fecha de salida</b>. La prensa especializada calcula diciembre de 2026, pero es solo una estimación.', 'Blizzard has <b>not announced a release date</b>. The specialist press estimates December 2026, but that is only a guess.'),
+        L('Un parche ligero: el resumen oficial no incluye ninguna banda ni mazmorra nueva.', 'A light patch: the official overview lists no new raid or dungeon.'),
+      ])
+      + h(L('Qué trae', 'What it brings'))
+      + ul([
+        L('<b>Campaña «Regreso a Dornogal»</b> con Arator, Brinthe, Dagran y Brann.', '<b>"The Return to Dornogal" campaign</b> with Arator, Brinthe, Dagran and Brann.'),
+        L('<b>Historias de leyenda</b> (Talebound): nuevo modo JcE de rol y acción con su propia moneda, la plata vinculada.', '<b>Talebound</b>: a new PvE action RPG mode with its own currency, Bound Silver.'),
+        L('<b>Paseo por la historia</b> (Lorewalking): cuatro relatos sobre Jaina, Thrall, los titanes y Tyr.', '<b>Lorewalking</b>: four stories about Jaina, Thrall, the Titans and Tyr.'),
+        L('<b>Líneas temporales turbulentas</b> (Turbulent Timeways): evento de ocho semanas con la montura Markeet del Infinito.', '<b>Turbulent Timeways</b>: an eight-week event with the Markeet of the Infinite mount.'),
+        L('<b>Folio del Omnium</b>: dos motas más y dos runas nuevas.', '<b>Omnium Folio</b>: two more motes and two new runes.'),
+        L('Mejoras de profesiones, hogares, interfaz y monturas nuevas (datos del RPP).', 'Profession, Housing and interface changes, and new mounts (PTR data).'),
+      ])],
+    ['campana', L('Campaña', 'Campaign'), () =>
+      h(L('«Regreso a Dornogal»', '"The Return to Dornogal"'))
+      + p(L('<b>Xal\'atath</b> ha entrado en el Núcleo del Mundo, y la única vía para llegar hasta él es la <b>Vía del Núcleo</b> dañada de Dornogal.', '<b>Xal\'atath</b> has breached the Worldcore, and the only route to it is the damaged <b>Coreway</b> in Dornogal.'))
+      + ul([
+        L('Ayudas a <b>Arator</b>, <b>Brinthe</b>, <b>Dagran</b> y <b>Brann</b> a averiguar cómo acceder a la Vía del Núcleo y al Núcleo del Mundo que hay más allá.', 'You help <b>Arator</b>, <b>Brinthe</b>, <b>Dagran</b> and <b>Brann</b> work out how to reach the Coreway and the Worldcore beyond it.'),
+      ])
+      + note(L('Blizzard no ha publicado más detalles de la historia.', 'Blizzard has not published further story details.'))],
+    ['talebound', 'Talebound', () =>
+      h(L('Historias de leyenda (Talebound)', 'Talebound'))
+      + p(L('Nuevo <b>modo JcE de rol y acción</b>: sumérgete, solo o con amigos, en los relatos macabros de un misterioso <b>Narrador</b>. Hay enemigos y jefes temibles, acertijos, tesoros y reliquias.', 'A new <b>PvE action RPG mode</b>: dive into the dark tales of a mysterious <b>Storyteller</b>, solo or with friends. Expect fearsome enemies and bosses, puzzles, treasure and relics.'))
+      + h(L('Monedas y recompensas', 'Currencies and rewards'))
+      + ul([
+        L('<b>Plata vinculada</b> (Bound Silver): moneda <b>de banda de guerra</b> que se consigue con misiones, logros y el progreso en los relatos del Narrador. Se gasta en cosméticos.', '<b>Bound Silver</b>: a <b>Warband-bound</b> currency earned from quests, achievements and progress in the Tales of the Storyteller. It is spent on cosmetics.'),
+        L('<b>Ducados</b> (Ducats): se recogen durante las partidas y se convierten en los recursos necesarios para avanzar en el modo.', '<b>Ducats</b>: collected during runs and converted into the resources needed to progress through the mode.'),
+        L('Al terminar un relato, vuelve a <b>Tumbaspina</b> (Quillgrave) para recibir plata vinculada y otras recompensas.', 'After finishing a tale, return to <b>Quillgrave</b> to claim Bound Silver and other rewards.'),
+      ])
+      + h(L('La tienda de Talebound', 'The Talebound store'))
+      + ul([
+        L('Se abre desde la <b>pantalla de selección de personaje</b>, desde el <b>menú del juego</b> o hablando con <b>Nib</b> en Tumbaspina.', 'Open it from the <b>character selection screen</b>, the <b>Game Menu</b>, or by talking to <b>Nib</b> in Quillgrave.'),
+        L('Vende conjuntos de transfiguración, piezas sueltas y otros cosméticos.', 'It sells transmog sets, individual pieces and other cosmetics.'),
+      ])
+      + h(L('Recompensas mostradas por Blizzard', 'Rewards shown by Blizzard'))
+      + ul([
+        L('Conjunto de transfiguración <b>Witch Hunter\'s Shadow Attire</b>.', '<b>Witch Hunter\'s Shadow Attire</b> transmog set.'),
+        L('Adorno de hogar <b>Quillgrave Storyteller\'s Lectern</b>.', '<b>Quillgrave Storyteller\'s Lectern</b> housing decor.'),
+        L('Montura <b>Shadowbound Storybook</b>.', '<b>Shadowbound Storybook</b> mount.'),
+        L('Adorno de hogar <b>Quillgrave Talebound Shadowtome</b>.', '<b>Quillgrave Talebound Shadowtome</b> housing decor.'),
+      ])
+      + note(L('En las primeras semanas del RPP, el modo todavía no estaba abierto para probarlo.', 'During the first weeks on the PTR the mode was not yet open for testing.'))],
+    ['paseo', L('Paseo por la historia', 'Lorewalking'), () =>
+      h(L('Paseo por la historia (Lorewalking)', 'Lorewalking'))
+      + p(L('Habla con <b>Li Li Cerveza de Trueno</b> (Apprentice Lorewalker Li Li Stormstout) en <b>Ventormenta</b> u <b>Orgrimmar</b>. Disponible desde el <b>nivel 10</b>.', 'Speak with <b>Apprentice Lorewalker Li Li Stormstout</b> in <b>Stormwind</b> or <b>Orgrimmar</b>. Available from <b>level 10</b>.'))
+      + h(L('Cuatro relatos', 'Four storylines'))
+      + ul(['<b>Jaina</b>', '<b>Thrall</b>', L('<b>Los titanes</b> (Titans)', '<b>The Titans</b>'), '<b>Tyr</b>'])
+      + h(L('Cómo funciona', 'How it works'))
+      + ul([
+        L('Los relatos son <b>repetibles</b>.', 'The stories are <b>repeatable</b>.'),
+        L('Mientras haces Paseo por la historia no puedes aceptar ni avanzar otras misiones, pero puedes <b>pausar y reanudar</b>.', 'While Lorewalking you cannot take or progress other quests, but you can <b>pause and resume</b>.'),
+        L('Si empiezas otro relato sin terminar el actual, <b>se pierde el progreso</b> del primero.', 'If you start a different story before finishing the current one, <b>its progress is reset</b>.'),
+        L('El botón <b>«Hacer una pregunta»</b> está bajo el minimapa; la <b>X</b> sirve para salir en cualquier momento.', 'The <b>"Ask a Question"</b> button is below the minimap; use the <b>X</b> to exit at any time.'),
+      ])],
+    ['timeways', L('Líneas temporales', 'Timeways'), () =>
+      h(L('Líneas temporales turbulentas (Turbulent Timeways)', 'Turbulent Timeways'))
+      + p(L('Vuelve el evento: el Vuelo Bronce informa de perturbaciones en las líneas temporales. Dura <b>ocho semanas</b> desde la salida del parche.', 'The event returns: the Bronze Dragonflight reports disturbances in the Timeways. It lasts <b>eight weeks</b> from the patch\'s launch.'))
+      + h(L('Recompensa principal', 'Main reward'))
+      + ul([
+        L('Logro <b>«Master of the Turbulent Timeways VI»</b>: mantén <b>Mastery of the Timeways</b> durante cuatro semanas cualesquiera del evento y consigue la montura de vuelo dinámico <b>Markeet del Infinito</b> (Markeet of the Infinite).', 'Achievement <b>"Master of the Turbulent Timeways VI"</b>: keep <b>Mastery of the Timeways</b> for any four weeks of the event to earn the <b>Markeet of the Infinite</b> Skyriding mount.'),
+      ])
+      + h(L('Bonificaciones de Paseo en el tiempo', 'Timewalking bonuses'))
+      + ul([
+        L('Cada mazmorra de Paseo en el tiempo completada da <b>Knowledge of the Timeways</b>: un beneficio acumulable de <b>+5 %</b>.', 'Each Timewalking dungeon completed grants <b>Knowledge of the Timeways</b>: a stacking <b>5%</b> buff.'),
+        L('Tras <b>cuatro mazmorras</b> se convierte en <b>Mastery of the Timeways</b>: <b>+30 % de experiencia</b> mientras dure.', 'After <b>four dungeons</b> it upgrades to <b>Mastery of the Timeways</b>: <b>30% experience gain</b> for its duration.'),
+        L('Nuevos <b>adornos de hogar</b> en los vendedores de Paseo en el tiempo.', 'New <b>housing decor</b> items at the Timewalking vendors.'),
+        L('Por tiempo limitado, las misiones de Paseo en el tiempo del <b>archimago Aethas Sunreaver</b> en Ciudad de Lunargenta dan más recompensas, entre ellas un nuevo <b>Cache of Quel\'Thalas Treasures</b> de nivel Heroico.', 'For a limited time, <b>Archmage Aethas Sunreaver</b>\'s Timewalking quests in Silvermoon City give increased rewards, including a new Heroic-level <b>Cache of Quel\'Thalas Treasures</b>.'),
+      ])],
+    ['omnium', L('Folio del Omnium', 'Omnium Folio'), () =>
+      h(L('El Folio del Omnium se amplía', 'The Omnium Folio expands'))
+      + ul([L('Puedes conseguir <b>dos Motas de investigación omnial</b> más (Motes of Omnial Inquiry).', 'You can earn <b>two additional Motes of Omnial Inquiry</b>.')])
+      + h(L('Dos runas nuevas', 'Two new runes'))
+      + h4(L('Runa de Potenciación (Rune of Empowerment)', 'Rune of Empowerment'))
+      + ul([L('Tu runa de <b>Critical Power</b>, <b>Burning Haste</b>, <b>Masterful Cunning</b> o <b>Versatile Warrior</b> otorga un <b>20 % más</b> de su característica.', 'Your Rune of <b>Critical Power</b>, <b>Burning Haste</b>, <b>Masterful Cunning</b> or <b>Versatile Warrior</b> grants <b>20% more</b> of its stat.')])
+      + h4(L('Runa de Masa crítica (Rune of Critical Mass)', 'Rune of Critical Mass'))
+      + ul([
+        L('Con la <b>Rune of Void-Touched Orbs</b> como runa central: un golpe de daño o sanación puede invocar <b>3 orbes del Vacío</b> que dañan a los enemigos o curan a los aliados en <b>5 m</b>.', 'With the <b>Rune of Void-Touched Orbs</b> as your Core Rune: a damage or healing hit can call down <b>3 Void orbs</b> that damage enemies or heal allies within <b>5 yards</b>.'),
+        L('Con la <b>Rune of Unleashed Fire</b> como runa central: un golpe puede provocar una explosión de <b>daño de Fuego</b> repartido entre los enemigos, o de sanación repartida entre los aliados, en <b>10 m</b>.', 'With the <b>Rune of Unleashed Fire</b> as your Core Rune: a hit can blast the area with <b>Fire</b> damage split among enemies, or healing split among allies, within <b>10 yards</b>.'),
+      ])
+      + h(L('Más información', 'Learn more'))
+      + p(L('El lore del Omnium Sunstrider lo cuentan el <b>magister Umbric</b>, el <b>sumo magister Rommath</b> y el <b>custodio Veldharin</b> en el Lycaneum de la <b>Isla de Quel\'Danas</b>.', 'Learn about the Sunstrider Omnium from <b>Magister Umbric</b>, <b>Grand Magister Rommath</b> or <b>Custodian Veldharin</b> in the Lycaneum on the <b>Isle of Quel\'Danas</b>.'))],
+    ['monturas', L('Monturas', 'Mounts'), () =>
+      h(L('Monturas nuevas', 'New mounts'))
+      + p(L('Datos del RPP: se han encontrado <b>17 monturas</b> en los archivos del juego. Pueden cambiar antes de salir.', 'PTR data: <b>17 mounts</b> have been found in the game files. They may change before release.'))
+      + ul([
+        L('<b>Markeet of the Infinite</b> — logro «Master of the Turbulent Timeways VI» (Líneas temporales turbulentas).', '<b>Markeet of the Infinite</b> — "Master of the Turbulent Timeways VI" achievement (Turbulent Timeways).'),
+        L('<b>Shadowbound Storybook</b> — recompensa de Talebound.', '<b>Shadowbound Storybook</b> — Talebound reward.'),
+        L('<b>Winterrrgl\'s Pine-Powered Candy Cane Contraption</b> — la suelta el Greench durante el Festival de Invierno; no se vende.', '<b>Winterrrgl\'s Pine-Powered Candy Cane Contraption</b> — dropped by the Greench during Feast of Winter Veil; not sold by a vendor.'),
+        L('<b>Autumn Dream Jumper</b> — aparece en la lista de Talebound.', '<b>Autumn Dream Jumper</b> — listed under Talebound.'),
+      ])
+      + h(L('Otras monturas encontradas', 'Other mounts found'))
+      + p('Woodland Wanderer · Faith-Cursed · Gilnean Charger · Lost Mare · Night Court · Shadowpaw · Stone Crusher · Skeletal Raptor · Watcher · Stegodon (' + L('negro, azul, verde y morado', 'black, blue, green and purple') + ')')
+      + note(L('De estas últimas todavía no se sabe cómo se consiguen.', 'How to obtain these is not known yet.'))],
+    ['otros', L('Otros cambios', 'Other changes'), () =>
+      h(L('Profesiones', 'Professions'))
+      + ul([
+        L('<b>Herboristería de Midnight:</b> la especialización <b>Bountiful Harvests</b> da más <b>Destreza</b> (Deftness).', '<b>Midnight Herbalism:</b> the <b>Bountiful Harvests</b> specialization grants more <b>Deftness</b>.'),
+        L('<b>Minería de Midnight:</b> la especialización <b>Plentiful Ores</b> da más <b>Destreza</b> (Deftness).', '<b>Midnight Mining:</b> the <b>Plentiful Ores</b> specialization grants more <b>Deftness</b>.'),
+      ])
+      + h('Housing')
+      + ul([
+        L('Corregido que los adornos giraran al convertir los datos de una casa al formato nuevo.', 'Fixed decor rotating when house data is converted to the new format.'),
+        L('Se han encontrado <b>63 adornos</b> nuevos que venden los mercaderes de Azeroth por distintas monedas (datos del RPP).', '<b>63 new decor items</b> sold by Azeroth merchants for various currencies have been found (PTR data).'),
+        L('Nuevos adornos de hogar en los vendedores de Paseo en el tiempo y en la tienda de Talebound (ver las secciones correspondientes).', 'New housing decor at the Timewalking vendors and in the Talebound store (see the matching sections).'),
+        L('Un nuevo <b>campamento de banda de guerra</b> aparece en los archivos del juego.', 'A new <b>Warband campsite</b> shows up in the game files.'),
+      ])
+      + h(L('Festival de Invierno', 'Feast of Winter Veil'))
+      + ul([L('Novedades del Festival de Invierno, entre ellas la montura de Winterrrgl (ver Monturas). Blizzard no da más detalles.', 'Winter Veil updates, including Winterrrgl\'s mount (see Mounts). Blizzard gives no further details.')])
+      + h(L('Para creadores de addons', 'For addon authors'))
+      + ul([
+        L('Los GUID dejan de exponer el ID del servidor y el de aparición (se ofuscan).', 'GUIDs no longer expose the server ID and spawn ID (they are obfuscated).'),
+        L('Las directivas del .toc ya no expanden variables como <code>[Game]</code> o <code>[Family]</code>.', 'TOC directives no longer expand variables such as <code>[Game]</code> or <code>[Family]</code>.'),
+      ])
+      + note(L('No hay una lista de cambios de clase del 12.1.7: lo publicado hasta ahora es solo contenido y ajustes menores.', 'There is no 12.1.7 class changelist yet: what has been published so far is content and minor tweaks.'))],
+    ['fuentes', L('Fuentes', 'Sources'), () =>
+      h(L('Fuentes', 'Sources'))
+      + ul([
+        lk(L(LINK117.blizzEs, LINK117.blizz), L('Blizzard: «Midnight: resumen de Ecos del Núcleo del Mundo»', 'Blizzard: "Midnight: Echoes of the Worldcore Overview"')),
+        lk(L(LINK117.wowheadEs, LINK117.wowhead), L('Wowhead: guía del parche 12.1.7 (características, actividades y recompensas)', 'Wowhead: Patch 12.1.7 overview guide (features, activities and rewards)')),
+        lk(LINK117.wiki, 'Warcraft Wiki: Patch 12.1.7'),
+        lk(LINK117.api, 'Warcraft Wiki: Patch 12.1.7/API changes'),
+        lk(LINK117.icy, L('Icy Veins: notas de desarrollo del RPP del 12.1.7', 'Icy Veins: 12.1.7 PTR development notes')),
+        lk('https://mamytwink.com/actualite/patch-12-1-7-les-elements-de-decoration-chez-les-marchands-dazeroth', L('Mamytwink: adornos de hogar en los mercaderes (en francés)', 'Mamytwink: decor sold by merchants (in French)')),
+        lk(LINK117.mounts, L('Monturas encontradas en los datos del 12.1.7', 'Mounts found in the 12.1.7 data')),
+      ])
+      + p(L('Los textos están resumidos y traducidos por WipeTime. Los nombres de objetos, logros y hechizos sin traducción confirmada se dejan en inglés. Todo es contenido del RPP: puede cambiar antes de que el parche salga.', 'Texts are summarized and translated by WipeTime. Item, achievement and spell names without a confirmed translation are left in English. Everything is PTR content and may change before the patch goes live.'))],
+  ];
+
+  const PATCHES = () => ({
+    '12.1.5': { title: L('Parche 12.1.5', 'Patch 12.1.5'), ban: L('Contenido que Blizzard ha hecho público · Midnight', 'Content Blizzard has made public · Midnight'), secs: SECTIONS() },
+    '12.1.7': { title: L('Parche 12.1.7', 'Patch 12.1.7'), ban: L('Ecos del Núcleo del Mundo · en el RPP · Midnight', 'Echoes of the Worldcore · on the PTR · Midnight'), secs: SECTIONS117() },
+  });
+
+  function open(tabId, patchId) {
     let dlg = document.getElementById('patchDlg');
     if (!dlg) {
       dlg = document.createElement('dialog');
@@ -254,26 +412,66 @@ const Patch115 = (() => {
       document.body.appendChild(dlg);
       dlg.addEventListener('click', (ev) => {
         const tabBtn = ev.target.closest('[data-pn-tab]');
-        if (tabBtn) { open(tabBtn.dataset.pnTab); return; }
+        if (tabBtn) { open(tabBtn.dataset.pnTab, dlg.dataset.patch); return; }
         const link = ev.target.closest('[data-pn-link]');
         if (link) { ev.preventDefault(); window.api.openExternal(link.dataset.pnLink); return; }
         if (ev.target.closest('[data-pn-close]') || ev.target === dlg) dlg.close();
       });
     }
-    const secs = SECTIONS();
-    const cur = secs.find((s) => s[0] === (tabId || dlg.dataset.tab)) || secs[0];
+    const all = PATCHES();
+    const pid = all[patchId] ? patchId : (all[dlg.dataset.patch] ? dlg.dataset.patch : '12.1.5');
+    const pt = all[pid];
+    const secs = pt.secs;
+    const cur = secs.find((s) => s[0] === (tabId || (pid === dlg.dataset.patch ? dlg.dataset.tab : ''))) || secs[0];
+    dlg.dataset.patch = pid;
     dlg.dataset.tab = cur[0];
-    dlg.innerHTML = `<div class="set-wrap"><div class="set-nav"><h2>${L('Parche 12.1.5', 'Patch 12.1.5')}</h2>
+    dlg.innerHTML = `<div class="set-wrap"><div class="set-nav"><h2>${pt.title}</h2>
       ${secs.map(([id, label]) => `<button type="button" class="set-tab ${id === cur[0] ? 'on' : ''}" data-pn-tab="${id}">${label}</button>`).join('')}
       <span class="grow"></span><button type="button" class="btn ghost" data-pn-close>${L('Cerrar', 'Close')}</button></div>
-      <div class="set-body pn-body"><div class="pn-ban">${L('Contenido que Blizzard ha hecho público · Midnight', 'Content Blizzard has made public · Midnight')}</div>${cur[2]()}</div></div>`;
+      <div class="set-body pn-body"><div class="pn-ban">${pt.ban}</div>${cur[2]()}</div></div>`;
     if (!dlg.open) dlg.showModal();
     dlg.querySelector('.pn-body')?.scrollTo(0, 0);
   }
 
+  // ------------------------------------------------------------ desplegable del botón del inicio
+  // Cuelga del body (la tarjeta del inicio recorta lo que sobresale) y se abre hacia arriba desde el botón.
+  let pop = null;
+  function closeMenu() {
+    if (!pop) return;
+    const btn = document.querySelector('[data-pn="menu"]');
+    if (btn) btn.setAttribute('aria-expanded', 'false');
+    const el = pop;
+    pop = null;
+    el.classList.add('out');
+    setTimeout(() => el.remove(), 140);
+  }
+  function openMenu(btn) {
+    const r = btn.getBoundingClientRect();
+    const el = document.createElement('div');
+    el.className = 'pn-pop';
+    el.setAttribute('role', 'menu');
+    el.innerHTML = [['12.1.5', L('Kith\'ix · Labyrinth of Kindo\'jan', 'Kith\'ix · Labyrinth of Kindo\'jan')], ['12.1.7', L('Ecos del Núcleo del Mundo · RPP', 'Echoes of the Worldcore · PTR')]]
+      .map(([v, sub]) => `<button type="button" role="menuitem" class="pn-opt" data-pn-patch="${v}"><b>${v}</b><small>${sub}</small></button>`).join('');
+    document.body.appendChild(el);
+    const w = Math.max(r.width, 250);
+    el.style.minWidth = w + 'px';
+    el.style.left = Math.max(8, Math.min(r.left, innerWidth - el.offsetWidth - 8)) + 'px';
+    el.style.bottom = (innerHeight - r.top + 8) + 'px';
+    btn.setAttribute('aria-expanded', 'true');
+    pop = el;
+    el.querySelector('.pn-opt')?.focus();
+  }
+
   document.addEventListener('click', (ev) => {
-    if (ev.target.closest('[data-pn="open"]')) open();
+    const opt = ev.target.closest('[data-pn-patch]');
+    if (opt) { const v = opt.dataset.pnPatch; closeMenu(); open('', v); return; }
+    const btn = ev.target.closest('[data-pn="menu"]');
+    if (btn) { if (pop) closeMenu(); else openMenu(btn); return; }
+    if (ev.target.closest('[data-pn="open"]')) { closeMenu(); open('', '12.1.5'); return; }
+    if (pop && !ev.target.closest('.pn-pop')) closeMenu();
   });
+  document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && pop) closeMenu(); });
+  window.addEventListener('resize', closeMenu);
 
   return { homeHTML, startTimer, open };
 })();
