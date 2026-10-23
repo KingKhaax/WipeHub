@@ -6,7 +6,7 @@ const GuildCmp = (() => {
   const ASSETS = 'https://assets.rpglogs.com/img/warcraft';
   const MAX_PAGES = 16;
   const emptyQ = () => ({ name: '', realm: '', region: WCSettings.get('region') || 'eu' });
-  const st = { q: [emptyQ(), emptyQ()], sel: [null, null], res: [null, null], msg: ['', ''], zones: null, zone: null, diff: 5, cache: new Map(), done: new Map(), meta: new Map(), loading: '', err: '', open: new Set() };
+  const st = { q: [emptyQ(), emptyQ()], sel: [null, null], res: [null, null], msg: ['', ''], zones: null, zone: null, diff: 5, cache: new Map(), done: new Map(), meta: new Map(), rio: new Map(), rioBosses: null, loading: '', err: '', open: new Set() };
 
   const keyOf = (g) => `${g.region}/${g.realmSlug}/${String(g.name).toLowerCase()}`;
   const repaint = () => { if (S.guildOpen && typeof Guilds !== 'undefined') Guilds.render(); };
@@ -104,6 +104,10 @@ const GuildCmp = (() => {
     } catch (e) { st.err = (typeof friendlyError === 'function' && friendlyError(e)) || String(e.message || e); }
     st.loading = '';
     repaint();
+    if (!st.err) {
+      await Promise.all(st.sel.map((g) => loadRio(g)));
+      repaint();
+    }
   }
 
   // Resumen de un jefe para una guild: trys hasta la primera kill, mejor wipe, tiempo invertido y lista de pulls
@@ -162,15 +166,58 @@ const GuildCmp = (() => {
   // Warcraft Logs no entrega por su API los reports privados u ocultos (muchas guilds de progreso los tienen así): sin reports no hay trys que contar
   const noLogs = (g) => st.meta.get(`${keyOf(g)}:${st.zone}:${st.diff}`) === 0;
 
+  const RIO_EXPS = [9, 10, 11, 12];
+  const RIO_DIFF = { 3: 'normal', 4: 'heroic', 5: 'mythic' };
+  const bossSlug = (n) => String(n).toLowerCase().replace(/['’,]/g, '').replace(/&/g, ' ').replace(/-/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+  function rioBossMap() {
+    if (!st.rioBosses) {
+      st.rioBosses = (async () => {
+        const m = new Map();
+        for (const x of RIO_EXPS) {
+          const r = await window.api.rioJson(`/api/v1/raiding/static-data?expansion_id=${x}`);
+          for (const raid of r?.raids || []) for (const en of raid.encounters || []) m.set(en.slug.replace(/-/g, ''), { slug: en.slug, raid: raid.slug });
+        }
+        return m;
+      })();
+      st.rioBosses.catch(() => { st.rioBosses = null; });
+    }
+    return st.rioBosses;
+  }
+
+  async function loadRio(g) {
+    const key = `${keyOf(g)}:${st.zone}:${st.diff}`;
+    const per = st.done.get(key);
+    const zone = (st.zones || []).find((z) => z.id === st.zone);
+    if (st.rio.has(key) || !per || !zone || !RIO_DIFF[st.diff]) return;
+    try {
+      const bosses = await rioBossMap();
+      const out = new Map();
+      await Promise.all(zone.encounters.filter((e) => e.name && per.get(e.id)?.some((x) => x.kill)).map(async (e) => {
+        const hit = bosses.get(bossSlug(e.name).replace(/-/g, ''));
+        if (!hit) return;
+        const r = await window.api.rioJson(`/api/v1/guilds/boss-kill?region=${g.region}&realm=${encodeURIComponent(g.realmSlug)}&guild=${encodeURIComponent(g.name)}&raid=${hit.raid}&boss=${hit.slug}&difficulty=${RIO_DIFF[st.diff]}`);
+        const at = Date.parse(r?.kill?.defeatedAt || '');
+        if (at) out.set(e.id, at);
+      }));
+      st.rio.set(key, out);
+    } catch { /* sin Raider.IO no se avisa de nada */ }
+  }
+
   // Datos de la comparación (para la tabla y para la imagen)
   function compareData() {
     const zone = (st.zones || []).find((z) => z.id === st.zone);
     const [a, b] = st.sel;
     const mA = st.done.get(`${keyOf(a)}:${st.zone}:${st.diff}`), mB = st.done.get(`${keyOf(b)}:${st.zone}:${st.diff}`);
     if (!zone || !mA || !mB) return null;
+    const markMin = (s, g, e) => {
+      const at = st.rio.get(`${keyOf(g)}:${st.zone}:${st.diff}`)?.get(e.id);
+      if (s?.killed && at && at < s.killAt - 6 * 3600000) s.min = at;
+      return s;
+    };
     let totA = 0, totB = 0, both = 0;
     const rows = zone.encounters.filter((e) => e.name).map((e) => {
-      const sA = summary(mA.get(e.id)), sB = summary(mB.get(e.id));
+      const sA = markMin(summary(mA.get(e.id)), a, e), sB = markMin(summary(mB.get(e.id)), b, e);
       let diff = null;
       if (sA?.killed && sB?.killed) { both++; totA += sA.n; totB += sB.n; diff = { d: sA.n - sB.n }; }
       return { e, sA, sB, diff };
@@ -191,18 +238,23 @@ const GuildCmp = (() => {
     if (!cd) return `<div class="loading"><span class="spinner"></span>${LL('Cargando logs…', 'Loading logs…')} ${esc(st.loading)}</div>`;
     const { a, b, rows, both, totA, totB } = cd;
     const hidden = [a, b].filter(noLogs);
+    const partial = [a, b].filter((g, i) => rows.some((r) => (i ? r.sB : r.sA)?.min));
+    const minWarn = partial.length ? `<div class="gc-warn">ⓘ ${LL(`En algunos jefes de ${partial.map((g) => g.name).join(' y ')}, Raider.IO registra la primera kill antes que el primer log de Warcraft Logs: faltan logs de esos intentos y los trys marcados con ≥ son un mínimo.`, `On some bosses of ${partial.map((g) => g.name).join(' and ')}, Raider.IO has the first kill before the first Warcraft Logs log: the logs of those attempts are missing and the tries marked with ≥ are a minimum.`)}</div>` : '';
     const warn = hidden.length ? `<div class="gc-warn">ⓘ ${LL(`${hidden.map((g) => g.name).join(' y ')}: Warcraft Logs no entrega ningún report público de ${hidden.length > 1 ? 'estas guilds' : 'esta guild'} para esta banda y dificultad (sus logs son privados u ocultos, o no están asociados a la guild), así que no se pueden contar sus trys aquí. Los verás solo en la web de Warcraft Logs.`, `${hidden.map((g) => g.name).join(' and ')}: Warcraft Logs returns no public report for ${hidden.length > 1 ? 'these guilds' : 'this guild'} for this raid and difficulty (its logs are private or hidden, or not linked to the guild), so its tries cannot be counted here. You can only see them on the Warcraft Logs website.`)}</div>` : '';
-    const cell = (s, i, g) => (s ? `<div class="gc-c" style="--gc:${NAME_COL[i]}"><span class="gc-top"><b class="gc-n">${num(s.n, 0)}</b><span class="gc-l">${s.killed ? LL('trys', 'tries') : LL('trys, sin kill', 'tries, no kill')}</span></span><small>${esc(cellTxt(s))}</small></div>`
+    const cell = (s, i, g, win = false, w = 0) => (s ? `<div class="gc-c${win ? ' win' : ''}" style="--gc:${NAME_COL[i]};--w:${w}%"><span class="gc-top"><b class="gc-n">${s.min ? '≥' : ''}${num(s.n, 0)}</b><span class="gc-l">${s.killed ? LL('trys', 'tries') : LL('trys, sin kill', 'tries, no kill')}</span></span><small>${esc(cellTxt(s))}</small>${w ? '<i class="gc-bar"></i>' : ''}${s.min ? `<small class="gc-min" title="${esc(LL('Raider.IO da la primera kill antes que el primer log de Warcraft Logs: faltan logs de esos intentos', 'Raider.IO has the first kill before the first Warcraft Logs log: the logs of those attempts are missing'))}">ⓘ ${esc(LL('Raider.IO: kill el ', 'Raider.IO: kill on '))}${esc(fmtDate(s.min))}</small>` : ''}</div>`
       : `<div class="gc-c none" style="--gc:${NAME_COL[i]}"><span class="gc-top"><b class="gc-n">—</b></span><small>${noLogs(g) ? LL('sin logs públicos', 'no public logs') : LL('sin pulls', 'no pulls')}</small></div>`);
     const body = rows.map((r) => {
       const d = diffTxt(r, a, b);
       const open = st.open.has(r.e.id);
+      const bothK = r.sA?.killed && r.sB?.killed;
+      const mx = bothK ? Math.max(r.sA.n, r.sB.n) : 0;
+      const wA = bothK ? Math.max(6, Math.round((r.sA.n / mx) * 100)) : 0, wB = bothK ? Math.max(6, Math.round((r.sB.n / mx) * 100)) : 0;
       return `<div class="gc-row ${open ? 'open' : ''}" data-gc="row" data-e="${r.e.id}">
         <div class="gc-boss"><span class="pf-bic"><img src="${ASSETS}/bosses/${r.e.id}-icon.jpg" width="24" height="24" loading="lazy" alt=""></span><span>${esc(r.e.name)}</span></div>
-        ${cell(r.sA, 0, a)}${cell(r.sB, 1, b)}<div class="gc-d"${d.c ? ` style="color:${d.c}"` : ''}>${esc(d.t)}</div></div>${open ? detailHTML(r.sA, r.sB) : ''}`;
+        ${cell(r.sA, 0, a, !!r.diff && r.diff.d < 0, wA)}${cell(r.sB, 1, b, !!r.diff && r.diff.d > 0, wB)}<div class="gc-d"><span class="gc-chip"${d.c ? ` style="--gc:${d.c}"` : ''}>${esc(d.t)}</span></div></div>${open ? detailHTML(r.sA, r.sB) : ''}`;
     }).join('');
     const total = both ? `<div class="gc-sum">${LL(`En los ${both} jefes que mataron las dos`, `On the ${both} bosses both killed`)}: <b style="color:${NAME_COL[0]}">${esc(a.name)}</b> ${num(totA, 0)} ${LL('trys', 'tries')} · <b style="color:${NAME_COL[1]}">${esc(b.name)}</b> ${num(totB, 0)} ${LL('trys', 'tries')}</div>` : '';
-    return `${warn}<div class="gc-tools"><button type="button" class="btn ghost sm" data-gc="copy">${LL('Copiar imagen', 'Copy image')}</button><button type="button" class="btn ghost sm" data-gc="save">${LL('Guardar PNG', 'Save PNG')}</button></div>${total}
+    return `${warn}${minWarn}<div class="gc-tools"><button type="button" class="btn ghost sm" data-gc="copy">${LL('Copiar imagen', 'Copy image')}</button><button type="button" class="btn ghost sm" data-gc="save">${LL('Guardar PNG', 'Save PNG')}</button></div>${total}
       <div class="gc-head"><span>${LL('Jefe', 'Boss')}</span><span style="color:${NAME_COL[0]}">${esc(a.name)}</span><span style="color:${NAME_COL[1]}">${esc(b.name)}</span><span>${LL('Diferencia', 'Difference')}</span></div><div class="gc-tbl">${body}</div>
       <p class="foot">${LL('Un try es un pull al jefe en los logs públicos de Warcraft Logs (un pull subido en varios logs cuenta una vez); se cuentan hasta la primera kill (incluida). Pulsa un jefe para ver cada try.', 'A try is a pull on the boss in the public Warcraft Logs (a pull uploaded in several logs counts once); they are counted up to the first kill (included). Click a boss to see every try.')}</p>`;
   }
@@ -248,8 +300,8 @@ const GuildCmp = (() => {
           g.fillText(r.e.name, cx[0] + (ims[i] ? 32 : 0), cy, cx[1] - cx[0] - 40);
           [[r.sA, 1, 0, a], [r.sB, 2, 1, b]].forEach(([sm, ci, k, gg]) => {
             if (!sm) { g.fillStyle = '#6b6b74'; g.font = `700 18px ${font}`; g.fillText('—', cx[ci], cy - 6); g.font = `11px ${font}`; g.fillText(noLogs(gg) ? LL('sin logs públicos', 'no public logs') : LL('sin pulls', 'no pulls'), cx[ci], cy + 11); return; }
-            g.fillStyle = NAME_COL[k]; g.font = `700 19px ${font}`; g.fillText(num(sm.n, 0), cx[ci], cy - 6);
-            const nw = g.measureText(num(sm.n, 0)).width;
+            g.fillStyle = NAME_COL[k]; g.font = `700 19px ${font}`; g.fillText((sm.min ? '≥' : '') + num(sm.n, 0), cx[ci], cy - 6);
+            const nw = g.measureText((sm.min ? '≥' : '') + num(sm.n, 0)).width;
             g.fillStyle = '#c9c9d1'; g.font = `12px ${font}`; g.fillText(sm.killed ? LL('trys', 'tries') : LL('trys, sin kill', 'tries, no kill'), cx[ci] + nw + 6, cy - 5);
             g.fillStyle = '#9a9aa3'; g.font = `11px ${font}`; g.fillText(cellTxt(sm), cx[ci], cy + 11, 222);
           });

@@ -3173,3 +3173,28 @@ a:focus-visible, button:focus-visible, select:focus-visible, summary:focus-visib
 @keyframes wh-sheen { 0%, 20% { left: -60%; } 70%, 100% { left: 130%; } }
 @media (prefers-reduced-motion: reduce) { .wh-logo .wh-h::after { animation: none; } }
 :root[data-theme="light"] .wh-logo .wh-w { color: #10223a; text-shadow: none; }
+.gc-min { color: #f0c777; }
+
+
+.gc-sum { border-radius: 12px; border-color: color-mix(in srgb, var(--accent) 30%, var(--line)); background: linear-gradient(90deg, color-mix(in srgb, #5b8def 13%, var(--panel)), var(--panel) 50%, color-mix(in srgb, #e0a43a 13%, var(--panel))); }
+.gc-head { border-radius: 14px 14px 0 0; border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); background: linear-gradient(90deg, color-mix(in srgb, #5b8def 20%, var(--panel-2)), color-mix(in srgb, var(--panel-2) 88%, #000) 50%, color-mix(in srgb, #e0a43a 20%, var(--panel-2))); }
+.gc-head span { font-size: 12px; letter-spacing: .2px; }
+.gc-tbl { border-radius: 0 0 14px 14px; border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); box-shadow: 0 14px 34px -16px #000c; background: linear-gradient(180deg, var(--panel), color-mix(in srgb, var(--panel) 90%, #000)); }
+.gc-row { position: relative; overflow: hidden; isolation: isolate; border-top-color: color-mix(in srgb, var(--line) 65%, transparent); }
+.gc-row > * { position: relative; z-index: 1; }
+.gc-row::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; z-index: 2; background: linear-gradient(var(--accent), transparent); opacity: 0; transition: opacity .2s; }
+.gc-row::after { content: ""; position: absolute; top: 0; bottom: 0; width: 28%; left: -45%; z-index: 0; pointer-events: none; transform: skewX(-18deg); background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .07), transparent); transition: left .7s ease; }
+.gc-row:hover::before { opacity: 1; }
+.gc-row:hover::after { left: 125%; }
+.gc-boss { padding: 4px 10px; color: var(--text); transition: color .2s; }
+.gc-row:hover .gc-boss { color: var(--accent); }
+.gc-boss .pf-bic img { border-radius: 6px; box-shadow: 0 0 0 1px var(--line); }
+.gc-c, .gc-d { padding: 3px 8px; border-left-color: color-mix(in srgb, var(--line) 55%, transparent); }
+.gc-c { transition: background .25s, box-shadow .25s; }
+.gc-n { font-weight: 800; }
+.gc-c.win { background: linear-gradient(180deg, color-mix(in srgb, var(--gc) 17%, transparent), color-mix(in srgb, var(--gc) 4%, transparent)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--gc) 38%, transparent), 0 0 18px -9px var(--gc); }
+.gc-c.win .gc-n { text-shadow: 0 0 14px color-mix(in srgb, var(--gc) 60%, transparent); }
+.gc-bar { display: block; position: relative; width: 72%; height: 3px; margin-top: 3px; border-radius: 2px; overflow: hidden; background: color-mix(in srgb, var(--gc) 18%, transparent); }
+.gc-bar::after { content: ""; position: absolute; inset: 0; width: var(--w, 0%); border-radius: 2px; background: linear-gradient(90deg, color-mix(in srgb, var(--gc) 65%, #fff), var(--gc)); }
+.gc-chip { display: inline-block; padding: 1px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap; color: var(--gc, var(--muted)); background: color-mix(in srgb, var(--gc, var(--muted)) 14%, transparent); border: 1px solid color-mix(in srgb, var(--gc, var(--muted)) 40%, transparent); }
+@media (prefers-reduced-motion: reduce) { .gc-row::after { display: none; } .gc-row::before, .gc-boss, .gc-c { transition: none; } }

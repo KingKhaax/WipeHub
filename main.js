@@ -1303,6 +1303,16 @@ ipcMain.handle('rio:guilds', async (_e, term) => {
   } catch (err) { return { error: String(err.message || err) }; }
 });
 
+ipcMain.handle('rio:json', async (_e, p) => {
+  try {
+    const path = String(p || '');
+    if (!/^[/a-z0-9_=&.?%-]+$/i.test(path) || !['/api/v1/raiding/static-data?', '/api/v1/guilds/boss-kill?'].some((x) => path.startsWith(x))) return { error: 'BAD_PATH' };
+    const res = await fetch('https://raider.io' + path, { headers: { 'user-agent': 'WipeHub', accept: 'application/json' } });
+    if (!res.ok) return { error: 'HTTP_' + res.status };
+    return await res.json();
+  } catch (err) { return { error: String(err.message || err) }; }
+});
+
 ipcMain.handle('open:external', (_e, url) => {
   if (/^https:\/\/(([a-z]+\.)?warcraftlogs\.com|worldofwarcraft\.blizzard\.com|news\.blizzard\.com|(www\.)?raider\.io|(www\.)?raidbots\.com|kingkhaax\.github\.io)\//.test(url)) shell.openExternal(url);
 });

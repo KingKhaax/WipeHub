@@ -308,6 +308,11 @@
       return `wipehub://report/${code}${fight && /^\d+$/.test(fight) ? `?fight=${fight}` : ''}`;
     },
     onDeepLink: () => {},
+    rioJson: wrap(async (p) => {
+      const path = String(p || '');
+      if (!/^[/a-z0-9_=&.?%-]+$/i.test(path) || !['/api/v1/raiding/static-data?', '/api/v1/guilds/boss-kill?'].some((x) => path.startsWith(x))) throw new Error('BAD_PATH');
+      return rioGet('https://raider.io' + path);
+    }),
     rioGuilds: wrap(async (term) => {
       const q = String(term || '').trim();
       if (q.length < 2) return { list: [] };

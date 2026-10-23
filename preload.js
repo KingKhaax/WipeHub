@@ -27,6 +27,7 @@ contextBridge.exposeInMainWorld('api', {
   onDeepLink: (cb) => ipcRenderer.on('deeplink', (_e, link) => cb(link)),
   rioGuilds: (term) => ipcRenderer.invoke('rio:guilds', term),
   rioRank: (o) => ipcRenderer.invoke('rio:rank', o),
+  rioJson: (p) => ipcRenderer.invoke('rio:json', p),
   bnetStatus: () => ipcRenderer.invoke('bnet:status'),
   bnetSet: (o) => ipcRenderer.invoke('bnet:set', o),
   bnetLogin: () => ipcRenderer.invoke('bnet:login'),
