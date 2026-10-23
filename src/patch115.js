@@ -22,7 +22,7 @@ const Patch115 = (() => {
 
   function homeHTML() {
     const count = live() ? '' : `<div class="pn-count"><small>${L('Parche 12.1.5 en', 'Patch 12.1.5 in')}</small><div id="pnTimer" class="pn-boxes"></div><small>${L('miércoles 14 de octubre · Kith\'ix', 'Wednesday, October 14 · Kith\'ix')}</small></div>`;
-    return `${count}<button type="button" class="pn-btn pn-menu-btn" data-pn="menu" aria-haspopup="menu" aria-expanded="false"><span class="pn-fx" aria-hidden="true"><i></i><i></i><i></i></span><span class="pn-lbl">${L('Contenido del 12.1.5 / 12.1.7', '12.1.5 / 12.1.7 content')}</span><i class="pn-chev" aria-hidden="true">▴</i></button>`;
+    return `${count}<button type="button" class="pn-btn pn-menu-btn" data-pn="menu" aria-haspopup="menu" aria-expanded="false"><span class="pn-fx" aria-hidden="true"><i></i><i></i></span><span class="pn-lbl">${L('Contenido del 12.1.5 / 12.1.7', '12.1.5 / 12.1.7 content')}</span><i class="pn-chev" aria-hidden="true">▴</i></button>`;
   }
 
   function tick() {

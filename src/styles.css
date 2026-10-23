@@ -3136,20 +3136,20 @@ a:focus-visible, button:focus-visible, select:focus-visible, summary:focus-visib
 @keyframes pn-pulse-v { 50% { transform: scale(1.18); } }
 @keyframes pn-gsheen { 0%, 100% { background-position: 120% 0, 0 0; } 50% { background-position: -20% 0, 0 0; } }
 @keyframes pn-spark { 0%, 100% { opacity: 0; transform: scale(.3) rotate(0); } 45% { opacity: 1; transform: scale(1.2) rotate(35deg); } 70% { opacity: .2; transform: scale(.6) rotate(60deg); } }
-/* Botón principal «Latido»: destello periódico y, al pasar el ratón, ondas de energía desde el centro */
-.pn-menu-btn { position: relative; overflow: hidden; isolation: isolate; }
-.pn-menu-btn > .pn-lbl, .pn-menu-btn > .pn-chev { position: relative; z-index: 2; }
-.pn-menu-btn::before { content: ''; position: absolute; inset: 0; z-index: 1; background: linear-gradient(100deg, transparent 35%, #ffffff40 50%, transparent 65%) -150% 0 / 60% 100% no-repeat; animation: pn-glide 3.8s ease-in-out infinite; pointer-events: none; }
-.pn-menu-btn .pn-fx i { left: 50%; top: 50%; width: 20px; height: 20px; margin: -10px; border: 2px solid #8ff4ff; opacity: 0; }
-.pn-menu-btn:hover .pn-fx i { animation: pn-ring 1.5s ease-out infinite; }
-.pn-menu-btn:hover .pn-fx i:nth-child(2) { animation-delay: .5s; } .pn-menu-btn:hover .pn-fx i:nth-child(3) { animation-delay: 1s; }
-.pn-menu-btn:hover .pn-chev { animation: pn-bob 1s ease-in-out infinite; }
-@keyframes pn-glide { 55%, 100% { background-position: 260% 0; } }
-@keyframes pn-ring { 0% { transform: scale(.5); opacity: .9; } 100% { transform: scale(9, 2.4); opacity: 0; } }
-@keyframes pn-bob { 50% { transform: translateY(-3px); } }
+/* Botón principal: «doble barrido» al pasar el ratón (un rayo blanco y otro cian cruzan el botón en sentidos opuestos) */
+.pn-menu-btn { position: relative; overflow: hidden; isolation: isolate; transition: transform .2s, filter .2s, box-shadow .25s; }
+.pn-menu-btn > .pn-lbl, .pn-menu-btn > .pn-chev { position: relative; z-index: 3; }
+.pn-menu-btn .pn-fx i { top: 0; bottom: 0; width: 34%; border-radius: 0; transform: skewX(-18deg); opacity: 0; }
+.pn-menu-btn .pn-fx i:nth-child(1) { left: -50%; background: linear-gradient(90deg, transparent, #ffffff55, transparent); }
+.pn-menu-btn .pn-fx i:nth-child(2) { right: -50%; background: linear-gradient(90deg, transparent, #9ff8ff66, transparent); }
+.pn-menu-btn:hover .pn-fx i:nth-child(1) { animation: pn-swr .9s ease-out forwards; }
+.pn-menu-btn:hover .pn-fx i:nth-child(2) { animation: pn-swl .9s ease-out .12s forwards; }
+.pn-menu-btn:hover { filter: brightness(1.1); }
+@keyframes pn-swr { 0% { left: -50%; opacity: 1; } 100% { left: 130%; opacity: 1; } }
+@keyframes pn-swl { 0% { right: -50%; opacity: 1; } 100% { right: 130%; opacity: 1; } }
 @keyframes pn-pop-in { from { opacity: 0; transform: translateY(10px) scale(.94); } to { opacity: 1; transform: none; } }
 @keyframes pn-pop-out { to { opacity: 0; transform: translateY(6px) scale(.96); } }
-@media (prefers-reduced-motion: reduce) { .pn-pop, .pn-pop.out, .pn-opt, .pn-opt *, .pn-menu-btn::before, .pn-menu-btn .pn-fx i, .pn-menu-btn .pn-chev { animation: none !important; } .pn-chev, .pn-opt, .pn-opt::after { transition: none; } }
+@media (prefers-reduced-motion: reduce) { .pn-pop, .pn-pop.out, .pn-opt, .pn-opt *, .pn-menu-btn .pn-fx i { animation: none !important; } .pn-chev, .pn-opt, .pn-opt::after { transition: none; } }
 
 /* Panel del 12.1.7: acento ámbar (fuego del Núcleo del Mundo) en lugar del verde del veneno del 12.1.5 */
 .pn-dlg[data-patch="12.1.7"] { --pn-c: #ffb04a; }
