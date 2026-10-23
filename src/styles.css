@@ -3205,3 +3205,4 @@ a:focus-visible, button:focus-visible, select:focus-visible, summary:focus-visib
 .gc-n { font-size: 20px; }
 @keyframes gc-star { 50% { transform: scale(1.35) rotate(18deg); } }
 @media (prefers-reduced-motion: reduce) { .gc-c.win::after { animation: none; } }
+.made-with .heart { display: inline-block; vertical-align: -3px; margin: 0 3px; }
