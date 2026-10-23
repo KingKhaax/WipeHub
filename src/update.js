@@ -8,6 +8,7 @@ const WCUpdate = (() => {
 
   // Historial: [versión, es, en]
   const CHANGELOG = [
+    ['2.12.5', 'Comparar guilds: los trys ya no se pierden cuando una noche de raid se subió a Warcraft Logs con otra zona (por ejemplo una mazmorra). Antes solo se leían los reports de la banda elegida y a veces faltaban pulls, así que un jefe podía salir con 1 try cuando la guild había hecho varios.', 'Compare guilds: tries are no longer lost when a raid night was uploaded to Warcraft Logs under another zone (for example a dungeon). Only the reports of the chosen raid were read before, so pulls were sometimes missing and a boss could show 1 try when the guild had made several.'],
     ['2.12.4', 'Menú de idioma: la opción activa y los efectos al pasar el ratón usan el mismo color de acento de la web (antes la activa salía en verde).', 'Language menu: the active option and the hover effects use the same accent color as the rest of the site (the active one used to be green).'],
     ['2.12.3', 'Portada: la caja de «Hub» del logotipo pasa al cian de WipeHub y lleva un destello que la cruza de forma automática.', 'Home: the “Hub” box in the logo is now WipeHub cyan and has a light sweep that crosses it automatically.'],
     ['2.12.2', 'Portada: el nombre «WipeHub» ahora tiene logotipo propio, con «Wipe» en blanco y negrita y «Hub» en negro sobre una caja naranja.', 'Home: the “WipeHub” name now has its own logo, with “Wipe” in bold white and “Hub” in black on an orange box.'],

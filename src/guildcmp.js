@@ -46,22 +46,32 @@ const GuildCmp = (() => {
   // Lee todos los reports de la guild (paginados) y devuelve los pulls de cada jefe ya sin repetidos
   async function fetchPulls(g, zone, diff, onPage) {
     const per = new Map();
+    const seen = new Set();
     let nReports = 0;
-    for (let page = 1; page <= MAX_PAGES; page++) {
-      if (onPage) onPage(page);
-      const d = await gql(`query($n:String!,$s:String!,$r:String!,$z:Int,$d:Int,$p:Int){reportData{reports(guildName:$n,guildServerSlug:$s,guildServerRegion:$r,zoneID:$z,limit:50,page:$p){has_more_pages data{code startTime fights(difficulty:$d){encounterID kill fightPercentage startTime endTime}}}}}`,
-        { n: g.name, s: g.realmSlug, r: g.region.toUpperCase(), z: zone, d: diff, p: page });
-      const r = d.reportData?.reports;
-      nReports += (r?.data || []).length;
-      for (const rep of r?.data || []) {
-        for (const f of rep.fights || []) {
-          if (!f.encounterID) continue;
-          if (!per.has(f.encounterID)) per.set(f.encounterID, []);
-          per.get(f.encounterID).push({ t: rep.startTime + f.startTime, dur: f.endTime - f.startTime, kill: !!f.kill, pct: f.fightPercentage, code: rep.code });
-        }
+    let first = Infinity;
+    const take = (rep) => {
+      if (seen.has(rep.code)) return;
+      seen.add(rep.code);
+      nReports++;
+      first = Math.min(first, rep.startTime);
+      for (const f of rep.fights || []) {
+        if (!f.encounterID) continue;
+        if (!per.has(f.encounterID)) per.set(f.encounterID, []);
+        per.get(f.encounterID).push({ t: rep.startTime + f.startTime, dur: f.endTime - f.startTime, kill: !!f.kill, pct: f.fightPercentage, code: rep.code });
       }
-      if (!r?.has_more_pages) break;
-    }
+    };
+    const scan = async (byZone, since) => {
+      for (let page = 1; page <= MAX_PAGES; page++) {
+        if (onPage) onPage(page);
+        const d = await gql(`query($n:String!,$s:String!,$r:String!,${byZone ? '$z:Int' : '$t:Float'},$d:Int,$p:Int){reportData{reports(guildName:$n,guildServerSlug:$s,guildServerRegion:$r,${byZone ? 'zoneID:$z' : 'startTime:$t'},limit:50,page:$p){has_more_pages data{code startTime fights(difficulty:$d){encounterID kill fightPercentage startTime endTime}}}}}`,
+          { n: g.name, s: g.realmSlug, r: g.region.toUpperCase(), z: zone, d: diff, p: page, t: since });
+        const r = d.reportData?.reports;
+        for (const rep of r?.data || []) take(rep);
+        if (!r?.has_more_pages) break;
+      }
+    };
+    await scan(true, 0);
+    if (nReports) await scan(false, first - 21 * 86400000);
     for (const [e, l] of per) per.set(e, dedupe(l.sort((a, b) => a.t - b.t)));
     return { per, nReports };
   }
@@ -71,25 +81,10 @@ const GuildCmp = (() => {
     const key = `${keyOf(g)}:${st.zone}:${st.diff}`;
     if (st.cache.has(key)) return st.cache.get(key);
     const p = (async () => {
-      const per = new Map();
-      let nReports = 0;
-      for (let page = 1; page <= MAX_PAGES; page++) {
+      const { per, nReports } = await fetchPulls(g, st.zone, st.diff, (page) => {
         st.loading = `${g.name} · ${LL('página', 'page')} ${page}`;
         repaint();
-        const d = await gql(`query($n:String!,$s:String!,$r:String!,$z:Int,$d:Int,$p:Int){reportData{reports(guildName:$n,guildServerSlug:$s,guildServerRegion:$r,zoneID:$z,limit:50,page:$p){has_more_pages data{code startTime fights(difficulty:$d){encounterID kill fightPercentage startTime endTime}}}}}`,
-          { n: g.name, s: g.realmSlug, r: g.region.toUpperCase(), z: st.zone, d: st.diff, p: page });
-        const r = d.reportData?.reports;
-        nReports += (r?.data || []).length;
-        for (const rep of r?.data || []) {
-          for (const f of rep.fights || []) {
-            if (!f.encounterID) continue;
-            if (!per.has(f.encounterID)) per.set(f.encounterID, []);
-            per.get(f.encounterID).push({ t: rep.startTime + f.startTime, dur: f.endTime - f.startTime, kill: !!f.kill, pct: f.fightPercentage, code: rep.code });
-          }
-        }
-        if (!r?.has_more_pages) break;
-      }
-      for (const [e, l] of per) per.set(e, dedupe(l.sort((a, b) => a.t - b.t)));
+      });
       st.meta.set(key, nReports);
       st.done.set(key, per);
       return per;
