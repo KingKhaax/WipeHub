@@ -2056,7 +2056,7 @@ function renderWelcome() {
       <div class="hero-in">
         <div class="hero-text">
           <div class="eyebrow">WIPEHUB · ${heroTag()}</div>
-          <h1 class="hero-title">${t('welcomeHello')}<br><span class="grad">WipeHub</span></h1>
+          <h1 class="hero-title">${t('welcomeHello')}<br><span class="wh-logo"><span class="wh-w">Wipe</span><span class="wh-h">Hub</span></span></h1>
           <p class="sub">${t('welcomeText')}</p>
           <form id="heroForm" class="hero-form">
             <input id="heroInput" type="text" spellcheck="false" autocomplete="off" placeholder="${esc(t('urlPlaceholder'))}">

@@ -3164,3 +3164,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, summary:focus-visib
 .pn-dlg[data-patch="12.1.5"] .set-tab.on { box-shadow: inset 3px 0 0 var(--pn-c); }
 .pn-note { margin: 10px 0 0; padding: 8px 12px; border-left: 3px solid var(--pn-c, var(--accent)); border-radius: 0 8px 8px 0; background: color-mix(in srgb, var(--pn-c, var(--accent)) 8%, transparent); color: var(--muted); font-size: 12.5px; line-height: 1.45; }
 .pn-body code { padding: 1px 5px; border-radius: 5px; background: var(--panel-2, rgba(255, 255, 255, .06)); font-size: .92em; }
+.wh-logo { display: inline-flex; align-items: center; font-weight: 800; text-shadow: none; }
+.wh-logo .wh-w { color: #fff; text-shadow: 0 2px 16px rgba(0, 0, 0, .4); }
+.wh-logo .wh-h { color: #000; background: #ff9000; padding: 0 .22em .06em; margin-left: .08em; border-radius: .16em; line-height: 1.05; }
+:root[data-theme="light"] .wh-logo .wh-w { color: #10223a; text-shadow: none; }
