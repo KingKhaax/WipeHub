@@ -22,7 +22,7 @@ const Patch115 = (() => {
 
   function homeHTML() {
     const count = live() ? '' : `<div class="pn-count"><small>${L('Parche 12.1.5 en', 'Patch 12.1.5 in')}</small><div id="pnTimer" class="pn-boxes"></div><small>${L('miércoles 14 de octubre · Kith\'ix', 'Wednesday, October 14 · Kith\'ix')}</small></div>`;
-    return `${count}<button type="button" class="pn-btn pn-menu-btn" data-pn="menu" aria-haspopup="menu" aria-expanded="false"><span>${L('Contenido del 12.1.5 / 12.1.7', '12.1.5 / 12.1.7 content')}</span><i class="pn-chev" aria-hidden="true">▴</i></button>`;
+    return `${count}<button type="button" class="pn-btn pn-menu-btn" data-pn="menu" aria-haspopup="menu" aria-expanded="false"><span class="pn-fx" aria-hidden="true"><i></i><i></i><i></i></span><span class="pn-lbl">${L('Contenido del 12.1.5 / 12.1.7', '12.1.5 / 12.1.7 content')}</span><i class="pn-chev" aria-hidden="true">▴</i></button>`;
   }
 
   function tick() {
@@ -450,8 +450,9 @@ const Patch115 = (() => {
     const el = document.createElement('div');
     el.className = 'pn-pop';
     el.setAttribute('role', 'menu');
-    el.innerHTML = [['12.1.5', L('Kith\'ix · Labyrinth of Kindo\'jan', 'Kith\'ix · Labyrinth of Kindo\'jan')], ['12.1.7', L('Ecos del Núcleo del Mundo · RPP', 'Echoes of the Worldcore · PTR')]]
-      .map(([v, sub]) => `<button type="button" role="menuitem" class="pn-opt" data-pn-patch="${v}"><b>${v}</b><small>${sub}</small></button>`).join('');
+    // 12.1.5: vacío de Kith'ix (morado, estrellas y agujero negro) · 12.1.7: Núcleo del Mundo (oro con destellos)
+    el.innerHTML = `<button type="button" role="menuitem" class="pn-opt pn-void" data-pn-patch="12.1.5"><span class="pn-fx" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="pn-t">${L('Contenido del 12.1.5', '12.1.5 content')}</span></button>`
+      + `<button type="button" role="menuitem" class="pn-opt pn-gold" data-pn-patch="12.1.7"><span class="pn-fx" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span class="pn-t">${L('Contenido del 12.1.7', '12.1.7 content')}</span></button>`;
     document.body.appendChild(el);
     const w = Math.max(r.width, 250);
     el.style.minWidth = w + 'px';
