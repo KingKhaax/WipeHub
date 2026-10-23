@@ -8,6 +8,7 @@ const WCUpdate = (() => {
 
   // Historial: [versión, es, en]
   const CHANGELOG = [
+    ['2.12.11', 'Fondo general nuevo: el arte de «Hope Shall Rise» (Midnight) sustituye al anterior, con un oscurecimiento algo mayor para que los paneles y los textos se lean bien.', 'New general background: the “Hope Shall Rise” (Midnight) art replaces the previous one, with slightly stronger dimming so panels and text stay readable.'],
     ['2.12.7–2.12.10', 'Mejoras menores y ajustes visuales.', 'Minor improvements and visual tweaks.'],
     ['2.12.6', 'Comparar guilds: si Raider.IO registra la primera kill de una guild antes que su primer log en Warcraft Logs, el número sale como «≥» (mínimo) y aparece un aviso de que faltan logs.', 'Compare guilds: when Raider.IO has a guild first kill before its first Warcraft Logs log, the number is shown as “≥” (a minimum) and a warning says logs are missing.'],
     ['2.12.5', 'Comparar guilds: los trys ya no se pierden cuando una noche de raid se subió a Warcraft Logs con otra zona (por ejemplo una mazmorra). Antes solo se leían los reports de la banda elegida y a veces faltaban pulls, así que un jefe podía salir con 1 try cuando la guild había hecho varios.', 'Compare guilds: tries are no longer lost when a raid night was uploaded to Warcraft Logs under another zone (for example a dungeon). Only the reports of the chosen raid were read before, so pulls were sometimes missing and a boss could show 1 try when the guild had made several.'],

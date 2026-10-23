@@ -3207,7 +3207,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, summary:focus-visib
 @media (prefers-reduced-motion: reduce) { .gc-c.win::after { animation: none; } }
 .made-with .heart { display: inline-block; vertical-align: -3px; margin: 0 3px; }
 .bg-art { position: fixed; inset: 0; z-index: -2; pointer-events: none; background: #07060b url(bg-general.jpg) 50% 30% / cover no-repeat; }
-.bg-dim { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: rgba(7, 6, 12, .25); }
+.bg-dim { position: fixed; inset: 0; z-index: -1; pointer-events: none; background: radial-gradient(120% 90% at 50% 40%, rgba(7, 6, 12, .40), rgba(7, 6, 12, .66)); }
 .welcome .card, .welcome .exp-card { background: rgba(14, 12, 22, .55); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 .welcome .hero { background: radial-gradient(900px 440px at 88% -12%, rgba(25, 170, 168, .26), transparent 60%), radial-gradient(800px 480px at -10% 112%, rgba(62, 66, 198, .40), transparent 56%), linear-gradient(160deg, rgba(15, 27, 56, .62), rgba(7, 12, 27, .62) 72%); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 :root[data-theme="light"] .bg-art, :root[data-theme="light"] .bg-dim { display: none; }
