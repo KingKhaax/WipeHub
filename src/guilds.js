@@ -197,9 +197,14 @@ const Guilds = (() => {
   }
 
   // ---- Registro a mano (sin iniciar sesión): personajes y guilds guardados en este equipo
-  const savedChars = () => lsList('gd:chars');
-  const savedGuilds = () => lsList('gd:guilds');
+  // Si falta la clave principal (almacenamiento limpiado) se recupera la copia; al quitar el último personaje la clave queda como [] y no se restaura.
   const saveList = (k, l) => lsSet(k, JSON.stringify(l));
+  const savedChars = () => (lsGet('gd:chars') === null ? lsList('gd:chars:bak') : lsList('gd:chars'));
+  const saveChars = (l) => { saveList('gd:chars', l); saveList('gd:chars:bak', l); };
+  // Última ficha buena de cada personaje: si Warcraft Logs/Blizzard no responde, el personaje se sigue viendo con lo último que se supo
+  const cardCache = () => { try { return JSON.parse(lsGet('gd:charcache') || '{}'); } catch { return {}; } };
+  const stubOf = (c) => ({ name: c.name, realmSlug: c.realmSlug, realmName: c.realmName || c.realmSlug, region: c.region, manual: true, stale: true });
+  const savedGuilds = () => lsList('gd:guilds');
 
   // Une lo que viene de la cuenta de Battle.net (si inició sesión) con lo registrado a mano
   function rebuild() {
@@ -217,10 +222,16 @@ const Guilds = (() => {
   }
 
   async function loadSaved() {
-    const list = await Promise.all(savedChars().map(async (c) => {
-      try { return { ...(await Cards.char(c.name, c.realmSlug, c.region)), manual: true, region: c.region }; } catch { return null; }
+    const saved = savedChars();
+    const cc = cardCache();
+    // lo guardado sale al instante; los datos nuevos lo actualizan cuando llegan
+    st.manualChars = saved.map((c) => ({ ...(cc[charKey(c)] || stubOf(c)), manual: true, region: c.region }));
+    rebuild();
+    const list = await Promise.all(saved.map(async (c) => {
+      try { const card = { ...(await Cards.char(c.name, c.realmSlug, c.region)), manual: true, region: c.region }; cc[charKey(c)] = card; return card; } catch { return { ...(cc[charKey(c)] || stubOf(c)), manual: true, region: c.region }; }
     }));
-    st.manualChars = list.filter(Boolean);
+    st.manualChars = list;
+    try { lsSet('gd:charcache', JSON.stringify(cc)); } catch { /* sin espacio */ }
     rebuild();
   }
 
@@ -230,7 +241,7 @@ const Guilds = (() => {
     try {
       const info = await Cards.char(name, slug, region);
       const l = savedChars();
-      if (!l.some((x) => charKey(x) === charKey({ name: info.name, realmSlug: info.realmSlug }))) { l.push({ name: info.name, realmSlug: info.realmSlug, region }); saveList('gd:chars', l); }
+      if (!l.some((x) => charKey(x) === charKey({ name: info.name, realmSlug: info.realmSlug }))) { l.push({ name: info.name, realmSlug: info.realmSlug, realmName: info.realmName, region }); saveChars(l); }
       await loadSaved();
       lsSet('gd:hidden', JSON.stringify(lsList('gd:hidden').filter((k) => k !== charKey(info))));
     } catch (e) { st.charMsg = friendly(String(e.message || e)); }
@@ -256,8 +267,8 @@ const Guilds = (() => {
 
   function guildFormHTML() {
     const last = lsGet('gd:guildRegion') || WCSettings.get('region') || st.status?.region || 'eu';
-    return `<form id="gdAddGuildForm" class="gd-form"><input name="name" placeholder="${esc(LL('Nombre de la guild', 'Guild name'))}" spellcheck="false" autocomplete="off" required>
-      <input name="realm" placeholder="${esc(LL('Reino (ej. Zul’jin)', 'Realm (e.g. Zul’jin)'))}" spellcheck="false" autocomplete="off" required>
+    return `<form id="gdAddGuildForm" class="gd-form"><input name="name" placeholder="${esc(LL('Nombre de la guild', 'Guild name'))}" value="${esc(st.guildMsg ? st.guildName || '' : '')}" spellcheck="false" autocomplete="off" required>
+      <input name="realm" placeholder="${esc(LL('Reino (ej. Zul’jin)', 'Realm (e.g. Zul’jin)'))}" value="${esc(lsGet('gd:guildRealm') || '')}" spellcheck="false" autocomplete="off" required>
       ${chipSelect('region', ['eu', 'us', 'kr', 'tw'].map((r) => [r, r.toUpperCase()]), last)}
       <button class="btn" type="submit">${LL('Añadir guild', 'Add guild')}</button></form>
       ${st.guildMsg ? `<div class="error sm"><p>${esc(st.guildMsg)}</p></div>` : ''}`;
@@ -266,8 +277,8 @@ const Guilds = (() => {
   const guildSaved = (g) => savedGuilds().some((x) => guildKey(x) === guildKey(g));
   function charFormHTML() {
     const last = lsGet('gd:charRegion') || WCSettings.get('region') || st.status?.region || 'eu';
-    return `<form id="gdCharForm" class="gd-form"><input name="name" placeholder="${esc(LL('Nombre del personaje', 'Character name'))}" spellcheck="false" autocomplete="off" required>
-      <input name="realm" placeholder="${esc(LL('Reino (ej. Zul’jin)', 'Realm (e.g. Zul’jin)'))}" spellcheck="false" autocomplete="off" required>
+    return `<form id="gdCharForm" class="gd-form"><input name="name" placeholder="${esc(LL('Nombre del personaje', 'Character name'))}" value="${esc(st.charMsg ? st.charName || '' : '')}" spellcheck="false" autocomplete="off" required>
+      <input name="realm" placeholder="${esc(LL('Reino (ej. Zul’jin)', 'Realm (e.g. Zul’jin)'))}" value="${esc(lsGet('gd:charRealm') || '')}" spellcheck="false" autocomplete="off" required>
       ${chipSelect('region', ['eu', 'us', 'kr', 'tw'].map((r) => [r, r.toUpperCase()]), last)}
       <button class="btn" type="submit">${LL('Añadir personaje', 'Add character')}</button></form>
       ${st.charMsg ? `<div class="error sm"><p>${esc(st.charMsg)}</p></div>` : ''}`;
@@ -619,7 +630,7 @@ const Guilds = (() => {
     else if (a === 'armory-refresh') { const x = st.armory; if (x) openArmory(x.key, x.realmSlug, x.name, false, x.region || ''); }
     else if (a === 'armory-close') { clearInterval(st.armoryTimer); st.armory = null; render(); }
     else if (a === 'pick-char') { if (!S.guildOpen) await open(); pickGuild({ name: el.dataset.guild, realmSlug: el.dataset.realm, realmName: el.dataset.realmname, region: el.dataset.region || st.status?.region }); }
-    else if (a === 'delchar') { saveList('gd:chars', savedChars().filter((x) => charKey(x) !== el.dataset.key)); lsSet('gd:favs', JSON.stringify(lsList('gd:favs').filter((x) => x !== el.dataset.key))); if (st.armory?.key === el.dataset.key) st.armory = null; await loadSaved(); render(); }
+    else if (a === 'delchar') { saveChars(savedChars().filter((x) => charKey(x) !== el.dataset.key)); lsSet('gd:favs', JSON.stringify(lsList('gd:favs').filter((x) => x !== el.dataset.key))); if (st.armory?.key === el.dataset.key) st.armory = null; await loadSaved(); render(); }
     else if (a === 'saveguild' || a === 'unsaveguild') {
       const g = st.sel;
       if (g) { const rest = savedGuilds().filter((x) => guildKey(x) !== guildKey(g)); saveList('gd:guilds', a === 'saveguild' ? [...rest, { name: g.name, realmSlug: g.realmSlug, realmName: g.realmName || g.realmSlug, region: g.region || st.status?.region || 'eu' }] : rest); rebuild(); render(); }
@@ -658,6 +669,8 @@ const Guilds = (() => {
       lsSet('gd:charRegion', region);
       const name = String(fd.get('name') || '').trim();
       const realm = String(fd.get('realm') || '').trim();
+      lsSet('gd:charRealm', realm);
+      st.charName = name;
       if (name && realm) addChar(name, realm, region);
       return;
     }
@@ -668,6 +681,8 @@ const Guilds = (() => {
       lsSet('gd:guildRegion', region);
       const name = String(fd.get('name') || '').trim();
       const realm = String(fd.get('realm') || '').trim();
+      lsSet('gd:guildRealm', realm);
+      st.guildName = name;
       if (name && realm) addGuild(name, realm, region);
       return;
     }

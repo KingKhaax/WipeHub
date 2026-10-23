@@ -681,7 +681,7 @@ const Profile = (() => {
     const reg = [['all', LL('Todas las regiones', 'All regions')], ['eu', 'EU'], ['us', 'US'], ['kr', 'KR'], ['tw', 'TW']];
     return `<form id="pfForm" class="pf-search" autocomplete="off">
       <input name="name" class="pf-in-name" placeholder="${esc(LL('Nombre del personaje', 'Character name'))}" spellcheck="false" required>
-      <input name="realm" class="pf-in-realm" placeholder="${esc(LL('Reino (opcional)', 'Realm (optional)'))}" spellcheck="false">
+      <input name="realm" class="pf-in-realm" placeholder="${esc(LL('Reino (opcional)', 'Realm (optional)'))}" value="${esc(lsGet('prof:realm') || '')}" spellcheck="false">
       ${chipSelect('region', reg, last)}
       <button class="btn primary" type="submit">${LL('Buscar', 'Search')}</button></form>
       ${rec.length ? `<div class="chips pf-rec">${rec.map((x, i) => `<span class="pf-rec-i"><button type="button" class="chip" data-pf="recent" data-i="${i}">${flagHTML(x.locale, x.region)} ${esc(x.name)} <span class="muted">${esc(x.realm)} · ${esc(x.region.toUpperCase())}</span></button><button type="button" class="pf-rec-x" data-pf="recent-del" data-i="${i}" title="${esc(LL('Quitar de recientes', 'Remove from recent'))}" aria-label="${esc(LL('Quitar', 'Remove'))}">✕</button></span>`).join('')}<button type="button" class="mini-btn" data-pf="recent-clear">${LL('Borrar todos', 'Clear all')}</button></div>` : ''}`;
@@ -701,6 +701,7 @@ const Profile = (() => {
     const realm = String(fd.get('realm') || '').trim();
     const region = String(fd.get('region') || 'eu');
     lsSet('prof:region', region);
+    lsSet('prof:realm', realm);
     if (name) search(name, realm, region);
   });
 
