@@ -3,11 +3,13 @@
 // Cambios de clases en PvE de Midnight, del parche 12.1.0 al 12.1.5.
 // Fuentes: notas oficiales de la actualización 12.1.5 y registro oficial de hotfixes de Blizzard (13 de agosto – 14 de octubre de 2026).
 // Tipos: b = mejora, n = nerfeo, r = cambio/rediseño, f = corrección. Los nombres de talentos y hechizos se dejan en inglés (nombre oficial).
+// Los ajustes del 27 de octubre (mantenimiento semanal) vienen del artículo de Wowhead «Subtlety Rogue Nerfs and Feral Druid Buffs».
 // Solo PvE; las correcciones sin cifras se resumen en una línea. Blizzard no ha confirmado todavía cambios de clase para el 12.2.
 const ClassChanges = (() => {
   const L = tr;
   const LINK = 'https://worldofwarcraft.blizzard.com/en-us/news/24296142';
   const LINK_NOTES = 'https://worldofwarcraft.blizzard.com/en-us/news/24304162';
+  const LINK_TUNING = 'https://www.wowhead.com/news/subtlety-rogue-nerfs-and-feral-druid-buffs-class-tuning-incoming-with-weekly-383568';
   const V = '12.1.5';
   const TYPES = { b: ['Mejora', 'Buff'], n: ['Nerfeo', 'Nerf'], r: ['Cambio', 'Change'], f: ['Corrección', 'Fix'] };
 
@@ -67,6 +69,7 @@ const ClassChanges = (() => {
         ['2026-09-01', 'b', 'Daño de habilidades +4 %; Shred +10 % (clase).', 'All ability damage +4%; Shred +10% (class).'],
       ],
       feral: [
+        ['2026-10-27', 'b', 'Todo el daño +5 %.', 'All damage +5%.'],
         ['2026-10-01', 'f', 'Rampant Ferocity: corregido el efecto que saltaba mal contra un solo objetivo.', 'Rampant Ferocity: fixed incorrect triggering on a single target.'],
         ['2026-09-22', 'b', 'Wildstalker — Bursting Growth +15 %; Patient Custodian: daño de sangrado 10 % (antes 8 %).', 'Wildstalker — Bursting Growth +15%; Patient Custodian bleed damage 10% (was 8%).'],
         ['2026-09-02', 'r', 'Unseen Predator (rango 1): prefiere objetivos que no sean inmunes ni reciban menos del 5 % de daño físico.', 'Unseen Predator (rank 1): prefers targets that are not immune or taking less than 5% physical damage.'],
@@ -77,6 +80,7 @@ const ClassChanges = (() => {
         ['2026-09-09', 'f', 'Wild Guardian: aumentaba por error el daño de Thrash y Mangle; Wild Guardian: ahora solo lo hace con el rango 3 elegido.', 'Wild Guardian: it was incorrectly increasing Thrash and Mangle damage; Wild Guardian: it now only does so with Rank 3 selected.'],
       ],
       restoration: [
+        ['2026-10-27', 'b', 'Verdancy: sanación +60 %; Regrowth: sanación +10 %; Improved Swiftmend: sanación +40 % (antes 30 %).', 'Verdancy: healing +60%; Regrowth: healing +10%; Improved Swiftmend: healing +40% (was 30%).'],
         ['2026-08-31', 'f', 'Grove Guardians prioriza los objetivos de Swiftmend/Wild Growth; Everbloom cura a 5 objetivos y no a 6.', 'Grove Guardians now prioritize Swiftmend/Wild Growth targets; Everbloom heals 5 targets instead of 6.'],
         ['2026-08-20', 'f', 'Tranquility: corregido el tooltip de la duración extra de las HoT. Overgrowth (con Soul of the Forest): las HoT se aplican al objetivo correcto.', 'Tranquility: HoT extension duration tooltip fixed. Overgrowth (with Soul of the Forest): HoTs are applied to the correct target.'],
         ['2026-08-19', 'f', 'Rejuvenation ya no se quita antes de tiempo al cambiar la celeridad.', 'Rejuvenation is no longer removed early when haste changes.'],
@@ -114,6 +118,7 @@ const ClassChanges = (() => {
         ['2026-08-17', 'f', 'Wildspeaker: los Kill Commands de Dire Beast ya se benefician de Killer Instinct, Alpha Predator, Specialized Arsenal y Savagery.', 'Wildspeaker: Dire Beast Kill Commands now benefit from Killer Instinct, Alpha Predator, Specialized Arsenal and Savagery.'],
       ],
       marksmanship: [
+        ['2026-10-27', 'b', 'Trick Shots: el daño de rebote de Aimed Shot y Rapid Fire 85 % (antes 75 %); Explosive Shot +10 %; Volley +10 %.', 'Trick Shots: ricochet damage of Aimed Shot and Rapid Fire 85% (was 75%); Explosive Shot +10%; Volley +10%.'],
         ['2026-09-15', 'f', 'Aimed Shot: corregida la animación de lanzamiento con armas de fuego y ballestas.', 'Aimed Shot: cast animation fixed with guns and crossbows.'],
         [V, 'r', 'Unload eliminado. Nuevo talento Blood Fletching: los críticos de Aimed Shot aplican el sangrado de Master Marksman al 20 % del daño y, 4 s después, el objetivo recibe sangrado extra cuando tus habilidades le dañan. Corregidos Explosive Shot (ya no dispara a un objetivo cercano sin objetivo) y Dark Ranger (Bleak Powder genera Trick Shots con 2 objetivos).', 'Unload removed. New talent Blood Fletching: Aimed Shot crits apply the Master Marksman bleed at 20% of damage dealt and, for 4 s, the target takes extra bleed damage when your abilities hit it. Fixed Explosive Shot (no longer fires at a nearby target with no target) and Dark Ranger (Bleak Powder generates Trick Shots on exactly 2 targets).'],
         ['2026-09-22', 'b', 'Trick Shots: rebote 75 % (antes 60 %); Volley +10 %.', 'Trick Shots ricochet 75% (was 60%); Volley +10%.'],
@@ -138,6 +143,7 @@ const ClassChanges = (() => {
         ['2026-08-18', 'r', 'Daño de habilidades +3 %. Venomous Abyss: Arcane Missiles (2 piezas) 20 % → 5 %; Cumulative Power (4 piezas) 5 % → 3 % por acumulación.', 'All ability damage +3%. Venomous Abyss: Arcane Missiles 2-piece 20% → 5%; Cumulative Power 4-piece 5% → 3% per stack.'],
       ],
       fire: [
+        ['2026-10-27', 'b', 'Todo el daño +5 %.', 'All damage +5%.'],
         ['2026-08-31', 'f', 'Flamestrike (2 piezas): ya concede siempre Hot Streak con Pyroclasm.', 'Flamestrike (2-piece): now always grants Hot Streak with Pyroclasm.'],
         ['2026-09-22', 'b', 'Meteor (daño periódico) +100 %; Dualcasting Adept (Flamestrike) 15 % (antes 10 %); Burden of Power (Flamestrike) 6 % (antes 3 %).', 'Meteor DoT +100%; Dualcasting Adept (Flamestrike) 15% (was 10%); Burden of Power (Flamestrike) 6% (was 3%).'],
         ['2026-09-01', 'b', 'Daño de habilidades +3 %.', 'All ability damage +3%.'],
@@ -226,6 +232,7 @@ const ClassChanges = (() => {
         [V, 'n', 'Deft Maneuvers: ya no suma 30 de energía al coste de Blade Flurry; Deft Maneuvers: ahora suma 5 de energía por objetivo golpeado, hasta 30.', 'Deft Maneuvers: no longer adds 30 Energy to Blade Flurry\'s cost; Deft Maneuvers: it now adds 5 Energy per target hit, up to 30.'],
       ],
       subtlety: [
+        ['2026-10-27', 'n', 'Todo el daño de habilidades −8 %; Trickster — Fazed: bonificación de daño 5 % (antes 7 %).', 'All ability damage −8%; Trickster — Fazed: damage bonus 5% (was 7%).'],
         [V, 'b', 'Daño de todas las habilidades +14 %; corregidos los modificadores de daño de Sombra que se aplicaban mal.', 'All ability damage +14%; fixed Shadow damage modifiers that applied incorrectly.'],
         ['2026-10-06', 'b', 'Trickster — Fazed: +7 % de daño recibido (antes 5 %); Unseen Blade +15 %; Coup de Grace +10 %.', 'Trickster — Fazed: 7% extra damage taken (was 5%); Unseen Blade +15%; Coup de Grace +10%.'],
         ['2026-09-22', 'b', 'Trickster — Unseen Blade +50 %; Coup de Grace +30 %.', 'Trickster — Unseen Blade +50%; Coup de Grace +30%.'],
@@ -263,6 +270,7 @@ const ClassChanges = (() => {
     } },
     warlock: { es: 'Brujo', en: 'Warlock', specs: {
       affliction: [
+        ['2026-10-27', 'b', 'Unstable Affliction +20 %.', 'Unstable Affliction +20%.'],
         ['2026-08-31', 'f', 'Blackened Soul: ya se activa con Unstable Affliction aplicado mediante Fatal Echoes.', 'Blackened Soul: now activates from Unstable Affliction applied via Fatal Echoes.'],
         ['2026-08-18', 'f', 'Withering Bolt tiene en cuenta Wither. Hellcaller — Blackened Soul funciona con el lanzamiento sobre el ratón.', 'Withering Bolt now accounts for Wither. Hellcaller — Blackened Soul works with mouse-over casting.'],
         ['2026-08-13', 'f', 'Seed of Corruption: consume Shard Instability al lanzarse.', 'Seed of Corruption: consumes Shard Instability on cast.'],
@@ -275,6 +283,7 @@ const ClassChanges = (() => {
         ['2026-08-18', 'r', 'Burning Cleave: de cono a círculo. Venomous Abyss (2 piezas): Implode de Wild Imp 250 % → 350 % al objetivo principal y 225 % → 315 % al resto.', 'Burning Cleave: cone → circle. Venomous Abyss 2-piece: Wild Imp Implode 250% → 350% main target and 225% → 315% other targets.'],
       ],
       destruction: [
+        ['2026-10-27', 'b', 'Rain of Fire +20 %.', 'Rain of Fire +20%.'],
         ['2026-08-27', 'f', 'Mayhem: ya no deja de seguirse a veces al refrescarse.', 'Mayhem: no longer sometimes becomes untracked when refreshed.'],
         ['2026-08-17', 'f', 'Shadowburn: el tooltip muestra la duración correcta.', 'Shadowburn: tooltip now shows the correct duration.'],
         ['2026-09-02', 'f', 'Font of Venomous Rage: el canal podía cancelarse al instante si se ponía en cola justo después de Cataclysm.', 'Font of Venomous Rage: the channel could be immediately canceled if spell-queued right after Cataclysm.'],
@@ -404,11 +413,11 @@ const ClassChanges = (() => {
     if (D[k].specs.general) keys.push('general');
     dlg.innerHTML = `<div class="cc-wrap"><aside class="cc-side"><h2>${L('Cambios de las clases', 'Class changes')}</h2>${nav}</aside>
       <div class="cc-main"><div class="cc-top"><img src="${classIconUrl(k)}" width="44" height="44" alt=""><div><h3 style="color:${COLORS[k]}">${esc(cls(k))}</h3>
-        <small>${L('PvE · parches 12.1.0 a 12.1.5', 'PvE · patches 12.1.0 to 12.1.5')}</small></div><span class="grow"></span>
+        <small>${L('PvE · parches 12.1.0 a 12.1.5 y ajustes del 27 de octubre', 'PvE · patches 12.1.0 to 12.1.5 and the October 27 tuning')}</small></div><span class="grow"></span>
         <button type="button" class="btn ghost" data-cc-close>${L('Cerrar', 'Close')}</button></div>
         <div class="cc-body">${keys.map((s) => specBlock(k, s)).join('')}
           <p class="foot">${L('Solo PvE. Las correcciones sin cifras se resumen. Cambios confirmados para el 12.2: Blizzard aún no ha publicado ninguno.', 'PvE only. Fixes without numbers are summarized. Confirmed changes for 12.2: Blizzard has not published any yet.')}</p>
-          <p class="foot"><a href="#" data-cc-link="${LINK_NOTES}">${L('Notas oficiales del 12.1.5', 'Official 12.1.5 notes')}</a> · <a href="#" data-cc-link="${LINK}">${L('Registro oficial de hotfixes', 'Official hotfix log')}</a></p></div></div></div>`;
+          <p class="foot"><a href="#" data-cc-link="${LINK_NOTES}">${L('Notas oficiales del 12.1.5', 'Official 12.1.5 notes')}</a> · <a href="#" data-cc-link="${LINK_TUNING}">${L('Ajustes del 27 de octubre (Wowhead)', 'October 27 tuning (Wowhead)')}</a> · <a href="#" data-cc-link="${LINK}">${L('Registro oficial de hotfixes', 'Official hotfix log')}</a></p></div></div></div>`;
     dlg.querySelector('.cc-body')?.scrollTo(0, 0);
   }
 

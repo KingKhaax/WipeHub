@@ -831,6 +831,11 @@ const CLASS_SPELLS = {
   "Implosión",
   "inv_implosion"
  ],
+ "Improved Swiftmend": [
+  470549,
+  "Alivio presto mejorado",
+  "ability_druid_empoweredtouch"
+ ],
  "Infliction of Sorrow": [
   434143,
   "Infligir pesar",
@@ -1669,6 +1674,11 @@ const CLASS_SPELLS = {
   1318312,
   "Corazón venenoso",
   "inv_121_trinket_raid_ulatek_heart"
+ ],
+ "Verdancy": [
+  392329,
+  "Verdeante",
+  "inv_10_herb_seed_magiccolor5"
  ],
  "Verdant Embrace": [
   360995,
