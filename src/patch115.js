@@ -272,6 +272,7 @@ const Patch115 = (() => {
       + ul([
         L('<b>En el RPP</b> desde el <b>15 de octubre de 2026</b>. Todo lo que se cuenta aquí es el contenido del RPP y puede cambiar antes de salir.', '<b>On the PTR</b> since <b>October 15, 2026</b>. Everything here is PTR content and may change before release.'),
         L('Blizzard <b>no ha anunciado fecha de salida</b>. La prensa especializada calcula diciembre de 2026, pero es solo una estimación.', 'Blizzard has <b>not announced a release date</b>. The specialist press estimates December 2026, but that is only a guess.'),
+        L('Última actualización del RPP: <b>build 70493</b> (22 de octubre de 2026), tras la 70424. Han ido apareciendo escenarios, logros, monturas y adornos nuevos.', 'Latest PTR update: <b>build 70493</b> (October 22, 2026), after build 70424. New scenarios, achievements, mounts and decor keep appearing.'),
         L('Un parche ligero: el resumen oficial no incluye ninguna banda ni mazmorra nueva.', 'A light patch: the official overview lists no new raid or dungeon.'),
       ])
       + h(L('Qué trae', 'What it brings'))
@@ -311,7 +312,25 @@ const Patch115 = (() => {
         L('Montura <b>Shadowbound Storybook</b>.', '<b>Shadowbound Storybook</b> mount.'),
         L('Adorno de hogar <b>Quillgrave Talebound Shadowtome</b>.', '<b>Quillgrave Talebound Shadowtome</b> housing decor.'),
       ])
-      + note(L('En las primeras semanas del RPP, el modo todavía no estaba abierto para probarlo.', 'During the first weeks on the PTR the mode was not yet open for testing.'))],
+      + h(L('Relatos y escenarios', 'Tales and scenarios'))
+      + ul([
+        L('Cuatro relatos: <b>Darkhaven</b>, <b>Greenthistle Wood</b>, <b>Greywake’s Expedition</b> y <b>Court of Night</b>.', 'Four tales: <b>Darkhaven</b>, <b>Greenthistle Wood</b>, <b>Greywake’s Expedition</b> and <b>Court of Night</b>.'),
+        L('Escenarios de la build 70493: <b>01 · Torrential Power</b> (limpiar los santuarios de los naga), <b>01 · Wilderness Reclaimed</b> (las brujas y el gigante), <b>02 · Defy the Abyss</b> (termina con el <b>Hadal Tyrant</b>), <b>03 · Sinister Forces</b> (limpiar santuarios arcanos para invocar al <b>Heraldo</b>) y <b>04 · Oppose the Unknown</b> (el <b>Herald from Beyond</b>).', 'Scenarios in build 70493: <b>01: Torrential Power</b> (clear the naga sanctums), <b>01: Wilderness Reclaimed</b> (the Witches and the Giant), <b>02: Defy the Abyss</b> (ends with the <b>Hadal Tyrant</b>), <b>03: Sinister Forces</b> (clear eldritch sanctums to summon the <b>Herald</b>) and <b>04: Oppose the Unknown</b> (the <b>Herald from Beyond</b>).'),
+        L('Jefes: Tilywth (la reina de las hadas), Mobog, Zzyg’th, Chathoa, Konrad von Sonnesheim, Maernok, Alexandre Dozsenc, Ylska Vilefang y Granny Greenthumb.', 'Bosses: Tilywth (the Fairy Queen), Mobog, Zzyg’th, Chathoa, Konrad von Sonnesheim, Maernok, Alexandre Dozsenc, Ylska Vilefang and Granny Greenthumb.'),
+      ])
+      + h(L('Personajes', 'Characters'))
+      + ul([
+        L('Los datos del RPP incluyen la clase <b>Traveler</b> con tres especializaciones, <b>Inquisitor</b>, <b>Slayer</b> y <b>Witch</b>, con habilidades propias como Brewing Storm, Explosive Shot, Purify, Shrapnel Round y Slash.', 'PTR data includes the <b>Traveler</b> class with three specializations, <b>Inquisitor</b>, <b>Slayer</b> and <b>Witch</b>, with their own abilities such as Brewing Storm, Explosive Shot, Purify, Shrapnel Round and Slash.'),
+        L('Un texto indica que hay que <b>crear un personaje</b> de Talebound para ver sus recompensas, y que el progreso de los relatos se guarda y se retoma en el <b>Libro de las Sombras</b> (Book of Shadows).', 'A text says you must <b>create a Talebound character</b> to see its rewards, and that tale progress is saved and can be resumed at the <b>Book of Shadows</b>.'),
+      ])
+      + h(L('Logros y títulos', 'Achievements and titles'))
+      + ul([
+        L('Logros por cada jefe en dificultad <b>Heroica</b>, <b>Mítica</b>, <b>Veterano</b> y cualquiera. Cada Enfrentamiento final tiene versiones <b>Inquisitor</b>, <b>Slayer</b> y <b>Witch</b>.', 'Achievements for each boss on <b>Heroic</b>, <b>Mythic</b>, <b>Veteran</b> and any difficulty. Each Final Confrontation has <b>Inquisitor</b>, <b>Slayer</b> and <b>Witch</b> versions.'),
+        L('Logros por completar cada relato y «The Complete Tale» (los cuatro relatos y el Enfrentamiento final), por acertijos, por historias oídas, por reliquias y fórmulas, y cinco de <b>1.000 a 5.000 ducados</b>.', 'Achievements for completing each tale and “The Complete Tale” (all four tales plus the Final Confrontation), for puzzles, for stories heard, for relics and formulas, and five for earning <b>1,000 to 5,000 Ducats</b>.'),
+        L('La mayoría da <b>20 de plata vinculada</b>, que se cambia con <b>Nib</b> en Tumbaspina por cosméticos válidos para toda la cuenta.', 'Most grant <b>20 Bound Silver</b>, which can be traded to <b>Nib</b> in Quillgrave for account-wide cosmetics.'),
+        L('Títulos con los Enfrentamientos finales Míticos: <b>of the Sacred Flame</b> (Inquisitor), <b>Monster Hunter</b> (Slayer) y <b>of the Crooked Path</b> (Witch). El título <b>Listener</b> llega con «Stories to Share».', 'Titles from the Mythic Final Confrontations: <b>of the Sacred Flame</b> (Inquisitor), <b>Monster Hunter</b> (Slayer) and <b>of the Crooked Path</b> (Witch). The <b>Listener</b> title comes from “Stories to Share”.'),
+      ])
+      + note(L('Todo son datos de las builds 70424 y 70493 del RPP: nombres y logros pueden cambiar antes de salir.', 'Everything comes from PTR builds 70424 and 70493: names and achievements may change before release.'))],
     ['paseo', L('Paseo por la historia', 'Lorewalking'), () =>
       h(L('Paseo por la historia (Lorewalking)', 'Lorewalking'))
       + p(L('Habla con <b>Li Li Cerveza de Trueno</b> (Apprentice Lorewalker Li Li Stormstout) en <b>Ventormenta</b> u <b>Orgrimmar</b>. Disponible desde el <b>nivel 10</b>.', 'Speak with <b>Apprentice Lorewalker Li Li Stormstout</b> in <b>Stormwind</b> or <b>Orgrimmar</b>. Available from <b>level 10</b>.'))
@@ -323,6 +342,7 @@ const Patch115 = (() => {
         L('Mientras haces Paseo por la historia no puedes aceptar ni avanzar otras misiones, pero puedes <b>pausar y reanudar</b>.', 'While Lorewalking you cannot take or progress other quests, but you can <b>pause and resume</b>.'),
         L('Si empiezas otro relato sin terminar el actual, <b>se pierde el progreso</b> del primero.', 'If you start a different story before finishing the current one, <b>its progress is reset</b>.'),
         L('El botón <b>«Hacer una pregunta»</b> está bajo el minimapa; la <b>X</b> sirve para salir en cualquier momento.', 'The <b>"Ask a Question"</b> button is below the minimap; use the <b>X</b> to exit at any time.'),
+        L('Cada relato (Jaina, Thrall, Titans y Tyr) tiene su logro, con un <b>adorno de hogar</b> de recompensa.', 'Each story (Jaina, Thrall, Titans and Tyr) has its own achievement, with a <b>housing decor</b> reward.'),
       ])],
     ['timeways', L('Líneas temporales', 'Timeways'), () =>
       h(L('Líneas temporales turbulentas (Turbulent Timeways)', 'Turbulent Timeways'))
@@ -358,32 +378,64 @@ const Patch115 = (() => {
         L('<b>Markeet of the Infinite</b> — logro «Master of the Turbulent Timeways VI» (Líneas temporales turbulentas).', '<b>Markeet of the Infinite</b> — "Master of the Turbulent Timeways VI" achievement (Turbulent Timeways).'),
         L('<b>Shadowbound Storybook</b> — recompensa de Talebound.', '<b>Shadowbound Storybook</b> — Talebound reward.'),
         L('<b>Winterrrgl\'s Pine-Powered Candy Cane Contraption</b> — la suelta el Greench durante el Festival de Invierno; no se vende.', '<b>Winterrrgl\'s Pine-Powered Candy Cane Contraption</b> — dropped by the Greench during Feast of Winter Veil; not sold by a vendor.'),
-        L('<b>Autumn Dream Jumper</b> — aparece en la lista de Talebound.', '<b>Autumn Dream Jumper</b> — listed under Talebound.'),
+        L('<b>Stone-Carved Crusher</b> y <b>Autumn Dream Jumper</b> — recompensas de Talebound.', '<b>Stone-Carved Crusher</b> and <b>Autumn Dream Jumper</b> — Talebound rewards.'),
+        L('<b>Ashen Dreadglider</b> — montura de vuelo dinámico (nivel 30).', '<b>Ashen Dreadglider</b> — a skyriding mount (level 30).'),
+        L('<b>The Watcher in the Waves</b> — Puesto comercial (Trading Post); todavía no se sabe de qué tipo es.', '<b>The Watcher in the Waves</b> — Trading Post; its type is not known yet.'),
+        L('Cuatro stegodontes del Puesto comercial: <b>Attuned Ancient</b>, <b>Crackling Ancient</b>, <b>Rumbling Jungle</b> y <b>Thundering Primal</b>.', 'Four Trading Post stegodons: <b>Attuned Ancient</b>, <b>Crackling Ancient</b>, <b>Rumbling Jungle</b> and <b>Thundering Primal</b>.'),
       ])
       + h(L('Otras monturas encontradas', 'Other mounts found'))
-      + p('Woodland Wanderer · Faith-Cursed · Gilnean Charger · Lost Mare · Night Court · Shadowpaw · Stone Crusher · Skeletal Raptor · Watcher · Stegodon (' + L('negro, azul, verde y morado', 'black, blue, green and purple') + ')')
-      + note(L('De estas últimas todavía no se sabe cómo se consiguen.', 'How to obtain these is not known yet.'))],
+      + p('Woodland Wanderer · Faith-Cursed · Gilnean Charger · Lost Mare · Night Court · Shadowpaw Wood Watcher · Giant Grrloc · Reanimated Skeletal Raptor')
+      + note(L('De estas últimas todavía no se sabe cómo se consiguen.', 'How to obtain these is not known yet.'))
+      + h(L('Mascotas', 'Pets'))
+      + p('Bump · Lump · Grump · Frump (' + L('crías de stegodonte', 'Stegodon pets') + ') · Petite Snow Buddy · Slayer’s Faithful Tracker · Inquisitor’s Messenger · Hex-Cursed Manifestation · Zyg’ee')
+      + h(L('Equipo y objetos', 'Gear and items'))
+      + ul([
+        L('<b>Slayer’s Top Hat</b> (cabeza) y tres objetos de mano izquierda: <b>Lost Wood-Witch’s Focus</b>, <b>Vestel’s Thurible</b> y <b>Ancient Bone Fetish</b>.', '<b>Slayer’s Top Hat</b> (head) and three off-hand items: <b>Lost Wood-Witch’s Focus</b>, <b>Vestel’s Thurible</b> and <b>Ancient Bone Fetish</b>.'),
+        L('<b>Throw Bow</b>: objeto de basura del Festival de Invierno.', '<b>Throw Bow</b>: a Feast of Winter Veil junk item.'),
+      ])],
     ['otros', L('Otros cambios', 'Other changes'), () =>
       h(L('Profesiones', 'Professions'))
       + ul([
         L('<b>Herboristería de Midnight:</b> la especialización <b>Bountiful Harvests</b> da más <b>Destreza</b> (Deftness).', '<b>Midnight Herbalism:</b> the <b>Bountiful Harvests</b> specialization grants more <b>Deftness</b>.'),
         L('<b>Minería de Midnight:</b> la especialización <b>Plentiful Ores</b> da más <b>Destreza</b> (Deftness).', '<b>Midnight Mining:</b> the <b>Plentiful Ores</b> specialization grants more <b>Deftness</b>.'),
+        L('Nuevos objetos colocables en casa: <b>Arcanist’s Research Board</b> (Inscripción) y <b>Round Nomad’s Cushion</b> (Sastrería). En <b>Pesca</b>, el tótem <b>Tokka’s Multi-Ward</b> da caminar sobre el agua y otros beneficios.', 'New placeable house items: <b>Arcanist’s Research Board</b> (Inscription) and <b>Round Nomad’s Cushion</b> (Tailoring). In <b>Fishing</b>, the <b>Tokka’s Multi-Ward</b> totem grants water walking and other boons.'),
       ])
       + h('Housing')
       + ul([
         L('Corregido que los adornos giraran al convertir los datos de una casa al formato nuevo.', 'Fixed decor rotating when house data is converted to the new format.'),
-        L('Se han encontrado <b>63 adornos</b> nuevos que venden los mercaderes de Azeroth por distintas monedas (datos del RPP).', '<b>63 new decor items</b> sold by Azeroth merchants for various currencies have been found (PTR data).'),
+        L('Se han encontrado <b>163 adornos</b> nuevos en la build 70424 (algunos podrían no llegar al 12.1.7) y <b>8 más</b> en la 70493 (datos del RPP).', '<b>163 new decor items</b> were found in build 70424 (some may not reach 12.1.7) and <b>8 more</b> in build 70493 (PTR data).'),
         L('Nuevos adornos de hogar en los vendedores de Paseo en el tiempo y en la tienda de Talebound (ver las secciones correspondientes).', 'New housing decor at the Timewalking vendors and in the Talebound store (see the matching sections).'),
         L('Un nuevo <b>campamento de banda de guerra</b> aparece en los archivos del juego.', 'A new <b>Warband campsite</b> shows up in the game files.'),
       ])
       + h(L('Festival de Invierno', 'Feast of Winter Veil'))
-      + ul([L('Novedades del Festival de Invierno, entre ellas la montura de Winterrrgl (ver Monturas). Blizzard no da más detalles.', 'Winter Veil updates, including Winterrrgl\'s mount (see Mounts). Blizzard gives no further details.')])
+      + ul([
+        L('El Festival de Invierno dura del <b>15 de diciembre de 2026 al 2 de enero de 2027</b>.', 'The Feast of Winter Veil runs from <b>December 15, 2026 to January 2, 2027</b>.'),
+        L('<b>24 adornos</b> navideños en los vendedores (Jolli Maxiboom, Holly Twinklebright y los de Orgrimmar y Forjaz) y otros 19 que podrían llegar por eventos promocionales o la tienda, sin confirmar.', '<b>24 Winter Veil decor items</b> at vendors (Jolli Maxiboom, Holly Twinklebright and those in Orgrimmar and Ironforge) and another 19 that may come from promotional events or the shop, unconfirmed.'),
+        L('Seis logros nuevos de 10 puntos: <b>Bells Will Be Ringing</b>, <b>Candy Cane Brigade</b> (entregar 12 regalos en los barrios de hogar), <b>Season’s Beatings</b>, <b>Sockin’ Around the Winter Veil Tree</b> (empujar a 100 atacantes del árbol), <b>That’s Not For You</b> y <b>Tree-fense</b> (completar la defensa del árbol del barrio).', 'Six new 10-point achievements: <b>Bells Will Be Ringing</b>, <b>Candy Cane Brigade</b> (deliver 12 gifts in housing neighborhoods), <b>Season’s Beatings</b>, <b>Sockin’ Around the Winter Veil Tree</b> (punt 100 tree attackers), <b>That’s Not For You</b> and <b>Tree-fense</b> (complete the neighborhood tree defense).'),
+        L('La montura de Winterrrgl (ver Monturas) y el <b>Throw Bow</b>, que un logro pide usar cinco veces.', 'Winterrrgl’s mount (see Mounts) and the <b>Throw Bow</b>, which an achievement asks you to use five times.'),
+      ])
+      + h(L('Logros y desafíos', 'Achievements and feats'))
+      + ul([
+        L('<b>Madrigueras:</b> derrotar a <b>Kindo’jan</b> en nivel 11 sin otros jugadores en el grupo durante la Temporada 2 de Midnight da «Loa-Blessed Wayfarer»; la versión «Fabled» da un título.', '<b>Delves:</b> defeating <b>Kindo’jan</b> on Tier 11 with no other party members during Midnight Season 2 grants “Loa-Blessed Wayfarer”; a Fabled version grants a title.'),
+        L('<b>Through the Looking Glass:</b> completar las Visiones horribles revisitadas en una sola visita en solitario con las 8 Máscaras sin rostro activas da el título «The Mad». Hay que haberlo hecho antes de Midnight.', '<b>Through the Looking Glass:</b> completing the Revisited Horrific Visions in a single solo visit with all 8 Faceless Masks active grants the title “The Mad”. It must have been completed before Midnight.'),
+        L('Campaña: logro <b>Coreway Advance</b> (10 puntos, recompensa por confirmar). Asaltos del Vacío: <b>Core Logic</b> y <b>The Power of Stories</b>.', 'Campaign: <b>Coreway Advance</b> achievement (10 points, reward to be confirmed). Void Assaults: <b>Core Logic</b> and <b>The Power of Stories</b>.'),
+      ])
+      + h(L('Interfaz', 'Interface'))
+      + ul([
+        L('Aparecen textos para elegir el servicio de <b>chat de voz</b> (Discord o el clásico), el <b>modo de edición de la HUD</b> y los atajos de la <b>barra en cruz</b> del mando.', 'Texts appear for choosing the <b>voice chat</b> service (Discord or the legacy one), the <b>HUD edit mode</b> and the gamepad <b>crossbar</b> bindings.'),
+        L('Un grupo solo puede entrar en una localización si el <b>líder del grupo</b> ya está dentro.', 'A party can enter a location only if the <b>party leader</b> is already inside.'),
+      ])
       + h(L('Para creadores de addons', 'For addon authors'))
       + ul([
         L('Los GUID dejan de exponer el ID del servidor y el de aparición (se ofuscan).', 'GUIDs no longer expose the server ID and spawn ID (they are obfuscated).'),
         L('Las directivas del .toc ya no expanden variables como <code>[Game]</code> o <code>[Family]</code>.', 'TOC directives no longer expand variables such as <code>[Game]</code> or <code>[Family]</code>.'),
       ])
-      + note(L('No hay una lista de cambios de clase del 12.1.7: lo publicado hasta ahora es solo contenido y ajustes menores.', 'There is no 12.1.7 class changelist yet: what has been published so far is content and minor tweaks.'))],
+      + h(L('Cambios de clase (sin confirmar)', 'Class changes (unconfirmed)'))
+      + ul([
+        L('<b>Mago:</b> el bonus de daño de Fuego de <b>Glass Cannon</b> pasaría del 25 % al 20 %, con una reducción de vida máxima del 30 %.', '<b>Mage:</b> the Fire damage bonus of <b>Glass Cannon</b> would change from 25% to 20%, with a 30% maximum health reduction.'),
+        L('<b>Pícaro (Sutileza):</b> la bonificación de daño y sanación pasaría del 13 % al 29 %.', '<b>Rogue (Subtlety):</b> the damage and healing bonus would go from 13% to 29%.'),
+      ])
+      + note(L('Son cifras de los datos del RPP, sin confirmar por Blizzard. No hay una lista oficial de cambios de clase del 12.1.7.', 'These figures come from PTR data and are not confirmed by Blizzard. There is no official 12.1.7 class changelist.'))],
     ['fuentes', L('Fuentes', 'Sources'), () =>
       h(L('Fuentes', 'Sources'))
       + ul([
@@ -392,6 +444,9 @@ const Patch115 = (() => {
         lk(LINK117.wiki, 'Warcraft Wiki: Patch 12.1.7'),
         lk(LINK117.api, 'Warcraft Wiki: Patch 12.1.7/API changes'),
         lk(LINK117.icy, L('Icy Veins: notas de desarrollo del RPP del 12.1.7', 'Icy Veins: 12.1.7 PTR development notes')),
+        lk('https://www.mmo-champion.com/content/14636-Patch-12-1-7-PTR-Build-70493', L('MMO-Champion: RPP del 12.1.7, build 70493', 'MMO-Champion: Patch 12.1.7 PTR build 70493')),
+        lk('https://www.mmo-champion.com/content/14613-Patch-12-1-7-PTR-Build-70424', L('MMO-Champion: RPP del 12.1.7, build 70424', 'MMO-Champion: Patch 12.1.7 PTR build 70424')),
+        lk('https://www.mmo-champion.com/content/14615-New-Winter-Veil-Housing-Decor-in-Patch-12-1-7', L('MMO-Champion: adornos de hogar del Festival de Invierno', 'MMO-Champion: Winter Veil housing decor')),
         lk('https://mamytwink.com/actualite/patch-12-1-7-les-elements-de-decoration-chez-les-marchands-dazeroth', L('Mamytwink: adornos de hogar en los mercaderes (en francés)', 'Mamytwink: decor sold by merchants (in French)')),
         lk(LINK117.mounts, L('Monturas encontradas en los datos del 12.1.7', 'Mounts found in the 12.1.7 data')),
       ])
