@@ -28,6 +28,16 @@ const Cards = (() => {
     return charCache.get(key);
   }
 
+  // Categoría del equipo (color del Ilvl): una consulta por personaje, con caché en memoria
+  const gearCache = new Map();
+  function gear(name, realmSlug, region) {
+    const key = `${region || ''}:${realmSlug}:${String(name).toLowerCase()}`;
+    if (!gearCache.has(key)) {
+      gearCache.set(key, window.api.bnetGear(realmSlug, name, region).then((r) => { if (r.error) throw new Error(r.error); return r; }).catch((e) => { gearCache.delete(key); throw e; }));
+    }
+    return gearCache.get(key);
+  }
+
   function crest(realmSlug, guildName) {
     const key = `${realmSlug}:${String(guildName).toLowerCase()}`;
     if (!crestCache.has(key)) {
@@ -40,7 +50,14 @@ const Cards = (() => {
   const portraitHTML = (c, size = 72) => `<span class="cc-pic" style="--sz:${size}px">${c.avatar ? `<img src="${media(c.avatar)}" alt="">` : ''}<b class="cc-lvl">${esc(c.level ?? '')}</b></span>`;
 
   // Nivel de objeto equipado (el de Blizzard, en entero); si aún no se conoce no se muestra nada
-  const ilvlHTML = (c) => { const n = Math.round(c.ilvlEquipped || c.ilvlAvg || 0); return n ? `<b class="cc-ilvl" title="${esc(LL('Nivel de objeto equipado', 'Equipped item level'))}">${n}</b>` : ''; };
+  const TIERS = { 1: ['#1eff00', 'equipo verde', 'green gear'], 2: ['#0070ff', 'equipo azul', 'blue gear'], 3: ['#a335ee', 'equipo épico Normal/Heroico', 'Normal/Heroic epic gear'], 4: ['#e268a8', 'equipo Mítico', 'Mythic gear'] };
+  const ilvlHTML = (c) => {
+    const n = Math.round(c.ilvlEquipped || c.ilvlAvg || 0);
+    const lv = c.level ? `<b class="cc-lv" title="${esc(LL('Nivel del personaje', 'Character level'))}">${esc(c.level)}</b>` : '';
+    const t = TIERS[c.gearTier];
+    const il = n ? `<b class="cc-ilvl" ${t ? `style="--il:${t[0]}" ` : ''}title="${esc('Ilvl' + (t ? ' · ' + LL(t[1], t[2]) : ''))}">${n}</b>` : '';
+    return lv + il;
+  };
 
   // Tarjeta como la de Warcraft Logs: Nombre / Guild - Reino (Región) / Raza Clase
   // Tarjeta compacta: nombre / guild · reino (región) / icono de spec + raza · clase (cada una en una sola línea)
@@ -198,5 +215,5 @@ const Cards = (() => {
     document.addEventListener('scroll', hide, true);
   })();
 
-  return { char, crest, charCardHTML, SPEC_KEY, itemTipKey, itemTipHTML, crestHTML, portraitHTML, fillCrests, fillMe, slugOf, media, CLASS_KEY };
+  return { char, gear, crest, charCardHTML, SPEC_KEY, itemTipKey, itemTipHTML, crestHTML, portraitHTML, fillCrests, fillMe, slugOf, media, CLASS_KEY };
 })();

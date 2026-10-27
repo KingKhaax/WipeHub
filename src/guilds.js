@@ -203,7 +203,7 @@ const Guilds = (() => {
   const saveChars = (l) => { saveList('gd:chars', l); saveList('gd:chars:bak', l); };
   // Última ficha buena de cada personaje: si Warcraft Logs/Blizzard no responde, el personaje se sigue viendo con lo último que se supo
   const cardCache = () => { try { return JSON.parse(lsGet('gd:charcache') || '{}'); } catch { return {}; } };
-  const slimCard = (c) => ({ name: c.name, realmSlug: c.realmSlug, realmName: c.realmName, region: c.region, level: c.level, race: c.race, cls: c.cls, classId: c.classId, specId: c.specId, avatar: c.avatar, faction: c.faction, guild: c.guild, ilvlEquipped: c.ilvlEquipped, ilvlAvg: c.ilvlAvg });
+  const slimCard = (c) => ({ name: c.name, realmSlug: c.realmSlug, realmName: c.realmName, region: c.region, level: c.level, race: c.race, cls: c.cls, classId: c.classId, specId: c.specId, avatar: c.avatar, faction: c.faction, guild: c.guild, ilvlEquipped: c.ilvlEquipped, ilvlAvg: c.ilvlAvg, gearTier: c.gearTier });
   const stubOf = (c) => ({ name: c.name, realmSlug: c.realmSlug, realmName: c.realmName || c.realmSlug, region: c.region, manual: true, stale: true });
   const savedGuilds = () => lsList('gd:guilds');
 
@@ -229,7 +229,7 @@ const Guilds = (() => {
     st.manualChars = saved.map((c) => ({ ...(cc[charKey(c)] || stubOf(c)), manual: true, region: c.region }));
     rebuild();
     const list = await Promise.all(saved.map(async (c) => {
-      try { const card = { ...(await Cards.char(c.name, c.realmSlug, c.region)), manual: true, region: c.region }; cc[charKey(c)] = slimCard(card); return card; } catch { return { ...(cc[charKey(c)] || stubOf(c)), manual: true, region: c.region }; }
+      try { const [info, g] = await Promise.all([Cards.char(c.name, c.realmSlug, c.region), Cards.gear(c.name, c.realmSlug, c.region).catch(() => null)]); const card = { ...info, manual: true, region: c.region, gearTier: g?.tier || cc[charKey(c)]?.gearTier }; cc[charKey(c)] = slimCard(card); return card; } catch { return { ...(cc[charKey(c)] || stubOf(c)), manual: true, region: c.region }; }
     }));
     st.manualChars = list;
     try { lsSet('gd:charcache', JSON.stringify(cc)); } catch { /* sin espacio */ }
@@ -297,7 +297,7 @@ const Guilds = (() => {
       ${st.charMsg ? `<div class="error sm"><p>${esc(st.charMsg)}</p></div>` : ''}`;
   }
 
-  const SORTS = [['added', 'Orden de añadido', 'Order added'], ['name', 'Nombre', 'Name'], ['ilvl', 'Nivel de objeto', 'Item level'], ['level', 'Nivel', 'Level'], ['class', 'Clase', 'Class']];
+  const SORTS = [['added', 'Orden de añadido', 'Order added'], ['name', 'Nombre', 'Name'], ['ilvl', 'Ilvl', 'Ilvl'], ['level', 'Nivel', 'Level'], ['class', 'Clase', 'Class']];
   const charSort = () => { const v = lsGet('gd:charSort'); return SORTS.some((x) => x[0] === v) ? v : 'added'; };
   function sortChars(list) {
     const by = charSort();

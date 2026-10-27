@@ -1010,6 +1010,29 @@ async function charInfo(realmSlug, name, lang, token, region = bnetRegion()) {
   };
 }
 
+// Categoría del equipo equipado, para colorear su nivel de objeto como un parse:
+// 1 verde (Aventurero), 2 azul (Veterano), 3 épico Normal/Heroico (Campeón y Héroe), 4 Mítico (también las crafteadas con blasones míticos).
+// Gana la categoría más baja entre las piezas, salvo que los verdes no cuentan si hay alguna pieza mejor.
+async function gearTier(realmSlug, name, token, region = bnetRegion()) {
+  const ns = `profile-${region}`;
+  const base = `/profile/wow/character/${encodeURIComponent(String(realmSlug).toLowerCase())}/${encodeURIComponent(String(name).toLowerCase())}`;
+  const eq = await bnetApi(`${base}/equipment?namespace=${ns}&locale=en_US`, token, region);
+  const list = (eq.equipped_items || []).filter((i) => !['SHIRT', 'TABARD'].includes(i.slot?.type));
+  const tiers = await Promise.all(list.map(async (i) => {
+    const q = i.quality?.type;
+    const il = i.level?.value || 0;
+    if (q === 'POOR' || q === 'COMMON' || q === 'UNCOMMON') return 1;
+    if (q === 'RARE') return 2;
+    if (il >= 322) return 4; // por encima del máximo de Héroe (321): Mítico, incluidas las crafteadas con blasones míticos
+    if (il < 318) return 3; // Campeón o Héroe
+    // 318-321: Héroe 5-6/6 o Mítico 1-2/6, se mira la pista de mejora en Wowhead
+    const r = await wowheadItem(i.item?.id, i.bonus_list || [], 90, 0);
+    return /Upgrade Level[^A-Za-z]{0,10}Myth/i.test(String(r?.tooltip || '').replace(/<[^>]+>/g, ' ')) ? 4 : 3;
+  }));
+  const high = tiers.filter((t) => t > 1);
+  return { tier: high.length ? Math.min(...high) : 1, pieces: list.length };
+}
+
 // Armería: equipo, estadísticas (valor y %) y datos básicos de un personaje con la API de perfil de Blizzard
 const itemIconCache = new Map();
 async function itemIcon(id, token, region = bnetRegion()) {
@@ -1119,6 +1142,10 @@ async function armory(realmSlug, name, lang, region = bnetRegion()) {
 
 ipcMain.handle('bnet:armory', async (_e, realmSlug, name, lang, region) => {
   try { return await armory(realmSlug, name, lang, region); } catch (err) { return { error: String(err.message || err) }; }
+});
+
+ipcMain.handle('bnet:gear', async (_e, realmSlug, name, region) => {
+  try { return await gearTier(realmSlug, name, await bnetAppToken(), BNET_REGIONS.includes(region) ? region : bnetRegion()); } catch (err) { return { error: String(err.message || err) }; }
 });
 
 ipcMain.handle('bnet:char', async (_e, realmSlug, name, lang, region) => {

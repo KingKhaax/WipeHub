@@ -34,6 +34,7 @@ contextBridge.exposeInMainWorld('api', {
   bnetLogout: () => ipcRenderer.invoke('bnet:logout'),
   bnetGuilds: (lang) => ipcRenderer.invoke('bnet:guilds', lang),
   bnetChar: (realm, name, lang, region) => ipcRenderer.invoke('bnet:char', realm, name, lang, region),
+  bnetGear: (realm, name, region) => ipcRenderer.invoke('bnet:gear', realm, name, region),
   rioSearch: (term) => ipcRenderer.invoke('rio:search', term),
   rioSpec: (region, realmSlug, name) => ipcRenderer.invoke('rio:spec', region, realmSlug, name),
   rioChar: (region, realm, name) => ipcRenderer.invoke('rio:char', region, realm, name),

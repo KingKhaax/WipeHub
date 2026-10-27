@@ -3225,3 +3225,7 @@ a:focus-visible, button:focus-visible, select:focus-visible, summary:focus-visib
 .cc-sortbar { display: flex; align-items: center; gap: 8px; margin: 14px 0 -2px; color: var(--muted); font-size: 13px; }
 .cc-sortbar select { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; color: var(--text); font: inherit; font-size: 13px; }
 .cc-sortbar select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent); }
+
+/* Nivel del personaje (neutro) y Ilvl con el color de la categoría de su equipo */
+.cc-lv { flex: none; font-size: 12px; font-weight: 800; padding: 1px 7px; border-radius: 999px; color: var(--text-2, #c9c9d1); background: rgba(255, 255, 255, .07); border: 1px solid rgba(255, 255, 255, .16); font-variant-numeric: tabular-nums; }
+.cc-ilvl { --il: var(--gold, #e6c068); color: var(--il); background: color-mix(in srgb, var(--il) 14%, transparent); border-color: color-mix(in srgb, var(--il) 55%, transparent); }
