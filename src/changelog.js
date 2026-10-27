@@ -5,7 +5,7 @@
 // Se numera con la última versión del grupo. Los cambios que solo tocan colores, tamaños o ajustes internos no se cuentan.
 // Estructura: { v, date, es: { intro, sections: [[icono, título, [viñetas]]] }, en: { ... } }
 const RELEASES = [
-  { v: '2.12.17', date: '2026-10-27',
+  { v: '2.12.18', date: '2026-10-27',
     es: { intro: 'Los personajes muestran su nivel y su Ilvl con el color de su equipo y se pueden ordenar, el panel del parche 12.1.7 se completa y los cambios de clase llegan hasta el 27 de octubre.', sections: [
       ['achievement_bg_winwsg', 'Personajes', [
         'Cada tarjeta muestra el nivel del personaje (en un color neutro) y su Ilvl, coloreado como un parse según el equipo: verde si todo es verde, azul si hay piezas azules, morado si todo es épico Normal/Heroico y rosa (parse 99) si todo es Mítico. Las crafteadas con blasones míticos cuentan como Míticas.',
@@ -20,7 +20,7 @@ const RELEASES = [
         'Al día hasta el 27 de octubre: ajustes del mantenimiento semanal (Feral, Fuego, Restauración, Puntería, Sutileza, Aflicción y Destrucción) y hotfixes del 23 y del 26 de octubre (Chamán Mejora y Brujo), con nombres en español, iconos y tooltips.',
       ]],
       ['inv_gizmo_02', 'Apariencia', ['Nuevo fondo general con el arte de «Hope Shall Rise» (Midnight), oscurecido para que los paneles se lean bien.']],
-      ['inv_misc_note_06', 'Historial de versiones', ['Las más de 200 versiones pequeñas se agrupan en unas 24 versiones con resumen, fecha y sus cambios por secciones, que se despliegan al pulsar la cabecera.']],
+      ['inv_misc_note_06', 'Historial de versiones', ['Las más de 200 versiones pequeñas se agrupan en 24 versiones con resumen, fecha y sus cambios por secciones. Se ve el historial completo, con todas las versiones desplegadas, y cada cabecera las pliega.']],
     ] },
     en: { intro: 'Characters show their level and Ilvl in the color of their gear and can be sorted, the 12.1.7 patch panel is completed and class changes are up to date through October 27.', sections: [
       ['achievement_bg_winwsg', 'Characters', [
@@ -36,7 +36,7 @@ const RELEASES = [
         'Up to date through October 27: the weekly maintenance tuning (Feral, Fire, Restoration, Marksmanship, Subtlety, Affliction and Destruction) and the October 23 and 26 hotfixes (Enhancement Shaman and Warlock), with translated names, icons and tooltips.',
       ]],
       ['inv_gizmo_02', 'Appearance', ['New general background with the “Hope Shall Rise” (Midnight) art, dimmed so panels stay readable.']],
-      ['inv_misc_note_06', 'Version history', ['The 200+ small versions are grouped into about 24 versions with a summary, a date and their changes by section, which unfold when you click the header.']],
+      ['inv_misc_note_06', 'Version history', ['The 200+ small versions are grouped into 24 versions with a summary, a date and their changes by section. The full history is shown, with every version unfolded, and each header collapses it.']],
     ] } },
 
   { v: '2.12.10', date: '2026-10-23',

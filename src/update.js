@@ -32,7 +32,7 @@ const WCUpdate = (() => {
     const sections = rich ? rich.sections : [];
     const main = sections[0] ? sections[0][0] : logIcon(intro);
     const date = rel && rel.date ? new Date(`${rel.date}T12:00:00`).toLocaleDateString(es ? 'es-ES' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
-    const open = latest;
+    const open = true; // todas las versiones vienen desplegadas; la cabecera las pliega
     return `<article class="cl-card${latest ? ' latest' : ''}${open ? ' open' : ''}"><header class="cl-head" data-cl-toggle role="button" tabindex="0" aria-expanded="${open}"><img class="cl-ic" src="${iconUrl(main)}" width="40" height="40" alt="" loading="lazy">`
       + `<div class="cl-ht"><b class="cl-ver">v${logEsc(v)} · ${es ? 'Novedades' : 'What’s new'}</b>${latest ? `<span class="cl-tag">${es ? 'Última versión' : 'Latest version'}</span>` : ''}${date ? `<small class="cl-date">${logEsc(date)}</small>` : ''}</div><span class="cl-chev" aria-hidden="true"></span></header>`
       + `<p class="cl-intro">${logEsc(intro)}</p>`
@@ -45,7 +45,7 @@ const WCUpdate = (() => {
   document.addEventListener('keydown', (ev) => { if ((ev.key === 'Enter' || ev.key === ' ') && ev.target.matches?.('[data-cl-toggle]')) { ev.preventDefault(); toggleCard(ev.target); } });
   // Todo el historial (o solo las últimas 10 versiones)
   function logHTML(lang, all) {
-    const list = all ? CHANGELOG : CHANGELOG.slice(0, 10);
+    const list = CHANGELOG; // el historial completo, sin «Ver más»
     return `<div class="cl-list">${list.map((e, i) => logCard(e, lang, i === 0, (n) => `wcicon://i/${n}`)).join('')}</div>`;
   }
 

@@ -89,7 +89,7 @@ async function openSettings(tab) {
       ${toggle('autoUpdateCheck', LL('Buscar actualizaciones al abrir', 'Check for updates on startup'))}`}
       ${aboutHTML}
       <h3>${LL('Historial de versiones', 'Version history')}</h3>
-      ${(() => { const all = dlg.dataset.log === 'all'; return `${WCUpdate.logHTML(S.lang, all)}${WCUpdate.CHANGELOG.length > 10 ? `<div class="set-actions"><button type="button" class="btn ghost" data-set-act="toggle-log">${all ? LL('Ver menos', 'Show less') : LL(`Ver más (${WCUpdate.CHANGELOG.length - 10} versiones anteriores)`, `Show more (${WCUpdate.CHANGELOG.length - 10} older versions)`)}</button></div>` : ''}`; })()}`,
+      ${WCUpdate.logHTML(S.lang, true)}`,
   };
   const tabs = [['general', LL('General', 'General')], ['look', LL('Apariencia', 'Appearance')], ['replay', 'Replay'], ['data', LL('Datos', 'Data')], ['version', LL('Versión y acerca de', 'Version & about')]];
   dlg.innerHTML = `<form method="dialog" id="settingsForm" class="set-wrap">

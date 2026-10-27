@@ -85,12 +85,16 @@ test('Ajustes: pestañas, restablecer con confirmación, historial recortado y �
   assert.equal(await p.evaluate(() => WCSettings.get('zoom')), 130);
   await p.click('#resetAll'); await p.waitForTimeout(400);
   assert.equal(await p.evaluate(() => WCSettings.get('zoom')), 100);
-  // historial: 10 entradas y «Ver más»
+  // historial: todas las versiones, desplegadas, con su fecha y secciones con iconos
   await p.click('[data-set-tab="version"]'); await p.waitForTimeout(250);
-  assert.equal(await p.$$eval('.cl-card', (e) => e.length), 10);
+  const total = await p.evaluate(() => WCUpdate.CHANGELOG.length);
+  assert.ok(total >= 20, 'el historial agrupado tiene todas las versiones');
+  assert.equal(await p.$$eval('.cl-card', (e) => e.length), total);
+  assert.equal(await p.$$eval('.cl-card.open', (e) => e.length), total, 'todas vienen desplegadas');
   assert.ok(await p.$('.cl-card.latest .cl-tag'), 'la última versión lleva su etiqueta');
-  await p.click('[data-set-act="toggle-log"]'); await p.waitForTimeout(250);
-  assert.ok((await p.$$eval('.cl-card', (e) => e.length)) > 10);
+  assert.ok(await p.$('.cl-card .cl-date'), 'cada versión lleva su fecha');
+  await p.click('.cl-card:nth-child(2) .cl-head'); await p.waitForTimeout(100);
+  assert.equal(await p.$$eval('.cl-card.open', (e) => e.length), total - 1, 'al pulsar la cabecera se pliega');
   assert.ok((await p.$$eval('.cl-card .cl-sic', (e) => e.length)) >= 6, 'secciones con iconos de WoW');
   // la bandera de España va sin texto
   assert.ok(!/España/.test(await p.$eval('.about-es', (e) => e.innerText)));
