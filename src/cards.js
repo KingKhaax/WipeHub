@@ -39,6 +39,9 @@ const Cards = (() => {
   // Retrato del personaje con la insignia del nivel
   const portraitHTML = (c, size = 72) => `<span class="cc-pic" style="--sz:${size}px">${c.avatar ? `<img src="${media(c.avatar)}" alt="">` : ''}<b class="cc-lvl">${esc(c.level ?? '')}</b></span>`;
 
+  // Nivel de objeto equipado (el de Blizzard, en entero); si aún no se conoce no se muestra nada
+  const ilvlHTML = (c) => { const n = Math.round(c.ilvlEquipped || c.ilvlAvg || 0); return n ? `<b class="cc-ilvl" title="${esc(LL('Nivel de objeto equipado', 'Equipped item level'))}">${n}</b>` : ''; };
+
   // Tarjeta como la de Warcraft Logs: Nombre / Guild - Reino (Región) / Raza Clase
   // Tarjeta compacta: nombre / guild · reino (región) / icono de spec + raza · clase (cada una en una sola línea)
   function charCardHTML(c, { onClick = '' } = {}) {
@@ -49,7 +52,7 @@ const Cards = (() => {
     const kind = [c.race, c.cls].filter(Boolean).join(' · ');
     const realm = `${c.realmName || c.realmSlug} (${String(c.region || '').toUpperCase()})`;
     return `<div class="cc ${onClick ? 'click' : ''}" style="--cc:${color}" ${onClick}>${portraitHTML(c, 64)}
-      <div class="cc-txt"><div class="cc-name" title="${esc(c.name)}">${esc(c.name)}</div>
+      <div class="cc-txt"><div class="cc-name" title="${esc(c.name)}"><span class="cc-nm-t">${esc(c.name)}</span>${ilvlHTML(c)}</div>
         <div class="cc-guild" title="${esc((c.guild ? c.guild.name + ' · ' : '') + realm)}">${c.guild ? `<span style="color:${FACTION[c.guild.faction] || FACTION[c.faction] || 'var(--muted)'}">${esc(c.guild.name)}</span> · ` : ''}<span class="muted">${esc(realm)}</span></div>
         <div class="cc-class" style="color:${color}" title="${esc(kind)}">${specImg}<span>${esc(kind)}</span></div></div></div>`;
   }

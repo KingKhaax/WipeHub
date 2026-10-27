@@ -3212,3 +3212,16 @@ a:focus-visible, button:focus-visible, select:focus-visible, summary:focus-visib
 .welcome .hero { background: radial-gradient(900px 440px at 88% -12%, rgba(25, 170, 168, .26), transparent 60%), radial-gradient(800px 480px at -10% 112%, rgba(62, 66, 198, .40), transparent 56%), linear-gradient(160deg, rgba(15, 27, 56, .62), rgba(7, 12, 27, .62) 72%); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
 :root[data-theme="light"] .bg-art, :root[data-theme="light"] .bg-dim { display: none; }
 :root[data-theme="light"] .welcome .card, :root[data-theme="light"] .welcome .exp-card, :root[data-theme="light"] .welcome .hero { backdrop-filter: none; -webkit-backdrop-filter: none; }
+
+/* «Añadir un personaje» / «Añadir guild»: mismas barras que el buscador de personajes (fondo oscuro y borde), legibles sobre el fondo con arte */
+.gd-form input, .gd-form select { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 11px 14px; color: var(--text); font-size: 15px; transition: transform .2s cubic-bezier(.2, .8, .2, 1), border-color .2s, box-shadow .2s; }
+.gd-form input::placeholder { color: var(--muted); opacity: 1; }
+.gd-form input:hover, .gd-form select:hover { transform: translateY(-1px); border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 18%, transparent); }
+.gd-form input:focus, .gd-form select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent), 0 6px 18px color-mix(in srgb, var(--accent) 18%, transparent); }
+/* nivel de objeto junto al nombre y barra de orden */
+.cc-name { display: flex; align-items: baseline; gap: 8px; min-width: 0; }
+.cc-nm-t { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.cc-ilvl { flex: none; font-family: var(--font); font-size: 12px; font-weight: 800; letter-spacing: .3px; padding: 1px 7px; border-radius: 999px; color: var(--gold, #e6c068); background: color-mix(in srgb, var(--gold, #e6c068) 14%, transparent); border: 1px solid color-mix(in srgb, var(--gold, #e6c068) 45%, transparent); font-variant-numeric: tabular-nums; }
+.cc-sortbar { display: flex; align-items: center; gap: 8px; margin: 14px 0 -2px; color: var(--muted); font-size: 13px; }
+.cc-sortbar select { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px; color: var(--text); font: inherit; font-size: 13px; }
+.cc-sortbar select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 22%, transparent); }

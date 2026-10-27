@@ -203,6 +203,7 @@ const Guilds = (() => {
   const saveChars = (l) => { saveList('gd:chars', l); saveList('gd:chars:bak', l); };
   // Última ficha buena de cada personaje: si Warcraft Logs/Blizzard no responde, el personaje se sigue viendo con lo último que se supo
   const cardCache = () => { try { return JSON.parse(lsGet('gd:charcache') || '{}'); } catch { return {}; } };
+  const slimCard = (c) => ({ name: c.name, realmSlug: c.realmSlug, realmName: c.realmName, region: c.region, level: c.level, race: c.race, cls: c.cls, classId: c.classId, specId: c.specId, avatar: c.avatar, faction: c.faction, guild: c.guild, ilvlEquipped: c.ilvlEquipped, ilvlAvg: c.ilvlAvg });
   const stubOf = (c) => ({ name: c.name, realmSlug: c.realmSlug, realmName: c.realmName || c.realmSlug, region: c.region, manual: true, stale: true });
   const savedGuilds = () => lsList('gd:guilds');
 
@@ -228,7 +229,7 @@ const Guilds = (() => {
     st.manualChars = saved.map((c) => ({ ...(cc[charKey(c)] || stubOf(c)), manual: true, region: c.region }));
     rebuild();
     const list = await Promise.all(saved.map(async (c) => {
-      try { const card = { ...(await Cards.char(c.name, c.realmSlug, c.region)), manual: true, region: c.region }; cc[charKey(c)] = card; return card; } catch { return { ...(cc[charKey(c)] || stubOf(c)), manual: true, region: c.region }; }
+      try { const card = { ...(await Cards.char(c.name, c.realmSlug, c.region)), manual: true, region: c.region }; cc[charKey(c)] = slimCard(card); return card; } catch { return { ...(cc[charKey(c)] || stubOf(c)), manual: true, region: c.region }; }
     }));
     st.manualChars = list;
     try { lsSet('gd:charcache', JSON.stringify(cc)); } catch { /* sin espacio */ }
@@ -245,7 +246,19 @@ const Guilds = (() => {
       await loadSaved();
       lsSet('gd:hidden', JSON.stringify(lsList('gd:hidden').filter((k) => k !== charKey(info))));
     } catch (e) { st.charMsg = friendly(String(e.message || e)); }
-    render();
+    keepTyping('gdCharForm', 'name', 'charMsg', st.charName, render);
+  }
+
+  // Tras repintar, el formulario conserva lo que se estaba escribiendo y el cursor vuelve al nombre
+  function keepTyping(formId, field, msgKey, failedValue, repaint) {
+    const f = document.getElementById(formId);
+    const typed = f ? { name: f.elements.name?.value || '', realm: f.elements.realm?.value || '' } : null;
+    repaint();
+    const f2 = document.getElementById(formId);
+    if (!f2) return;
+    if (typed?.name) f2.elements.name.value = typed.name; else if (st[msgKey] && failedValue) f2.elements.name.value = failedValue;
+    if (typed?.realm) f2.elements.realm.value = typed.realm;
+    f2.elements[field].focus();
   }
 
   // Añadir una guild a mano (como un personaje): se comprueba que exista y se guarda en «Tus guilds»
@@ -262,7 +275,7 @@ const Guilds = (() => {
       saveList('gd:guilds', [...rest, item]);
       rebuild();
     } catch (e) { st.guildMsg = friendly(String(e.message || e)); }
-    render();
+    keepTyping('gdAddGuildForm', 'name', 'guildMsg', st.guildName, render);
   }
 
   function guildFormHTML() {
@@ -284,6 +297,18 @@ const Guilds = (() => {
       ${st.charMsg ? `<div class="error sm"><p>${esc(st.charMsg)}</p></div>` : ''}`;
   }
 
+  const SORTS = [['added', 'Orden de añadido', 'Order added'], ['name', 'Nombre', 'Name'], ['ilvl', 'Nivel de objeto', 'Item level'], ['level', 'Nivel', 'Level'], ['class', 'Clase', 'Class']];
+  const charSort = () => { const v = lsGet('gd:charSort'); return SORTS.some((x) => x[0] === v) ? v : 'added'; };
+  function sortChars(list) {
+    const by = charSort();
+    if (by === 'added') return list;
+    const nm = (a, b) => String(a.name).localeCompare(String(b.name), undefined, { sensitivity: 'base' });
+    const ilv = (c) => Math.round(c.ilvlEquipped || c.ilvlAvg || 0);
+    const cmp = { name: nm, ilvl: (a, b) => ilv(b) - ilv(a) || nm(a, b), level: (a, b) => (b.level || 0) - (a.level || 0) || ilv(b) - ilv(a) || nm(a, b), class: (a, b) => String(a.cls || '').localeCompare(String(b.cls || ''), undefined, { sensitivity: 'base' }) || nm(a, b) }[by];
+    return list.slice().sort(cmp);
+  }
+  const sortBarHTML = () => `<div class="cc-sortbar"><label for="gdCharSort">${LL('Ordenar por', 'Sort by')}</label><select id="gdCharSort">${SORTS.map(([v, es, en]) => `<option value="${v}"${v === charSort() ? ' selected' : ''}>${esc(LL(es, en))}</option>`).join('')}</select></div>`;
+
   function charsHTML() {
     if (!st.chars?.length) return '';
     const hidden = new Set(lsList('gd:hidden'));
@@ -296,12 +321,12 @@ const Guilds = (() => {
         <button type="button" class="${favs.has(k) ? 'on' : ''}" data-gd="fav" data-key="${esc(k)}" title="${esc(favs.has(k) ? LL('Quitar de favoritos', 'Remove from favorites') : LL('Añadir a favoritos', 'Add to favorites'))}" aria-label="${esc(LL('Favorito', 'Favorite'))}">${ICON_STAR(favs.has(k))}</button>
         ${canHide ? `<button type="button" data-gd="${c.manual ? 'delchar' : 'hide'}" data-key="${esc(k)}" title="${esc(LL('Quitar de la lista', 'Remove from the list'))}" aria-label="${esc(LL('Quitar', 'Remove'))}">${ICON_X}</button>` : ''}</div></div>${armoryHTML(c)}`;
     };
-    const favList = st.chars.filter((c) => favs.has(charKey(c)));
+    const favList = sortChars(st.chars.filter((c) => favs.has(charKey(c))));
     // un favorito pasa a «Personajes favoritos» y sale de «Tus personajes»; al quitarle la estrella vuelve a «Tus personajes»
-    const list = st.chars.filter((c) => !hidden.has(charKey(c)) && !favs.has(charKey(c)));
+    const list = sortChars(st.chars.filter((c) => !hidden.has(charKey(c)) && !favs.has(charKey(c))));
     const hiddenN = st.chars.filter((c) => hidden.has(charKey(c)) && !favs.has(charKey(c))).length;
     const empty = favList.length ? `<div class="empty sm">${LL('Todos tus personajes están en favoritos.', 'All your characters are in favorites.')}</div>` : `<div class="empty sm">${LL('Has quitado todos los personajes de la lista.', 'You removed every character from the list.')}</div>`;
-    return `${favList.length ? `<h3 class="sec">${LL('Personajes favoritos', 'Favorite characters')}</h3><div class="cc-grid">${favList.map((c) => wrap(c, false)).join('')}</div>` : ''}
+    return `${sortBarHTML()}${favList.length ? `<h3 class="sec">${LL('Personajes favoritos', 'Favorite characters')}</h3><div class="cc-grid">${favList.map((c) => wrap(c, false)).join('')}</div>` : ''}
       <h3 class="sec">${LL('Tus personajes', 'Your characters')}${hiddenN ? ` <button type="button" class="mini-btn" data-gd="unhide">${LL(`Restaurar ${hiddenN} quitado${hiddenN === 1 ? '' : 's'}`, `Restore ${hiddenN} removed`)}</button>` : ''}</h3>
       ${list.length ? `<div class="cc-grid">${list.map((c) => wrap(c, true)).join('')}</div>` : empty}`;
   }
@@ -661,6 +686,12 @@ const Guilds = (() => {
     else if (a === 'report') { S.guildOpen = false; S.cmpOpen = false; loadReport(el.dataset.code); }
   });
 
+  document.addEventListener('change', (ev) => {
+    if (ev.target.id !== 'gdCharSort') return;
+    lsSet('gd:charSort', ev.target.value);
+    if (document.getElementById('gdChars')) renderCharsBox(); else render();
+  });
+
   document.addEventListener('submit', async (ev) => {
     if (ev.target.id === 'gdCharForm') {
       ev.preventDefault();
@@ -671,7 +702,7 @@ const Guilds = (() => {
       const realm = String(fd.get('realm') || '').trim();
       lsSet('gd:charRealm', realm);
       st.charName = name;
-      if (name && realm) addChar(name, realm, region);
+      if (name && realm) { ev.target.elements.name.value = ''; ev.target.elements.name.focus(); addChar(name, realm, region); }
       return;
     }
     if (ev.target.id === 'gdAddGuildForm') {
@@ -683,7 +714,7 @@ const Guilds = (() => {
       const realm = String(fd.get('realm') || '').trim();
       lsSet('gd:guildRealm', realm);
       st.guildName = name;
-      if (name && realm) addGuild(name, realm, region);
+      if (name && realm) { ev.target.elements.name.value = ''; ev.target.elements.name.focus(); addGuild(name, realm, region); }
       return;
     }
     if (ev.target.id !== 'gdForm') return;
