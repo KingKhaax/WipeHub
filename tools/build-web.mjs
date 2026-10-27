@@ -48,6 +48,7 @@ for (const f of fs.readdirSync(out)) {
     s = s.replace(/<meta http-equiv="Content-Security-Policy"[\s\S]*?>/,
       `<meta http-equiv="Content-Security-Policy"\n        content="default-src 'self'; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' ${proxy} https://raider.io https://nether.wowhead.com https://www.raidbots.com https://assets.rpglogs.com https://wow.zamimg.com https://render.worldofwarcraft.com; worker-src 'self'; frame-src 'self'">`);
     s = s.replace('<script src="boot.js"></script>', '<script src="web-api.js"></script>\n  <script src="boot.js"></script>');
+    s = s.replace('title="Versión">v0.0.0<', 'title="Versión">v' + pkg.version + '<'); // reserva el ancho de la insignia antes de que arranque el JS
     s = s.replace('<title>WipeHub</title>', '<title>WipeHub</title>\n  <link rel="icon" href="icon.png">');
   }
   fs.writeFileSync(p, s);
@@ -88,4 +89,6 @@ if (esbuild) {
   console.log(`optimizada: ${bundleFiles.length} scripts → app.bundle.js (${(bundle.length / 1024).toFixed(0)} KB), CSS → app.css; ${(before / 1024).toFixed(0)} KB → ${((bundle.length + fs.statSync(path.join(out, 'app.css')).size) / 1024).toFixed(0)} KB`);
 }
 fs.writeFileSync(path.join(out, 'version.json'), JSON.stringify({ version: pkg.version }));
+// robots.txt: la web se puede indexar entera
+fs.writeFileSync(path.join(out, 'robots.txt'), 'User-agent: *\nAllow: /\n');
 console.log(`web-dist listo: v${pkg.version}, proxy ${proxy}, ${specKeys.length} specs, ${left} sustituciones`);

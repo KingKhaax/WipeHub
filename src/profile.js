@@ -688,7 +688,7 @@ const Profile = (() => {
   }
 
   function sectionHTML() {
-    return `<section class="pf-find"><h3 class="sec" data-pf="focus">${LL('Buscar personaje', 'Find a character')}</h3>
+    return `<section class="pf-find"><h3 class="sec" data-pf="focus" aria-level="2">${LL('Buscar personaje', 'Find a character')}</h3>
       <p class="muted">${LL('Escribe el nombre y pulsa Intro: verás los personajes que existen con ese nombre, su reino y su país. El reino es opcional. Al elegir uno, se abre su ficha con posiciones, logs por jefe, equipo y modelo en vivo.', 'Type the name and press Enter: you will see the characters that exist with that name, their realm and country. The realm is optional. Pick one to open its page with rankings, logs per boss, gear and model, live.')}</p>
       ${formHTML()}</section>`;
   }

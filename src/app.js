@@ -2065,7 +2065,7 @@ function renderWelcome() {
           <button class="btn ghost cmp-cta" data-cmp="open"><svg class="navic" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v16"/><path d="m3 8 4-4 4 4"/><path d="M17 20V4"/><path d="m13 16 4 4 4-4"/></svg> ${t('cmpOpen')}</button>
         </div>
         <div class="exp-card" id="expCard">
-          <img class="exp-img" id="expImg" data-fallback="${img}" style="visibility:hidden" alt="${esc(exp.name)}">
+          <img class="exp-img" id="expImg" data-fallback="${img}" fetchpriority="high" decoding="async" style="visibility:hidden" alt="${esc(exp.name)}">
           <div class="exp-info">
             <small>${t('expLabel')}</small>
             <b>${esc(exp.name)}</b>

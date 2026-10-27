@@ -145,7 +145,7 @@ const GuildCmp = (() => {
     return `<div class="gc-slot" style="--gc:${NAME_COL[i]}"><form class="gd-form gc-form" id="gcForm${i}" autocomplete="off">
       <input name="name" placeholder="${esc(LL(`Guild ${i + 1}: nombre`, `Guild ${i + 1}: name`))}" value="${esc(q.name)}" spellcheck="false" required>
       <input name="realm" placeholder="${esc(LL('Reino (opcional)', 'Realm (optional)'))}" value="${esc(q.realm)}" spellcheck="false">
-      <select name="region">${['eu', 'us', 'kr', 'tw'].map((r) => `<option value="${r}" ${r === q.region ? 'selected' : ''}>${r.toUpperCase()}</option>`).join('')}</select>
+      <select name="region" aria-label="${LL('Región', 'Region')}">${['eu', 'us', 'kr', 'tw'].map((r) => `<option value="${r}" ${r === q.region ? 'selected' : ''}>${r.toUpperCase()}</option>`).join('')}</select>
       <button class="btn" type="submit">${LL('Buscar', 'Search')}</button></form>${st.msg[i] ? `<div class="error sm"><p>${esc(st.msg[i])}</p></div>` : ''}${list}</div>`;
   }
 

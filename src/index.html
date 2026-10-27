@@ -6,6 +6,11 @@
         content="default-src 'self'; img-src 'self' data: wcicon: wcmap: wcmedia: https://assets.rpglogs.com; connect-src 'self' wcicon: wcmap: wcmedia: https://assets.rpglogs.com; style-src 'self' 'unsafe-inline'; script-src 'self'; frame-src https://kingkhaax.github.io">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>WipeHub</title>
+  <meta name="description" content="WipeHub analiza tus logs de Warcraft Logs: daño, sanación, muertes, buffos, rotación, replay, parses y comparación de guilds. Gratis y sin instalar nada.">
+  <meta name="theme-color" content="#0b0d12">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="WipeHub">
+  <meta property="og:description" content="Analiza tus logs de Warcraft Logs: daño, sanación, muertes, buffos, rotación, replay, parses y comparación de guilds.">
   <link rel="stylesheet" href="fonts.css">
   <link rel="stylesheet" href="styles.css">
   <script src="boot.js"></script>
@@ -13,17 +18,18 @@
 <body>
   <div class="bg-art" aria-hidden="true"></div><div class="bg-dim" aria-hidden="true"></div>
   <header class="topbar">
+    <h1 class="sr-only">WipeHub</h1>
     <button class="btn ghost icon side-toggle" id="sideToggle" aria-label="Lista de intentos" title="Lista de intentos" hidden>☰</button>
     <a class="brand" id="brandHome" href="#/" title="Inicio"><img class="brand-logo" src="logo.png" alt="">WipeHub</a>
     <nav class="navtabs" aria-label="Navigation"><span class="nav-ind" aria-hidden="true"></span>
     <a class="btn ghost home-btn" id="homeBtn" href="#/" aria-label="Inicio / Home"><svg class="navic" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-5h4v5"/></svg><span id="homeLabel">Inicio</span></a>
-    <a class="btn ghost home-btn" id="cmpBtn" href="#/compare"><svg class="navic" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v16"/><path d="m3 8 4-4 4 4"/><path d="M17 20V4"/><path d="m13 16 4 4 4-4"/></svg><span id="cmpLabel">Comparar logs</span></a>
+    <a class="btn ghost home-btn" id="cmpBtn" href="#/compare" aria-label="Comparar logs / Compare logs"><svg class="navic" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4v16"/><path d="m3 8 4-4 4 4"/><path d="M17 20V4"/><path d="m13 16 4 4 4-4"/></svg><span id="cmpLabel">Comparar logs</span></a>
     <a class="btn ghost home-btn" id="guildBtn" href="#/guilds" title="Guilds"><svg class="navic" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 21V3.5"/><path d="M6 4h12l-2.6 4.2L18 12H6"/></svg><span id="guildLabel">Guilds</span></a>
-    <a class="btn ghost home-btn" id="profBtn" href="#/characters"><svg class="navic" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c.6-4 3.6-6.2 7.5-6.2s6.9 2.2 7.5 6.2"/></svg><span id="profLabel">Personajes</span></a>
+    <a class="btn ghost home-btn" id="profBtn" href="#/characters" aria-label="Personajes / Characters"><svg class="navic" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c.6-4 3.6-6.2 7.5-6.2s6.9 2.2 7.5 6.2"/></svg><span id="profLabel">Personajes</span></a>
     </nav>
     <form id="loadForm" class="load">
       <input id="urlInput" type="text" spellcheck="false" autocomplete="off">
-      <button id="loadBtn" type="submit" class="btn primary"></button>
+      <button id="loadBtn" type="submit" class="btn primary">Cargar</button>
     </form>
     <div class="top-actions">
       <span class="top-sep" aria-hidden="true"></span>
@@ -32,7 +38,7 @@
         <div id="langList" class="lang-list" role="menu" hidden></div>
       </div>
       <button id="exportBtn" class="btn ghost home-btn" hidden title="Exportar / compartir"><svg class="navic" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3"/><path d="m7 8 5-5 5 5"/><path d="M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg><span id="exportLabel">Exportar</span></button>
-      <button id="verBadge" class="ver-badge" title="Versión"></button>
+      <button id="verBadge" class="ver-badge" title="Versión">v0.0.0</button>
       <button id="settingsBtn" class="btn ghost icon" aria-label="Settings"><svg class="navic" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/></svg></button>
     </div>
   </header>
