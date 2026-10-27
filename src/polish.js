@@ -44,3 +44,22 @@
     box.querySelectorAll('button').forEach((x) => x.classList.toggle('on', x === b));
   });
 })();
+
+// Orden de títulos para lectores de pantalla (no cambia nada de lo que se ve): el título de la página es un h1 oculto y cada título
+// de la pantalla baja a lo sumo un nivel más que el anterior (así no se saltan niveles)
+(function () {
+  const main = document.getElementById('main');
+  if (!main) return;
+  let queued = false;
+  const fix = () => {
+    queued = false;
+    let last = 1;
+    main.querySelectorAll('h2, h3, h4, h5, h6').forEach((h) => {
+      const level = Math.min(Number(h.tagName[1]), last + 1);
+      if (h.getAttribute('aria-level') !== String(level)) h.setAttribute('aria-level', String(level));
+      last = level;
+    });
+  };
+  new MutationObserver(() => { if (!queued) { queued = true; requestAnimationFrame(fix); } }).observe(main, { childList: true, subtree: true });
+  fix();
+})();

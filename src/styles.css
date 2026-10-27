@@ -2600,7 +2600,7 @@ h3.sec, .recent-h { font-size: 17px; font-weight: 700; letter-spacing: 0; }
 :root[data-theme="light"] .hero-title, :root[data-theme="light"] .hero h1 { color: #10223a; text-shadow: none; }
 :root[data-theme="light"] .hero .eyebrow { color: #4b647f; }
 :root[data-theme="light"] .rate, :root[data-theme="light"] .row .c-rate, :root[data-theme="light"] .wl-dps, :root[data-theme="light"] .pc-m b, :root[data-theme="light"] .pn-box b { color: #3f7d0e; }
-:root[data-theme="light"] .ver-badge.ok, :root[data-theme="light"] .ver-num.ok, :root[data-theme="light"] .ver-state .ok { color: #1a8f43; }
+:root[data-theme="light"] .ver-badge.ok, :root[data-theme="light"] .ver-num.ok, :root[data-theme="light"] .ver-state .ok { color: #15753a; }
 :root[data-theme="light"] .ver-badge.bad { color: #c93a28; }
 :root[data-theme="light"] .hero-form { background: #fff; border-color: var(--line); box-shadow: 0 2px 10px rgba(20, 40, 70, .08); }
 :root[data-theme="light"] .hero-form input { color: var(--text); background: transparent; }
@@ -3261,3 +3261,6 @@ html:not([data-mobile-motion="on"]) .pn-soon-tag,
 html:not([data-mobile-motion="on"]) .pn-soon-tag::before,
 html:not([data-mobile-motion="on"]) .wh-logo .wh-h::after { animation: none !important; }
 }
+
+/* Tema claro: las etiquetas pequeñas en mayúsculas (eyebrow) un poco más oscuras para que se lean (4,7 a 1) */
+:root[data-theme="light"] .eyebrow, :root[data-theme="light"] .hero .eyebrow { color: color-mix(in srgb, var(--muted) 90%, #000); }
