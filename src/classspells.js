@@ -405,6 +405,15 @@ const CLASS_SPELLS = {
   "Devorar",
   "inv_12_dh_void_ability_devourerbite"
  ],
+ "Diabolic Oculi": [
+  1268709,
+  "Óculos diabólicos",
+  "inv_pet_inquisitoreye"
+ ],
+ "Diabolist": [
+  0,
+  "Diabolista"
+ ],
  "Dire Beast": [
   120679,
   "Bestia temible",
@@ -1492,10 +1501,20 @@ const CLASS_SPELLS = {
   "Muerte súbita",
   "ability_warrior_improveddisciplines"
  ],
+ "Summon Darkglare": [
+  387278,
+  "Invocar miradaoscura",
+  "inv_beholderwarlock"
+ ],
  "Summon Felguard": [
   30146,
   "Invocar guardia vil",
   "spell_shadow_summonfelguard"
+ ],
+ "Surging Elements": [
+  382042,
+  "Elementos emergentes",
+  "item_sparkofragnoros"
  ],
  "Surging Totem": [
   455630,
@@ -1753,6 +1772,11 @@ const CLASS_SPELLS = {
   260243,
   "Salva",
   "ability_hunter_rapidkilling"
+ ],
+ "Voltaic Blaze": [
+  1259101,
+  "Llamarada voltaica",
+  "inv_10_dungeonjewelry_primalist_trinket_1ragingelement_fire"
  ],
  "Wake of Ashes": [
   255937,

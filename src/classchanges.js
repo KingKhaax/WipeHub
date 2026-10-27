@@ -10,6 +10,7 @@ const ClassChanges = (() => {
   const LINK = 'https://worldofwarcraft.blizzard.com/en-us/news/24296142';
   const LINK_NOTES = 'https://worldofwarcraft.blizzard.com/en-us/news/24304162';
   const LINK_TUNING = 'https://www.wowhead.com/news/subtlety-rogue-nerfs-and-feral-druid-buffs-class-tuning-incoming-with-weekly-383568';
+  const LINK_HOTFIX = 'https://www.wowhead.com/news/more-labyrinth-and-class-bug-fixes-patch-12-1-5-hotfixes-for-october-26th-383599';
   const V = '12.1.5';
   const TYPES = { b: ['Mejora', 'Buff'], n: ['Nerfeo', 'Nerf'], r: ['Cambio', 'Change'], f: ['Corrección', 'Fix'] };
 
@@ -251,6 +252,8 @@ const ClassChanges = (() => {
         ['2026-08-18', 'b', 'Todo el daño +5 %.', 'All damage +5%.'],
       ],
       enhancement: [
+        ['2026-10-26', 'f', 'Voltaic Blaze: ya alcanza a los objetivos secundarios cuando Ula\'tek es el objetivo principal.', 'Voltaic Blaze: now hits secondary targets when Ula\'tek is the main target.'],
+        ['2026-10-23', 'f', 'Surging Elements: ya aparece en el Gestor de Recargas.', 'Surging Elements: now appears on the Cooldown Manager.'],
         ['2026-09-09', 'f', 'Doom Winds ya no interrumpe canales; Crash Lightning ya no golpea a objetivos de Windfury no previstos.', 'Doom Winds no longer interrupts channels; Crash Lightning no longer hits unintended Windfury targets.'],
         [V, 'f', 'Static Accumulation ya no impide generar acumulaciones de Maelstrom Weapon durante Ascendance o Doom Winds.', 'Static Accumulation no longer stops Maelstrom Weapon stacks from generating during Ascendance or Doom Winds.'],
         ['2026-10-06', 'b', 'Daño de habilidades y auto-ataque +4 %; Lava Lash +35 %.', 'All ability and auto-attack damage +4%; Lava Lash +35%.'],
@@ -270,6 +273,7 @@ const ClassChanges = (() => {
     } },
     warlock: { es: 'Brujo', en: 'Warlock', specs: {
       affliction: [
+        ['2026-10-26', 'f', 'Summon Darkglare: corregida su indicación en el Gestor de Recargas.', 'Summon Darkglare: Cooldown Manager display fixed.'],
         ['2026-10-27', 'b', 'Unstable Affliction +20 %.', 'Unstable Affliction +20%.'],
         ['2026-08-31', 'f', 'Blackened Soul: ya se activa con Unstable Affliction aplicado mediante Fatal Echoes.', 'Blackened Soul: now activates from Unstable Affliction applied via Fatal Echoes.'],
         ['2026-08-18', 'f', 'Withering Bolt tiene en cuenta Wither. Hellcaller — Blackened Soul funciona con el lanzamiento sobre el ratón.', 'Withering Bolt now accounts for Wither. Hellcaller — Blackened Soul works with mouse-over casting.'],
@@ -291,6 +295,7 @@ const ClassChanges = (() => {
         ['2026-08-18', 'f', 'Conflagration of Chaos: crítico garantizado de Conflagrate/Shadowburn; Conflagration of Chaos: aplica el debuff de Shadowburn tras dañar al objetivo de Havoc.', 'Conflagration of Chaos: guaranteed Conflagrate/Shadowburn crit; Conflagration of Chaos: applies the Shadowburn debuff after damaging the Havoc target.'],
       ],
       general: [
+        ['2026-10-23', 'f', 'Las invocaciones de Shadow of Nathreza (Aflicción), de Dominion of Argus (Demonología) y de Diabolist, y los Diabolic Oculi, ya no atacan a enemigos fuera de combate.', 'Summons from Shadow of Nathreza (Affliction), Dominion of Argus (Demonology) and Diabolist, and Diabolic Oculi, no longer target enemies outside of combat.'],
         ['2026-08-14', 'f', 'Soul Leech: las mascotas ya no lo aprenden de forma continua.', 'Soul Leech: pets no longer continually learn it.'],
         ['2026-08-25', 'b', 'Daño de las mascotas (Imp, Voidwalker, Sayaad, Felhunter) +350 %.', 'Pet damage (Imp, Voidwalker, Sayaad, Felhunter) +350%.'],
       ],
@@ -417,7 +422,7 @@ const ClassChanges = (() => {
         <button type="button" class="btn ghost" data-cc-close>${L('Cerrar', 'Close')}</button></div>
         <div class="cc-body">${keys.map((s) => specBlock(k, s)).join('')}
           <p class="foot">${L('Solo PvE. Las correcciones sin cifras se resumen. Cambios confirmados para el 12.2: Blizzard aún no ha publicado ninguno.', 'PvE only. Fixes without numbers are summarized. Confirmed changes for 12.2: Blizzard has not published any yet.')}</p>
-          <p class="foot"><a href="#" data-cc-link="${LINK_NOTES}">${L('Notas oficiales del 12.1.5', 'Official 12.1.5 notes')}</a> · <a href="#" data-cc-link="${LINK_TUNING}">${L('Ajustes del 27 de octubre (Wowhead)', 'October 27 tuning (Wowhead)')}</a> · <a href="#" data-cc-link="${LINK}">${L('Registro oficial de hotfixes', 'Official hotfix log')}</a></p></div></div></div>`;
+          <p class="foot"><a href="#" data-cc-link="${LINK_NOTES}">${L('Notas oficiales del 12.1.5', 'Official 12.1.5 notes')}</a> · <a href="#" data-cc-link="${LINK_TUNING}">${L('Ajustes del 27 de octubre (Wowhead)', 'October 27 tuning (Wowhead)')}</a> · <a href="#" data-cc-link="${LINK_HOTFIX}">${L('Hotfixes del 26 de octubre (Wowhead)', 'October 26 hotfixes (Wowhead)')}</a> · <a href="#" data-cc-link="${LINK}">${L('Registro oficial de hotfixes', 'Official hotfix log')}</a></p></div></div></div>`;
     dlg.querySelector('.cc-body')?.scrollTo(0, 0);
   }
 
