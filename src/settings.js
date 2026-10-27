@@ -45,7 +45,8 @@ async function openSettings(tab) {
       ${row(LL('Fuente', 'Font'), `<select data-font>${fonts}</select><div class="font-prev" id="fontPrev">${LL('Así se ve el texto: Zul’jan 261,2 k · Cénit', 'This is how text looks: Zul’jan 261.2 k · Zenith')}</div>`, LL('Expressway y Bahnschrift usan la fuente instalada en tu PC; si no la tienes, se usa una parecida.', 'Expressway and Bahnschrift use the font installed on your PC; if you do not have it, a similar one is used.'))}
       ${row(LL('Densidad', 'Density'), seg('density', [['comfortable', LL('Cómoda', 'Comfortable')], ['compact', LL('Compacta', 'Compact')]]), LL('Compacta muestra más datos en pantalla', 'Compact shows more data on screen'))}
       <h3 class="set-grp">${LL('Movimiento', 'Motion')}</h3>
-      ${row(LL('Animaciones', 'Animations'), seg('motion', [['full', LL('Normales', 'Normal')], ['reduced', LL('Reducidas', 'Reduced')]]))}`,
+      ${row(LL('Animaciones', 'Animations'), seg('motion', [['full', LL('Normales', 'Normal')], ['reduced', LL('Reducidas', 'Reduced')]]))}
+      ${toggle('mobileMotion', LL('Animaciones continuas en el móvil', 'Ambient animations on phones'), LL('Por defecto, en pantallas táctiles pequeñas el borde de luz, los halos y los fondos en movimiento se quedan quietos para ahorrar batería', 'By default, on small touch screens the light border, halos and moving backgrounds stay still to save battery'))}`,
     replay: `
       ${row(LL('Velocidad por defecto', 'Default speed'), seg('rpSpeed', [[0.5, '0,5×'], [1, '1×'], [2, '2×'], [4, '4×']]))}
       ${toggle('rpNames', LL('Mostrar nombres de jugadores', 'Show player names'))}

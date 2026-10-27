@@ -4,7 +4,7 @@
 var WCSettings = (function () {
   var KEY = 'settings:v1';
   var DEFAULTS = {
-    theme: 'dark', accent: 'teal', zoom: 100, font: 'default', density: 'comfortable', motion: 'full',
+    theme: 'dark', accent: 'teal', zoom: 100, font: 'default', density: 'comfortable', motion: 'full', mobileMotion: false,
     rpSpeed: 1, rpNames: true, rpTrails: false, rpPets: false, hdIcons: true, bossMaps: true, spellTips: true, updateSource: '', autoUpdateCheck: true, region: '', diff: 0, colors: null, accentCustom: '#2aa7b5',
   };
   var ACCENTS = {
@@ -90,6 +90,7 @@ var WCSettings = (function () {
     if (cs && cs.panel) root.style.setProperty('--panel-2', 'color-mix(in srgb, ' + cs.panel + ' 90%, ' + (cs.text || '#fff') + ' 10%)'); else root.style.removeProperty('--panel-2');
     root.dataset.density = get('density');
     root.dataset.motion = get('motion');
+    root.dataset.mobileMotion = get('mobileMotion') ? 'on' : 'off';
   }
 
   function applyZoom() {

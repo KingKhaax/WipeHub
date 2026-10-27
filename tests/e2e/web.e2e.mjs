@@ -262,6 +262,19 @@ test('Móvil (390 px): viewport correcto, navegación abajo y ninguna pantalla s
   noErrors(p);
 });
 
+test('Móvil: las animaciones continuas están quietas por defecto, se activan con el ajuste y en escritorio siguen', async () => {
+  const probe = async (p) => p.evaluate(() => getComputedStyle(document.querySelector('.exp-card .exp-img'), null).animationName);
+  const m = await newPage(browser, { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true });
+  await m.goto(url, { waitUntil: 'load' }); await m.waitForTimeout(500);
+  assert.equal(await probe(m), 'none', 'en el móvil la portada no tiene animaciones continuas');
+  await m.evaluate(() => localStorage.setItem('settings:v1', JSON.stringify({ mobileMotion: true })));
+  await m.reload({ waitUntil: 'load' }); await m.waitForTimeout(500);
+  assert.notEqual(await probe(m), 'none', 'con el ajuste activado vuelven');
+  const d = await open();
+  assert.notEqual(await probe(d), 'none', 'en escritorio siguen animadas');
+  noErrors(m);
+});
+
 test('Parche 12.2: apartados a la izquierda que muestran solo sus cambios, con enlaces de Blizzard y Wowhead', async () => {
   const p = await open();
   await p.click('[data-p22="open"]'); await p.waitForSelector('#patch122Dlg .p22-tab');

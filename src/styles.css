@@ -3244,3 +3244,20 @@ a:focus-visible, button:focus-visible, select:focus-visible, summary:focus-visib
 
 /* Texto solo para lectores de pantalla (títulos de página y etiquetas sin texto visible) */
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+/* En pantallas táctiles pequeñas las animaciones continuas se quedan quietas (ahorran batería y dibujo); lo que reacciona al tocar, los indicadores de carga y los avisos siguen igual.
+   Se vuelven a activar en Ajustes → Apariencia → «Animaciones continuas en el móvil». */
+@media (hover: none) and (max-width: 760px) {
+html:not([data-mobile-motion="on"]) .exp-card::before,
+html:not([data-mobile-motion="on"]) .exp-card::after,
+html:not([data-mobile-motion="on"]) .exp-card .exp-img,
+html:not([data-mobile-motion="on"]) .pn-box::after,
+html:not([data-mobile-motion="on"]) .hero::before,
+html:not([data-mobile-motion="on"]) .hero::after,
+html:not([data-mobile-motion="on"]) .pn-btn:not(.pn-soon),
+html:not([data-mobile-motion="on"]) .pn-btn:not(.pn-soon)::after,
+html:not([data-mobile-motion="on"]) .pn-btn.cc-btn,
+html:not([data-mobile-motion="on"]) .pn-soon-tag,
+html:not([data-mobile-motion="on"]) .pn-soon-tag::before,
+html:not([data-mobile-motion="on"]) .wh-logo .wh-h::after { animation: none !important; }
+}

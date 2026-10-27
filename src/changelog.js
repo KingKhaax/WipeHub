@@ -5,7 +5,7 @@
 // Se numera con la última versión del grupo. Los cambios que solo tocan colores, tamaños o ajustes internos no se cuentan.
 // Estructura: { v, date, es: { intro, sections: [[icono, título, [viñetas]]] }, en: { ... } }
 const RELEASES = [
-  { v: '2.12.20', date: '2026-10-27',
+  { v: '2.12.21', date: '2026-10-27',
     es: { intro: 'Los personajes muestran su nivel y su Ilvl con el color de su equipo y se pueden ordenar, el panel del parche 12.1.7 se completa y los cambios de clase llegan hasta el 27 de octubre.', sections: [
       ['achievement_bg_winwsg', 'Personajes', [
         'Cada tarjeta muestra el nivel del personaje (en un color neutro) y su Ilvl, coloreado como un parse según el equipo: verde si todo es verde, azul si hay piezas azules, morado si todo es épico Normal/Heroico y rosa (parse 99) si todo es Mítico. Las crafteadas con blasones míticos cuentan como Míticas.',
@@ -20,7 +20,7 @@ const RELEASES = [
         'Al día hasta el 27 de octubre: ajustes del mantenimiento semanal (Feral, Fuego, Restauración, Puntería, Sutileza, Aflicción y Destrucción) y hotfixes del 23 y del 26 de octubre (Chamán Mejora y Brujo), con nombres en español, iconos y tooltips.',
       ]],
       ['inv_gizmo_02', 'Apariencia', ['Nuevo fondo general con el arte de «Hope Shall Rise» (Midnight), oscurecido para que los paneles se lean bien.']],
-      ['inv_shield_04', 'Rendimiento y accesibilidad', ['Carga más rápida, sobre todo en el móvil: el fondo y el logo del parche pesan hasta un 85 % menos sin cambiar su aspecto y la web guarda mejor sus archivos para que las visitas siguientes vayan casi al instante.', 'Mejor accesibilidad y búsqueda: etiquetas para lectores de pantalla en los botones y selectores sin texto, un título principal por página y descripción de la web para los buscadores.']],
+      ['inv_shield_04', 'Rendimiento y accesibilidad', ['Carga más rápida, sobre todo en el móvil: el fondo y el logo del parche pesan hasta un 85 % menos sin cambiar su aspecto y la web guarda mejor sus archivos para que las visitas siguientes vayan casi al instante.', 'Mejor accesibilidad y búsqueda: etiquetas para lectores de pantalla en los botones y selectores sin texto, un título principal por página y descripción de la web para los buscadores.', 'En el móvil, las animaciones continuas (borde de luz, halos y fondos en movimiento) se quedan quietas para ahorrar batería y hacer más fluido el desplazamiento. Se pueden reactivar en Ajustes → Apariencia → «Animaciones continuas en el móvil».', 'Las letras de la región (EU, US…) del reloj del servidor se leen mejor sobre el fondo oscuro.']],
     ] },
     en: { intro: 'Characters show their level and Ilvl in the color of their gear and can be sorted, the 12.1.7 patch panel is completed and class changes are up to date through October 27.', sections: [
       ['achievement_bg_winwsg', 'Characters', [
@@ -36,7 +36,7 @@ const RELEASES = [
         'Up to date through October 27: the weekly maintenance tuning (Feral, Fire, Restoration, Marksmanship, Subtlety, Affliction and Destruction) and the October 23 and 26 hotfixes (Enhancement Shaman and Warlock), with translated names, icons and tooltips.',
       ]],
       ['inv_gizmo_02', 'Appearance', ['New general background with the “Hope Shall Rise” (Midnight) art, dimmed so panels stay readable.']],
-      ['inv_shield_04', 'Performance and accessibility', ['Faster loading, especially on mobile: the background and the patch logo weigh up to 85% less without changing their look, and the web caches its files better so repeat visits are almost instant.', 'Better accessibility and search: screen-reader labels on buttons and selectors without text, one main heading per page and a site description for search engines.']],
+      ['inv_shield_04', 'Performance and accessibility', ['Faster loading, especially on mobile: the background and the patch logo weigh up to 85% less without changing their look, and the web caches its files better so repeat visits are almost instant.', 'Better accessibility and search: screen-reader labels on buttons and selectors without text, one main heading per page and a site description for search engines.', 'On phones, ambient animations (light border, halos and moving backgrounds) stay still to save battery and scroll more smoothly. They can be turned back on in Settings → Appearance → “Ambient animations on phones”.', 'The region letters (EU, US…) of the server clock are easier to read on the dark background.']],
     ] } },
 
   { v: '2.12.10', date: '2026-10-23',
