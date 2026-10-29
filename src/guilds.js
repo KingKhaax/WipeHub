@@ -533,13 +533,22 @@ const Guilds = (() => {
     const pool = members.filter((m) => m.level === maxLevel).sort((a, b) => a.rank - b.rank).slice(0, MAX_MEMBERS);
     const key = `gd:rank:v4:${guildKey(gd)}:${region()}:${zone.id}:${st.diff}:${st.metric}:${st.bracket ? 'b' : 'g'}`;
     let rows = null;
-    try { const c = JSON.parse(lsGet(key) || 'null'); if (c && Date.now() - c.at < RANK_TTL) rows = c.rows; } catch { /* sin caché */ }
+    try { const c = JSON.parse(lsGet(key) || 'null'); if (c && Date.now() - c.at < 3 * 3600 * 1000) rows = c.rows; } catch { /* sin caché */ }
     if (!rows) {
       rows = [];
-      for (let i = 0; i < pool.length; i += 8) {
-        const chunk = pool.slice(i, i + 8);
+      let done = 0, incomplete = false;
+      const chunks = [];
+      for (let i = 0; i < pool.length; i += 8) chunks.push(pool.slice(i, i + 8));
+      // Se piden 3 trozos a la vez y los que fallan se reintentan; si alguno no llega no se guarda en caché para no dejar jugadores fuera 24 h
+      const runChunk = async (chunk) => {
         const aliases = chunk.map((m, j) => `c${j}:character(name:${JSON.stringify(m.name)},serverSlug:${JSON.stringify(m.realmSlug)},serverRegion:${JSON.stringify(region())}){name zoneRankings(zoneID:${Number(zone.id)},difficulty:${st.diff},metric:${['dps', 'hps', 'bossdps'].includes(st.metric) ? st.metric : 'dps'}${st.bracket ? ',byBracket:true' : ''})}`).join(' ');
-        const d = await gql(`{characterData{${aliases}}}`).catch(() => null);
+        let d = null, bad = true;
+        for (let tries = 0; tries < 3 && bad; tries++) {
+          if (tries) await new Promise((r) => setTimeout(r, 1200 * tries));
+          d = await gql(`{characterData{${aliases}}}`).catch(() => null);
+          bad = !d?.characterData || chunk.some((m, j) => { const c = d.characterData[`c${j}`]; return c && c.zoneRankings == null; });
+        }
+        if (bad) incomplete = true;
         chunk.forEach((m, j) => {
           const zr = d?.characterData?.[`c${j}`]?.zoneRankings;
           if (!zr || zr.error || zr.bestPerformanceAverage == null) return;
@@ -551,11 +560,14 @@ const Guilds = (() => {
           }
           rows.push({ name: m.name, cls: CLASS_BY_ID[m.classId] || '', spec, role: HEAL.has(spec) ? 'healer' : TANK.has(spec) ? 'tank' : 'dps', avg: zr.bestPerformanceAverage, stars: zr.allStars?.[0]?.points ?? null, boss, kills });
         });
+        done += chunk.length;
         const live = document.getElementById('gdRank');
-        if (live) live.innerHTML = `<div class="loading"><span class="spinner"></span>${LL(`Calculando… ${Math.min(i + 8, pool.length)}/${pool.length} jugadores`, `Computing… ${Math.min(i + 8, pool.length)}/${pool.length} players`)}</div>`;
-        if (st.tab !== 'rank') return;
-      }
-      lsSet(key, JSON.stringify({ at: Date.now(), rows }));
+        if (live && st.tab === 'rank') live.innerHTML = `<div class="loading"><span class="spinner"></span>${LL(`Calculando… ${done}/${pool.length} jugadores`, `Computing… ${done}/${pool.length} players`)}</div>`;
+      };
+      let next = 0;
+      await Promise.all([0, 1, 2].map(async () => { while (next < chunks.length && st.tab === 'rank') await runChunk(chunks[next++]); }));
+      if (st.tab !== 'rank') return;
+      if (!incomplete) lsSet(key, JSON.stringify({ at: Date.now(), rows }));
     }
     const standing = await standingP;
     const live = document.getElementById('gdRank');

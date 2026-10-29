@@ -5,13 +5,14 @@
 // Se numera con la última versión del grupo. Los cambios que solo tocan colores, tamaños o ajustes internos no se cuentan.
 // Estructura: { v, date, es: { intro, sections: [[icono, título, [viñetas]]] }, en: { ... } }
 const RELEASES = [
-  { v: '2.12.23', date: '2026-10-29',
+  { v: '2.12.24', date: '2026-10-29',
     es: { intro: 'Los personajes muestran su nivel y su Ilvl con el color de su equipo y se pueden ordenar, el panel del parche 12.1.7 se completa y los cambios de clase llegan hasta el 27 de octubre.', sections: [
       ['achievement_bg_winwsg', 'Personajes', [
         'Cada tarjeta muestra el nivel del personaje (en un color neutro) y su Ilvl, coloreado como un parse según el equipo: verde si todo es verde, azul si hay piezas azules, morado si todo es épico Normal/Heroico y rosa (parse 99) si todo es Mítico. Las crafteadas con blasones míticos cuentan como Míticas.',
         'Nuevo selector «Ordenar por»: orden de añadido, nombre, Ilvl, nivel o clase. Se recuerda tu elección.',
         '«Tus personajes» ya no se vacía cuando Warcraft Logs o Blizzard no responden: lo guardado sale al instante con su última ficha y se actualiza cuando llegan datos nuevos. La lista tiene además una copia de seguridad.',
         '«Añadir un personaje» y «Añadir guild» usan las mismas barras que el buscador. El reino que escribes se conserva y, tras pulsar Intro, sigues escribiendo sin perder el foco.',
+        'El ranking de la guild tarda menos (pide a los jugadores de tres en tres) y ya no deja jugadores fuera cuando Warcraft Logs responde con error: reintenta y, si algo falla, no guarda el resultado incompleto. Los datos guardados se renuevan cada 3 horas.',
       ]],
       ['inv_misc_book_11', 'Parche 12.1.7', [
         'El botón de contenido recoge las novedades de las builds 70424 y 70493 del RPP: escenarios, jefes, personajes y logros de Historias de leyenda (Talebound), monturas, mascotas y objetos nuevos, adornos de hogar, Festival de Invierno, madrigueras y profesiones.',
@@ -28,6 +29,7 @@ const RELEASES = [
         'New “Sort by” selector: order added, name, Ilvl, level or class. Your choice is remembered.',
         '“Your characters” no longer empties when Warcraft Logs or Blizzard do not answer: saved characters show instantly with their last card and refresh when new data arrives. The list also has a backup copy.',
         '“Add a character” and “Add guild” use the same bars as the search form. The realm you type is kept and, after pressing Enter, you keep typing without losing focus.',
+        'The guild ranking loads faster (players are requested three at a time) and no longer leaves players out when Warcraft Logs returns an error: it retries and, if anything fails, does not save the incomplete result. Saved data refreshes every 3 hours.',
       ]],
       ['inv_misc_book_11', 'Patch 12.1.7', [
         'The content button collects what builds 70424 and 70493 of the PTR brought: scenarios, bosses, characters and achievements of Talebound, new mounts, pets and items, housing decor, Feast of Winter Veil, burrows and professions.',
