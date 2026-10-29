@@ -958,7 +958,7 @@ function renderSidebar() {
     <div class="combine-bar"><button class="chip refresh-btn ${S.refreshing ? 'busy' : ''}" data-action="refresh-report" title="${esc(LL('Vuelve a cargar el log para ver nuevos pulls y kills', 'Reload the log to see new pulls and kills'))}">${S.refreshing ? '<span class="spinner sm"></span> ' : ''}${LL('Actualizar', 'Refresh')}</button><button class="chip" data-action="combine-all" title="${esc(LL('Combinar todos los trys de todos los jefes del log', 'Combine every try of every boss in the log'))}">${LL('Todo el log', 'Whole log')}</button><button class="chip ${S.combineMode ? 'on' : ''}" data-action="combine-toggle" title="${esc(LL('Marca varios pulls y mira sus cifras sumadas', 'Tick several pulls and see their combined numbers'))}">${LL('Combinar pulls', 'Combine pulls')}</button>${S.combineMode ? `<small class="muted">${S.combine.length < 2 ? LL('Marca al menos 2 pulls', 'Tick at least 2 pulls') : LL(`${S.combine.length} pulls`, `${S.combine.length} pulls`)}</small>` : ''}</div>`;
   const spark = (fights) => {
     const pts = fights.map((f) => (f.kill ? 0 : pctOf(f.fightPercentage ?? f.bossPercentage))).filter((v) => v != null);
-    if (pts.length < 2) return '';
+    if (pts.length < 3) return '';
     const w = 54, h = 16, step = w / (pts.length - 1);
     const d = pts.map((v, i) => `${i ? 'L' : 'M'}${(i * step).toFixed(1)} ${(1 + (Math.min(100, v) / 100) * (h - 2)).toFixed(1)}`).join('');
     return `<svg class="spark" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" aria-hidden="true"><path d="${d}" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
