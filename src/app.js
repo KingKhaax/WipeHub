@@ -956,17 +956,10 @@ function renderSidebar() {
     <div class="rep-title">${esc(r.title)}</div>
     <div class="rep-sub">${esc(zoneName(r.zone?.name))}${r.owner?.name ? ' · ' + esc(r.owner.name) : ''}<br>${new Date(r.startTime).toLocaleString(locale())}</div>
     <div class="combine-bar"><button class="chip refresh-btn ${S.refreshing ? 'busy' : ''}" data-action="refresh-report" title="${esc(LL('Vuelve a cargar el log para ver nuevos pulls y kills', 'Reload the log to see new pulls and kills'))}">${S.refreshing ? '<span class="spinner sm"></span> ' : ''}${LL('Actualizar', 'Refresh')}</button><button class="chip" data-action="combine-all" title="${esc(LL('Combinar todos los trys de todos los jefes del log', 'Combine every try of every boss in the log'))}">${LL('Todo el log', 'Whole log')}</button><button class="chip ${S.combineMode ? 'on' : ''}" data-action="combine-toggle" title="${esc(LL('Marca varios pulls y mira sus cifras sumadas', 'Tick several pulls and see their combined numbers'))}">${LL('Combinar pulls', 'Combine pulls')}</button>${S.combineMode ? `<small class="muted">${S.combine.length < 2 ? LL('Marca al menos 2 pulls', 'Tick at least 2 pulls') : LL(`${S.combine.length} pulls`, `${S.combine.length} pulls`)}</small>` : ''}</div>`;
-  const spark = (fights) => {
-    const pts = fights.map((f) => (f.kill ? 0 : pctOf(f.fightPercentage ?? f.bossPercentage))).filter((v) => v != null);
-    if (pts.length < 3) return '';
-    const w = 54, h = 16, step = w / (pts.length - 1);
-    const d = pts.map((v, i) => `${i ? 'L' : 'M'}${(i * step).toFixed(1)} ${(1 + (Math.min(100, v) / 100) * (h - 2)).toFixed(1)}`).join('');
-    return `<svg class="spark" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" aria-hidden="true"><path d="${d}" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>`;
-  };
   for (const fights of groups.values()) {
     const f0 = fights[0];
     const kills = fights.filter((f) => f.kill).length;
-    html += `<div class="enc"><div class="enc-h"><span class="enc-n"><img class="enc-ic" src="https://assets.rpglogs.com/img/warcraft/bosses/${f0.encounterID}-icon.jpg" width="22" height="22" alt="" loading="lazy" onerror="this.remove()">${esc(f0.name)}</span>${spark(fights)}<span class="enc-d ${kills ? 'kill' : 'wipe'}">${esc(diffName(f0.difficulty))} · ${fights.length} <button class="mini-btn" data-action="combine-group" data-key="${esc(f0.groupKey)}" title="${esc(LL('Combinar todos los trys de este jefe', 'Combine every try of this boss'))}">${LL('Todos los trys', 'All tries')}</button></span></div>
+    html += `<div class="enc"><div class="enc-h"><span class="enc-n"><img class="enc-ic" src="https://assets.rpglogs.com/img/warcraft/bosses/${f0.encounterID}-icon.jpg" width="22" height="22" alt="" loading="lazy" onerror="this.remove()">${esc(f0.name)}</span><span class="enc-d ${kills ? 'kill' : 'wipe'}">${esc(diffName(f0.difficulty))} · ${fights.length} <button class="mini-btn" data-action="combine-group" data-key="${esc(f0.groupKey)}" title="${esc(LL('Combinar todos los trys de este jefe', 'Combine every try of this boss'))}">${LL('Todos los trys', 'All tries')}</button></span></div>
       ${fights.map(fightBtn).join('')}</div>`;
   }
   if (trash.length) {

@@ -2935,7 +2935,6 @@ a:focus-visible, button:focus-visible, select:focus-visible, summary:focus-visib
 .tr.th { position: sticky; top: 0; z-index: 3; }
 .tr:not(.th):nth-child(even) { background: color-mix(in srgb, var(--text) 3%, transparent); }
 
-.enc-h .spark { margin-left: auto; margin-right: 6px; color: var(--muted); opacity: .8; flex: none; }
 .fight { position: relative; }
 .fight::before { content: ''; position: absolute; left: 0; top: 50%; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%; background: var(--bad-c); opacity: .85; }
 .fight.kill::before { background: var(--good); box-shadow: 0 0 8px var(--good); }

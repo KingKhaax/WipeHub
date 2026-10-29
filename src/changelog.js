@@ -5,7 +5,7 @@
 // Se numera con la última versión del grupo. Los cambios que solo tocan colores, tamaños o ajustes internos no se cuentan.
 // Estructura: { v, date, es: { intro, sections: [[icono, título, [viñetas]]] }, en: { ... } }
 const RELEASES = [
-  { v: '2.12.26', date: '2026-10-29',
+  { v: '2.12.27', date: '2026-10-29',
     es: { intro: 'Los personajes muestran su nivel y su Ilvl con el color de su equipo y se pueden ordenar, el panel del parche 12.1.7 se completa y los cambios de clase llegan hasta el 27 de octubre.', sections: [
       ['achievement_bg_winwsg', 'Personajes', [
         'Cada tarjeta muestra el nivel del personaje (en un color neutro) y su Ilvl, coloreado como un parse según el equipo: verde si todo es verde, azul si hay piezas azules, morado si todo es épico Normal/Heroico y rosa (parse 99) si todo es Mítico. Las crafteadas con blasones míticos cuentan como Míticas.',
@@ -14,7 +14,7 @@ const RELEASES = [
         '«Añadir un personaje» y «Añadir guild» usan las mismas barras que el buscador. El reino que escribes se conserva y, tras pulsar Intro, sigues escribiendo sin perder el foco.',
         'El ranking de la guild tarda menos (pide a los jugadores de tres en tres) y ya no deja jugadores fuera cuando Warcraft Logs responde con error: reintenta y, si algo falla, no guarda el resultado incompleto. Los datos guardados se renuevan cada 3 horas.',
         'En la lista de intentos, cada jefe muestra su dificultad y número de intentos en verde si hay kill y en rojo si solo hay wipes (se quita el tic).',
-        'La mini-gráfica de progreso de cada jefe solo aparece con 3 o más intentos; con 2 se veía como una raya suelta.',
+        'Se quita la mini-gráfica de progreso junto a cada jefe en la lista de intentos.',
       ]],
       ['inv_misc_book_11', 'Parche 12.1.7', [
         'El botón de contenido recoge las novedades de las builds 70424 y 70493 del RPP: escenarios, jefes, personajes y logros de Historias de leyenda (Talebound), monturas, mascotas y objetos nuevos, adornos de hogar, Festival de Invierno, madrigueras y profesiones.',
@@ -33,7 +33,7 @@ const RELEASES = [
         '“Add a character” and “Add guild” use the same bars as the search form. The realm you type is kept and, after pressing Enter, you keep typing without losing focus.',
         'The guild ranking loads faster (players are requested three at a time) and no longer leaves players out when Warcraft Logs returns an error: it retries and, if anything fails, does not save the incomplete result. Saved data refreshes every 3 hours.',
         'In the attempts list, each boss shows its difficulty and number of tries in green if there is a kill and in red if there are only wipes (the check mark is gone).',
-        'The progress mini-chart of each boss only appears with 3 or more tries; with 2 it looked like a stray line.',
+        'The progress mini-chart next to each boss in the attempts list is removed.',
       ]],
       ['inv_misc_book_11', 'Patch 12.1.7', [
         'The content button collects what builds 70424 and 70493 of the PTR brought: scenarios, bosses, characters and achievements of Talebound, new mounts, pets and items, housing decor, Feast of Winter Veil, burrows and professions.',
