@@ -3264,3 +3264,6 @@ html:not([data-mobile-motion="on"]) .wh-logo .wh-h::after { animation: none !imp
 
 /* Tema claro: las etiquetas pequeñas en mayúsculas (eyebrow) un poco más oscuras para que se lean (4,7 a 1) */
 :root[data-theme="light"] .eyebrow, :root[data-theme="light"] .hero .eyebrow { color: color-mix(in srgb, var(--muted) 90%, #000); }
+/* El fondo ilustrado solo se ve en Inicio */
+.bg-art, .bg-dim { transition: opacity .3s ease; }
+body:not(:has(#homeBtn.on)) .bg-art, body:not(:has(#homeBtn.on)) .bg-dim { opacity: 0; }
