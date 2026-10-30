@@ -3277,3 +3277,14 @@ body:not(:has(#homeBtn.on)) .bg-art, body:not(:has(#homeBtn.on)) .bg-dim { opaci
 .gr-r > span:nth-child(2) { left: 190px; box-shadow: 8px 0 8px -8px rgba(0, 0, 0, .6); }
 .gr-r[data-gd="pickpl"]:hover > span:nth-child(-n+2) { background: linear-gradient(color-mix(in srgb, var(--accent) 10%, transparent), color-mix(in srgb, var(--accent) 10%, transparent)), var(--rb); }
 .gr-r.sel > span:nth-child(-n+2) { background: linear-gradient(color-mix(in srgb, var(--accent) 18%, transparent), color-mix(in srgb, var(--accent) 18%, transparent)), var(--rb); }
+/* Ranking por jefes de un log: Nombre y Avg se quedan fijos a la izquierda al desplazar hacia los demás jefes */
+.wl-mx .wl-row { --rb: var(--panel); }
+.wl-mx .wl-row:not(.th):nth-child(even) { --rb: color-mix(in srgb, var(--panel) 98%, #fff); }
+:root[data-theme="light"] .wl-mx .wl-row:not(.th):nth-child(even) { --rb: color-mix(in srgb, var(--panel) 96.5%, #142846); }
+.wl-mx .wl-row.th { --rb: var(--panel-2); }
+.wl-mx .wl-row.me { --rb: color-mix(in srgb, var(--accent) 12%, var(--panel)); }
+.wl-mx .wl-row > span:nth-child(-n+2) { position: sticky; z-index: 2; background: var(--rb); }
+.wl-mx .wl-row > span:nth-child(1) { left: 0; }
+.wl-mx .wl-row > span:nth-child(2) { left: 176px; box-shadow: 8px 0 8px -8px rgba(0, 0, 0, .6); }
+.wl-mx .wl-row.click:hover > span:nth-child(-n+2) { background: linear-gradient(var(--hover), var(--hover)), var(--rb); }
+.wl-mx .wl-row.th > span.on:nth-child(-n+2) { background: linear-gradient(color-mix(in srgb, var(--accent) 16%, transparent), color-mix(in srgb, var(--accent) 16%, transparent)), var(--rb); }
