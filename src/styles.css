@@ -1241,7 +1241,7 @@ img.ai { box-shadow: 0 0 0 1px rgba(0, 0, 0, .7), 0 0 0 2px rgba(47, 183, 192, .
 .gr-rk.w b { color: #3b8bff; } .gr-rk.r b { color: #b266ff; } .gr-rk.n b { color: #ff6aa8; } .gr-rk.es b { color: #ffa63d; }
 .gr-src { margin: 0 0 8px; }
 .gr-scroll { overflow-x: auto; }
-.gr-table { --cols: repeat(var(--n), minmax(60px, 1fr)); display: grid; min-width: max-content; border-radius: 10px; overflow: hidden; border: 1px solid var(--line); }
+.gr-table { --cols: repeat(var(--n), minmax(60px, 1fr)); display: grid; min-width: max-content; border-radius: 10px; overflow: clip; border: 1px solid var(--line); }
 .gr-r { display: grid; grid-template-columns: 190px 70px var(--cols) 96px; align-items: center; padding: 0; background: var(--bg-deep); font-size: 13px; }
 .gr-r:nth-child(odd):not(.th) { background: color-mix(in srgb, var(--bg-deep) 70%, var(--panel) 30%); }
 .gr-r > span { padding: 7px 10px; text-align: center; }
@@ -3268,3 +3268,12 @@ html:not([data-mobile-motion="on"]) .wh-logo .wh-h::after { animation: none !imp
 /* El fondo ilustrado solo se ve en Inicio */
 .bg-art, .bg-dim { transition: opacity .3s ease; }
 body:not(:has(#homeBtn.on)) .bg-art, body:not(:has(#homeBtn.on)) .bg-dim { opacity: 0; }
+/* Nombre y Avg se quedan fijos a la izquierda al desplazar la tabla de jefes (overflow: clip no crea un contenedor de scroll y deja que el sticky funcione) */
+.gr-r { --rb: var(--bg-deep); }
+.gr-r:nth-child(odd):not(.th) { --rb: color-mix(in srgb, var(--bg-deep) 70%, var(--panel) 30%); }
+.gr-r.th { --rb: var(--head); }
+.gr-r > span:nth-child(-n+2) { position: sticky; z-index: 2; background: var(--rb); }
+.gr-r > span:nth-child(1) { left: 0; }
+.gr-r > span:nth-child(2) { left: 190px; box-shadow: 8px 0 8px -8px rgba(0, 0, 0, .6); }
+.gr-r[data-gd="pickpl"]:hover > span:nth-child(-n+2) { background: linear-gradient(color-mix(in srgb, var(--accent) 10%, transparent), color-mix(in srgb, var(--accent) 10%, transparent)), var(--rb); }
+.gr-r.sel > span:nth-child(-n+2) { background: linear-gradient(color-mix(in srgb, var(--accent) 18%, transparent), color-mix(in srgb, var(--accent) 18%, transparent)), var(--rb); }
