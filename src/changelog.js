@@ -5,7 +5,7 @@
 // Se numera con la última versión del grupo. Los cambios que solo tocan colores, tamaños o ajustes internos no se cuentan.
 // Estructura: { v, date, es: { intro, sections: [[icono, título, [viñetas]]] }, en: { ... } }
 const RELEASES = [
-  { v: '2.12.30', date: '2026-10-29',
+  { v: '2.12.32', date: '2026-10-29',
     es: { intro: 'Los personajes muestran su nivel y su Ilvl con el color de su equipo y se pueden ordenar, el panel del parche 12.1.7 se completa y los cambios de clase llegan hasta el 27 de octubre.', sections: [
       ['achievement_bg_winwsg', 'Personajes', [
         'Cada tarjeta muestra el nivel del personaje (en un color neutro) y su Ilvl, coloreado como un parse según el equipo: verde si todo es verde, azul si hay piezas azules, morado si todo es épico Normal/Heroico y rosa (parse 99) si todo es Mítico. Las crafteadas con blasones míticos cuentan como Míticas.',
@@ -16,6 +16,8 @@ const RELEASES = [
         'En el ranking de la guild, las columnas Nombre y Avg se quedan fijas a la izquierda al desplazarte hacia los demás jefes, en daño, tanques y sanadores.',
         'En la tabla de parses por jefe de un log (DPS, Tanks y Healers), los nombres y la media se quedan fijos a la izquierda cuando te desplazas hacia los demás jefes.',
         'Los grupos de las tablas de jugadores se llaman DPS, Tanks y Healers, y el número de jugadores tiene el mismo tamaño que el título.',
+        'La vista avanzada también usa DPS, Tanks y Healers como títulos, con el contador del mismo tamaño.',
+        'En la vista avanzada, el Total de cada jugador se ve con la cifra en negrita y clara, la unidad (M, B) con el color de acento y el número de intentos apagado.',
         'En la lista de intentos, cada jefe muestra su dificultad y número de intentos en verde si hay kill y en rojo si solo hay wipes (se quita el tic).',
         'Se quita la mini-gráfica de progreso junto a cada jefe en la lista de intentos.',
       ]],
@@ -38,6 +40,8 @@ const RELEASES = [
         'In the guild ranking, the Name and Avg columns stay pinned on the left while you scroll to the other bosses, in damage, tanks and healers.',
         'In the per-boss parse table of a log (DPS, Tanks and Healers), the names and the average stay pinned on the left while you scroll to the other bosses.',
         'The player table groups are now called DPS, Tanks and Healers, and the player count is the same size as the title.',
+        'The advanced view also uses DPS, Tanks and Healers as titles, with the counter at the same size.',
+        'In the advanced view, each player’s Total shows a bold, bright figure, the unit (M, B) in the accent color and the number of tries muted.',
         'In the attempts list, each boss shows its difficulty and number of tries in green if there is a kill and in red if there are only wipes (the check mark is gone).',
         'The progress mini-chart next to each boss in the attempts list is removed.',
       ]],

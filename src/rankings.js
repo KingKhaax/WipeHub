@@ -406,12 +406,12 @@
         <span class="rk-parse">${r.parse != null ? parsePill(r.parse) : '<span class="muted">–</span>'}</span>
         <span class="rk-parse">${r.parseIlvl != null ? parsePill(r.parseIlvl) : '<span class="muted">–</span>'}${r.pa.length > 1 ? `<small class="muted">${LL('media de', 'avg of')} ${r.pa.length}</small>` : ''}</span>
         <span class="rk-rate">${plain(r.rate)}${t('perSec')}</span>
-        <span class="rk-tot muted">${big(r.total)}${r.n > 1 ? ` · ${r.n}×` : ''}</span>
+        <span class="rk-tot">${big(r.total)}${r.n > 1 ? `<span class="rk-n"> · ${r.n}×</span>` : ''}</span>
       </div>`;
     };
     const head = `<div class="rk-row th"><span>#</span><span>${LL('Jugador', 'Player')}</span><span>ilvl</span><span>Parse</span><span>${LL('Parse ilvl', 'Parse ilvl')}</span><span>${unit}</span><span>${LL('Total', 'Total')}</span></div>`;
     // tres ventanas: DPS arriba, luego tanques y por último sanadores
-    const WINS = [['dps', LL('DPS', 'DPS'), 'inv_sword_04'], ['tank', LL('Tanques', 'Tanks'), 'inv_shield_04'], ['healer', LL('Sanadores', 'Healers'), 'spell_holy_flashheal']];
+    const WINS = [['dps', LL('DPS', 'DPS'), 'inv_sword_04'], ['tank', 'Tanks', 'inv_shield_04'], ['healer', 'Healers', 'spell_holy_flashheal']];
     const wins = WINS.map(([role, title]) => {
       const mine = rows.filter((r) => r.role === role && (!rk.cls || r.cls === rk.cls)).sort(cmp);
       const crowns = rk.sort === 'parse-desc' && !rk.cls;

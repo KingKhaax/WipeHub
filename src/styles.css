@@ -1444,7 +1444,7 @@ img.role-ic { border-radius: 7px; }
 
 .rk-win { margin-top: 22px; }
 .rk-win-h { display: flex; align-items: center; gap: 10px; margin: 0 0 6px; font-family: var(--display); font-size: 20px; color: var(--title); }
-.rk-win-h small { font-family: inherit; font-size: 13px; }
+.rk-win-h small { font-family: inherit; font-size: inherit; font-weight: inherit; }
 
 .about-dc:first-of-type { margin-top: 26px; }
 .about-dc .muted { font-size: 13px; }
@@ -3288,3 +3288,7 @@ body:not(:has(#homeBtn.on)) .bg-art, body:not(:has(#homeBtn.on)) .bg-dim { opaci
 .wl-mx .wl-row > span:nth-child(2) { left: 176px; box-shadow: 8px 0 8px -8px rgba(0, 0, 0, .6); }
 .wl-mx .wl-row.click:hover > span:nth-child(-n+2) { background: linear-gradient(var(--hover), var(--hover)), var(--rb); }
 .wl-mx .wl-row.th > span.on:nth-child(-n+2) { background: linear-gradient(color-mix(in srgb, var(--accent) 16%, transparent), color-mix(in srgb, var(--accent) 16%, transparent)), var(--rb); }
+/* Total del ranking de la vista avanzada: cifra clara y en negrita, unidad con el color de acento y número de intentos apagado */
+.rk-tot { color: var(--text); font-weight: 700; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.rk-tot small { color: var(--accent); font-size: .8em; font-weight: 800; letter-spacing: .3px; }
+.rk-tot .rk-n { color: var(--muted); font-weight: 500; font-size: .85em; }
