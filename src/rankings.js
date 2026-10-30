@@ -228,7 +228,7 @@
         <span class="wl-dps">${c.amount != null ? num(c.amount, 1) : '–'}</span><span class="wl-muted">${ilvlFmt(c.bracketData)}</span><span class="wl-c">${pctCell(c.bracketPercent)}</span></div>`;
     };
     const ROLE_ORDER = tab === 'heal' ? ['healers', 'tanks', 'dps'] : ['dps', 'tanks', 'healers'];
-    const ROLE_TITLE = { dps: LL('Dañadores', 'Damage dealers'), tanks: LL('Tanques', 'Tanks'), healers: LL('Sanadores', 'Healers') };
+    const ROLE_TITLE = { dps: 'DPS', tanks: 'Tanks', healers: 'Healers' };
     const ROLE_KEY = { dps: 'dps', tanks: 'tank', healers: 'healer' };
     const playerCols = '78px 84px 84px 100px minmax(240px,1fr) 130px 70px 76px';
     const playerHead = [...hdrPos, [LL('Jugador', 'Player'), 'wl-l'], [unit], ['Ilvl'], ['Ilvl %', 'wl-c']];
@@ -303,7 +303,7 @@
     const execAvg = avgOf(datas.map((d) => d.dps?.execution?.rankPercent).filter((v) => typeof v === 'number'));
     const speedAvg = avgOf(datas.map((d) => d.dps?.speed?.rankPercent).filter((v) => typeof v === 'number'));
     const ROLE_ORDER = tab === 'heal' ? ['healers', 'tanks', 'dps'] : ['dps', 'tanks', 'healers'];
-    const ROLE_TITLE = { dps: LL('Dañadores', 'Damage dealers'), tanks: LL('Tanques', 'Tanks'), healers: LL('Sanadores', 'Healers') };
+    const ROLE_TITLE = { dps: 'DPS', tanks: 'Tanks', healers: 'Healers' };
     const ROLE_KEY = { dps: 'dps', tanks: 'tank', healers: 'healer' };
     const players = { dps: new Map(), tanks: new Map(), healers: new Map() };
     datas.forEach((d, bi) => {

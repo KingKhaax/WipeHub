@@ -1990,7 +1990,7 @@ button.dbf-row:hover { background: var(--hover); }
 
 /* Clasificaciones con el formato de Warcraft Logs (ejecución, velocidad y jugadores) */
 .wl-sec { display: flex; align-items: center; gap: 10px; margin: 24px 0 10px; font-size: 16px; font-weight: 700; color: var(--title, var(--text)); }
-.wl-sec small { color: var(--muted); font-weight: 500; font-size: 12px; }
+.wl-sec small { color: var(--muted); font-weight: 700; font-size: inherit; }
 .wl-wrap { overflow-x: auto; border-radius: 12px; border: 1px solid var(--line); background: var(--panel); }
 .wl-table { min-width: 760px; }
 .wl-row { display: grid; grid-template-columns: var(--wl-cols); align-items: center; column-gap: 10px; padding: 7px 14px; border-top: 1px solid var(--line); font-size: 14px; font-variant-numeric: tabular-nums; }
