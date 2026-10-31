@@ -1043,6 +1043,11 @@ const CLASS_SPELLS = {
   "Tortura mental: demencia",
   "spell_fire_twilightflamebreath"
  ],
+ "Mistline": [
+  1280297,
+  "Línea de bruma",
+  "ability_monk_surgingmist"
+ ],
  "Monster Rising": [
   452414,
   "Alzamiento monstruoso",

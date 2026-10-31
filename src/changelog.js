@@ -5,7 +5,7 @@
 // Se numera con la última versión del grupo. Los cambios que solo tocan colores, tamaños o ajustes internos no se cuentan.
 // Estructura: { v, date, es: { intro, sections: [[icono, título, [viñetas]]] }, en: { ... } }
 const RELEASES = [
-  { v: '2.12.32', date: '2026-10-29',
+  { v: '2.12.33', date: '2026-10-29',
     es: { intro: 'Los personajes muestran su nivel y su Ilvl con el color de su equipo y se pueden ordenar, el panel del parche 12.1.7 se completa y los cambios de clase llegan hasta el 27 de octubre.', sections: [
       ['achievement_bg_winwsg', 'Personajes', [
         'Cada tarjeta muestra el nivel del personaje (en un color neutro) y su Ilvl, coloreado como un parse según el equipo: verde si todo es verde, azul si hay piezas azules, morado si todo es épico Normal/Heroico y rosa (parse 99) si todo es Mítico. Las crafteadas con blasones míticos cuentan como Míticas.',
@@ -22,10 +22,10 @@ const RELEASES = [
         'Se quita la mini-gráfica de progreso junto a cada jefe en la lista de intentos.',
       ]],
       ['inv_misc_book_11', 'Parche 12.1.7', [
-        'El botón de contenido recoge las novedades de las builds 70424 y 70493 del RPP: escenarios, jefes, personajes y logros de Historias de leyenda (Talebound), monturas, mascotas y objetos nuevos, adornos de hogar, Festival de Invierno, madrigueras y profesiones.',
+        'El botón de contenido recoge las novedades de las builds 70424, 70493 y 70668 del RPP: escenarios, jefes, personajes y logros de Historias de leyenda (Talebound) y su fin de semana de pruebas, monturas con icono, mascotas y objetos nuevos, adornos y conjuntos de hogar, habilidades de jefes, Festival de Invierno, madrigueras y profesiones.',
       ]],
       ['spell_holy_crusade', 'Cambios de clase', [
-        'Al día hasta el 27 de octubre: ajustes del mantenimiento semanal (Feral, Fuego, Restauración, Puntería, Sutileza, Aflicción y Destrucción) y hotfixes del 23 y del 26 de octubre (Chamán Mejora y Brujo), con nombres en español, iconos y tooltips.',
+        'Al día hasta el 30 de octubre: ajustes del mantenimiento semanal del 27 (Feral, Fuego, Restauración, Puntería, Sutileza, Aflicción y Destrucción, y la corrección de Línea de bruma del Tejedor de niebla) y hotfixes del 23 y del 26 de octubre (Chamán Mejora y Brujo), con nombres en español, iconos y tooltips. El hotfix del 30 no trae cambios de clase de PvE.',
       ]],
       ['inv_gizmo_02', 'Apariencia', ['Nuevo fondo general con el arte de «Hope Shall Rise» (Midnight), oscurecido para que los paneles se lean bien.', 'El fondo ilustrado solo se ve en Inicio; el resto de apartados quedan limpios.']],
       ['inv_shield_04', 'Rendimiento y accesibilidad', ['Carga más rápida, sobre todo en el móvil: el fondo y el logo del parche pesan hasta un 85 % menos sin cambiar su aspecto y la web guarda mejor sus archivos para que las visitas siguientes vayan casi al instante.', 'Mejor accesibilidad y búsqueda: etiquetas para lectores de pantalla en los botones y selectores sin texto, un título principal por página y descripción de la web para los buscadores.', 'En el móvil, las animaciones continuas (borde de luz, halos y fondos en movimiento) se quedan quietas para ahorrar batería y hacer más fluido el desplazamiento. Se pueden reactivar en Ajustes → Apariencia → «Animaciones continuas en el móvil».', 'Las letras de la región (EU, US…) del reloj del servidor se leen mejor sobre el fondo oscuro.', 'En el tema claro, la insignia de versión y las etiquetas pequeñas en mayúsculas se leen mejor.']],
@@ -46,10 +46,10 @@ const RELEASES = [
         'The progress mini-chart next to each boss in the attempts list is removed.',
       ]],
       ['inv_misc_book_11', 'Patch 12.1.7', [
-        'The content button collects what builds 70424 and 70493 of the PTR brought: scenarios, bosses, characters and achievements of Talebound, new mounts, pets and items, housing decor, Feast of Winter Veil, burrows and professions.',
+        'The content button collects what builds 70424, 70493 and 70668 of the PTR brought: scenarios, bosses, characters and achievements of Talebound and its test weekend, mounts with icons, new pets and items, housing decor and sets, boss abilities, Feast of Winter Veil, burrows and professions.',
       ]],
       ['spell_holy_crusade', 'Class changes', [
-        'Up to date through October 27: the weekly maintenance tuning (Feral, Fire, Restoration, Marksmanship, Subtlety, Affliction and Destruction) and the October 23 and 26 hotfixes (Enhancement Shaman and Warlock), with translated names, icons and tooltips.',
+        'Up to date through October 30: the weekly maintenance tuning of the 27th (Feral, Fire, Restoration, Marksmanship, Subtlety, Affliction and Destruction, and the Mistweaver Mistline fix) and the October 23 and 26 hotfixes (Enhancement Shaman and Warlock), with translated names, icons and tooltips. The October 30 hotfix has no PvE class changes.',
       ]],
       ['inv_gizmo_02', 'Appearance', ['New general background with the “Hope Shall Rise” (Midnight) art, dimmed so panels stay readable.', 'The illustrated background now shows only on Home; the other sections stay clean.']],
       ['inv_shield_04', 'Performance and accessibility', ['Faster loading, especially on mobile: the background and the patch logo weigh up to 85% less without changing their look, and the web caches its files better so repeat visits are almost instant.', 'Better accessibility and search: screen-reader labels on buttons and selectors without text, one main heading per page and a site description for search engines.', 'On phones, ambient animations (light border, halos and moving backgrounds) stay still to save battery and scroll more smoothly. They can be turned back on in Settings → Appearance → “Ambient animations on phones”.', 'The region letters (EU, US…) of the server clock are easier to read on the dark background.', 'In the light theme, the version badge and the small uppercase labels are easier to read.']],

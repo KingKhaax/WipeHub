@@ -165,6 +165,7 @@ const ClassChanges = (() => {
         ['2026-08-25', 'b', 'Todo el daño +3 %; Celestial Brew y Celestial Infusion: absorción +20 %.', 'All damage +3%; Celestial Brew and Celestial Infusion: absorb +20%.'],
       ],
       mistweaver: [
+        ['2026-10-27', 'f', 'Mistline: corregido un error por el que a veces no sanaba al objetivo con menos vida.', 'Mistline: fixed a bug where it sometimes failed to heal the lowest-health target.'],
         ['2026-08-31', 'f', 'Soothing Mist: ya no cancela por error otra aura.', 'Soothing Mist: no longer rarely cancels the wrong aura.'],
         ['2026-10-06', 'b', 'Invigorating Mists +15 %; Enveloping Mist +15 %.', 'Invigorating Mists +15%; Enveloping Mist +15%.'],
         ['2026-09-22', 'b', 'Toda la curación +5 %; Vivify +15 %; Sheilun\'s Gift +15 %.', 'All healing +5%; Vivify +15%; Sheilun\'s Gift +15%.'],

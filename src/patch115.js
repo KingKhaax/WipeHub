@@ -262,6 +262,10 @@ const Patch115 = (() => {
     mounts: 'https://www.wowsaga.com/news/all-new-mounts-coming-in-patch-1217-echoes-of-the-worldcore',
   };
   const note = (t) => `<p class="pn-note">${t}</p>`;
+  // Habilidad con su icono oficial y tooltip (data-spell, igual que en Cambios de clase); si el hechizo solo existe en el RPP no tiene un tooltip útil y se muestra solo el icono
+  const icn = (icon) => `<img class="cc-ic" src="${abilityIconUrl(icon)}" width="16" height="16" alt="" loading="lazy">`;
+  const sp = (id, icon, name) => `<span class="cc-sp" data-spell="${id}">${icn(icon)}${name}</span>`;
+  const ic = (icon, name) => `<span class="cc-nm">${icn(icon)}${name}</span>`;
   const lk = (u, t) => `<a href="#" data-pn-link="${u}">${t}</a>`;
 
   const SECTIONS117 = () => [
@@ -272,7 +276,8 @@ const Patch115 = (() => {
       + ul([
         L('<b>En el RPP</b> desde el <b>15 de octubre de 2026</b>. Todo lo que se cuenta aquí es el contenido del RPP y puede cambiar antes de salir.', '<b>On the PTR</b> since <b>October 15, 2026</b>. Everything here is PTR content and may change before release.'),
         L('Blizzard <b>no ha anunciado fecha de salida</b>. La prensa especializada calcula diciembre de 2026, pero es solo una estimación.', 'Blizzard has <b>not announced a release date</b>. The specialist press estimates December 2026, but that is only a guess.'),
-        L('Última actualización del RPP: <b>build 70493</b> (22 de octubre de 2026), tras la 70424. Han ido apareciendo escenarios, logros, monturas y adornos nuevos.', 'Latest PTR update: <b>build 70493</b> (October 22, 2026), after build 70424. New scenarios, achievements, mounts and decor keep appearing.'),
+        L('Última actualización del RPP: <b>build 70668</b> (29 de octubre de 2026), tras la 70424 y la 70493. Han ido apareciendo escenarios, logros, monturas y adornos nuevos.', 'Latest PTR update: <b>build 70668</b> (October 29, 2026), after builds 70424 and 70493. New scenarios, achievements, mounts and decor keep appearing.'),
+        L('Fin de semana de pruebas de <b>Historias de leyenda</b>: del <b>30 de octubre a las 10:00 PDT al 2 de noviembre a las 10:00 PDT</b> (hora del Pacífico de EE. UU.).', 'Talebound test weekend: from <b>October 30 at 10:00 AM PDT to November 2 at 10:00 AM PDT</b>.'),
         L('Un parche ligero: el resumen oficial no incluye ninguna banda ni mazmorra nueva.', 'A light patch: the official overview lists no new raid or dungeon.'),
       ])
       + h(L('Qué trae', 'What it brings'))
@@ -318,6 +323,16 @@ const Patch115 = (() => {
         L('Escenarios de la build 70493: <b>01 · Torrential Power</b> (limpiar los santuarios de los naga), <b>01 · Wilderness Reclaimed</b> (las brujas y el gigante), <b>02 · Defy the Abyss</b> (termina con el <b>Hadal Tyrant</b>), <b>03 · Sinister Forces</b> (limpiar santuarios arcanos para invocar al <b>Heraldo</b>) y <b>04 · Oppose the Unknown</b> (el <b>Herald from Beyond</b>).', 'Scenarios in build 70493: <b>01: Torrential Power</b> (clear the naga sanctums), <b>01: Wilderness Reclaimed</b> (the Witches and the Giant), <b>02: Defy the Abyss</b> (ends with the <b>Hadal Tyrant</b>), <b>03: Sinister Forces</b> (clear eldritch sanctums to summon the <b>Herald</b>) and <b>04: Oppose the Unknown</b> (the <b>Herald from Beyond</b>).'),
         L('Jefes: Tilywth (la reina de las hadas), Mobog, Zzyg’th, Chathoa, Konrad von Sonnesheim, Maernok, Alexandre Dozsenc, Ylska Vilefang y Granny Greenthumb.', 'Bosses: Tilywth (the Fairy Queen), Mobog, Zzyg’th, Chathoa, Konrad von Sonnesheim, Maernok, Alexandre Dozsenc, Ylska Vilefang and Granny Greenthumb.'),
       ])
+      + h(L('Novedades de la build 70668', 'New in build 70668'))
+      + ul([
+        L('Nuevo escenario <b>03 · Sanguine Onslaught</b>; el que era el 03 pasa a ser el <b>04 · Unholy Abomination</b>.', 'New scenario <b>03 · Sanguine Onslaught</b>; the former 03 becomes <b>04 · Unholy Abomination</b>.'),
+        L('Cada <b>Enfrentamiento final</b> suma logros por dificultad (<b>Veterano</b>, <b>Heroica</b> y <b>Mítica</b>) en tres versiones: la general, <b>«Conclusion»</b> y <b>«Comprehensive»</b>; y <b>The Final Confrontation</b> como logro de jefe de Talebound.', 'Each <b>Final Confrontation</b> adds achievements per difficulty (<b>Veteran</b>, <b>Heroic</b> and <b>Mythic</b>) in three versions: the base one, <b>Conclusion</b> and <b>Comprehensive</b>; and <b>The Final Confrontation</b> as a Talebound boss achievement.'),
+        L('Un logro por empezar cada nivel de relato: <b>It\'s Just a Normal Tale</b>, <b>Starting Down a Veteran\'s Tale</b>, <b>Stepping up to a Heroic Tale</b> y <b>Confronting a Mythic Tale</b>; además de <b>Delving into a Tale</b>.', 'An achievement for starting each tale level: <b>It\'s Just a Normal Tale</b>, <b>Starting Down a Veteran\'s Tale</b>, <b>Stepping up to a Heroic Tale</b> and <b>Confronting a Mythic Tale</b>; plus <b>Delving into a Tale</b>.'),
+        L('Cinco logros «Traveler\'s» (<b>Cache</b>, <b>Coin</b>, <b>Fortune</b>, <b>Purse</b> y <b>Trove</b>) con sus versiones «Exchanged», y <b>Tapping at the Trader\'s Door</b>.', 'Five “Traveler\'s” achievements (<b>Cache</b>, <b>Coin</b>, <b>Fortune</b>, <b>Purse</b> and <b>Trove</b>) with their “Exchanged” versions, and <b>Tapping at the Trader\'s Door</b>.'),
+        L('Logros de los acertijos: <b>The Sanguine Puzzlemaster\'s Reward</b>, <b>The Hexed Puzzlemaster\'s Reward</b>, <b>The Fae Puzzlemaster\'s Reward</b>, <b>The Eldrich Puzzlemaster\'s Reward</b>, <b>The Tale of the Puzzle Master Rewarded</b> y <b>A Puzzling Tale Reward</b>.', 'Puzzle achievements: <b>The Sanguine Puzzlemaster\'s Reward</b>, <b>The Hexed Puzzlemaster\'s Reward</b>, <b>The Fae Puzzlemaster\'s Reward</b>, <b>The Eldrich Puzzlemaster\'s Reward</b>, <b>The Tale of the Puzzle Master Rewarded</b> and <b>A Puzzling Tale Reward</b>.'),
+        L('Logros por completar cada capítulo: <b>The Antiquarian\'s Chapter Complete</b>, <b>The Arcanist\'s Account Complete</b>, <b>The Outfitter\'s Story Complete</b> y los de <b>The Inquisitor / Slayer / Witch and the Scribe Complete</b>; además <b>Stories Shared</b> y <b>The Tale Complete</b>.', 'Achievements for completing each chapter: <b>The Antiquarian\'s Chapter Complete</b>, <b>The Arcanist\'s Account Complete</b>, <b>The Outfitter\'s Story Complete</b> and the <b>The Inquisitor / Slayer / Witch and the Scribe Complete</b> ones; plus <b>Stories Shared</b> and <b>The Tale Complete</b>.'),
+      ])
+      + note(L('Blizzard todavía no ha traducido estos logros: los nombres se muestran en inglés para que puedas buscarlos en el juego.', 'These achievements are listed under their PTR names.'))
       + h(L('Personajes', 'Characters'))
       + ul([
         L('Los datos del RPP incluyen la clase <b>Traveler</b> con tres especializaciones, <b>Inquisitor</b>, <b>Slayer</b> y <b>Witch</b>, con habilidades propias como Brewing Storm, Explosive Shot, Purify, Shrapnel Round y Slash.', 'PTR data includes the <b>Traveler</b> class with three specializations, <b>Inquisitor</b>, <b>Slayer</b> and <b>Witch</b>, with their own abilities such as Brewing Storm, Explosive Shot, Purify, Shrapnel Round and Slash.'),
@@ -330,7 +345,7 @@ const Patch115 = (() => {
         L('La mayoría da <b>20 de plata vinculada</b>, que se cambia con <b>Nib</b> en Tumbaspina por cosméticos válidos para toda la cuenta.', 'Most grant <b>20 Bound Silver</b>, which can be traded to <b>Nib</b> in Quillgrave for account-wide cosmetics.'),
         L('Títulos con los Enfrentamientos finales Míticos: <b>of the Sacred Flame</b> (Inquisitor), <b>Monster Hunter</b> (Slayer) y <b>of the Crooked Path</b> (Witch). El título <b>Listener</b> llega con «Stories to Share».', 'Titles from the Mythic Final Confrontations: <b>of the Sacred Flame</b> (Inquisitor), <b>Monster Hunter</b> (Slayer) and <b>of the Crooked Path</b> (Witch). The <b>Listener</b> title comes from “Stories to Share”.'),
       ])
-      + note(L('Todo son datos de las builds 70424 y 70493 del RPP: nombres y logros pueden cambiar antes de salir.', 'Everything comes from PTR builds 70424 and 70493: names and achievements may change before release.'))],
+      + note(L('Todo son datos de las builds 70424, 70493 y 70668 del RPP: nombres y logros pueden cambiar antes de salir.', 'Everything comes from PTR builds 70424, 70493 and 70668: names and achievements may change before release.'))],
     ['paseo', L('Paseo por la historia', 'Lorewalking'), () =>
       h(L('Paseo por la historia (Lorewalking)', 'Lorewalking'))
       + p(L('Habla con <b>Li Li Cerveza de Trueno</b> (Apprentice Lorewalker Li Li Stormstout) en <b>Ventormenta</b> u <b>Orgrimmar</b>. Disponible desde el <b>nivel 10</b>.', 'Speak with <b>Apprentice Lorewalker Li Li Stormstout</b> in <b>Stormwind</b> or <b>Orgrimmar</b>. Available from <b>level 10</b>.'))
@@ -383,6 +398,14 @@ const Patch115 = (() => {
         L('<b>The Watcher in the Waves</b> — Puesto comercial (Trading Post); todavía no se sabe de qué tipo es.', '<b>The Watcher in the Waves</b> — Trading Post; its type is not known yet.'),
         L('Cuatro stegodontes del Puesto comercial: <b>Attuned Ancient</b>, <b>Crackling Ancient</b>, <b>Rumbling Jungle</b> y <b>Thundering Primal</b>.', 'Four Trading Post stegodons: <b>Attuned Ancient</b>, <b>Crackling Ancient</b>, <b>Rumbling Jungle</b> and <b>Thundering Primal</b>.'),
       ])
+      + h(L('Novedades de la build 70668', 'New in build 70668'))
+      + ul([
+        L(`${ic('inv_gilneashorsemount', 'Ambermill Traveler\'s Rouncey')}: montura terrestre que cambia de nombre; antes <b>«Destrero cobrizo gilneano»</b> (Gilnean Copper Charger).`, `${ic('inv_gilneashorsemount', 'Ambermill Traveler\'s Rouncey')}: ground mount renamed from <b>Gilnean Copper Charger</b>.`),
+        L(`${ic('inv_darkmoonhorsemount_black', 'Lost Mare of the Maddening Faire')}: montura terrestre que cambia de nombre; antes <b>«Destrero de la Luna Negra de medianoche»</b> (Midnight Darkmoon Charger).`, `${ic('inv_darkmoonhorsemount_black', 'Lost Mare of the Maddening Faire')}: ground mount renamed from <b>Midnight Darkmoon Charger</b>.`),
+        L(`${ic('8519836', 'Autumn Dream Jumper')}: montura terrestre.`, `${ic('8519836', 'Autumn Dream Jumper')}: ground mount.`),
+        L(`${ic('inv_fox2_black', 'Shadowpaw Wood Watcher')}: montura de vuelo dinámico (Skyriding).`, `${ic('inv_fox2_black', 'Shadowpaw Wood Watcher')}: skyriding mount.`),
+        L(`${sp(1305612, '7933423', 'Grrloc gigante')} (montura terrestre) y ${sp(1314189, '7958551', 'Planeapavor de ceniza')} (vuelo dinámico): aparecen entre los cambios del RPP con origen <b>Tienda del juego</b>.`, `${sp(1305612, '7933423', 'Giant Grrloc')} (ground mount) and ${sp(1314189, '7958551', 'Ashen Dreadglider')} (skyriding): listed in the PTR changes with the <b>In-Game Shop</b> as their source.`),
+      ])
       + h(L('Otras monturas encontradas', 'Other mounts found'))
       + p('Woodland Wanderer · Faith-Cursed · Gilnean Charger · Lost Mare · Night Court · Shadowpaw Wood Watcher · Giant Grrloc · Reanimated Skeletal Raptor')
       + note(L('De estas últimas todavía no se sabe cómo se consiguen.', 'How to obtain these is not known yet.'))
@@ -406,6 +429,10 @@ const Patch115 = (() => {
         L('Se han encontrado <b>163 adornos</b> nuevos en la build 70424 (algunos podrían no llegar al 12.1.7) y <b>8 más</b> en la 70493 (datos del RPP).', '<b>163 new decor items</b> were found in build 70424 (some may not reach 12.1.7) and <b>8 more</b> in build 70493 (PTR data).'),
         L('Nuevos adornos de hogar en los vendedores de Paseo en el tiempo y en la tienda de Talebound (ver las secciones correspondientes).', 'New housing decor at the Timewalking vendors and in the Talebound store (see the matching sections).'),
         L('Un nuevo <b>campamento de banda de guerra</b> aparece en los archivos del juego.', 'A new <b>Warband campsite</b> shows up in the game files.'),
+        L(`Dos objetos nuevos ligados a la banda de guerra: ${ic('8262637', 'Cozy Cabin Burrow')} e ${ic('8262637', 'Icy Cabin Burrow')} (build 70668).`, `Two new Warband-bound items: ${ic('8262637', 'Cozy Cabin Burrow')} and ${ic('8262637', 'Icy Cabin Burrow')} (build 70668).`),
+        L('Nuevo conjunto de adornos <b>Grimtide</b> (más de veinte piezas): librería, candelabro, lámpara de araña, mesa de centro, sofá, silla de comedor, ancla de exhibición, velas encantadas (pequeña, normal y alta), trampilla, piano de cola, mesa grande, alfombras, aplique, mesa auxiliar, tentáculo y ventanas de día y de noche.', 'New <b>Grimtide</b> decor set (over twenty pieces): bookcase, candelabra, chandelier, coffee table, couch, dining chair, display anchor, enchanted candles (small, regular and tall), floor hatch, grand piano, grand table, rugs, sconce, side table, tentacle and daytime and nighttime windows.'),
+        L('<b>Adornos de la Liga de Exploradores</b> (Explorers\' League): recompensa de renombre de nivel <b>22</b> de la Expedición Dragonscale, con cantimplora, cuerda enrollada, globo terráqueo, lente de inspección y cajas de suministros.', '<b>Explorers\' League decor</b>: a level <b>22</b> Dragonscale Expedition renown reward, with a canteen, coiled rope, globe, inspection lens and supply crates.'),
+        L('Nuevos conjuntos de transfiguración: <b>Ambermill Traveler Attire</b>, <b>Faith-Cursed Vestments</b>, <b>Dockside / Drustvar / Seabound Smuggler\'s Attire</b>, <b>Village Patrolman\'s Regalia</b>, seis chalecos <b>Outfitter\'s</b> (otoño, gris rosado, formal, azul marino, roble y vino quemado) y los de ropa común <b>Traveler\'s</b> y <b>Villager\'s</b>.', 'New transmog ensembles: <b>Ambermill Traveler Attire</b>, <b>Faith-Cursed Vestments</b>, <b>Dockside / Drustvar / Seabound Smuggler\'s Attire</b>, <b>Village Patrolman\'s Regalia</b>, six <b>Outfitter\'s</b> vests (Autumn, Blush-Grey, Formal, Navy, Oak and Wine-Charred) and the <b>Traveler\'s</b> and <b>Villager\'s</b> commonwear sets.'),
       ])
       + h(L('Festival de Invierno', 'Feast of Winter Veil'))
       + ul([
@@ -425,6 +452,12 @@ const Patch115 = (() => {
         L('Aparecen textos para elegir el servicio de <b>chat de voz</b> (Discord o el clásico), el <b>modo de edición de la HUD</b> y los atajos de la <b>barra en cruz</b> del mando.', 'Texts appear for choosing the <b>voice chat</b> service (Discord or the legacy one), the <b>HUD edit mode</b> and the gamepad <b>crossbar</b> bindings.'),
         L('Un grupo solo puede entrar en una localización si el <b>líder del grupo</b> ya está dentro.', 'A party can enter a location only if the <b>party leader</b> is already inside.'),
       ])
+      + h(L('Habilidades de jefes', 'Boss abilities'))
+      + p(L('La build 70668 toca habilidades de la <b>sabia de pergaminos Iku</b> y del <b>contramaestre Nama</b>; Blizzard no ha explicado qué cambia:', 'Build 70668 touches abilities of <b>Scrollsage Iku</b> and <b>Boatswain Nama</b>; Blizzard has not said what changes:'))
+      + ul([
+        `${sp(1294334, 'spell_arcane_blink', 'Nova de traslación')} · ${sp(1295893, 'spell_fire_firebolt02', 'Salva de Pirofrío')} · ${sp(1286922, 'ability_mage_frostfirebolt', 'Llamas ligadas al hielo')} · ${sp(1310616, 'spell_frost_iceshard', 'Fragmentos trituradores')}`,
+        `${sp(1296133, 'spell_sandexplosion', 'Batacazo potente')} · ${sp(1297644, 'spell_winston_bubble', 'Frente unido')} · ${ic('spell_holy_blessingofprotection', 'Fervid Onslaught')} · ${ic('inv_ability_holyfire_wave', 'Righteous Path')}`,
+      ])
       + h(L('Para creadores de addons', 'For addon authors'))
       + ul([
         L('Los GUID dejan de exponer el ID del servidor y el de aparición (se ofuscan).', 'GUIDs no longer expose the server ID and spawn ID (they are obfuscated).'),
@@ -434,6 +467,8 @@ const Patch115 = (() => {
       + ul([
         L('<b>Mago:</b> el bonus de daño de Fuego de <b>Glass Cannon</b> pasaría del 25 % al 20 %, con una reducción de vida máxima del 30 %.', '<b>Mage:</b> the Fire damage bonus of <b>Glass Cannon</b> would change from 25% to 20%, with a 30% maximum health reduction.'),
         L('<b>Pícaro (Sutileza):</b> la bonificación de daño y sanación pasaría del 13 % al 29 %.', '<b>Rogue (Subtlety):</b> the damage and healing bonus would go from 13% to 29%.'),
+        L(`La build 70668 recoge en el RPP los ajustes del <b>27 de octubre</b> que ya están en directo: ${sp(392329, 'inv_10_herb_seed_magiccolor5', 'Verdeante')}, ${sp(8936, 'spell_nature_resistnature', 'Recrecimiento')} y ${sp(470549, 'ability_druid_empoweredtouch', 'Alivio presto mejorado')} (Druida), ${sp(212680, '6bf_explosive_shard', 'Disparo explosivo')}, ${sp(260247, 'buff_epichunter', 'Salva')} y ${sp(257622, 'inv_trickshot', 'Disparos trucados')} (Cazador), ${sp(1261176, 'spell_shadow_unstableaffliction_3', 'Aflicción inestable')} y ${sp(5740, 'spell_shadow_rainoffire', 'Lluvia de Fuego')} (Brujo), además de Feral, Fuego y Sutileza. Las cifras están en <b>Cambios de clase</b>.`, `Build 70668 brings the <b>October 27</b> tuning already live to the PTR: ${sp(392329, 'inv_10_herb_seed_magiccolor5', 'Verdancy')}, ${sp(8936, 'spell_nature_resistnature', 'Regrowth')} and ${sp(470549, 'ability_druid_empoweredtouch', 'Improved Swiftmend')} (Druid), ${sp(212680, '6bf_explosive_shard', 'Explosive Shot')}, ${sp(260247, 'buff_epichunter', 'Volley')} and ${sp(257622, 'inv_trickshot', 'Trick Shots')} (Hunter), ${sp(1261176, 'spell_shadow_unstableaffliction_3', 'Unstable Affliction')} and ${sp(5740, 'spell_shadow_rainoffire', 'Rain of Fire')} (Warlock), plus Feral, Fire and Subtlety. The numbers are in <b>Class changes</b>.`),
+        L(`Hechizos tocados en la build 70668 sin cifras publicadas: ${sp(400456, 'spell_hunter_exoticmunitions_incendiary', 'Gran salva')} y ${sp(1262390, '6bf_explosive_shard', 'Bomba adhesiva')} (Cazador) y ${sp(199507, 'spell_holy_holyprotection', 'Difundir la palabra: Protección')} (Paladín Protección).`, `Spells touched in build 70668 with no published numbers: ${sp(400456, 'spell_hunter_exoticmunitions_incendiary', 'Salvo')} and ${sp(1262390, '6bf_explosive_shard', 'Sticky Bomb')} (Hunter) and ${sp(199507, 'spell_holy_holyprotection', 'Spreading The Word: Protection')} (Protection Paladin).`),
       ])
       + note(L('Son cifras de los datos del RPP, sin confirmar por Blizzard. No hay una lista oficial de cambios de clase del 12.1.7.', 'These figures come from PTR data and are not confirmed by Blizzard. There is no official 12.1.7 class changelist.'))],
     ['fuentes', L('Fuentes', 'Sources'), () =>
@@ -444,6 +479,7 @@ const Patch115 = (() => {
         lk(LINK117.wiki, 'Warcraft Wiki: Patch 12.1.7'),
         lk(LINK117.api, 'Warcraft Wiki: Patch 12.1.7/API changes'),
         lk(LINK117.icy, L('Icy Veins: notas de desarrollo del RPP del 12.1.7', 'Icy Veins: 12.1.7 PTR development notes')),
+        lk('https://www.mmo-champion.com/content/14657-Patch-12-1-7-PTR-Build-70668', L('MMO-Champion: RPP del 12.1.7, build 70668', 'MMO-Champion: Patch 12.1.7 PTR build 70668')),
         lk('https://www.mmo-champion.com/content/14636-Patch-12-1-7-PTR-Build-70493', L('MMO-Champion: RPP del 12.1.7, build 70493', 'MMO-Champion: Patch 12.1.7 PTR build 70493')),
         lk('https://www.mmo-champion.com/content/14613-Patch-12-1-7-PTR-Build-70424', L('MMO-Champion: RPP del 12.1.7, build 70424', 'MMO-Champion: Patch 12.1.7 PTR build 70424')),
         lk('https://www.mmo-champion.com/content/14615-New-Winter-Veil-Housing-Decor-in-Patch-12-1-7', L('MMO-Champion: adornos de hogar del Festival de Invierno', 'MMO-Champion: Winter Veil housing decor')),
