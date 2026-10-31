@@ -87,7 +87,7 @@ const Patch115 = (() => {
         L('<b>Refresco de mitad de la Temporada 2:</b> más Nebulous Voidcores y Ascendant Venomstones.', '<b>Season 2 mid-season refresh:</b> extra Nebulous Voidcores and Ascendant Venomstones.'),
         L('<b>Keystone Myth</b> de la Temporada 2 y ajustes de mazmorras.', '<b>Keystone Myth</b> for Season 2 and dungeon tuning.'),
         L('<b>Campaña:</b> "The Promise of Tomorrow".', '<b>Campaign:</b> "The Promise of Tomorrow".'),
-        L('Cambios de clase, Housing, PvP, Prey, interfaz y reputación de banda de guerra.', 'Class changes, Housing, PvP, Prey, UI and warband reputation.'),
+        L('Housing, PvP, Prey, interfaz y reputación de banda de guerra.', 'Housing, PvP, Prey, UI and warband reputation.'),
       ])],
     ['raid', L('Raid: Kith\'ix', 'Raid: Kith\'ix'), () =>
       h('The Unbinding of Kith\'ix')
@@ -150,69 +150,6 @@ const Patch115 = (() => {
       + ul([L('<i>Snake Eyes</i>, <i>Snake Eater</i> y <i>Good Night, Sweet Prince</i> ya no son necesarios para <i>Glory of the Wartorn Hero</i>.', '<i>Snake Eyes</i>, <i>Snake Eater</i> and <i>Good Night, Sweet Prince</i> are no longer required for <i>Glory of the Wartorn Hero</i>.')])
       + h(L('Campaña', 'Campaign'))
       + p(L('<b>"The Promise of Tomorrow":</b> la derrota de Ula\'tek despierta un terror ancestral. Mantén la paz entre Quel\'Thalas y Zul\'Aman, desciende a la Coiled Isle y planta cara a Kith\'ix.', '<b>"The Promise of Tomorrow":</b> Ula\'tek\'s defeat awakens an ancient terror. Keep the peace between Quel\'Thalas and Zul\'Aman, descend to the Coiled Isle and make a final stand against Kith\'ix.'))],
-    ['clases', L('Clases', 'Classes'), () => {
-      const c = (name, items) => `<h4>${name}</h4>${ul(items)}`;
-      return h(L('Cambios de clase', 'Class changes'))
-        + c(L('Cazador de demonios — Devourer', 'Demon Hunter — Devourer'), [
-          L('Collapsing Star gana alcance extra tras empezar el lanzamiento.', 'Collapsing Star gains extra range after its cast begins.'),
-          L('Cancelar Collapsing Star ya no provoca un enfriamiento de <b>5 s</b>.', 'Cancelling Collapsing Star no longer triggers a <b>5 s</b> cooldown.'),
-          L('La ralentización de drenaje de Furia de Collapsing Star dura un tiempo limitado: unos <b>1,5 lanzamientos</b> completos entre cancelaciones; después la Furia se drena con normalidad.', 'Collapsing Star\'s Fury-drain slow now lasts a limited time: about <b>1.5 full casts</b> across cancel-and-recast; after that Fury drains normally.'),
-          L('Soulforged Blades: probabilidad de crítico de Hungering Slash y Voidblade <b>18 %</b> (antes 15 %).', 'Soulforged Blades: crit chance of Hungering Slash and Voidblade <b>18%</b> (was 15%).'),
-          L('Voidpurge: reducción de enfriamiento de Void Ray en Void Metamorphosis <b>2,5 s</b> (antes 2).', 'Voidpurge: Void Ray cooldown reduction during Void Metamorphosis <b>2.5 s</b> (was 2).'),
-          L('The Hunt y Eradicate pasan a la puerta central del árbol; otros talentos pasan a posiciones de culminación.', 'The Hunt and Eradicate move to the middle gate; other talents move to capstone positions.'),
-        ])
-        + c(L('Cazador de demonios — Void-Scarred', 'Demon Hunter — Void-Scarred'), [
-          L('Demonic Intensity: Collapsing Star reinicia el enfriamiento de The Hunt y el daño potenciado de The Hunt sube un <b>30 %</b>.', 'Demonic Intensity: Collapsing Star resets The Hunt\'s cooldown and The Hunt\'s empowered damage is up <b>30%</b>.'),
-          L('Violent Transformation: reinicia Soul Immolation; ya no reinicia The Hunt ni aumenta su daño (era un 25 %).', 'Violent Transformation: resets Soul Immolation; no longer resets The Hunt or increases its damage (was 25%).'),
-          L('Monster Rising: bonificación de Intelecto fuera de forma demoníaca <b>10 %</b> (antes 15 %); bonificación de daño de Collapsing Star <b>20 %</b> (antes 15 %).', 'Monster Rising: Intellect bonus outside demon form <b>10%</b> (was 15%); Collapsing Star damage bonus <b>20%</b> (was 15%).'),
-        ])
-        + c(L('Druida — Restauración', 'Druid — Restoration'), [L('Nature\'s Bounty rediseñado: Regrowth cura a hasta <b>3</b> aliados con Rejuvenation activa por el <b>15 %</b> de su sanación, priorizando a los de menos vida.', 'Nature\'s Bounty redesigned: Regrowth heals up to <b>3</b> allies with Rejuvenation active for <b>15%</b> of its healing, prioritizing lowest health.')])
-        + c(L('Evocador — Aumento', 'Evoker — Augmentation'), [
-          L('Chronowarden: las duraciones de Temporality y Temporal Burst aumentan con Mastery: Timewalker.', 'Chronowarden: Temporality and Temporal Burst durations are increased by Mastery: Timewalker.'),
-          L('Scalecommander: el daño de Melt Armor aumenta un <b>100 %</b>.', 'Scalecommander: Melt Armor damage increased by <b>100%</b>.'),
-        ])
-        + c(L('Evocador — Preservación', 'Evoker — Preservation'), [
-          L('Merithra\'s Blessing dura <b>30 s</b> (antes 1 min).', 'Merithra\'s Blessing lasts <b>30 s</b> (was 1 min).'),
-          L('Consume Flame ya no aprovecha dos veces los aumentos de sanación del objetivo.', 'Consume Flame no longer double-dips healing increases on the target.'),
-          L('Chronowarden: corregido que Double-time detuviera Life-Giver\'s Flame y que Afterimage hiciera que Deep Breath lanzara Living Flame sobre el Evocador.', 'Chronowarden: fixed Double-time stopping Life-Giver\'s Flame and Afterimage making Deep Breath cast Living Flame on the Evoker.'),
-          L('Flameshaper: la sanación de Consume Flame sube un <b>20 %</b>.', 'Flameshaper: Consume Flame healing increased by <b>20%</b>.'),
-        ])
-        + c(L('Cazador — Puntería', 'Hunter — Marksmanship'), [
-          L('Nuevo talento <b>Blood Fletching</b>: los críticos de Aimed Shot aplican el sangrado de Master Marksman al <b>20 %</b> del daño; durante <b>4 s</b> tras un crítico, el objetivo recibe más daño de sangrado de tus habilidades.', 'New talent <b>Blood Fletching</b>: Aimed Shot crits apply the Master Marksman bleed at <b>20%</b> of damage; for <b>4 s</b> after a crit the target takes extra bleed damage from your abilities.'),
-          L('<b>Unload</b> eliminado.', '<b>Unload</b> removed.'),
-          L('Corregido que Explosive Shot se lanzara solo contra un objetivo cercano sin objetivo seleccionado.', 'Fixed Explosive Shot auto-firing at a nearby target with no target selected.'),
-          L('Dark Ranger: corregido que Umbral Reach no generara Trick Shots cuando Bleak Powder golpea exactamente a 2 objetivos.', 'Dark Ranger: fixed Umbral Reach not generating Trick Shots when Bleak Powder hits exactly 2 targets.'),
-        ])
-        + c(L('Cazador — Supervivencia', 'Hunter — Survival'), [
-          L('Corregido que el daño extra de Strike as One de Raptor Swipe (rango 3) no funcionara con Aspect of the Eagle.', 'Fixed Strike as One bonus damage from Raptor Swipe (rank 3) not working with Aspect of the Eagle.'),
-          L('Corregido que el alcance de Raptor Swipe fuera mayor de lo previsto con Aspect of the Eagle.', 'Fixed Raptor Swipe\'s range being longer than intended with Aspect of the Eagle.'),
-        ])
-        + c(L('Mago', 'Mage'), [
-          L('<b>Arcano:</b> varios hechizos se añaden al sistema de Spell Density.', '<b>Arcane:</b> several spells added to the Spell Density system.'),
-          L('<b>Escarcha:</b> corregidos varios fallos de Splitting Ice (daño sobre Frostbolt, segundo objetivo, radio de búsqueda), de Shatter con dos Ice Lances en el aire y de Ray of Frost interrumpido con Crystalline Refraction.', '<b>Frost:</b> fixed several Splitting Ice issues (Frostbolt damage, second target, search radius), Shatter with two Ice Lances in the air and interrupted Ray of Frost with Crystalline Refraction.'),
-          L('<b>Frostfire:</b> corregido que Frostfire Empowerment no se aplicara al segundo objetivo de Splitting Ice; tooltip de Frostfire Infusion actualizado.', '<b>Frostfire:</b> fixed Frostfire Empowerment not applying to Splitting Ice\'s second target; Frostfire Infusion tooltip updated.'),
-          L('<b>Spellslinger:</b> Splinterstorm se puede seguir como beneficio en el Cooldown Manager y ya no se quita al empezar un encuentro de banda o Mítica+.', '<b>Spellslinger:</b> Splinterstorm is trackable as a buff in the Cooldown Manager and is no longer removed at the start of a raid encounter or Mythic+.'),
-        ])
-        + c(L('Monje', 'Monk'), [L('Corregido que Transcendence: Transfer se pudiera usar estando silenciado con Transcendence: Linked Spirits.', 'Fixed Transcendence: Transfer being usable while silenced with Transcendence: Linked Spirits.')])
-        + c(L('Sacerdote', 'Priest'), [
-          L('<b>Disciplina:</b> Master the Darkness dura <b>30 s</b> (antes 1 min).', '<b>Discipline:</b> Master the Darkness lasts <b>30 s</b> (was 1 min).'),
-          L('<b>Sagrado:</b> Holy Celerity y Ultimate Serenity intercambian posición; Ultimate Serenity es más fácil de alcanzar.', '<b>Holy:</b> Holy Celerity and Ultimate Serenity swap positions; Ultimate Serenity is easier to reach.'),
-        ])
-        + c(L('Pícaro', 'Rogue'), [
-          L('Shiv ya no muestra efecto de impacto sobre el Pícaro.', 'Shiv no longer plays an impact visual on the Rogue.'),
-          L('<b>Asesinato:</b> nueva estela de arma en Mutilate y animación de Crimson Tempest actualizada.', '<b>Assassination:</b> Mutilate has a new weapon trail and Crimson Tempest\'s animation is updated.'),
-          L('<b>Forajido:</b> Deft Maneuvers ya no añade 30 de Energía a Blade Flurry: añade <b>5 por objetivo golpeado, hasta 30</b>.', '<b>Outlaw:</b> Deft Maneuvers no longer adds 30 Energy to Blade Flurry: it adds <b>5 per target hit, up to 30</b>.'),
-          L('<b>Sutileza:</b> modificadores de daño de Sombras corregidos; Shadow Blades tiene nuevos efectos visuales.', '<b>Subtlety:</b> Shadow damage modifiers updated; Shadow Blades has new cast and weapon visuals.'),
-        ])
-        + c(L('Chamán', 'Shaman'), [
-          L('<b>Mejora:</b> corregido que Static Accumulation detuviera la generación de cargas de Maelstrom Weapon durante Ascendance o Doom Winds.', '<b>Enhancement:</b> fixed Static Accumulation stopping Maelstrom Weapon stack generation during Ascendance or Doom Winds.'),
-          L('<b>Restauración:</b> alargar Riptide con Swelling Tides ahora extiende el tiempo en vez de reiniciarlo; corregido que Nature\'s Swiftness y Ancestral Swiftness no hicieran instantáneo Healing Rain.', '<b>Restoration:</b> extending Riptide through Swelling Tides now extends the timer instead of resetting it; fixed Nature\'s Swiftness and Ancestral Swiftness not making Healing Rain instant.'),
-        ])
-        + c(L('Guerrero — Protección', 'Warrior — Protection'), [
-          L('El daño de <b>Execute</b> sube un <b>30 %</b>.', '<b>Execute</b> damage increased by <b>30%</b>.'),
-          L('Colossus: Practiced Strikes reduce el coste de Rabia de Execute y Revenge en <b>10</b>.', 'Colossus: Practiced Strikes now reduces Execute and Revenge Rage costs by <b>10</b>.'),
-        ]);
-    }],
     ['otros', L('Otros cambios', 'Other changes'), () =>
       h('PvP')
       + ul([L('Evocador Preservación: Merithra\'s Blessing ahora es un hechizo Arcano y puede lanzarse con la Naturaleza bloqueada.', 'Preservation Evoker: Merithra\'s Blessing is now an Arcane spell and can be cast while locked out of Nature.')])
@@ -462,15 +399,7 @@ const Patch115 = (() => {
       + ul([
         L('Los GUID dejan de exponer el ID del servidor y el de aparición (se ofuscan).', 'GUIDs no longer expose the server ID and spawn ID (they are obfuscated).'),
         L('Las directivas del .toc ya no expanden variables como <code>[Game]</code> o <code>[Family]</code>.', 'TOC directives no longer expand variables such as <code>[Game]</code> or <code>[Family]</code>.'),
-      ])
-      + h(L('Cambios de clase (sin confirmar)', 'Class changes (unconfirmed)'))
-      + ul([
-        L('<b>Mago:</b> el bonus de daño de Fuego de <b>Glass Cannon</b> pasaría del 25 % al 20 %, con una reducción de vida máxima del 30 %.', '<b>Mage:</b> the Fire damage bonus of <b>Glass Cannon</b> would change from 25% to 20%, with a 30% maximum health reduction.'),
-        L('<b>Pícaro (Sutileza):</b> la bonificación de daño y sanación pasaría del 13 % al 29 %.', '<b>Rogue (Subtlety):</b> the damage and healing bonus would go from 13% to 29%.'),
-        L(`La build 70668 recoge en el RPP los ajustes del <b>27 de octubre</b> que ya están en directo: ${sp(392329, 'inv_10_herb_seed_magiccolor5', 'Verdeante')}, ${sp(8936, 'spell_nature_resistnature', 'Recrecimiento')} y ${sp(470549, 'ability_druid_empoweredtouch', 'Alivio presto mejorado')} (Druida), ${sp(212680, '6bf_explosive_shard', 'Disparo explosivo')}, ${sp(260247, 'buff_epichunter', 'Salva')} y ${sp(257622, 'inv_trickshot', 'Disparos trucados')} (Cazador), ${sp(1261176, 'spell_shadow_unstableaffliction_3', 'Aflicción inestable')} y ${sp(5740, 'spell_shadow_rainoffire', 'Lluvia de Fuego')} (Brujo), además de Feral, Fuego y Sutileza. Las cifras están en <b>Cambios de clase</b>.`, `Build 70668 brings the <b>October 27</b> tuning already live to the PTR: ${sp(392329, 'inv_10_herb_seed_magiccolor5', 'Verdancy')}, ${sp(8936, 'spell_nature_resistnature', 'Regrowth')} and ${sp(470549, 'ability_druid_empoweredtouch', 'Improved Swiftmend')} (Druid), ${sp(212680, '6bf_explosive_shard', 'Explosive Shot')}, ${sp(260247, 'buff_epichunter', 'Volley')} and ${sp(257622, 'inv_trickshot', 'Trick Shots')} (Hunter), ${sp(1261176, 'spell_shadow_unstableaffliction_3', 'Unstable Affliction')} and ${sp(5740, 'spell_shadow_rainoffire', 'Rain of Fire')} (Warlock), plus Feral, Fire and Subtlety. The numbers are in <b>Class changes</b>.`),
-        L(`Hechizos tocados en la build 70668 sin cifras publicadas: ${sp(400456, 'spell_hunter_exoticmunitions_incendiary', 'Gran salva')} y ${sp(1262390, '6bf_explosive_shard', 'Bomba adhesiva')} (Cazador) y ${sp(199507, 'spell_holy_holyprotection', 'Difundir la palabra: Protección')} (Paladín Protección).`, `Spells touched in build 70668 with no published numbers: ${sp(400456, 'spell_hunter_exoticmunitions_incendiary', 'Salvo')} and ${sp(1262390, '6bf_explosive_shard', 'Sticky Bomb')} (Hunter) and ${sp(199507, 'spell_holy_holyprotection', 'Spreading The Word: Protection')} (Protection Paladin).`),
-      ])
-      + note(L('Son cifras de los datos del RPP, sin confirmar por Blizzard. No hay una lista oficial de cambios de clase del 12.1.7.', 'These figures come from PTR data and are not confirmed by Blizzard. There is no official 12.1.7 class changelist.'))],
+      ])],
     ['fuentes', L('Fuentes', 'Sources'), () =>
       h(L('Fuentes', 'Sources'))
       + ul([
