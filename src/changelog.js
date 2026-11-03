@@ -5,11 +5,12 @@
 // Se numera con la última versión del grupo. Los cambios que solo tocan colores, tamaños o ajustes internos no se cuentan.
 // Estructura: { v, date, es: { intro, sections: [[icono, título, [viñetas]]] }, en: { ... } }
 const RELEASES = [
-  { v: '2.12.34', date: '2026-10-29',
+  { v: '2.12.35', date: '2026-10-29',
     es: { intro: 'Los personajes muestran su nivel y su Ilvl con el color de su equipo y se pueden ordenar, el panel del parche 12.1.7 se completa y los cambios de clase llegan hasta el 27 de octubre.', sections: [
       ['achievement_bg_winwsg', 'Personajes', [
         'Cada tarjeta muestra el nivel del personaje (en un color neutro) y su Ilvl, coloreado como un parse según el equipo: verde si todo es verde, azul si hay piezas azules, morado si todo es épico Normal/Heroico y rosa (parse 99) si todo es Mítico. Las crafteadas con blasones míticos cuentan como Míticas.',
         'Nuevo selector «Ordenar por»: orden de añadido, nombre, Ilvl, nivel o clase. Se recuerda tu elección.',
+        'En la web, los personajes, las guilds, los logs y los resultados de búsqueda se abren en otra pestaña con Mayús + clic (otra ventana), Ctrl + clic o el botón central del ratón.',
         '«Tus personajes» ya no se vacía cuando Warcraft Logs o Blizzard no responden: lo guardado sale al instante con su última ficha y se actualiza cuando llegan datos nuevos. La lista tiene además una copia de seguridad.',
         '«Añadir un personaje» y «Añadir guild» usan las mismas barras que el buscador. El reino que escribes se conserva y, tras pulsar Intro, sigues escribiendo sin perder el foco.',
         'El ranking de la guild tarda menos (pide a los jugadores de tres en tres) y ya no deja jugadores fuera cuando Warcraft Logs responde con error: reintenta y, si algo falla, no guarda el resultado incompleto. Los datos guardados se renuevan cada 3 horas.',
@@ -35,6 +36,7 @@ const RELEASES = [
       ['achievement_bg_winwsg', 'Characters', [
         'Each card shows the character level (neutral color) and its Ilvl, colored like a parse by gear: green if all green, blue if any blue piece, purple if all Normal/Heroic epic and pink (parse 99) if all Mythic. Pieces crafted with Mythic crests count as Mythic.',
         'New “Sort by” selector: order added, name, Ilvl, level or class. Your choice is remembered.',
+        'In the web version, characters, guilds, logs and search results open in another tab with Shift + click (new window), Ctrl + click or the middle mouse button.',
         '“Your characters” no longer empties when Warcraft Logs or Blizzard do not answer: saved characters show instantly with their last card and refresh when new data arrives. The list also has a backup copy.',
         '“Add a character” and “Add guild” use the same bars as the search form. The realm you type is kept and, after pressing Enter, you keep typing without losing focus.',
         'The guild ranking loads faster (players are requested three at a time) and no longer leaves players out when Warcraft Logs returns an error: it retries and, if anything fails, does not save the incomplete result. Saved data refreshes every 3 hours.',

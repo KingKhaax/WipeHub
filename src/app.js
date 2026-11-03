@@ -2681,6 +2681,8 @@ document.addEventListener('click', (ev) => {
   if (!IS_WEB || plainClick(ev) || ev.button !== 0) return;
   const el = ev.target.closest('[data-href]');
   if (!el || el.tagName === 'A' || !el.dataset.href) return;
+  const inner = ev.target.closest('button, a, input, select');
+  if (inner && inner !== el && el.contains(inner)) return; // una estrella o una equis dentro de la tarjeta hacen lo suyo
   ev.preventDefault();
   ev.stopPropagation();
   openRoute(el.dataset.href, ev.shiftKey);
@@ -2689,6 +2691,8 @@ document.addEventListener('auxclick', (ev) => {
   if (!IS_WEB || ev.button !== 1) return;
   const el = ev.target.closest('[data-href]');
   if (!el || el.tagName === 'A' || !el.dataset.href) return;
+  const inner = ev.target.closest('button, a, input, select');
+  if (inner && inner !== el && el.contains(inner)) return; // una estrella o una equis dentro de la tarjeta hacen lo suyo
   ev.preventDefault();
   openRoute(el.dataset.href, false);
 });

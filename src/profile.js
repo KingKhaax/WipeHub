@@ -73,7 +73,7 @@ const Profile = (() => {
     else if (data.error) body = `<div class="empty sm">${esc(data.error)}</div>`;
     else if (!data.length) body = `<div class="empty sm">${LL('No hay logs públicos de este jefe.', 'No public logs for this boss.')}</div>`;
     else body = `<table class="pf-logs"><thead><tr><th>${LL('Fecha', 'Date')}</th><th>%</th><th>${esc(st.metric === 'hps' ? 'HPS' : 'DPS')}</th><th>${LL('Duración', 'Duration')}</th><th>${LL('Nivel obj.', 'Item lvl')}</th><th></th></tr></thead><tbody>`
-      + data.map((r) => `<tr data-pf="log" data-code="${esc(r.report.code)}" data-fight="${Number(r.report.fightID) || ''}" title="${esc(LL('Abrir este log', 'Open this log'))}">`
+      + data.map((r) => `<tr data-pf="log" data-code="${esc(r.report.code)}" data-fight="${Number(r.report.fightID) || ''}" data-href="#/report/${esc(r.report.code)}${Number(r.report.fightID) ? `/fight/${Number(r.report.fightID)}` : ''}" title="${esc(LL('Abrir este log', 'Open this log'))}">`
         + `<td>${esc(new Date(r.startTime || r.report.startTime).toLocaleString(locale(), { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }))}</td>`
         + `<td><span class="pf-pct"><b style="color:${parseColor(r.rankPercent)}">${r.rankPercent != null ? Math.floor(r.rankPercent) : '-'}</b>${clsKey && r.spec ? `<img class="pf-spec" src="${specIconUrl(`${clsKey}-${String(r.spec).split(' ').join('')}`)}" width="18" height="18" alt="">` : ''}</span></td>`
         + `<td>${r.amount != null ? num(r.amount, 1) : '-'}</td><td>${r.duration ? clock(r.duration) : '-'}</td><td>${r.bracketData != null ? esc(r.bracketData) : '-'}</td>`
@@ -226,7 +226,7 @@ const Profile = (() => {
       const cls = key[x.classId] || '';
       const faction = x.faction === 'horde' ? '#ff4a4a' : x.faction === 'alliance' ? '#4a8dff' : 'var(--muted)';
       const flag = flagHTML(x.locale, x.region, [x.realmName, x.regionShort].filter(Boolean).join(' · '));
-      return `<button type="button" class="pf-row" data-pf="pick" data-i="${i}"><span class="pf-row-pic" style="--c:${classColor(cls)}">${x.thumb ? `<img src="${Cards.media(x.thumb)}" alt="" loading="lazy">` : ''}</span>
+      return `<button type="button" class="pf-row" data-pf="pick" data-i="${i}" data-href="#/char/${encodeURIComponent(String(x.region || 'eu').toLowerCase())}/${encodeURIComponent(x.realmSlug || '')}/${encodeURIComponent(x.name)}"><span class="pf-row-pic" style="--c:${classColor(cls)}">${x.thumb ? `<img src="${Cards.media(x.thumb)}" alt="" loading="lazy">` : ''}</span>
         <span class="pf-row-n"><b style="color:${classColor(cls)}"><img class="pf-row-spec" data-i="${i}" ${x.specIcon ? `src="${specIconUrl(x.specIcon)}"` : 'hidden'} width="20" height="20" alt="">${esc(x.name)}</b><small>${esc(cls ? className(cls) : '')} <i class="pf-fac" style="background:${faction}"></i></small></span>
         <span class="pf-row-s">${flag}<span>${esc(x.realmName)}${x.altName && x.altName !== x.realmName ? ` <small class="muted">${esc(x.altName)}</small>` : ''}<small>${esc(x.regionShort || x.region.toUpperCase())}</small></span></span></button>`;
     }).join('')}</div>${sr.hidden ? `<small class="muted">${LL(`${sr.hidden} resultados de reinos de China ocultos (no se pueden consultar).`, `${sr.hidden} results from China realms hidden (they cannot be queried).`)}</small>` : ''}`;
@@ -684,7 +684,7 @@ const Profile = (() => {
       <input name="realm" class="pf-in-realm" placeholder="${esc(LL('Reino (opcional)', 'Realm (optional)'))}" value="${esc(lsGet('prof:realm') || '')}" spellcheck="false">
       ${chipSelect('region', reg, last)}
       <button class="btn primary" type="submit">${LL('Buscar', 'Search')}</button></form>
-      ${rec.length ? `<div class="chips pf-rec">${rec.map((x, i) => `<span class="pf-rec-i"><button type="button" class="chip" data-pf="recent" data-i="${i}">${flagHTML(x.locale, x.region)} ${esc(x.name)} <span class="muted">${esc(x.realm)} · ${esc(x.region.toUpperCase())}</span></button><button type="button" class="pf-rec-x" data-pf="recent-del" data-i="${i}" title="${esc(LL('Quitar de recientes', 'Remove from recent'))}" aria-label="${esc(LL('Quitar', 'Remove'))}">✕</button></span>`).join('')}<button type="button" class="mini-btn" data-pf="recent-clear">${LL('Borrar todos', 'Clear all')}</button></div>` : ''}`;
+      ${rec.length ? `<div class="chips pf-rec">${rec.map((x, i) => `<span class="pf-rec-i"><button type="button" class="chip" data-pf="recent" data-i="${i}" data-href="#/char/${encodeURIComponent(String(x.region || 'eu').toLowerCase())}/${encodeURIComponent(x.slug || x.realmSlug || String(x.realm || '').toLowerCase().replace(/['’]/g, '').replace(/\s+/g, '-'))}/${encodeURIComponent(x.name)}">${flagHTML(x.locale, x.region)} ${esc(x.name)} <span class="muted">${esc(x.realm)} · ${esc(x.region.toUpperCase())}</span></button><button type="button" class="pf-rec-x" data-pf="recent-del" data-i="${i}" title="${esc(LL('Quitar de recientes', 'Remove from recent'))}" aria-label="${esc(LL('Quitar', 'Remove'))}">✕</button></span>`).join('')}<button type="button" class="mini-btn" data-pf="recent-clear">${LL('Borrar todos', 'Clear all')}</button></div>` : ''}`;
   }
 
   function sectionHTML() {

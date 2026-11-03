@@ -9,6 +9,9 @@ const Guilds = (() => {
 
   const region = () => (st.sel?.region || st.status?.region || 'eu').toUpperCase();
   const guildKey = (g) => `${g.realmSlug}/${g.name}`;
+  // Direcciones de lo que se abre al pulsar (para abrirlo en otra pestaña con Mayús, Ctrl o el botón central)
+  const guildHref = (g) => `#/guilds/${encodeURIComponent(String(g.region || st.status?.region || 'eu').toLowerCase())}/${encodeURIComponent(g.realmSlug)}/${encodeURIComponent(g.name)}`;
+  const charHref = (c) => `#/char/${encodeURIComponent(String(c.region || st.status?.region || 'eu').toLowerCase())}/${encodeURIComponent(c.realmSlug)}/${encodeURIComponent(c.name)}`;
   const friendly = (code) => {
     const c = String(code || '');
     if (c === 'NO_BNET_CLIENT') return LL('La conexión con Blizzard no está disponible ahora mismo.', 'The Blizzard connection is not available right now.');
@@ -70,7 +73,7 @@ const Guilds = (() => {
     if (st.busy === 'mine') mine = `<div class="loading"><span class="spinner"></span>${LL('Buscando tus guilds…', 'Finding your guilds…')}</div>`;
     else if (st.mineErr) mine = `<div class="error"><p>${esc(st.mineErr)}</p></div>`;
     else if (st.mine) mine = st.mine.length
-      ? `<div class="chips">${st.mine.map((g) => `<button class="chip ${st.sel && guildKey(st.sel) === guildKey(g) ? 'on' : ''}" data-gd="pick" data-key="${esc(guildKey(g))}"><span class="crest-slot" data-crest data-realm="${esc(g.realmSlug)}" data-guild="${esc(g.name)}" data-size="26"></span>${esc(g.name)} <span class="muted">${esc(g.realmName)}</span></button>`).join('')}</div>`
+      ? `<div class="chips">${st.mine.map((g) => `<button class="chip ${st.sel && guildKey(st.sel) === guildKey(g) ? 'on' : ''}" data-gd="pick" data-key="${esc(guildKey(g))}" data-href="${esc(guildHref(g))}"><span class="crest-slot" data-crest data-realm="${esc(g.realmSlug)}" data-guild="${esc(g.name)}" data-size="26"></span>${esc(g.name)} <span class="muted">${esc(g.realmName)}</span></button>`).join('')}</div>`
       : `<div class="empty sm">${LL('Ninguno de tus personajes está en una guild.', 'None of your characters are in a guild.')}</div>`;
     const last = (() => { try { return JSON.parse(lsGet('guild:last') || 'null') || {}; } catch { return {}; } })();
     const manual = `<form id="gdForm" class="gd-form"><input name="guild" placeholder="${esc(LL('Nombre de la guild', 'Guild name'))}" value="${esc(last.name || '')}" spellcheck="false" autocomplete="off">
@@ -154,7 +157,7 @@ const Guilds = (() => {
     if (!a || a.key !== charKey(c)) return '';
     const head = `<div class="arm-top"><b>${esc(c.name)}</b><span class="arm-sp"></span>
       <button type="button" class="btn ghost sm" data-gd="armory-refresh" data-key="${esc(a.key)}">↻ ${LL('Actualizar', 'Refresh')}</button>
-      ${c.guild ? `<button type="button" class="btn ghost sm" data-gd="pick-char" data-guild="${esc(c.guild.name)}" data-realm="${esc(c.guild.realmSlug)}" data-realmname="${esc(c.guild.realmName)}" data-region="${esc(c.region || '')}">${LL('Abrir guild', 'Open guild')}</button>` : ''}
+      ${c.guild ? `<button type="button" class="btn ghost sm" data-gd="pick-char" data-href="${esc(guildHref({ name: c.guild.name, realmSlug: c.guild.realmSlug, region: c.region }))}" data-guild="${esc(c.guild.name)}" data-realm="${esc(c.guild.realmSlug)}" data-realmname="${esc(c.guild.realmName)}" data-region="${esc(c.region || '')}">${LL('Abrir guild', 'Open guild')}</button>` : ''}
       <button type="button" class="btn ghost sm" data-gd="ext" data-u="https://www.raidbots.com/simbot/droptimizer">Droptimizer ↗</button>
       <button type="button" class="btn ghost sm" data-gd="armory-close">${LL('Cerrar', 'Close')}</button></div>`;
     if (a.status === 'loading') return `<div class="arm">${head}<div class="loading"><span class="spinner"></span>${t('loading')}</div></div>`;
@@ -316,7 +319,7 @@ const Guilds = (() => {
     const wrap = (c, canHide) => {
       const k = charKey(c);
       // al pulsar un personaje se abre al instante su ficha completa (equipo, talentos, logs por jefe, modelo 3D...)
-      const pick = `data-gd="open-char" data-key="${esc(k)}" data-realm="${esc(c.realmSlug)}" data-realmname="${esc(c.realmName || c.realmSlug)}" data-name="${esc(c.name)}" data-region="${esc(c.region || '')}"`;
+      const pick = `data-gd="open-char" data-href="${esc(charHref(c))}" data-key="${esc(k)}" data-realm="${esc(c.realmSlug)}" data-realmname="${esc(c.realmName || c.realmSlug)}" data-name="${esc(c.name)}" data-region="${esc(c.region || '')}"`;
       return `<div class="char-wrap ${st.armory?.key === k ? 'open' : ''}">${Cards.charCardHTML(c, { onClick: pick })}<div class="cc-act">
         <button type="button" class="${favs.has(k) ? 'on' : ''}" data-gd="fav" data-key="${esc(k)}" title="${esc(favs.has(k) ? LL('Quitar de favoritos', 'Remove from favorites') : LL('Añadir a favoritos', 'Add to favorites'))}" aria-label="${esc(LL('Favorito', 'Favorite'))}">${ICON_STAR(favs.has(k))}</button>
         ${canHide ? `<button type="button" data-gd="${c.manual ? 'delchar' : 'hide'}" data-key="${esc(k)}" title="${esc(LL('Quitar de la lista', 'Remove from the list'))}" aria-label="${esc(LL('Quitar', 'Remove'))}">${ICON_X}</button>` : ''}</div></div>${armoryHTML(c)}`;
@@ -366,7 +369,7 @@ const Guilds = (() => {
     if (r.error) return `<div class="error"><p>${esc(friendly(r.error))}</p></div>`;
     if (!r.list.length) return `<div class="empty sm">${LL(`No encontré ninguna guild llamada "${esc(r.term)}". Prueba con otro nombre o escribe también el reino.`, `I found no guild called "${esc(r.term)}". Try another name or enter the realm too.`)}</div>`;
     return `<h4 class="subh">${LL(`Guilds que coinciden con "${esc(r.term)}"`, `Guilds matching "${esc(r.term)}"`)}</h4><div class="gd-results">${r.list.map((x, i) =>
-      `<button class="gd-res" data-gd="pick-found" data-i="${i}"><span class="crest-slot" data-crest data-realm="${esc(x.realmSlug)}" data-guild="${esc(x.name)}" data-size="34"></span><span class="gd-res-t"><b>${esc(x.name)}</b><small>${esc(x.realmName)}</small></span><span class="gd-reg">${esc(x.region.toUpperCase())}</span></button>`).join('')}</div>`;
+      `<button class="gd-res" data-gd="pick-found" data-i="${i}" data-href="${esc(guildHref(x))}"><span class="crest-slot" data-crest data-realm="${esc(x.realmSlug)}" data-guild="${esc(x.name)}" data-size="34"></span><span class="gd-res-t"><b>${esc(x.name)}</b><small>${esc(x.realmName)}</small></span><span class="gd-reg">${esc(x.region.toUpperCase())}</span></button>`).join('')}</div>`;
   }
 
   // Pestañas de la guild: logs, progreso, asistencia, banda y ranking de parses
@@ -455,7 +458,7 @@ const Guilds = (() => {
     const list = [...st.logs.list].sort(SORTS[cur]);
     const chips = list.length > 1 ? `<div class="metricbar"><span class="muted">${LL('Ordenar', 'Sort')}</span>${[['new', LL('Más recientes', 'Newest')], ['old', LL('Más antiguos', 'Oldest')], ['long', LL('Más largos', 'Longest')], ['title', LL('Título A–Z', 'Title A–Z')]].map(([k, l]) => `<button type="button" class="chip ${cur === k ? 'on' : ''}" data-gd="logsort" data-v="${k}">${l}</button>`).join('')}</div>` : '';
     box.innerHTML = list.length ? `${chips}<div class="recent">${list.map((r) =>
-      `<div class="rwrap"><button class="rcard" data-gd="report" data-code="${esc(r.code)}"><b>${esc(r.title)}</b><small>${esc(zoneName(r.zone?.name))}${r.owner?.name ? ' · ' + esc(r.owner.name) : ''} · ${new Date(r.startTime).toLocaleDateString(locale())} · ${clock(r.endTime - r.startTime)}</small></button></div>`).join('')}</div>`
+      `<div class="rwrap"><button class="rcard" data-gd="report" data-code="${esc(r.code)}" data-href="#/report/${esc(r.code)}"><b>${esc(r.title)}</b><small>${esc(zoneName(r.zone?.name))}${r.owner?.name ? ' · ' + esc(r.owner.name) : ''} · ${new Date(r.startTime).toLocaleDateString(locale())} · ${clock(r.endTime - r.startTime)}</small></button></div>`).join('')}</div>`
       : `<div class="empty">${LL('Esta guild no tiene logs públicos en Warcraft Logs (o el nombre/reino no coincide con el de Warcraft Logs).', 'This guild has no public logs on Warcraft Logs (or the name/realm does not match the one on Warcraft Logs).')}</div>`;
   }
 
