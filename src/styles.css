@@ -3300,3 +3300,7 @@ body:not(:has(#homeBtn.on)) .bg-art, body:not(:has(#homeBtn.on)) .bg-dim { opaci
 .ver-badge:hover, .ver-badge.ok:hover, .ver-badge.bad:hover { background: transparent; border-color: var(--vc); transform: translateY(-2px); box-shadow: 0 8px 22px -8px var(--vc); }
 .ver-badge:active { transform: translateY(0) scale(.97); }
 @media (max-width: 720px) { .ver-badge .vl { padding: 5px 9px; } .ver-badge .vr { padding: 5px 10px; } }
+#settingsBtn svg { transition: transform .5s cubic-bezier(.3, 1.4, .4, 1), filter .25s; }
+#settingsBtn:hover { color: var(--accent); }
+#settingsBtn:hover svg { transform: rotate(90deg); filter: drop-shadow(0 0 7px color-mix(in srgb, var(--accent) 75%, transparent)); }
+@media (prefers-reduced-motion: reduce) { #settingsBtn svg { transition: none; } #settingsBtn:hover svg { transform: none; } }
