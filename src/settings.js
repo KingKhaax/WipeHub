@@ -80,7 +80,7 @@ async function openSettings(tab) {
       </div>`,
     version: `
       <div class="ver-card" id="verCard">
-        <div class="ver-now"><small class="muted">${LL('Tu versión', 'Your version')}</small><b class="ver-num ${WCUpdate.cls()}">v${esc(info.version || '?')}</b></div>
+        <div class="ver-now"><small class="muted">${LL('Tu versión', 'Your version')}</small><b class="ver-num ${WCUpdate.cls()}">v${esc(String(info.version || '?').replace(/\.0$/, ''))}</b></div>
         <div class="ver-state" id="verState">${WCUpdate.stateHTML()}</div>
       </div>
       ${IS_VERCEL ? '' : `<div class="set-actions">

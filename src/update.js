@@ -34,7 +34,7 @@ const WCUpdate = (() => {
     const date = rel && rel.date ? new Date(`${rel.date}T12:00:00`).toLocaleDateString(es ? 'es-ES' : 'en-GB', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
     const open = true; // todas las versiones vienen desplegadas; la cabecera las pliega
     return `<article class="cl-card${latest ? ' latest' : ''}${open ? ' open' : ''}"><header class="cl-head" data-cl-toggle role="button" tabindex="0" aria-expanded="${open}"><img class="cl-ic" src="${iconUrl(main)}" width="40" height="40" alt="" loading="lazy">`
-      + `<div class="cl-ht"><b class="cl-ver">v${logEsc(v)} · ${es ? 'Novedades' : 'What’s new'}</b>${latest ? `<span class="cl-tag">${es ? 'Última versión' : 'Latest version'}</span>` : ''}${date ? `<small class="cl-date">${logEsc(date)}</small>` : ''}</div><span class="cl-chev" aria-hidden="true"></span></header>`
+      + `<div class="cl-ht"><b class="cl-ver">v${logEsc(String(v).replace(/\.0$/, ''))} · ${es ? 'Novedades' : 'What’s new'}</b>${latest ? `<span class="cl-tag">${es ? 'Última versión' : 'Latest version'}</span>` : ''}${date ? `<small class="cl-date">${logEsc(date)}</small>` : ''}</div><span class="cl-chev" aria-hidden="true"></span></header>`
       + `<p class="cl-intro">${logEsc(intro)}</p>`
       + `<div class="cl-body">` + sections.map(([ic, title, items]) => `<section class="cl-sec">${ic ? `<img class="cl-sic" src="${iconUrl(ic)}" width="26" height="26" alt="" loading="lazy">` : ''}<div class="cl-sb">${title ? `<h4>${logEsc(title)}</h4>` : ''}<ul>${items.map((i) => `<li>${logEsc(i)}</li>`).join('')}</ul></div></section>`).join('') + '</div>'
       + '</article>';
@@ -56,16 +56,17 @@ const WCUpdate = (() => {
     if (!res) return `<span class="muted">${tr('Aún no se ha comprobado.', 'Not checked yet.')}</span>`;
     if (res.error === 'NO_SOURCE') return `<span class="muted">${tr('Configura abajo la fuente de actualizaciones para poder comprobar la última versión.', 'Set the update source below to check for the latest version.')}</span>`;
     if (res.error) return `<span class="bad">${tr('No se pudo comprobar', 'Could not check')}: ${esc(res.error)}</span>`;
-    if (res.outdated) return `<span class="bad">${tr(`Versión atrasada · la última es v${esc(res.latest)}`, `Outdated · latest is v${esc(res.latest)}`)}</span>${res.notes ? `<pre class="ver-notes">${esc(res.notes.slice(0, 600))}</pre>` : ''}`;
+    if (res.outdated) return `<span class="bad">${tr(`Versión atrasada · la última es v${esc(sv(res.latest))}`, `Outdated · latest is v${esc(sv(res.latest))}`)}</span>${res.notes ? `<pre class="ver-notes">${esc(res.notes.slice(0, 600))}</pre>` : ''}`;
     return `<span class="ok">${tr('Tienes la versión más reciente', 'You have the latest version')}</span>`;
   }
 
+  const sv = (v) => String(v).replace(/\.0$/, '');
   function paintBadge() {
     const b = document.getElementById('verBadge');
     if (!b) return;
     b.className = `ver-badge ${cls()}`;
-    b.innerHTML = `<span class="vl">v${version}</span>` + (cls() ? `<span class="vr">${res.outdated ? tr('Actualizar', 'Update') : tr('Al día', 'Up to date')}</span>` : '');
-    b.title = !res ? '' : res.error ? '' : res.outdated ? (tr(`Hay una versión nueva: v${res.latest}`, `New version available: v${res.latest}`)) : (tr('Última versión', 'Latest version'));
+    b.innerHTML = `<span class="vl">v${sv(version)}</span>` + (cls() ? `<span class="vr">${res.outdated ? tr('Actualizar', 'Update') : tr('Al día', 'Up to date')}</span>` : '');
+    b.title = !res ? '' : res.error ? '' : res.outdated ? (tr(`Hay una versión nueva: v${sv(res.latest)}`, `New version available: v${sv(res.latest)}`)) : (tr('Última versión', 'Latest version'));
   }
 
   async function check(manual) {
@@ -76,7 +77,7 @@ const WCUpdate = (() => {
     lastCheck = Date.now();
     paintBadge();
     refreshOpenPanel();
-    if (manual && res.outdated) toast(tr(`Hay una versión nueva: v${res.latest}`, `New version available: v${res.latest}`));
+    if (manual && res.outdated) toast(tr(`Hay una versión nueva: v${sv(res.latest)}`, `New version available: v${sv(res.latest)}`));
     return res;
   }
 
@@ -107,7 +108,7 @@ const WCUpdate = (() => {
   }
 
   const buttonLabel = () => (res?.outdated
-    ? tr(`Actualizar a v${res.latest}`, `Update to v${res.latest}`)
+    ? tr(`Actualizar a v${sv(res.latest)}`, `Update to v${sv(res.latest)}`)
     : tr('Buscar e instalar actualización', 'Check and install update'));
 
   // Si Ajustes → Versión está abierto, repinta el estado y el botón con el resultado más reciente
