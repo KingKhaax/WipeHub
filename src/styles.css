@@ -3310,3 +3310,5 @@ body:not(:has(#homeBtn.on)) .bg-art, body:not(:has(#homeBtn.on)) .bg-dim { opaci
 #langBtn:hover .tl1 { transform: translateX(2.5px) scale(1.08); } #langBtn:hover .tl2 { transform: translateX(-2.5px) scale(1.08); }
 @media (prefers-reduced-motion: reduce) { #langBtn svg path { transition: none; } #langBtn:hover .tl1, #langBtn:hover .tl2 { transform: none; } }
 #langBtn:hover { color: var(--accent); }
+#settingsBtn, #langBtn { color: var(--text); }
+#settingsBtn:hover, #langBtn:hover { color: var(--accent); }
