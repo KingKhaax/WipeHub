@@ -3304,3 +3304,4 @@ body:not(:has(#homeBtn.on)) .bg-art, body:not(:has(#homeBtn.on)) .bg-dim { opaci
 #settingsBtn:hover { color: var(--accent); }
 #settingsBtn:hover svg { transform: rotate(90deg); filter: drop-shadow(0 0 7px color-mix(in srgb, var(--accent) 75%, transparent)); }
 @media (prefers-reduced-motion: reduce) { #settingsBtn svg { transition: none; } #settingsBtn:hover svg { transform: none; } }
+#langLabel { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
