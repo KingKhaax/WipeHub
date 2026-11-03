@@ -63,8 +63,8 @@ const WCUpdate = (() => {
   function paintBadge() {
     const b = document.getElementById('verBadge');
     if (!b) return;
-    b.textContent = `v${version}`;
     b.className = `ver-badge ${cls()}`;
+    b.innerHTML = `<span class="vl">v${version}</span>` + (cls() ? `<span class="vr">${res.outdated ? tr('Actualizar', 'Update') : tr('Al día', 'Up to date')}</span>` : '');
     b.title = !res ? '' : res.error ? '' : res.outdated ? (tr(`Hay una versión nueva: v${res.latest}`, `New version available: v${res.latest}`)) : (tr('Última versión', 'Latest version'));
   }
 
