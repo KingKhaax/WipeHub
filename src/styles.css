@@ -3305,3 +3305,8 @@ body:not(:has(#homeBtn.on)) .bg-art, body:not(:has(#homeBtn.on)) .bg-dim { opaci
 #settingsBtn:hover svg { transform: rotate(90deg); filter: drop-shadow(0 0 7px color-mix(in srgb, var(--accent) 75%, transparent)); }
 @media (prefers-reduced-motion: reduce) { #settingsBtn svg { transition: none; } #settingsBtn:hover svg { transform: none; } }
 #langLabel { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+#langBtn svg path { transform-box: fill-box; transform-origin: center; transition: transform .5s cubic-bezier(.3, 1.4, .4, 1); }
+#langBtn:hover svg { filter: drop-shadow(0 0 7px color-mix(in srgb, var(--accent) 75%, transparent)); }
+#langBtn:hover .tl1 { transform: translateX(2.5px) scale(1.08); } #langBtn:hover .tl2 { transform: translateX(-2.5px) scale(1.08); }
+@media (prefers-reduced-motion: reduce) { #langBtn svg path { transition: none; } #langBtn:hover .tl1, #langBtn:hover .tl2 { transform: none; } }
+#langBtn:hover { color: var(--accent); }
