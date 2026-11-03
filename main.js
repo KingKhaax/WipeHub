@@ -666,17 +666,19 @@ ipcMain.handle('bossmaps:clear', () => {
 
 // ---- Descripciones de habilidades (tooltips públicos de Wowhead), con caché en disco de 30 días
 const spellDir = () => path.join(app.getPath('userData'), 'spells');
-ipcMain.handle('spell:tip', async (_e, id, lang) => {
+const TIP_KINDS = new Set(['spell', 'item', 'achievement', 'quest', 'currency', 'npc']);
+ipcMain.handle('spell:tip', async (_e, id, lang, kind) => {
   id = Number(id);
   if (!Number.isInteger(id) || id < 1 || id > 99999999) return { error: 'BAD_ID' };
+  kind = TIP_KINDS.has(kind) ? kind : 'spell';
   const loc = WOWHEAD_LOCALE[lang] ?? 0;
-  const file = path.join(spellDir(), `${loc}-${id}.json`);
+  const file = path.join(spellDir(), kind === 'spell' ? `${loc}-${id}.json` : `${kind}-${loc}-${id}.json`);
   try {
     const st = fs.statSync(file);
     if (Date.now() - st.mtimeMs < 30 * 24 * 3600 * 1000) return JSON.parse(fs.readFileSync(file, 'utf8'));
   } catch { /* sin caché */ }
   try {
-    const res = await fetch(`https://nether.wowhead.com/tooltip/spell/${id}?dataEnv=1&locale=${loc}`, {
+    const res = await fetch(`https://nether.wowhead.com/tooltip/${kind}/${id}?dataEnv=1&locale=${loc}`, {
       headers: { 'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) WipeHub', accept: 'application/json' },
     });
     if (!res.ok) return { error: 'HTTP_' + res.status };

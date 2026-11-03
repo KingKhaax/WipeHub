@@ -42,7 +42,7 @@ contextBridge.exposeInMainWorld('api', {
   bnetCrest: (realm, guild) => ipcRenderer.invoke('bnet:crest', realm, guild),
   bnetRoster: (realm, guild) => ipcRenderer.invoke('bnet:roster', realm, guild),
   talentMap: () => ipcRenderer.invoke('talents:map'),
-  spellTip: (id, lang) => ipcRenderer.invoke('spell:tip', id, lang),
+  spellTip: (id, lang, kind) => ipcRenderer.invoke('spell:tip', id, lang, kind),
   clearSpells: () => ipcRenderer.invoke('spells:clear'),
   openDataFolder: () => ipcRenderer.invoke('app:opendata'),
   artGet: (key) => ipcRenderer.invoke('art:get', key),

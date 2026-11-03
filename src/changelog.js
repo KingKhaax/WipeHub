@@ -5,7 +5,30 @@
 // Se numera con la última versión del grupo. Los cambios que solo tocan colores, tamaños o ajustes internos no se cuentan.
 // Estructura: { v, date, es: { intro, sections: [[icono, título, [viñetas]]] }, en: { ... } }
 const RELEASES = [
-  { v: '2.17.0', date: '2026-11-03',
+  { v: '2.18.0', date: '2026-11-03',
+    es: { intro: 'El parche 12.1.5 pasa a castellano con los nombres oficiales de Blizzard y los logros, objetos, monedas y misiones muestran su descripción al pasar el ratón.', sections: [
+      ['inv_scroll_02', 'Parche 12.1.5 en castellano', [
+        'Todo el contenido del panel del 12.1.5 usa los nombres oficiales en castellano de las notas de Blizzard y de Wowhead: La liberación de Kith\'ix, Laberinto de Kindo\'jan, Invasiones aqir y sus ocho afijos, núcleos de Vacío nebulosos, piedravenenos ascendentes, Isla Serpenteante, Puesto comercial y más.',
+        'Se añade lo que faltaba de las notas: el menor coste de artesanía de la decoración de las profesiones anteriores a Midnight.',
+        'Las fuentes oficiales enlazan ahora a la versión en castellano de Blizzard.',
+      ]],
+      ['inv_misc_note_06', 'Descripciones al pasar el ratón', [
+        'Los nombres subrayados del 12.1.5 (logros, objetos, monedas, misiones y personajes) muestran su descripción oficial de Wowhead en tu idioma, igual que las habilidades.',
+        'El sistema de descripciones admite ahora hechizos, objetos, logros, misiones, monedas y PNJ, por si se quiere usar en otros paneles.',
+      ]],
+    ] },
+    en: { intro: 'Patch 12.1.5 is now fully translated with Blizzard\'s official Spanish names, and achievements, items, currencies and quests show their description on hover.', sections: [
+      ['inv_scroll_02', 'Patch 12.1.5 in Spanish', [
+        'The whole 12.1.5 panel uses the official Spanish names from Blizzard\'s notes and Wowhead.',
+        'Adds what was missing from the notes: the lower crafting cost of pre-Midnight profession decor.',
+        'The official sources now link to Blizzard\'s Spanish pages when the app is in Spanish.',
+      ]],
+      ['inv_misc_note_06', 'Hover descriptions', [
+        'Underlined names in 12.1.5 (achievements, items, currencies, quests and NPCs) show their official Wowhead description in your language, like abilities do.',
+        'The tooltip system now supports spells, items, achievements, quests, currencies and NPCs, ready to use in other panels.',
+      ]],
+    ] } },
+  { v: '2.17.0', date: '2026-10-29',
     es: { intro: 'Los personajes muestran su nivel y su Ilvl con el color de su equipo y se pueden ordenar, el panel del parche 12.1.7 se completa y los cambios de clase llegan hasta el 27 de octubre.', sections: [
       ['achievement_bg_winwsg', 'Personajes', [
         'Cada tarjeta muestra el nivel del personaje (en un color neutro) y su Ilvl, coloreado como un parse según el equipo: verde si todo es verde, azul si hay piezas azules, morado si todo es épico Normal/Heroico y rosa (parse 99) si todo es Mítico. Las crafteadas con blasones míticos cuentan como Míticas.',

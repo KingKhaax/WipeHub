@@ -468,14 +468,15 @@
         return map;
       } catch { return saved ? saved.map : {}; }
     },
-    spellTip: async (id, lang) => {
+    spellTip: async (id, lang, kind) => {
       id = Number(id);
       if (!Number.isInteger(id) || id < 1 || id > 99999999) return { error: 'BAD_ID' };
+      kind = ['spell', 'item', 'achievement', 'quest', 'currency', 'npc'].includes(kind) ? kind : 'spell';
       const loc = WOWHEAD_LOCALE[lang] ?? 0;
-      const key = `${loc}-${id}`;
+      const key = `${kind}-${loc}-${id}`;
       if (spellMem.has(key)) return spellMem.get(key);
       try {
-        const j = await rioGet(`https://nether.wowhead.com/tooltip/spell/${id}?dataEnv=1&locale=${loc}`);
+        const j = await rioGet(`https://nether.wowhead.com/tooltip/${kind}/${id}?dataEnv=1&locale=${loc}`);
         const out = { name: j.name || '', icon: j.icon || '', tooltip: j.tooltip || '', buff: j.buff || '' };
         spellMem.set(key, out);
         return out;

@@ -93,7 +93,7 @@ const SpellTip = (() => {
     return `<div class="st-mech" style="--mc:${c}"><b>${tr('Guía de WipeHub', 'WipeHub guide')} · ${esc(MECH_DATA.types[m.type].label)}</b><p>${esc(m.note)}</p></div>`;
   }
 
-  function render(id, data, fallbackName, extra) {
+  function render(id, data, fallbackName, extra, kind = 'spell') {
     const meta = data.head.map((l) => `<div>${esc(l)}</div>`).join('');
     const descHtml = data.desc.map((l) => (l.startsWith('⟦') ? `<h4>${esc(l.replace(/[⟦⟧]/g, ''))}</h4>` : `<p>${esc(l)}</p>`)).join('');
     const buffHtml = data.buff?.length ? `<div class="st-buff"><b>${tr('Efecto', 'Effect')}</b>${data.buff.map((l) => `<p>${esc(l)}</p>`).join('')}</div>` : '';
@@ -101,14 +101,32 @@ const SpellTip = (() => {
       <div><b class="st-name">${esc(data.name || fallbackName || `#${id}`)}</b>${extra ? `<small>${esc(extra)}</small>` : ''}</div></div>
       ${meta ? `<div class="st-meta">${meta}</div>` : ''}
       ${descHtml ? `<div class="st-desc">${descHtml}</div>` : `<div class="st-desc"><p class="muted">${tr('Sin descripción disponible.', 'No description available.')}</p></div>`}
-      ${buffHtml}${mechBlock(id, data.name || fallbackName)}<div class="st-foot">ID ${id} · Wowhead</div>`;
+      ${buffHtml}${kind === 'spell' ? mechBlock(id, data.name || fallbackName) : ''}<div class="st-foot">ID ${id} · Wowhead</div>`;
   }
 
-  function load(id) {
-    const key = `${S.lang}:${id}`;
+  function parseFlat(raw, name) {
+    const doc = new DOMParser().parseFromString(`<div id="r">${raw || ''}</div>`, 'text/html');
+    const out = [];
+    toText(doc.getElementById('r'), out);
+    const lines = clean(out.join('')).split('\n').map((l) => l.trim()).filter((l) => l && !/\[DNT\]/i.test(l) && l !== '- Éxito de logro');
+    if (lines[0] === name) lines.shift();
+    return { name, head: [], desc: lines };
+  }
+
+  function target_(el) {
+    if (el.dataset.wh) { const [kind, id] = el.dataset.wh.split(':'); return { kind, id: Number(id) }; }
+    return { kind: 'spell', id: Number(el.dataset.spell) };
+  }
+
+  function load(id, kind = 'spell') {
+    const key = `${S.lang}:${kind}:${id}`;
     if (!cache.has(key)) {
-      cache.set(key, window.api.spellTip(id, S.lang).then((r) => {
+      cache.set(key, window.api.spellTip(id, S.lang, kind).then((r) => {
         if (!r || r.error) throw new Error(r?.error || 'ERR');
+        if (kind !== 'spell') {
+          const f = parseFlat(r.tooltip, r.name);
+          return { name: r.name, icon: r.icon, head: f.head, desc: f.desc, buff: [] };
+        }
         const p = parse(r.tooltip);
         const b = r.buff ? parse(r.buff) : null;
         return { name: r.name || p.name, icon: r.icon, head: p.head, desc: p.desc, buff: b ? b.desc.filter((l) => l !== (r.name || p.name)) : [] };
@@ -141,10 +159,10 @@ const SpellTip = (() => {
 
   async function show(target, x, y) {
     if (WCSettings.get('spellTips') === false) return;
-    const id = Number(target.dataset.spell);
+    const { kind, id } = target_(target);
     if (!id) return;
     const t = ensureEl();
-    shownId = id;
+    shownId = `${kind}:${id}`;
     const auraBox = target.closest?.('[data-aura-end]');
     const name = target.dataset.spellName || auraBox?.dataset.auraName || '';
     const extra = liveText(target) ?? (target.dataset.spellExtra || '');
@@ -161,11 +179,11 @@ const SpellTip = (() => {
     t.hidden = false;
     place(x, y);
     try {
-      const data = await load(id);
-      if (shownId !== id || t.hidden) return;
-      t.innerHTML = render(id, data, name, extra);
+      const data = await load(id, kind);
+      if (shownId !== `${kind}:${id}` || t.hidden) return;
+      t.innerHTML = render(id, data, name, extra, kind);
     } catch {
-      if (shownId !== id || t.hidden) return;
+      if (shownId !== `${kind}:${id}` || t.hidden) return;
       t.innerHTML = `<div class="st-head"><div><b class="st-name">${esc(name || `#${id}`)}</b>${extra ? `<small>${esc(extra)}</small>` : ''}</div></div><div class="st-desc"><p class="muted">${tr('No se pudo cargar la descripción.', 'Could not load the description.')}</p></div><div class="st-foot">ID ${id}</div>`;
     }
     place(x, y);
@@ -183,7 +201,7 @@ const SpellTip = (() => {
   let lastX = 0;
   let lastY = 0;
   document.addEventListener('mouseover', (ev) => {
-    const target = ev.target.closest?.('[data-spell]');
+    const target = ev.target.closest?.('[data-spell],[data-wh]');
     if (!target) { if (current) hide(); return; }
     if (target === current) return;
     hide();

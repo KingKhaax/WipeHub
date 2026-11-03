@@ -3,7 +3,7 @@
 // Parches 12.1.5 y 12.1.7 de Midnight: cuenta atrás del 12.1.5 y paneles con el contenido que Blizzard ha hecho público.
 // El botón del inicio abre un desplegable (hacia arriba) para elegir el parche.
 // Fuentes oficiales: artículo del 29 de septiembre y notas de actualización 12.1.5 (enlaces al final del panel).
-// Los nombres de talentos y hechizos se dejan en inglés (nombre oficial); las descripciones están traducidas.
+// Los nombres están en castellano como en las notas oficiales de Blizzard y Wowhead; los subrayados llevan tooltip (data-wh="tipo:id").
 const Patch115 = (() => {
   const L = tr;
   // Miércoles 14 de octubre de 2026: día del mantenimiento semanal en Europa (en EE. UU. es el martes 13).
@@ -66,6 +66,29 @@ const Patch115 = (() => {
       + boss.phases.map((ph) => `<h4>${esc(ph.phase)}</h4>${ul(ph.mechanics.map((m) => `<b>${esc(m.name)}</b> — ${esc(m.note)}`))}`).join('');
   }
 
+  const wh = (kind, id, es, en) => `<span class="cc-sp" data-wh="${kind}:${id}">${L(es, en)}</span>`;
+  const T = {
+    voidcore: () => wh('currency', 3418, 'núcleo de Vacío nebuloso', 'Nebulous Voidcore'),
+    voidcores: () => wh('currency', 3418, 'núcleos de Vacío nebulosos', 'Nebulous Voidcores'),
+    marl: () => wh('currency', 3316, 'marga de luz del Vacío', 'Voidlight Marl'),
+    mistcrest: () => wh('currency', 3438, 'blasones de bruma de veterano', 'Veteran Mistcrests'),
+    venomstone: () => wh('item', 280562, 'piedravenenos ascendentes', 'Ascendant Venomstones'),
+    saddle: () => wh('item', 279396, 'silla de montar perdida en el tiempo', 'Timelost Saddle'),
+    keystone: () => wh('achievement', 63690, '«Mito de la piedra angular de Midnight: temporada 2»', '"Midnight Keystone Myth: Season 2"'),
+    snakeEyes: () => wh('achievement', 12503, 'Ojos de serpiente', 'Snake Eyes'),
+    snakeEater: () => wh('achievement', 12507, 'Comeserpientes', 'Snake Eater'),
+    goodNight: () => wh('achievement', 12508, 'Descansa, dulce príncipe', 'Good Night, Sweet Prince'),
+    glory: () => wh('achievement', 12812, 'Gloria del héroe de guerra', 'Glory of the Wartorn Hero'),
+    promise: () => wh('achievement', 63519, '«La promesa del mañana»', '"The Promise of Tomorrow"'),
+    qShadow: () => wh('quest', 97945, '«A la sombra del catalizador»', '"In the Catalyst\'s Shadow"'),
+    qPrismatic: () => wh('quest', 97978, '«Potencial prismático»', '"Prismatic Potential"'),
+    qUmbral: () => wh('quest', 97981, '«Bendiciones umbrías del catalizador»', '"Umbral Blessings of the Catalyst"'),
+    qAncient: () => wh('quest', 98379, '«Profundidades antiguas, veneno antiguo»', '"Ancient Depths, Ancient Venom"'),
+    qAscending: () => wh('quest', 98390, '«Ascender con piedravenenos»', '"Ascending with Venomstones"'),
+    orin: () => wh('npc', 269987, 'Orin Luzperdida', 'Orin Straylight'),
+    kithix: () => wh('npc', 267861, 'Kith\'ix', 'Kith\'ix'),
+  };
+
   const SECTIONS = () => [
     ['video', L('Vídeo', 'Video'), () => {
       const id = VIDEOS[L('es', 'en')] || VIDEOS.en;
@@ -81,17 +104,17 @@ const Patch115 = (() => {
       ])
       + h(L('Qué trae', 'What it brings'))
       + ul([
-        L('<b>Raid de un jefe:</b> The Unbinding of Kith\'ix.', '<b>Single-boss raid:</b> The Unbinding of Kith\'ix.'),
-        L('<b>Labyrinth of Kindo\'jan:</b> reto de nueve cámaras tipo Inmersión/mazmorra gigante.', '<b>Labyrinth of Kindo\'jan:</b> a nine-chamber Delve-style mega-dungeon.'),
-        L('<b>Aqir Invasions:</b> eventos públicos en Eversong y Zul\'Aman.', '<b>Aqir Invasions:</b> public events in Eversong and Zul\'Aman.'),
-        L('<b>Refresco de mitad de la Temporada 2:</b> más Nebulous Voidcores y Ascendant Venomstones.', '<b>Season 2 mid-season refresh:</b> extra Nebulous Voidcores and Ascendant Venomstones.'),
-        L('<b>Keystone Myth</b> de la Temporada 2 y ajustes de mazmorras.', '<b>Keystone Myth</b> for Season 2 and dungeon tuning.'),
-        L('<b>Campaña:</b> "The Promise of Tomorrow".', '<b>Campaign:</b> "The Promise of Tomorrow".'),
-        L('Housing, PvP, Prey, interfaz y reputación de banda de guerra.', 'Housing, PvP, Prey, UI and warband reputation.'),
+        L('<b>Banda de un jefe:</b> La liberación de Kith\'ix.', '<b>Single-boss raid:</b> The Unbinding of Kith\'ix.'),
+        L('<b>Laberinto de Kindo\'jan:</b> reto de nueve cámaras al estilo de las Profundidades, una mazmorra gigante.', '<b>Labyrinth of Kindo\'jan:</b> a nine-chamber Delve-style mega-dungeon.'),
+        L('<b>Invasiones aqir:</b> eventos públicos en el Bosque Canción Eterna y Zul\'Aman.', '<b>Aqir Invasions:</b> public events in Eversong Woods and Zul\'Aman.'),
+        L(`<b>Refresco de mitad de la temporada 2:</b> más ${T.voidcores()} y ${T.venomstone()}.`, `<b>Season 2 mid-season refresh:</b> extra ${T.voidcores()} and ${T.venomstone()}.`),
+        L('<b>Mito de la piedra angular</b> de la temporada 2 y ajustes de mazmorras.', '<b>Keystone Myth</b> for Season 2 and dungeon tuning.'),
+        L(`<b>Campaña:</b> ${T.promise()}.`, `<b>Campaign:</b> ${T.promise()}.`),
+        L('Vivienda, JcJ, Presa, interfaz y reputación de banda guerrera.', 'Housing, PvP, Prey, UI and warband reputation.'),
       ])],
-    ['raid', L('Raid: Kith\'ix', 'Raid: Kith\'ix'), () =>
-      h('The Unbinding of Kith\'ix')
-      + p(L('Kith\'ix, general C\'Thraxxi, está atado en una guarida bajo el Abismo Venenoso (Venomous Abyss). Sus ataduras se debilitaron tras la derrota de Ula\'tek. Lady Liadrin te acompaña en el combate.', 'Kith\'ix, a C\'Thraxxi general, is bound in a lair beneath the Venomous Abyss. His restraints weakened after Ula\'tek\'s defeat. Lady Liadrin joins you in the fight.'))
+    ['raid', L('Banda: Kith\'ix', 'Raid: Kith\'ix'), () =>
+      h(L('La liberación de Kith\'ix', 'The Unbinding of Kith\'ix'))
+      + p(L(`${T.kithix()}, general C'Thraxxi, está atado en una guarida bajo el Abismo Venenoso. Sus ataduras se debilitaron tras la derrota de Ula'tek. Lady Liadrin te acompaña en el combate.`, `${T.kithix()}, a C'Thraxxi general, is bound in a lair beneath the Venomous Abyss. His restraints weakened after Ula'tek's defeat. Lady Liadrin joins you in the fight.`))
       + h(L('Dificultades', 'Difficulties'))
       + ul([
         L('Modo historia, Buscador de bandas, Normal y Heroico.', 'Story Mode, Raid Finder, Normal and Heroic.'),
@@ -99,89 +122,90 @@ const Patch115 = (() => {
       ])
       + p(L('Blizzard no ha publicado todavía los detalles de las mecánicas del combate.', 'Blizzard has not yet published the encounter\'s mechanics.'))
       + kithixMechanics()],
-    ['labyrinth', 'Labyrinth of Kindo\'jan', () =>
-      h('Labyrinth of Kindo\'jan')
-      + p(L('Un desafío de estilo Inmersión de gran tamaño (mazmorra gigante) en un complejo funerario amani sellado. Saqueadores y Vilebranch lo registran y los espíritus lo defienden.', 'A large Delve-style challenge (mega-dungeon) in a sealed Amani funeral complex. Looters and the Vilebranch search it while spirits defend it.'))
+    ['labyrinth', L('Laberinto de Kindo\'jan', 'Labyrinth of Kindo\'jan'), () =>
+      h(L('Laberinto de Kindo\'jan', 'Labyrinth of Kindo\'jan'))
+      + p(L('Un desafío de gran tamaño al estilo de las Profundidades (una mazmorra gigante) en un complejo funerario amani sellado. Saqueadores y trols Vilebranch lo registran y los espíritus lo defienden.', 'A large Delve-style challenge (mega-dungeon) in a sealed Amani funeral complex. Looters and the Vilebranch search it while spirits defend it.'))
       + ul([
         L('<b>Nueve cámaras</b>; puedes hacerlo de una sentada o un ala cada vez.', '<b>Nine chambers</b>; run it in one session or one wing at a time.'),
         L('Una sola ala ya da recompensas; cada sala extra añade más tesoro y más riesgo.', 'A single wing still earns rewards; each extra room adds more treasure and more risk.'),
         L('<b>Valeera Sanguinar</b> es tu compañera.', '<b>Valeera Sanguinar</b> is your companion.'),
         L('Progresión y desbloqueos propios; recompensas con <b>equipo Mítico</b>, cosméticos y títulos.', 'Dedicated progression and unlocks; rewards include <b>Mythic gear</b>, cosmetics and titles.'),
-        L('Incluye un reto en solitario de <b>Tier 11</b>.', 'Includes a <b>Tier 11</b> solo challenge.'),
+        L('Incluye un reto en solitario de <b>nivel 11</b>.', 'Includes a <b>Tier 11</b> solo challenge.'),
       ])],
-    ['aqir', 'Aqir Invasions', () =>
-      h('Aqir Invasions')
-      + p(L('Eventos públicos de toda la zona en <b>Eversong Woods</b> o <b>Zul\'Aman</b>. Cada hora hay una ventana de <b>10 minutos</b> para completar una serie de eventos y luchar contra un jefe. Las recompensas dependen de los objetivos que cumpla tu grupo antes de que se cierre la ventana.', 'Zone-wide public events in <b>Eversong Woods</b> or <b>Zul\'Aman</b>. Every hour there is a <b>10-minute</b> window to complete a series of events and fight a boss. Rewards depend on the objectives your group completes before the window closes.'))
+    ['aqir', L('Invasiones aqir', 'Aqir Invasions'), () =>
+      h(L('Invasiones aqir', 'Aqir Invasions'))
+      + p(L('Eventos públicos de toda la zona en el <b>Bosque Canción Eterna</b> o <b>Zul\'Aman</b>. Cada hora hay una ventana de <b>10 minutos</b> para completar una serie de eventos y luchar contra un jefe. Las recompensas dependen de los objetivos que cumpla tu grupo antes de que se cierre la ventana.', 'Zone-wide public events in <b>Eversong Woods</b> or <b>Zul\'Aman</b>. Every hour there is a <b>10-minute</b> window to complete a series of events and fight a boss. Rewards depend on the objectives your group completes before the window closes.'))
       + ul([L('Seis tipos de escenario: tres de combate y tres sin combate.', 'Six scenario types: three combat and three non-combat.')])
       + h(L('Ocho afijos de combate', 'Eight combat affixes'))
       + ul([
-        L('<b>Void Protection:</b> un Aqir Voidweaver crea una barrera protectora sobre los demás aqir.', '<b>Void Protection:</b> an Aqir Voidweaver shields the other aqir.'),
-        L('<b>Aqir Burrower:</b> los aqir se entierran y lanzan a los jugadores por los aires.', '<b>Aqir Burrower:</b> aqir burrow and launch players into the air.'),
-        L('<b>Void Sphere:</b> esferas que se mueven para atrapar a los jugadores.', '<b>Void Sphere:</b> spheres move around to trap players.'),
-        L('<b>Astalor\'s Anguish:</b> cristales de angustia dañan a los aqir y a los aventureros cercanos.', '<b>Astalor\'s Anguish:</b> Anguish Crystals damage aqir and nearby adventurers.'),
-        L('<b>Swarms!:</b> los aqir se sustituyen por enjambres de aqir más pequeños.', '<b>Swarms!:</b> aqir are replaced by swarms of smaller aqir.'),
-        L('<b>Aqir Elites:</b> menos aqir pero más fuertes.', '<b>Aqir Elites:</b> fewer but stronger aqir.'),
-        L('<b>Void Infestation:</b> los aqir infestados explotan a los pocos segundos y propagan la infección.', '<b>Void Infestation:</b> infested aqir explode after a few seconds and spread infection.'),
-        L('<b>Web Weavers:</b> un Aqir Webweaver puede enredar a un jugador si no se interrumpe su canalización.', '<b>Web Weavers:</b> an Aqir Webweaver may web a player if its channel is not interrupted.'),
+        L('<b>Protección del Vacío:</b> un tejevacío aqir crea una barrera protectora sobre los demás aqir.', '<b>Void Protection:</b> an Aqir Voidweaver shields the other aqir.'),
+        L('<b>Perforador aqir:</b> los aqir se entierran y lanzan a los jugadores por los aires.', '<b>Aqir Burrower:</b> aqir burrow and launch players into the air.'),
+        L('<b>Esfera de Vacío:</b> esferas que se mueven para atrapar a los jugadores.', '<b>Void Sphere:</b> spheres move around to trap players.'),
+        L('<b>Angustia de Astalor:</b> cristales de angustia dañan a los aqir y a los aventureros cercanos.', '<b>Astalor\'s Anguish:</b> Anguish Crystals damage aqir and nearby adventurers.'),
+        L('<b>¡Enjambres!:</b> los aqir se sustituyen por enjambres de aqir más pequeños.', '<b>Swarms!:</b> aqir are replaced by swarms of smaller aqir.'),
+        L('<b>Aqir de élite:</b> menos aqir pero más fuertes.', '<b>Aqir Elites:</b> fewer but stronger aqir.'),
+        L('<b>Infestación del Vacío:</b> los aqir infestados explotan a los pocos segundos y propagan la infección.', '<b>Void Infestation:</b> infested aqir explode after a few seconds and spread infection.'),
+        L('<b>Tejerredes:</b> un tejerredes aqir puede enredar a un jugador si no se interrumpe su canalización.', '<b>Web Weavers:</b> an Aqir Webweaver may web a player if its channel is not interrupted.'),
       ])],
     ['season', L('Mitad de temporada', 'Mid-season'), () =>
-      h(L('Refresco de la Temporada 2', 'Season 2 refresh'))
-      + p(L('Orin Straylight (Silvermoon City) ofrece <b>un Nebulous Voidcore extra por semana</b> para tiradas de bonificación.', 'Orin Straylight (Silvermoon City) offers <b>one extra Nebulous Voidcore per week</b> for bonus rolls.'))
+      h(L('Refresco de la temporada 2', 'Season 2 refresh'))
+      + p(L(`${T.orin()} (Lunargenta) ofrece <b>un ${T.voidcore()} extra por semana</b> para tiradas de bonificación.`, `${T.orin()} (Silvermoon City) offers <b>one extra ${T.voidcore()} per week</b> for bonus rolls.`))
       + h(L('Cómo se desbloquea', 'How it unlocks'))
       + ul([
-        L('Acepta <b>"In the Catalyst\'s Shadow"</b> de Decimus en Voidstorm y después <b>"Prismatic Potential"</b> de Orin.', 'Accept <b>"In the Catalyst\'s Shadow"</b> from Decimus in Voidstorm, then <b>"Prismatic Potential"</b> from Orin.'),
-        L('<b>Semana del 6 de octubre</b> (mantenimiento): Orin completa su investigación y ofrece <b>"Umbral Blessings of the Catalyst"</b>: intercambia oro, Voidlight Marl o Veteran Mistcrests por un Voidcore extra a la semana.', '<b>Week of October 6</b> (maintenance): Orin completes his research and offers <b>"Umbral Blessings of the Catalyst"</b>: trade gold, Voidlight Marl or Veteran Mistcrests for one extra Voidcore per week.'),
-        L('<b>Semana del 13 de octubre:</b> <b>"Ancient Depths, Ancient Venom"</b> inicia la investigación de las Ascendant Venomstones.', '<b>Week of October 13:</b> <b>"Ancient Depths, Ancient Venom"</b> starts the Ascendant Venomstones research.'),
-        L('<b>Semana del 20 de octubre:</b> termina la investigación y se ofrece <b>"Ascending with Venomstones"</b>. Ese día se <b>levanta el límite de crests</b>.', '<b>Week of October 20:</b> the research completes and <b>"Ascending with Venomstones"</b> is offered. The <b>crest cap is lifted</b> that week.'),
+        L(`Acepta <b>${T.qShadow()}</b> de Decimus en la Tormenta del Vacío y después <b>${T.qPrismatic()}</b> de Orin.`, `Accept <b>${T.qShadow()}</b> from Decimus in Voidstorm, then <b>${T.qPrismatic()}</b> from Orin.`),
+        L(`<b>Semana del 6 de octubre</b> (mantenimiento): Orin completa su investigación y ofrece <b>${T.qUmbral()}</b>: intercambia oro, ${T.marl()} o ${T.mistcrest()} por un ${T.voidcore()} extra a la semana.`, `<b>Week of October 6</b> (maintenance): Orin completes his research and offers <b>${T.qUmbral()}</b>: trade gold, ${T.marl()} or ${T.mistcrest()} for one extra Voidcore per week.`),
+        L(`<b>Semana del 13 de octubre:</b> <b>${T.qAncient()}</b> inicia la investigación de las ${T.venomstone()}.`, `<b>Week of October 13:</b> <b>${T.qAncient()}</b> starts the ${T.venomstone()} research.`),
+        L(`<b>Semana del 20 de octubre:</b> termina la investigación y se ofrece <b>${T.qAscending()}</b>. Ese día se <b>levanta el límite de blasones</b>.`, `<b>Week of October 20:</b> the research completes and <b>${T.qAscending()}</b> is offered. The <b>crest cap is lifted</b> that week.`),
       ])
-      + h('Ascendant Venomstones')
+      + h(L('Piedravenenos ascendentes', 'Ascendant Venomstones'))
       + ul([
-        L('Caen de: jefes de banda Heroicos o Míticos, mazmorras de llave Mítica+ de <b>+10 o más</b>, Delves Bountiful de <b>Tier 11</b> y cofres de equipo Champion de la cacería Nightmare de Prey.', 'Drop from: Heroic or Mythic raid bosses, Mythic+ keystone dungeons at <b>+10 and above</b>, <b>Tier 11</b> Bountiful Delves and Nightmare Prey Hunt Champion gear chests.'),
-        L('Con <b>10</b> piedras, junto al Catalyst de Silvermoon City, subes el nivel de objeto de una pieza de Héroe o Mito de la Temporada 2 totalmente mejorada, o de un arma, abalorio o collar Tidal Crafted de calidad máxima.', 'With <b>10</b> stones, near the Catalyst in Silvermoon City, you raise the item level of a fully upgraded Season 2 Hero or Myth item, or a max-quality Tidal Crafted weapon, trinket or necklace.'),
+        L('Caen de: jefes de banda Heroicos o Míticos, mazmorras de piedra angular mítica+ de <b>+10 o más</b>, profundidades pródigas de <b>nivel 11</b> y cofres de equipo de campeón de la cacería de Presa en dificultad pesadilla.', 'Drop from: Heroic or Mythic raid bosses, Mythic+ keystone dungeons at <b>+10 and above</b>, <b>Tier 11</b> Bountiful Delves and Nightmare Prey Hunt Champion gear chests.'),
+        L('Con <b>10</b> piedras, junto al Catalizador de Lunargenta, subes el nivel de objeto de una pieza de Héroe o Mito de la temporada 2 totalmente mejorada, o de un arma, abalorio o collar «Tidal Crafted» de calidad máxima.', 'With <b>10</b> stones, near the Catalyst in Silvermoon City, you raise the item level of a fully upgraded Season 2 Hero or Myth item, or a max-quality Tidal Crafted weapon, trinket or necklace.'),
       ])],
-    ['keystone', L('Keystone Myth y logros', 'Keystone Myth & achievements'), () =>
-      h('Keystone Myth')
+    ['keystone', L('Mito de la piedra angular y logros', 'Keystone Myth & achievements'), () =>
+      h(L('Mito de la piedra angular', 'Keystone Myth'))
       + ul([
-        L('Vuelve en la Temporada 2: logro <b>"Midnight Keystone Myth: Season 2"</b> al llegar a <b>3600</b> de puntuación Mítica+. Da el título <b>"Venomous Contender"</b> y la <b>Timelost Saddle</b>.', 'Returns for Season 2: <b>"Midnight Keystone Myth: Season 2"</b> achievement at a Mythic+ rating of <b>3600</b>. Rewards the <b>"Venomous Contender"</b> title and the <b>Timelost Saddle</b>.'),
+        L(`Vuelve en la temporada 2: logro <b>${T.keystone()}</b> al llegar a <b>3600</b> de índice de mítica+. Da el título <b>«el Contendiente Venenoso»</b> y la <b>${T.saddle()}</b>.`, `Returns for Season 2: <b>${T.keystone()}</b> achievement at a Mythic+ rating of <b>3600</b>. Rewards the <b>"Venomous Contender"</b> title and the <b>${T.saddle()}</b>.`),
         L('Ajustes de dificultad en las mazmorras que se salen de la media.', 'Targeted tuning for dungeons that are difficulty outliers.'),
-        L('<b>Murder Row:</b> corregido que Murder in a Row de Zaen Bladesorrow asignara a veces la zona segura a un barril tras el que no te escondías.', '<b>Murder Row:</b> fixed Zaen Bladesorrow\'s Murder in a Row sometimes assigning a safe spot to a barrel you were not hiding behind.'),
+        L('<b>Frontal de la muerte:</b> corregido que «Murder in a Row» de Zaen Hojapena asignara a veces la zona segura a un barril tras el que no te escondías.', '<b>Murder Row:</b> fixed Zaen Bladesorrow\'s Murder in a Row sometimes assigning a safe spot to a barrel you were not hiding behind.'),
       ])
       + h(L('Logros', 'Achievements'))
-      + ul([L('<i>Snake Eyes</i>, <i>Snake Eater</i> y <i>Good Night, Sweet Prince</i> ya no son necesarios para <i>Glory of the Wartorn Hero</i>.', '<i>Snake Eyes</i>, <i>Snake Eater</i> and <i>Good Night, Sweet Prince</i> are no longer required for <i>Glory of the Wartorn Hero</i>.')])
+      + ul([L(`<i>${T.snakeEyes()}</i>, <i>${T.snakeEater()}</i> y <i>${T.goodNight()}</i> ya no son necesarios para <i>${T.glory()}</i>.`, `<i>${T.snakeEyes()}</i>, <i>${T.snakeEater()}</i> and <i>${T.goodNight()}</i> are no longer required for <i>${T.glory()}</i>.`)])
       + h(L('Campaña', 'Campaign'))
-      + p(L('<b>"The Promise of Tomorrow":</b> la derrota de Ula\'tek despierta un terror ancestral. Mantén la paz entre Quel\'Thalas y Zul\'Aman, desciende a la Coiled Isle y planta cara a Kith\'ix.', '<b>"The Promise of Tomorrow":</b> Ula\'tek\'s defeat awakens an ancient terror. Keep the peace between Quel\'Thalas and Zul\'Aman, descend to the Coiled Isle and make a final stand against Kith\'ix.'))],
+      + p(L(`<b>${T.promise()}:</b> la derrota de Ula'tek despierta un terror ancestral. Mantén la paz entre Quel'Thalas y Zul'Aman, desciende a la Isla Serpenteante y planta cara a Kith'ix.`, `<b>${T.promise()}:</b> Ula'tek's defeat awakens an ancient terror. Keep the peace between Quel'Thalas and Zul'Aman, descend to the Coiled Isle and make a final stand against Kith'ix.`))],
     ['otros', L('Otros cambios', 'Other changes'), () =>
-      h('PvP')
-      + ul([L('Evocador Preservación: Merithra\'s Blessing ahora es un hechizo Arcano y puede lanzarse con la Naturaleza bloqueada.', 'Preservation Evoker: Merithra\'s Blessing is now an Arcane spell and can be cast while locked out of Nature.')])
-      + h('Prey')
+      h(L('JcJ', 'PvP'))
+      + ul([L('Evocador de Preservación: Bendición de Merithra ahora es un hechizo Arcano y puede lanzarse con la Naturaleza bloqueada.', 'Preservation Evoker: Merithra\'s Blessing is now an Arcane spell and can be cast while locked out of Nature.')])
+      + h(L('Presa', 'Prey'))
       + ul([
-        L('Por debajo del rango 4: <b>4000</b> de progreso de Journey (un rango completo) por cacería, en lugar del progreso de las cuatro primeras cacerías semanales.', 'Below rank 4: <b>4000</b> Journey progress (a full rank) per hunt, replacing the progress from the first four hunts each week.'),
+        L('Por debajo del rango 4: <b>4000</b> de progreso de aventura (Journey), un rango completo, por cacería, en lugar del progreso de las cuatro primeras cacerías semanales.', 'Below rank 4: <b>4000</b> Journey progress (a full rank) per hunt, replacing the progress from the first four hunts each week.'),
         L('Rangos 4 a 9: <b>2000</b> de progreso en cada una de las cuatro primeras cacerías de la semana.', 'Ranks 4–9: <b>2000</b> Journey progress from each of the first four hunts each week.'),
-        L('Las Afflicted y Tormented Souls ya no se pueden usar durante una cacería activa; hay que usarlas entre cacerías.', 'Afflicted and Tormented Souls can no longer be used during an active hunt; use them between hunts.'),
+        L('Las almas afligidas y las almas atormentadas ya no se pueden usar durante una cacería activa; hay que usarlas entre cacerías.', 'Afflicted and Tormented Souls can no longer be used during an active hunt; use them between hunts.'),
       ])
       + h(L('Interfaz y accesibilidad', 'Interface and accessibility'))
       + ul([
         L('Coordenadas del jugador bajo el minimapa (se pueden desactivar y mostrar como enteros o decimales).', 'Player coordinates below the minimap (can be disabled and shown as integers or decimals).'),
-        L('Opción para mostrar "hormigas" (borde animado) en los marcos de banda de las unidades que puedes disipar, y para hacer pulsar la opacidad de la superposición de disipación.', 'Option to show "ants" (animated border) on raid frames of units you can dispel, and to pulse the dispel overlay\'s opacity.'),
+        L('Opción para mostrar «hormigas» (borde animado) en los marcos de banda de las unidades que puedes disipar, y para hacer pulsar la opacidad de la superposición de disipación.', 'Option to show "ants" (animated border) on raid frames of units you can dispel, and to pulse the dispel overlay\'s opacity.'),
         L('Al hacer ping a una macro se muestra la información de #showtooltip.', 'Pinging a macro shows #showtooltip information.'),
-        L('Nuevo ajuste "Pulse Your Health" en Alertas de audio de combate: un sonido en bucle bajo un porcentaje de vida que se intensifica al bajar.', 'New "Pulse Your Health" setting under Combat Audio Alerts: a looping sound below a health percentage that intensifies as health drops.'),
-        L('Los ajustes de vista previa de la Trading Post (como "Combat Animation") se conservan al cambiar de objeto.', 'Trading Post preview settings (such as "Combat Animation") persist when switching items.'),
+        L('Nuevo ajuste «Aviso de salud» en Alertas de sonido en combate: un sonido en bucle bajo un porcentaje de vida que se intensifica al bajar.', 'New "Pulse Your Health" setting under Combat Audio Alerts: a looping sound below a health percentage that intensifies as health drops.'),
+        L('Los ajustes de vista previa del Puesto comercial (como «Animación de combate») se conservan al cambiar de objeto.', 'Trading Post preview settings (such as "Combat Animation") persist when switching items.'),
       ])
-      + h('Housing')
+      + h(L('Vivienda', 'Housing'))
       + ul([
-        L('Modo de edición de plano: teclas para subir/bajar de planta (Re Pág / Av Pág por defecto) y acceso directo a la Blueprint Collection.', 'Floorplan edit mode: floor up/down keybinds (Page Up/Page Down by default) and a shortcut to the Blueprint Collection.'),
-        L('Los Public Neighborhoods ya no reciben el mismo Endeavor dos veces seguidas.', 'Public Neighborhoods no longer receive the same Endeavor back-to-back.'),
-        L('Blueprints: las escaleras exportan todas las salas conectadas en vertical; la lista de contenido excluye tintes ya incluidos en la decoración; tooltips y textos nuevos.', 'Blueprints: stairwells export all vertically connected rooms; the contents list excludes dyes already provided by decor; new tooltips and text.'),
+        L('Modo de edición de plano: teclas para subir/bajar de planta (Re Pág / Av Pág por defecto) y acceso directo a la colección de planos.', 'Floorplan edit mode: floor up/down keybinds (Page Up/Page Down by default) and a shortcut to the Blueprint Collection.'),
+        L('Los vecindarios públicos ya no reciben la misma iniciativa (Endeavor) dos veces seguidas.', 'Public Neighborhoods no longer receive the same Endeavor back-to-back.'),
+        L('Planos: las escaleras exportan todas las salas conectadas en vertical; la lista de contenido excluye tintes ya incluidos en la decoración; descripciones y textos nuevos.', 'Blueprints: stairwells export all vertically connected rooms; the contents list excludes dyes already provided by decor; new tooltips and text.'),
+        L('Se reduce el coste de artesanía de la decoración de las profesiones anteriores a Midnight.', 'Crafting costs for pre-Midnight profession decor are reduced.'),
       ])
-      + h(L('Reputación de banda de guerra', 'Warband reputation'))
-      + ul([L('Las reputaciones de Legion y Battle for Azeroth ahora se comparten con toda la banda de guerra.', 'Legion and Battle for Azeroth reputations are now shared across the warband.')])],
+      + h(L('Reputación de banda guerrera', 'Warband reputation'))
+      + ul([L('Las reputaciones de Legion y Battle for Azeroth ahora se comparten con toda la banda guerrera.', 'Legion and Battle for Azeroth reputations are now shared across the warband.')])],
     ['fuentes', L('Fuentes', 'Sources'), () =>
       h(L('Fuentes oficiales de Blizzard', 'Official Blizzard sources'))
       + ul([
-        `<a href="#" data-pn-link="${LINK_NEWS}">${L('Anuncio: "Midnight\'s 12.1.5 Content Update Arrives October 13"', 'Announcement: "Midnight\'s 12.1.5 Content Update Arrives October 13"')}</a>`,
-        `<a href="#" data-pn-link="${LINK_NOTES}">${L('Notas de la actualización 12.1.5 (Midnight)', '12.1.5 Content Update Notes (Midnight)')}</a>`,
+        `<a href="#" data-pn-link="${L(LINK_NEWS.replace('/en-us/', '/es-es/'), LINK_NEWS)}">${L('Anuncio: «Midnight\'s 12.1.5 Content Update Arrives October 13» (título original en inglés)', 'Announcement: "Midnight\'s 12.1.5 Content Update Arrives October 13"')}</a>`,
+        `<a href="#" data-pn-link="${L(LINK_NOTES.replace('/en-us/', '/es-es/'), LINK_NOTES)}">${L('Notas de la actualización de contenido 12.1.5 (Midnight)', '12.1.5 Content Update Notes (Midnight)')}</a>`,
       ])
-      + p(L('Los textos están resumidos y traducidos por WipeHub; los nombres de talentos y hechizos se dejan en inglés. La fecha del miércoles 14 en Europa viene de la prensa especializada. Si Blizzard cambia algo, manda su web.', 'Texts are summarised and translated by WipeHub; talent and spell names are kept in English. The Wednesday 14 European date comes from the specialist press. If Blizzard changes anything, its website prevails.'))],
+      + p(L('Los textos están resumidos y traducidos por WipeHub con los nombres oficiales en castellano de las notas de Blizzard y de Wowhead; los que no tienen traducción oficial confirmada se dejan en inglés. Pasa el ratón por los nombres subrayados para ver su descripción. La fecha del miércoles 14 en Europa viene de la prensa especializada. Si Blizzard cambia algo, manda su web.', 'Texts are summarised and translated by WipeHub; names without a confirmed official translation are kept in English. Hover the underlined names to see their description. The Wednesday 14 European date comes from the specialist press. If Blizzard changes anything, its website prevails.'))],
   ];
 
 
