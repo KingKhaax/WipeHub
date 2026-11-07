@@ -1,0 +1,52 @@
+[
+ {
+  "en": "Gore Rattler",
+  "note": "sin ficha de PNJ encontrada en Wowhead"
+ },
+ {
+  "en": "Spectral Head",
+  "note": "sin ficha de PNJ encontrada en Wowhead"
+ },
+ {
+  "en": "Caustic Mist Totem",
+  "note": "sin ficha de PNJ encontrada en Wowhead"
+ },
+ {
+  "en": "Toadspawn",
+  "note": "sin ficha de PNJ encontrada en Wowhead"
+ },
+ {
+  "en": "Serpent Ward",
+  "note": "solo existe una ficha antigua que no es la de esta banda",
+  "keep": true
+ },
+ {
+  "en": "Slithering Clutch",
+  "npc": 271194,
+  "note": "Wowhead en castellano devuelve [Slithering Clutch]"
+ },
+ {
+  "en": "Blightscale Wretch",
+  "npc": 263942,
+  "note": "Wowhead en castellano devuelve [Blightscale Wretch]"
+ },
+ {
+  "en": "Broodling of Ithraz",
+  "npc": 270898,
+  "note": "Wowhead en castellano devuelve [Broodling of Ithraz]"
+ },
+ {
+  "en": "Fragments of Malacrass",
+  "note": "sin ficha de PNJ encontrada en Wowhead"
+ },
+ {
+  "en": "Rav'i",
+  "npc": 256350,
+  "note": "Wowhead lo llama Ravi; se mantiene Rav'i como en los registros",
+  "keep": true
+ },
+ {
+  "en": "The Council of Tribes",
+  "note": "sin traducción confirmada del grupo de jefes"
+ }
+]

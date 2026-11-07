@@ -1,0 +1,2554 @@
+[
+ {
+  "d": "2026-09-22",
+  "a": "Altar of Fangs",
+  "u": "*General",
+  "t": "f",
+  "es": "Corregido que {Laced Edge} de Blade of the Altar pudiera lanzarse estando bajo control de masas.",
+  "en": "Fixed an issue that allowed Blade of the Altar's Laced Edge to cast while crowd controlled."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Altar of Fangs",
+  "u": "*General",
+  "t": "g",
+  "es": "Eliminado un High Evolutionist de la zona posterior a Rav'i.",
+  "en": "Removed one High Evolutionist in the area after Rav'i."
+ },
+ {
+  "d": "2026-08-21",
+  "a": "Altar of Fangs",
+  "u": "*General",
+  "t": "g",
+  "es": "{Ravenous} de Ravenous Descendant ahora da un 10 % de velocidad de ataque por acumulación (antes 20 %) y su velocidad de movimiento baja un 20 %.",
+  "en": "Ravenous Descendant's Ravenous now grants 10% attack speed per stack (was 20%), and movement speed reduced by 20%."
+ },
+ {
+  "d": "2026-08-21",
+  "a": "Altar of Fangs",
+  "u": "*General",
+  "t": "g",
+  "es": "Daño inicial de {Paralyzing Shot} de Twinfang Harrower −50 %.",
+  "en": "Twinfang Harrower's Paralyzing Shots initial damage reduced by 50%."
+ },
+ {
+  "d": "2026-08-21",
+  "a": "Altar of Fangs",
+  "u": "*General",
+  "t": "g",
+  "es": "{Septic Spatter} de Venom Leech ya no deja un charco donde cae el cuerpo de la sanguijuela.",
+  "en": "Venom Leech's Septic Spatter no longer creates a puddle at the leech's corpse location."
+ },
+ {
+  "d": "2026-08-21",
+  "a": "Altar of Fangs",
+  "u": "*General",
+  "t": "g",
+  "es": "Absorción de {Blood Sacrifice} de Ritual Chieftain −10 %.",
+  "en": "Ritual Chieftain's Blood Sacrifice absorb reduced by 10%."
+ },
+ {
+  "d": "2026-08-21",
+  "a": "Altar of Fangs",
+  "u": "*General",
+  "t": "g",
+  "es": "Daño de {Unstable Totem} de Caustic Mist Totem −10 %.",
+  "en": "Caustic Mist Totem's Unstable Totem damage reduced by 10%."
+ },
+ {
+  "d": "2026-08-21",
+  "a": "Altar of Fangs",
+  "u": "*General",
+  "t": "g",
+  "es": "Reutilización de {Evolve} de High Evolutionist aumentada; tiempo de lanzamiento de {Envenom} 3 s (antes 2,5 s) y de {Mass Envenom} 3,5 s (antes 2,5 s).",
+  "en": "High Evolutionist's Evolve cooldown increased, Envenom cast time increased to 3 seconds (was 2.5 seconds), and Mass Envenom cast time increased to 3.5 seconds (was 2.5 seconds)."
+ },
+ {
+  "d": "2026-08-21",
+  "a": "Altar of Fangs",
+  "u": "*General",
+  "t": "g",
+  "es": "{Bloodletting} de Bloodletter se activa con menos frecuencia.",
+  "en": "Bloodletter's Bloodletting now procs less frequently."
+ },
+ {
+  "d": "2026-08-21",
+  "a": "Altar of Fangs",
+  "u": "*General",
+  "t": "g",
+  "es": "Vida de Ascendant Serpent −10 %.",
+  "en": "Ascendant Serpent health reduced by 10%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Altar of Fangs",
+  "u": "Ascendant Serpent",
+  "t": "g",
+  "es": "Vida −21 %.",
+  "en": "Health reduced by 21%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Altar of Fangs",
+  "u": "Bloodletter",
+  "t": "g",
+  "es": "Vida −5 %.",
+  "en": "Health reduced by 5%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Altar of Fangs",
+  "u": "High Evolutionist",
+  "t": "v",
+  "es": "{Evolve} tiene ahora un efecto visual más llamativo durante la canalización.",
+  "en": "Evolve now has a more prominent visual effect during channel."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Altar of Fangs",
+  "u": "Living Venom",
+  "t": "g",
+  "es": "Vida −25 %.",
+  "en": "Health reduced by 25%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Altar of Fangs",
+  "u": "Living Venom",
+  "t": "g",
+  "es": "Daño de {Venom Burst} −50 %.",
+  "en": "Venom Burst damage reduced by 50%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Altar of Fangs",
+  "u": "Primal Serpent",
+  "t": "g",
+  "es": "Daño de {Piercing Hiss} −25 %.",
+  "en": "Piercing Hiss damage reduced by 25%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Altar of Fangs",
+  "u": "Primal Serpent",
+  "t": "g",
+  "es": "Reutilización de {Piercing Hiss} +10 %.",
+  "en": "Piercing Hiss cooldown increased by 10%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Altar of Fangs",
+  "u": "Rattling Writhe",
+  "t": "g",
+  "es": "Vida −6 %.",
+  "en": "Health reduced by 6%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Altar of Fangs",
+  "u": "Rattling Writhe",
+  "t": "g",
+  "es": "Daño periódico de {Rattle} −25 %.",
+  "en": "Rattle periodic damage reduced by 25%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Altar of Fangs",
+  "u": "Rav'i",
+  "t": "g",
+  "es": "Daño periódico de {Carrion Burst} −10 %.",
+  "en": "Carrion Burst periodic damage reduced by 10%."
+ },
+ {
+  "d": "2026-08-21",
+  "a": "Altar of Fangs",
+  "u": "Rav'i",
+  "t": "g",
+  "es": "{Feeding Frenzy} ya no aumenta la frecuencia de {Messy Eater} ni de {Carrion Burst}.",
+  "en": "Feeding Frenzy no longer increases the rate of Messy Eater and Carrion Burst."
+ },
+ {
+  "d": "2026-08-21",
+  "a": "Altar of Fangs",
+  "u": "Rav'i",
+  "t": "v",
+  "es": "Los montones de {Fresh Meat} muestran ahora un aviso visual cuando Rav'i está lo bastante cerca para comer de ellos.",
+  "en": "Fresh Meat piles now display a warning visual when Rav'i is close enough to eat from them."
+ },
+ {
+  "d": "2026-08-21",
+  "a": "Altar of Fangs",
+  "u": "Rav'i",
+  "t": "g",
+  "es": "Daño de {Hydrastrike} −33 %.",
+  "en": "Hydrastrike damage reduced by 33%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Altar of Fangs",
+  "u": "Ravenous Descendant",
+  "t": "g",
+  "es": "Vida −9 %.",
+  "en": "Health reduced by 9%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Altar of Fangs",
+  "u": "Ritual Chieftain",
+  "t": "g",
+  "es": "Absorción de curación de {Blood Sacrifice} −12 %.",
+  "en": "Blood Sacrifice healing absorb reduced by 12%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Altar of Fangs",
+  "u": "Twinfang Harrower",
+  "t": "g",
+  "es": "Vida −6 %.",
+  "en": "Health reduced by 6%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Altar of Fangs",
+  "u": "Twinfang Harrower",
+  "t": "g",
+  "es": "Daño periódico de {Paralyzing Shot} −20 %.",
+  "en": "Paralyzing Shot periodic damage reduced by 20%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Altar of Fangs",
+  "u": "Twinfang Harrower",
+  "t": "g",
+  "es": "Duración de {Paralyzing Shot} 14 s (antes 20 s).",
+  "en": "Paralyzing Shot duration reduced to 14 seconds (was 20 seconds)."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Altar of Fangs",
+  "u": "Zul'jan",
+  "t": "g",
+  "es": "Daño periódico de {Axegrinder} −15 %.",
+  "en": "Axegrinder periodic damage reduced by 15%."
+ },
+ {
+  "d": "2026-08-21",
+  "a": "Altar of Fangs",
+  "u": "Zul'jan",
+  "t": "g",
+  "es": "El primer lanzamiento de {Ritual of the Fang} ocurre ahora unos segundos más tarde en el combate.",
+  "en": "The initial cast of Ritual of the Fang now occurs a few seconds later in the encounter."
+ },
+ {
+  "d": "2026-08-21",
+  "a": "Altar of Fangs",
+  "u": "Zul'jan",
+  "t": "g",
+  "es": "Tiempo de lanzamiento de {Ritual of the Fang} 5 s (antes 4 s).",
+  "en": "Ritual of the Fang cast time increased to 5 seconds (was 4 seconds)."
+ },
+ {
+  "d": "2026-08-21",
+  "a": "Altar of Fangs",
+  "u": "Zul'jan",
+  "t": "g",
+  "es": "Daño de {Fang Empowered} −20 %.",
+  "en": "Fang Empowered damage reduced by 20%."
+ },
+ {
+  "d": "2026-09-21",
+  "a": "Den of Nalorakk",
+  "u": "*General",
+  "t": "f",
+  "es": "Corregido que seguir la guía de Lindormi en Den of Nalorakk y Altar of Fangs hiciera terminar la mazmorra sin alcanzar el requisito de fuerzas enemigas.",
+  "en": "Fixed an issue where following Lindormi's Guidance in Den of Nalorakk and Altar of Fangs would lead to ending the dungeon short of the enemy forces requirement."
+ },
+ {
+  "d": "2026-09-10",
+  "a": "Den of Nalorakk",
+  "u": "*General",
+  "t": "f",
+  "es": "Corregido que {Echoing Maul} de Nalorakk se activara a veces sin querer.",
+  "en": "Addressed an issue where Nalorakk's Echoing Maul can sometimes trigger unintentionally."
+ },
+ {
+  "d": "2026-09-09",
+  "a": "Den of Nalorakk",
+  "u": "*General",
+  "t": "f",
+  "es": "Corregido que las mascotas de los jugadores no pudieran dañar a The Winter Squall.",
+  "en": "Addressed an issue where player pets were unable to damage The Winter Squall."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "Den of Nalorakk",
+  "u": "*General",
+  "t": "f",
+  "es": "Corregido que interactuar con Food Offering montado pudiera dejarla sin poder usarse durante un rato.",
+  "en": "Addressed an issue where interacting with Food Offering while mounted can cause it to no longer be interactable for a short period."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Den of Nalorakk",
+  "u": "*General",
+  "t": "g",
+  "es": "Eliminados 2 Earthwhisper Tender de la primera zona.",
+  "en": "Reduced the number of Earthwhisper Tenders in the first area by 2."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Den of Nalorakk",
+  "u": "Thornclaw Gatherer",
+  "t": "g",
+  "es": "Reutilización de {Rotten Supplies} 17 s (antes 14 s).",
+  "en": "Rotten Supplies cooldown increased to 17 seconds (was 14 seconds)."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Kings' Rest",
+  "u": "*General",
+  "t": "a",
+  "es": "Finished Mummy y Half-Finished Mummy pasan a ser élites.",
+  "en": "Finished Mummy and Half-Finished Mummy are now marked as elites."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Kings' Rest",
+  "u": "*General",
+  "t": "a",
+  "es": "Risen Hexer lanza ahora {Shadow Bolt} (antes {Shadowfrost Bolt}).",
+  "en": "Risen Hexer now casts Shadow Bolt (was Shadowfrost Bolt)."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Kings' Rest",
+  "u": "*General",
+  "t": "a",
+  "es": "Phantom Hex Priest usa ahora magia de Sombras (antes Naturaleza).",
+  "en": "Phantom Hex Priest now uses Shadow magic (was Nature)."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Kings' Rest",
+  "u": "*General",
+  "t": "g",
+  "es": "Reutilización de la habilidad de {Shadow of Zul} aumentada.",
+  "en": "Increased Shadow of Zul's ability cooldown."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Kings' Rest",
+  "u": "*General",
+  "t": "g",
+  "es": "{Sudden Rupture} de Bloodsworn Assassin evita ahora elegir al mismo jugador dos veces seguidas.",
+  "en": "Bloodsworn Assassin's Sudden Rupture now prefers not targeting the same player consecutively."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Kings' Rest",
+  "u": "The Council of Tribes",
+  "t": "v",
+  "es": "Actualizado el efecto visual de {Whirling Axes} de Kula the Butcher.",
+  "en": "Kula the Butcher's Whirling Axes visual updated."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Kings' Rest",
+  "u": "The Council of Tribes",
+  "t": "g",
+  "es": "Aka'ali the Conqueror y Zanazal the Wise esperan ahora un instante antes de atacar a los jugadores.",
+  "en": "Aka'ali the Conqueror and Zanazal the Wise now wait briefly before attacking players."
+ },
+ {
+  "d": "2026-10-16",
+  "a": "Murder Row",
+  "u": "*General",
+  "t": "v",
+  "es": "Se añade un indicador visual de la zona segura de cada barril durante {Murder in a Row}.",
+  "en": "Added a visual indicating the safe zone of a barrel during Murder in a Row."
+ },
+ {
+  "d": "2026-10-16",
+  "a": "Murder Row",
+  "u": "*General",
+  "t": "a",
+  "es": "Nota de los desarrolladores: se corrigió que {Murder in a Row} de Zaen Bladesorrow asignara a veces la zona segura a un barril tras el que el jugador no se escondía. Con la corrección hay que estar más cerca del barril para estar protegido; para que se vea claro, cada barril muestra ahora el radio de la zona segura.",
+  "en": "Developers' notes: Recently, we addressed an issue where Zaen Bladesorrow's Murder in a Row could incorrectly assign a player's safe spot to a barrel they weren't hiding behind. With the fix, players must stand closer to a barrel to be protected. To better communicate this change, each barrel will now have a visual indicator showing the radius of the safe area players need to hide behind a barrel during Murder in a Row."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "Murder Row",
+  "u": "*General",
+  "t": "f",
+  "es": "Corregido que {Axe Toss} de Xathuux the Annihilator infligiera a veces menos daño del debido.",
+  "en": "Addressed an issue where Xathuux the Annihilator's Axe Toss can sometimes inflict less damage than intended."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Murder Row",
+  "u": "*General",
+  "t": "f",
+  "es": "Corregido que {Malefic Wave} fallara a veces al golpear a los jugadores.",
+  "en": "Addressed an issue where Malefic Wave can sometimes fail to hit players."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Murder Row",
+  "u": "*General",
+  "t": "f",
+  "es": "Corregido que Row Snitch pudiera quedar sin poder interactuar con él.",
+  "en": "Addressed an issue where Row Snitch can be uninteractable."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Murder Row",
+  "u": "Lithiel Cinderfury",
+  "t": "a",
+  "es": "{Fingers of Gul'dan} prefiere ahora a jugadores que no sean tanques.",
+  "en": "Fingers of Gul'dan now prefers non-tank players."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Murder Row",
+  "u": "Lithiel Cinderfury",
+  "t": "g",
+  "es": "Número de objetivos de {Fingers of Gul'dan} 4 (antes 5).",
+  "en": "Fingers of Gul'Dan number of targets reduced to 4 (was 5)."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Murder Row",
+  "u": "Lithiel Cinderfury",
+  "t": "r",
+  "es": "Número de Wild Imps invocados por {Fingers of Gul'dan} 4 (antes 3).",
+  "en": "Fingers of Gul'dan number of Wild Imps summoned increased to 4 (was 3)."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Murder Row",
+  "u": "Zaen Bladesorrow",
+  "t": "g",
+  "es": "Daño de {Fire Bomb} −33 %.",
+  "en": "Fire Bomb damage reduced by 33%."
+ },
+ {
+  "d": "2026-09-17",
+  "a": "Ruby Life Pools",
+  "u": "*General",
+  "t": "f",
+  "es": "Corregido que Blazebound Destroyer o Primalist Flamedancer no sumaran fuerzas enemigas si ningún jugador estaba en su tabla de amenaza al terminar su secuencia de muerte.",
+  "en": "Addressed an issue where Blazebound Destroyers or Primalist Flamedancers could fail to contribute towards enemy forces if no player was on their threat table when they finished their death sequence."
+ },
+ {
+  "d": "2026-09-17",
+  "a": "Ruby Life Pools",
+  "u": "*General",
+  "t": "a",
+  "es": "Nota de los desarrolladores: un efecto secundario conocido es que estas criaturas ya no muestran su aportación a las fuerzas enemigas en el tooltip de la interfaz por defecto.",
+  "en": "Developers' notes: A known side-effect of this change is that these creatures will no longer display their contribution towards enemy forces on their tooltip in the default UI."
+ },
+ {
+  "d": "2026-09-03",
+  "a": "Ruby Life Pools",
+  "u": "*General",
+  "t": "f",
+  "es": "Corregido que el PNJ de regreso a la entrada de Radiant Drake no apareciera en Mítica+ tras derrotar al último jefe.",
+  "en": "Fixed an issue where the Radiant Drake entrance-return NPC did not appear in Mythic+ after defeating the final boss."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Ruby Life Pools",
+  "u": "*General",
+  "t": "a",
+  "es": "Se sustituye el Flashfrost Chillweaver más cercano a Defier Draghar por un Deepstone Earthshaper y se mueve uno de los Earthbound Guardian anteriores junto a él.",
+  "en": "Replaced the Flashfrost Chillweaver nearest to Defier Draghar with a Deepstone Earthshaper, and moved one of the preceding Earthbound Guardians next to this creature."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Ruby Life Pools",
+  "u": "*General",
+  "t": "a",
+  "es": "Requisito de fuerzas enemigas ajustado para que la ruta siga siendo la misma.",
+  "en": "Adjusted enemy forces requirement to keep routing the same as before."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Ruby Life Pools",
+  "u": "*General",
+  "t": "g",
+  "es": "Vida de Deepstone Earthshaper −8 % y vulnerabilidad de daño de {Techtonic Strikes} 25 % (antes 35 %).",
+  "en": "Deepstone Earthshaper's health reduced by 8%, and Techtonic Strikes damage vulnerability reduced to 25% (was 35%)."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Ruby Life Pools",
+  "u": "*General",
+  "t": "g",
+  "es": "Vida de Flashfrost Chillweaver −10 %.",
+  "en": "Flashfrost Chillweaver's health reduced by 10%."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Ruby Life Pools",
+  "u": "*General",
+  "t": "g",
+  "es": "Daño periódico y de explosión de {Living Bomb} de Primalist Cinderweaver −10 %.",
+  "en": "Primalist Cinderweaver's Living Bomb periodic damage and explosion damage reduced by 10%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Ruby Life Pools",
+  "u": "Defier Draghar",
+  "t": "g",
+  "es": "Vida −27 %.",
+  "en": "Health reduced by 27%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Ruby Life Pools",
+  "u": "Earthbound Guardian",
+  "t": "g",
+  "es": "Daño de impacto de {Earthbound's Imprint} −21 %.",
+  "en": "Earthbound's Imprint impact damage reduced by 21%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Ruby Life Pools",
+  "u": "Earthbound Guardian",
+  "t": "g",
+  "es": "Daño periódico de {Earthbound's Imprint} −13 %.",
+  "en": "Earthbound's Imprint periodic damage reduced by 13%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Ruby Life Pools",
+  "u": "High Channeler Ryvati",
+  "t": "g",
+  "es": "Absorción de {Tempest Stormshield} 15 % de la vida máxima (antes 20 %).",
+  "en": "Tempest Stormshield absorb percentage of maximum health reduced to 15% (was 20%)."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Ruby Life Pools",
+  "u": "Kokia Blazehoof",
+  "t": "g",
+  "es": "Vida de Blazebound Firestorm −12,5 %.",
+  "en": "Blazebound Firestorm health reduced by 12.5%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Ruby Life Pools",
+  "u": "Kokia Blazehoof",
+  "t": "g",
+  "es": "Daño de impacto de {Inferno} de Blazebound Firestorm −18 %.",
+  "en": "Blazebound Firestorm's Inferno impact damage reduced by 18%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Ruby Life Pools",
+  "u": "Kokia Blazehoof",
+  "t": "g",
+  "es": "Daño periódico de Blazebound Firestorm −14 %.",
+  "en": "Blazebound Firestorm's periodic damage reduced by 14%."
+ },
+ {
+  "d": "2026-08-19",
+  "a": "Ruby Life Pools",
+  "u": "Kyrakka and Erkhart Stormvein",
+  "t": "f",
+  "es": "Corregido que Erkhart pudiera apuntar con {Stormslam} a un jugador inesperado.",
+  "en": "Addressed an issue where Ekhart could target an unexpected player with Stormslam."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Ruby Life Pools",
+  "u": "Melidrussa Chillworn",
+  "t": "g",
+  "es": "Reutilización de {Cold Claws} de Infused Whelp aumentada.",
+  "en": "Infused Whelp's Cold Claws cooldown increased."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Ruby Life Pools",
+  "u": "Primalist Cinderweaver",
+  "t": "g",
+  "es": "El debuff de {Living Bomb} ahora se puede disipar y, al disiparlo, no se produce el daño de la explosión.",
+  "en": "Living Bomb debuff can now be dispelled and the explosion damage will not occur when dispelled."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Ruby Life Pools",
+  "u": "Storm Warrior",
+  "t": "g",
+  "es": "Daño de {Thunderous Stomp} −18 %.",
+  "en": "Thunderous Stomp damage reduced by 18%."
+ },
+ {
+  "d": "2026-08-14",
+  "a": "Ruby Life Pools",
+  "u": "Thunderhead",
+  "t": "f",
+  "es": "Corregido que {Electrical Discharge} fallara a veces al golpear a los jugadores.",
+  "en": "Fixed an issue where Electrical Discharge would sometimes fail to hit players."
+ },
+ {
+  "d": "2026-08-20",
+  "a": "Ruby Life Pools",
+  "u": "Thunderhead and Flamegullet",
+  "t": "f",
+  "es": "Corregido que ciertas habilidades cancelaran sin querer los alientos de estos jefes.",
+  "en": "Fixed an issue where certain abilities could cause their breath spells to cancel unexpectedly."
+ },
+ {
+  "d": "2026-09-22",
+  "a": "Temple of Sethraliss",
+  "u": "*General",
+  "t": "f",
+  "es": "Corregido que {Slither Strike} de Shrouded Fang pudiera lanzarse estando bajo control de masas.",
+  "en": "Fixed an issue that allowed Shrouded Fang's Slither Strike to cast while crowd controlled."
+ },
+ {
+  "d": "2026-08-27",
+  "a": "Temple of Sethraliss",
+  "u": "*General",
+  "t": "f",
+  "es": "Corregido que la criatura del afijo Voidbound Emissary de M+ pudiera hacer desaparecer a Galvazzt.",
+  "en": "Fixed an issue where the Voidbound Emisssary M+ affix creature could cause Galvazzt to despawn."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Temple of Sethraliss",
+  "u": "*General",
+  "t": "a",
+  "es": "Se sustituye un Faithless Subjugator por una Lightning Serpent.",
+  "en": "Replaced a Faithless Subjugator with a Lightning Serpent."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Temple of Sethraliss",
+  "u": "*General",
+  "t": "a",
+  "es": "Requisito de fuerzas enemigas ajustado para que la ruta siga siendo la misma.",
+  "en": "Adjusted enemy forces requirement to keep routing the same as before."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Temple of Sethraliss",
+  "u": "*General",
+  "t": "g",
+  "es": "Los Swarming Krolusk esperan más tiempo inactivos tras aparecer antes de atacar.",
+  "en": "Swarming Krolusks now idle for longer after spawning before attacking."
+ },
+ {
+  "d": "2026-08-19",
+  "a": "Temple of Sethraliss",
+  "u": "*General",
+  "t": "f",
+  "es": "Corregido que Spark Channeler pudiera ser desorientado sin querer.",
+  "en": "Fixed an issue where Spark Channeler could be turned unexpectedly."
+ },
+ {
+  "d": "2026-08-19",
+  "a": "Temple of Sethraliss",
+  "u": "*General",
+  "t": "f",
+  "es": "Corregido que las criaturas Static Anomaly no contaran bien para las fuerzas enemigas.",
+  "en": "Fixed an issue where Static Anomaly creatures did not contribute properly to the enemy forces count."
+ },
+ {
+  "d": "2026-08-19",
+  "a": "Temple of Sethraliss",
+  "u": "*General",
+  "t": "a",
+  "es": "El requisito de fuerzas enemigas se ha ajustado por esta corrección; no afecta a la ruta.",
+  "en": "The enemy forces requirement has been adjusted to take this fix into account. This change does not affect routing."
+ },
+ {
+  "d": "2026-08-20",
+  "a": "Temple of Sethraliss",
+  "u": "Avatar of Sethraliss",
+  "t": "f",
+  "es": "Corregido que la barra de progreso llegara al 100 % cuando el Avatar tenía el 99 % de vida.",
+  "en": "Fixed an issue where the progress bar could reach 100% when the Avatar reached 99% health."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Temple of Sethraliss",
+  "u": "Static Anomaly",
+  "t": "g",
+  "es": "Daño de {Spark Step} −25 %.",
+  "en": "Spark Step damage reduced by 25%."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "The Blinding Vale",
+  "u": "*General",
+  "t": "a",
+  "es": "Requisito de fuerzas enemigas 686 (antes 655).",
+  "en": "Increased enemy forces requirement to 686 (was 655)."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "The Blinding Vale",
+  "u": "*General",
+  "t": "g",
+  "es": "Ajustada la aparición de criaturas en la última zona para reducir su densidad.",
+  "en": "Adjusted spawning in the last area to reduce creature density."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "The Blinding Vale",
+  "u": "*General",
+  "t": "g",
+  "es": "Eliminado un Radiant Spellsower antes de Ziekket.",
+  "en": "Removed a Radiant Spellsower before Ziekket."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "The Blinding Vale",
+  "u": "Ikuzz the Light Hunter",
+  "t": "f",
+  "es": "Corregido que {Bloodthorn Root} se viera afectada por efectos de desorientación.",
+  "en": "Addressed an issue where Bloodthorn Root is affected by disorient effects."
+ },
+ {
+  "d": "2026-08-19",
+  "a": "The Blinding Vale",
+  "u": "Ikuzz the Light Hunter",
+  "t": "f",
+  "es": "Corregido que los Caballeros de la Muerte no pudieran lanzar {Consumption} tras ser levantados por {Bloodthirsty Gaze}.",
+  "en": "Resolved an issue preventing Death Knights from casting Consumption after the Death Knight has been picked up by Bloodthirsty Gaze."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "The Blinding Vale",
+  "u": "Lightwarden Ruia",
+  "t": "g",
+  "es": "Daño periódico de {Lightfire} −15 %.",
+  "en": "Lightfire periodic damage reduced by 15%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "The Blinding Vale",
+  "u": "Lightwarden Ruia",
+  "t": "g",
+  "es": "Daño de {Pulverizing Strikes} −12 %.",
+  "en": "Pulverizing Strikes damage reduced by 12%."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "The Blinding Vale",
+  "u": "Potatoad Matriarch",
+  "t": "a",
+  "es": "Valor de fuerzas enemigas 60 (antes 30).",
+  "en": "Increased enemy forces value to 60 (was 30)."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "The Blinding Vale",
+  "u": "Potatoad Matriarch",
+  "t": "g",
+  "es": "Vida −10 %.",
+  "en": "Reduced health by 10%."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "The Blinding Vale",
+  "u": "Potatoad Matriarch",
+  "t": "g",
+  "es": "Daño inicial de {Toxic Spew} −50 %.",
+  "en": "Toxic Spew initial damage reduced by 50%."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "The Blinding Vale",
+  "u": "Potatoad Matriarch",
+  "t": "g",
+  "es": "Radio de selección de Toadspawn 3-7 m (antes 10 m); los huevos terminan de eclosionar aunque la Matriarch haya muerto.",
+  "en": "Toadspawn target radius reduced to 3-7 yards (was 10 yards), and eggs now finish hatching even if the Matriarch is dead."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "The Blinding Vale",
+  "u": "Radiant Spellsower",
+  "t": "g",
+  "es": "Daño de {Light Bolt Volley} −16 %.",
+  "en": "Light Bolt Volley damage reduced by 16%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "The Blinding Vale",
+  "u": "Sporeblight Belcher",
+  "t": "g",
+  "es": "Vida −11 %.",
+  "en": "Reduced health by 11%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "The Blinding Vale",
+  "u": "Sporeblight Belcher",
+  "t": "g",
+  "es": "Daño periódico de {Spouting Floret} −16 %.",
+  "en": "Spouting Floret periodic damage reduced by 16%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "The Blinding Vale",
+  "u": "Sporeblight Belcher",
+  "t": "g",
+  "es": "Daño de {Belch Sore} −16 %.",
+  "en": "Belch Sore damage reduced by 16%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "The Blinding Vale",
+  "u": "Sporeblight Belcher",
+  "t": "g",
+  "es": "Proyectiles de {Belch Sore} por pulso 3 (antes 5).",
+  "en": "Reduced the number of Belch Sore projectiles per tick to 3 (was 5)."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "The Blinding Vale",
+  "u": "Ziekket",
+  "t": "g",
+  "es": "Vida de Lightspawn Lasher −10 %.",
+  "en": "Lightspawn Lasher health reduced by 10%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "The Blinding Vale",
+  "u": "Ziekket",
+  "t": "g",
+  "es": "Daño de {Lightspore Shot} −16 %.",
+  "en": "Lightspore Shot damage reduced by 16%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "The Blinding Vale",
+  "u": "Ziekket",
+  "t": "g",
+  "es": "Daño de {Oozing Xylem} −16 %.",
+  "en": "Oozing Xylem damage reduced by 16%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "The Blinding Vale",
+  "u": "Ziekket",
+  "t": "g",
+  "es": "Bonificación de celeridad y daño de {Vicious Regrowth} 20 % (antes 30 %).",
+  "en": "Vicious Regrowth haste and damage buff reduced to 20% (was 30%)."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "Voidscar Arena",
+  "u": "*General",
+  "t": "v",
+  "es": "Actualizado el efecto visual de los orbes de {Darkbloom} de Taz'Rah para ajustarse mejor a su radio de impacto.",
+  "en": "Updated visuals of Taz'Rah's Darkbloom orbs to better match their impact radius."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Voidscar Arena",
+  "u": "*General",
+  "t": "a",
+  "es": "Ajustada la aparición de un grupo cerca de Harrower para que quede más cerca de las escaleras.",
+  "en": "Adjusted spawning of a pack near the Harrower to be closer to the stairs."
+ },
+ {
+  "d": "2026-08-14",
+  "a": "Voidscar Arena",
+  "u": "*General",
+  "t": "f",
+  "es": "Corregido que {Smashing Charge} de Brutok pudiera atravesar puertas.",
+  "en": "Addressed an issue where Brutok's Smashing Charge can charge through doors."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Voidscar Arena",
+  "u": "Atroxus",
+  "t": "g",
+  "es": "Daño periódico de {Poison Splash} −11 %.",
+  "en": "Poison Splash periodic damage reduced by 11%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Voidscar Arena",
+  "u": "Atroxus",
+  "t": "g",
+  "es": "Daño periódico de {Toxic Aura} −20 %.",
+  "en": "Toxic Aura periodic damage reduced by 20%."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Voidscar Arena",
+  "u": "Atroxus",
+  "t": "f",
+  "es": "Corregidas las líneas de voz que no coincidían con los hechizos.",
+  "en": "Addressed issues with the voice lines not matching the spells."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Voidscar Arena",
+  "u": "Brutal Overseer",
+  "t": "g",
+  "es": "Aumento de daño por embate de {Brutal Slams} 8 % (antes 10 %).",
+  "en": "Brutal Slams damage increase per slam reduced to 8% (was 10%)."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Voidscar Arena",
+  "u": "Charonus",
+  "t": "g",
+  "es": "Daño periódico de {Condensed Mass} −20 %.",
+  "en": "Condensed Mass periodic damage reduced by 20%."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Voidscar Arena",
+  "u": "Chitigoth",
+  "t": "g",
+  "es": "Duración de la canalización de {Insidious Aura} 8 s (antes 10 s).",
+  "en": "Insidious Aura channel duration reduced to 8 seconds (was 10 seconds)."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "Voidscar Arena",
+  "u": "Feral Saberon",
+  "t": "g",
+  "es": "Reutilización de {Savage Leap} +25 %.",
+  "en": "Savage Leap cooldown increased by 25%."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "Voidscar Arena",
+  "u": "Taz'Rah",
+  "t": "v",
+  "es": "Los indicadores visuales de {Nether Dash} de Taz'Rah giran ahora con más suavidad.",
+  "en": "Nether Dash line visuals now turn more smoothly."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "tg",
+  "u": "Nymrissa Wavecaller",
+  "t": "g",
+  "es": "Vida de Nymrissa Wavecaller y sus múrlocs hasta −10 % en grupos pequeños en dificultades Normal, Heroica y Mítica.",
+  "en": "Nymrissa Wavecaller and her murlocs' health reduced by up to 10% for lower group sizes on Normal, Heroic, and Mythic difficulties."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "tg",
+  "u": "Nymrissa Wavecaller",
+  "t": "g",
+  "es": "Daño inicial y periódico de {Frost Orb} hasta −33 % en grupos pequeños en Normal y Heroica.",
+  "en": "Frost Orb initial and periodic damage reduced by up to 33% for lower group sizes on Normal and Heroic difficulty."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "tg",
+  "u": "Nymrissa Wavecaller",
+  "t": "g",
+  "es": "Daño inicial y periódico de {Frost Orb} hasta −17 % en grupos pequeños en Mítica.",
+  "en": "Frost Orb initial and periodic damage reduced by up to 17% for lower group sizes on Mythic difficulty."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "tg",
+  "u": "Nymrissa Wavecaller",
+  "t": "g",
+  "es": "Duración del aura de {Frost Orb} 12 s (antes 16 s).",
+  "en": "Frost Orb aura duration reduced to 12 seconds (was 16 seconds)."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "tg",
+  "u": "Nymrissa Wavecaller",
+  "t": "g",
+  "es": "Vida de Nymrissa Wavecaller −5 % en Heroica y −10 % en Mítica.",
+  "en": "Health of Nymrissa Wavecaller reduced by 5% on Heroic difficulty and 10% on Mythic difficulty."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "tg",
+  "u": "Nymrissa Wavecaller",
+  "t": "g",
+  "es": "Daño inicial de {Abyssal Rain} −12,5 %.",
+  "en": "Abyssal Rain's initial damage reduced by 12.5%."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "tg",
+  "u": "Nymrissa Wavecaller",
+  "t": "g",
+  "es": "Daño periódico de {Abyssal Rain} −12 % en Heroica y −20 % en Mítica.",
+  "en": "Abyssal Rain's periodic damage reduced by 12% on Heroic difficulty and 20% on Mythic difficulty."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "tg",
+  "u": "Nymrissa Wavecaller",
+  "t": "g",
+  "es": "Menor escalado del daño de {Abyssal Rain} en grupos grandes.",
+  "en": "Reduced Abyssal Rain's damage scaling for larger groups."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "tg",
+  "u": "Nymrissa Wavecaller",
+  "t": "g",
+  "es": "Daño de {Frost Burst} −40 %.",
+  "en": "Frost Burst damage reduced by 40%."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "tg",
+  "u": "Nymrissa Wavecaller",
+  "t": "g",
+  "es": "{Shatter} ocurre ahora a los 40 s (antes 30 s).",
+  "en": "Shatter now occurs after 40 seconds (was 30 seconds)."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "tg",
+  "u": "Nymrissa Wavecaller",
+  "t": "g",
+  "es": "Duración de {Chilling Frost} −1,5 s.",
+  "en": "Chilling Frost duration reduced by 1.5 seconds."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "tg",
+  "u": "Nymrissa Wavecaller",
+  "t": "g",
+  "es": "Bubblefin Frostscale por oleada de múrlocs 2 (antes 3).",
+  "en": "Reduced the number Bubblefin Frostscales that appear with each wave of murlocs to 2 (was 3)."
+ },
+ {
+  "d": "2026-08-26",
+  "a": "va",
+  "u": "*General",
+  "t": "f",
+  "es": "Modo historia: los seguidores de mazmorra guían ahora bien a los jugadores cuando la Asistencia en mazmorras está activada.",
+  "en": "Story Mode: Dungeon followers will now properly lead players when Dungeon Assistance is toggled on."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "*General",
+  "t": "g",
+  "es": "Menos criaturas en toda la zona.",
+  "en": "Reduced the number of creature spawns throughout the zone."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "*General",
+  "t": "g",
+  "es": "Menos sangre necesaria para abrir las puertas del Abismo Venenoso.",
+  "en": "Reduced the blood required to open doors throughout the Venomous Abyss."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "*General",
+  "t": "g",
+  "es": "Daño de {Venom Withdrawal} −30 %.",
+  "en": "Reduced the damage of Venom Withdrawal by 30%."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "*General",
+  "t": "g",
+  "es": "Duración de {Venom Withdrawal} −50 %.",
+  "en": "Reduced the duration of Venom Withdrawal by 50%."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "*General",
+  "t": "g",
+  "es": "Vida de Serpent Ward −75 %.",
+  "en": "Reduced the health of Serpent Wards by 75%."
+ },
+ {
+  "d": "2026-08-20",
+  "a": "va",
+  "u": "*General",
+  "t": "f",
+  "es": "Corregido que los jugadores pudieran caer a través del mundo en The Serpent Warren.",
+  "en": "Resolved an issue where players could fall through the world in The Serpent Warren."
+ },
+ {
+  "d": "2026-08-19",
+  "a": "va",
+  "u": "*General",
+  "t": "f",
+  "es": "Corregido que la puerta de la sala de The Twin Fangs se cerrara al empezar el combate y no se reabriera, impidiendo volver a la entrada de la banda.",
+  "en": "Resolved an issue where the door to The Twin Fangs room would close upon engaging combat but would not reopen, preventing players from backtracking to the entrance of the raid."
+ },
+ {
+  "d": "2026-11-05",
+  "a": "va",
+  "u": "Entombed Sentinels",
+  "t": "g",
+  "es": "Tamaño máximo de los charcos de {Blood Venom} reducido en Heroica y Mítica.",
+  "en": "Reduced the maximum scale of Blood Venom pools on Heroic and Mythic difficulty."
+ },
+ {
+  "d": "2026-11-05",
+  "a": "va",
+  "u": "Entombed Sentinels",
+  "t": "g",
+  "es": "Duración de los charcos de {Blood Venom} 2 min en Mítica (antes 5 min).",
+  "en": "Blood Venom pool duration reduced to 2 minutes on Mythic difficulty (was 5 minutes)."
+ },
+ {
+  "d": "2026-09-09",
+  "a": "va",
+  "u": "Entombed Sentinels",
+  "t": "g",
+  "es": "Las {Toxic Droplets} ya no se pisan al instante si caen justo encima de un jugador.",
+  "en": "Toxic Droplets are no longer instantly stepped on if they land directly on top of a player."
+ },
+ {
+  "d": "2026-09-09",
+  "a": "va",
+  "u": "Entombed Sentinels",
+  "t": "g",
+  "es": "{Living Venom} ya no atraviesa las inmunidades.",
+  "en": "Living Venom no longer pierces immunities."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "va",
+  "u": "Entombed Sentinels",
+  "t": "g",
+  "es": "Vida de Breath of Ula'tek y Blood of Ula'tek −15 % en Buscador de bandas.",
+  "en": "Breath of Ula'tek and Blood of Ula'tek health reduced by 15% on Raid Finder difficulty."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "va",
+  "u": "Nek'zali the Soulcoiler",
+  "t": "g",
+  "es": "Vida de Nek'zali −15 % en Buscador de bandas.",
+  "en": "Nek'zali's health reduced by 15% on Raid Finder difficulty."
+ },
+ {
+  "d": "2026-08-19",
+  "a": "va",
+  "u": "Nek'zali the Soulcoiler",
+  "t": "f",
+  "es": "Corregido que Nek'zali no volviera a su sitio cerca de la entrada de la zona de combate.",
+  "en": "Addressed an issue preventing Nek'zali from leashing near the entrance of the play space."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "va",
+  "u": "Sszorak",
+  "t": "g",
+  "es": "Tiempo para que Sszorak llegue a 100 de furia +5 s en Mítica.",
+  "en": "Increased the time for Sszorak to reach 100 rage by 5 seconds on Mythic difficulty."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "Sszorak",
+  "t": "g",
+  "es": "Daño de {Tempest} −20 % en Heroica y Mítica.",
+  "en": "Tempest damage reduced by 20% on Heroic and Mythic difficulties."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "Sszorak",
+  "t": "g",
+  "es": "{Caustic Claws} ya no forma un charco de {Caustic Residue} en Heroica.",
+  "en": "Caustic Claws no longer forms a pool of Caustic Residue on Heroic difficulty."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "va",
+  "u": "Sszorak",
+  "t": "g",
+  "es": "Vida de Sszorak hasta −10 % en bandas pequeñas en Normal y Heroica.",
+  "en": "Sszorak's health reduced by up to 10% for smaller raid sizes on Normal and Heroic difficulties."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "va",
+  "u": "Sszorak",
+  "t": "g",
+  "es": "Menos jugadores seleccionados por {Raging Crosswinds} en Normal y Heroica.",
+  "en": "Reduced the number of players targeted by Raging Crosswinds on Normal and Heroic difficulties."
+ },
+ {
+  "d": "2026-11-05",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Velocidad de movimiento de {Axegrinder} −20 % en todas las dificultades.",
+  "en": "Axegrinder movement speed reduced by 20% on all difficulties."
+ },
+ {
+  "d": "2026-11-05",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Daño de {Axegrinder} −20 % en Mítica.",
+  "en": "Axegrinder damage reduced by 20% on Mythic difficulty."
+ },
+ {
+  "d": "2026-11-05",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Daño de {Gloombomb} −20 % en Mítica.",
+  "en": "Gloombomb damage reduced by 20% on Mythic difficulty."
+ },
+ {
+  "d": "2026-11-05",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Daño de {Venom Rupture} −15 % en Mítica.",
+  "en": "Venom Rupture damage reduced by 15% on Mythic difficulty."
+ },
+ {
+  "d": "2026-11-05",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Daño de {Malevolent Resonance} −60 %.",
+  "en": "Malevolent Resonance damage reduced by 60%."
+ },
+ {
+  "d": "2026-11-05",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Los {Gravebound Soul Fragments} duran 2 s más antes de desvanecerse en Mítica.",
+  "en": "Gravebound Soul Fragments last an additional 2 seconds before fading away on Mythic difficulty."
+ },
+ {
+  "d": "2026-11-05",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Número de Spiteful Soulcoiler que aparecen con {Spiritcackle} 1 en Mítica (antes 2).",
+  "en": "The number of Spiteful Soulcoilers that spawn from Spiritcackle reduced to 1 on Mythic difficulty (was 2)."
+ },
+ {
+  "d": "2026-11-05",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "a",
+  "es": "Nota de los desarrolladores: con este cambio los Soulcoiler aparecerán de forma parecida a como lo hacen en Heroica.",
+  "en": "Developers' notes: With this change Soulcoilers will now spawn similarly to how they spawn on Heroic difficulty."
+ },
+ {
+  "d": "2026-10-16",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "f",
+  "es": "Corregido que el logro «Watch Out Behind You» no pudiera completarse con bandas de más de 20 jugadores.",
+  "en": "Fixed an issue where the achievement Watch Out Behind You was unable to be completed by raid groups larger than 20 players."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Número inicial total de orbes de {Toxic Deluge} en la Fase 1 8 en Mítica (antes 10).",
+  "en": "The initial total number of orbs that spawn during Toxic Deluge in Phase 1 reduced to 8 on Mythic difficulty (was 10)."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Número de {Virulent Mutation} que aparecen en la Fase 1 4 en Mítica (antes 5).",
+  "en": "The number of Virulent Mutations that spawn in Phase 1 reduced to 4 on Mythic difficulty (was 5)."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Radio de {Virulent Mutation} y {Mutagenic Venom} 6 m (antes 8 m).",
+  "en": "Virulent Mutation and Mutagenic Venom radius reduced to 6 yards (was 8 yards)."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Número de jugadores a los que apunta {Dreadmarch} 3 en Mítica (antes 4).",
+  "en": "The number of players Dreadmarch targets reduced to 3 on Mythic difficulty (was 4)."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "v",
+  "es": "Las Manifestations of Dread muestran ahora su brillo rojo a su objetivo fijado en el mismo instante en que empiezan a fijarlo, en todas las dificultades.",
+  "en": "Manifestations of Dread now immediately display their red glow visuals to their fixated target the moment they began fixating on all difficulties."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Las Manifestations of Dread desaparecen si muere su objetivo fijado, en lugar de fijar a otro jugador, en todas las dificultades.",
+  "en": "Manifestations of Dread now despawn if their fixated target dies instead of re-fixating on a new player on all difficulties."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Ángulo en el que se detecta y aturde a las Manifestations of Dread +10 grados en todas las dificultades.",
+  "en": "Increased the angle Manifestations of Dread are detected and stunned by 10 degrees on all difficulties."
+ },
+ {
+  "d": "2026-10-13",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Tiempo de lanzamiento de {Eternal Nightfall} +2 s en todas las dificultades.",
+  "en": "Eternal Nightfall cast time increased by 2 seconds on all difficulties."
+ },
+ {
+  "d": "2026-09-21",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "f",
+  "es": "Corregido un fallo poco frecuente por el que {Toxic Deluge} no creaba {Coalesced Venom} ni {Virulent Mutation}.",
+  "en": "Fixed a rare issue where Toxic Deluge would fail to create Coalesced Venoms and Virulent Mutations."
+ },
+ {
+  "d": "2026-09-21",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "f",
+  "es": "Corregido un fallo poco frecuente por el que {Fangs of the Crucible} y {Defilement of the Crucible} no creaban zonas de denegación en las dos mitades de la plataforma.",
+  "en": "Fixed a rare issue where Fangs of the Crucible and Defilement of the Crucible would not create area denial on both halves of the platform."
+ },
+ {
+  "d": "2026-09-21",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "f",
+  "es": "Corregido que las mascotas pudieran atacar a Zul'jan durante la escena de rol.",
+  "en": "Resolved an issue where pets could engage Zul'jan during the roleplay."
+ },
+ {
+  "d": "2026-09-17",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "f",
+  "es": "Corregido que {Unnerving Fixation} apuntara a los tanques más a menudo de lo previsto.",
+  "en": "Fixed an issue where Unnerving Fixation was targeting tanks more often than intended."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Daño de {Venom Rupture} −10 % en Heroica y Mítica.",
+  "en": "Venom Rupture damage reduced by 10% on Heroic and Mythic difficulty."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Daño de {Mutagenic Venom} −15 %.",
+  "en": "Mutagenic Venom damage reduced by 15%."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Tiempo de lanzamiento de {Wail of Terror} 12 s en Heroica.",
+  "en": "Wail of Terror cast time increased to 12 seconds on Heroic difficulty."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Tiempo de lanzamiento de {Wail of Terror} 10 s en Mítica.",
+  "en": "Wail of Terror cast time increased to 10 seconds on Mythic difficulty."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "a",
+  "es": "La aparición y el cambio de sitio de Spiteful Soulcoiler al ser interrumpido son ahora más predecibles.",
+  "en": "Spiteful Soulcoiler's spawning and relocation when interrupted are now more predictable."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "a",
+  "es": "Más probabilidad de que un Spiteful Soulcoiler aparezca cerca de Malacrass en Mítica.",
+  "en": "Increased the likelihood a Spiteful Soulcoiler will spawn near Malacrass on Mythic difficulty."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "El número de jugadores a los que apunta {Dreadmarch} ya no aumenta durante la fase, en todas las dificultades.",
+  "en": "The number of players targeted by Dreadmarch no longer increases throughout the phase on all difficulties."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Las Manifestations of Dread evitan ahora fijar a jugadores que ya tienen {Unnerving Fixation}.",
+  "en": "Manifestations of Dread now deprioritize fixating on players that currently have Unnerving Fixation."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Las Manifestations of Dread reveladas al interrumpir {Wail of Terror} permanecen visibles 3 s más.",
+  "en": "Manifestations of Dread revealed by interrupting Wail of Terror now remain visible for an additional 3 seconds."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Fragments of Malacrass durante el intermedio −25 % en Mítica.",
+  "en": "The number of Fragments of Malacrass that spawn during the intermission reduced by 25% on Mythic difficulty."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "f",
+  "es": "Corregido que {Coalesced Venom} y {Virulent Mutation} no cayeran al suelo si un sacerdote que los llevaba entraba en Espíritu de redención.",
+  "en": "Fixed an issue where Coalesced Venoms and Virulent Mutations would fail to drop on the ground if a priest carrying one enters Spirit of Redemption."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Daño de {Coalesced Venom} −15 % en Mítica.",
+  "en": "Coalesced Venom damage reduced by 15% on Mythic difficulty."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Daño de {Venom Rupture} −10 % en Mítica.",
+  "en": "Venom Rupture damage reduced by 10% on Mythic difficulty."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Daño de {Venom Rupture} hasta −15 % en grupos pequeños en Heroica.",
+  "en": "Venom Rupture damage reduced by up to 15% on smaller group sizes on Heroic difficulty."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Daño de {Volatile Venom} hasta −15 % en grupos pequeños en Buscador de bandas, Normal y Heroica.",
+  "en": "Volatile Venom damage reduced by up to 15% on smaller group sizes on Raid Finder, Normal, and Heroic difficulties."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Vida de Spiteful Soulcoiler hasta −10 % en grupos pequeños en Heroica.",
+  "en": "Spiteful Soulcoiler health reduced by up to 10% on smaller group sizes on Heroic difficulty."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Vida de Zul'jan hasta −10 % en grupos pequeños en Buscador de bandas, Normal y Heroica.",
+  "en": "Zul'jan's health reduced by up to 10% on smaller group sizes on Raid Finder, Normal, and Heroic difficulties."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Tiempo de lanzamiento de {Wail of Terror} hasta +20 % en grupos pequeños en Heroica.",
+  "en": "Wail of Terror cast time increased by up to 20% on smaller group sizes on Heroic difficulty."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Mínimo de jugadores que deben ser alcanzados por {Guillotine} y {Grim Guillotine} para evitar el daño de fallo: 3, en Buscador de bandas, Normal y Heroica.",
+  "en": "Reduced the minimum players needed to be hit by Guillotine and Grim Guillotine to avoid failure damage to 3 players on Raid Finder, Normal, and Heroic difficulties."
+ },
+ {
+  "d": "2026-08-31",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "f",
+  "es": "Corregido un fallo poco frecuente por el que {Coalesced Venom} aparecía dentro del borde de una {Virulent Mutation} en Mítica.",
+  "en": "Fixed a rare issue where Coalesced Venom's could spawn inside a Virulent Mutation rim on Mythic difficulty."
+ },
+ {
+  "d": "2026-08-31",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "f",
+  "es": "Corregido que {Soul Sever} marcara mal qué Manifestations of Dread iban a ser destruidas.",
+  "en": "Fixed an issue where Soul Sever was incorrectly highlighting which Manifestations of Dread would be destroyed."
+ },
+ {
+  "d": "2026-08-31",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Absorción de curación de {Defilement of the Coiled Altar} −20 % en Mítica.",
+  "en": "Defilement of the Coiled Altar healing absorb reduced by 20% in Mythic difficulty."
+ },
+ {
+  "d": "2026-08-27",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "f",
+  "es": "Corregido que dejar a Zul'jan con 1 de vida al final del intermedio impidiera matarlo en la Fase 3.",
+  "en": "Fixed an issue where bringing Zul'jan to 1 health at the end of the intermission would prevent him from being killable during phase 3."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "f",
+  "es": "Corregido que el aura de vulnerabilidad de {Sever} durara más de lo previsto.",
+  "en": "Fixed an issue where Sever's vulnerability aura lasted longer than intended."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "r",
+  "es": "Malacrass lanza ahora {Dreadmarch} sobre todos los jugadores 10 s después de enfurecerse.",
+  "en": "Malacrass now casts Dreadmarch on all players 10 seconds after he enrages."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Vida de Malacrass en la Fase 3 −10 % en Normal y Heroica.",
+  "en": "Reduced Malacrass's phase 3 health by 10% on Normal and Heroic difficulties."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "r",
+  "es": "{Eternal Nightfall} ya no se ve afectado por Maldición de lenguas ni efectos similares.",
+  "en": "Eternal Nightfall is no longer affected by Curse of Tongues or similar effects."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "g",
+  "es": "Absorción de {Veil of Twilight} −15 % en Normal y Heroica.",
+  "en": "Reduced the absorb value of Veil of Twilight by 15% on Normal and Heroic difficulties."
+ },
+ {
+  "d": "2026-08-20",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "f",
+  "es": "Corregido que el combate rara vez no pasara bien a la Fase 3 al final del intermedio.",
+  "en": "Fixed an issue where the encounter would rarely fail to properly transition to Phase 3 at the end of the intermission."
+ },
+ {
+  "d": "2026-08-19",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "f",
+  "es": "Corregido que el combate terminara de forma inesperada.",
+  "en": "Fixed an issue where the encounter would end unexpectedly."
+ },
+ {
+  "d": "2026-08-19",
+  "a": "va",
+  "u": "The Coiled Altar",
+  "t": "f",
+  "es": "Corregido que Hex Lord Malacrass y Zul'jan recuperaran demasiada vida durante el intermedio.",
+  "en": "Resolved an issue causing Hex Lord Malacrass and Zul'jan to regain too much health during their intermission."
+ },
+ {
+  "d": "2026-09-10",
+  "a": "va",
+  "u": "The Lost Explorers",
+  "t": "g",
+  "es": "El aumento de daño de Mor'zahi durante {Final Ascension} se reinicia ahora si se interrumpe su lanzamiento.",
+  "en": "Mor'zahi's damage escalation during Final Ascension will now reset if his cast is interrupted."
+ },
+ {
+  "d": "2026-09-09",
+  "a": "va",
+  "u": "The Lost Explorers",
+  "t": "f",
+  "es": "Corregido un fallo visual que ocurría a veces cuando los tortollan se potenciaban.",
+  "en": "Fixed a visual effect issue that sometimes occurred when the tortollans were empowered."
+ },
+ {
+  "d": "2026-09-09",
+  "a": "va",
+  "u": "The Lost Explorers",
+  "t": "f",
+  "es": "Hoji vuelve ahora a teletransportarse a la plataforma principal si cae del puente.",
+  "en": "Hoji will now teleport back to the main platform if he falls from the bridge."
+ },
+ {
+  "d": "2026-08-26",
+  "a": "va",
+  "u": "The Lost Explorers",
+  "t": "f",
+  "es": "La {Cauterizing Flame} de los Evocadores quita ahora bien el efecto de {Splinters} en este combate.",
+  "en": "Evokers' Cauterizing Flame should now properly remove the Splinters effect during this encounter."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "The Lost Explorers",
+  "t": "f",
+  "es": "Corregido que Hoji no dejara de lanzar al instante al terminar el combate, impidiendo completarlo.",
+  "en": "Resolved an issue where Hoji did not immediately stop casting when the encounter ends, preventing the encounter from completing."
+ },
+ {
+  "d": "2026-08-21",
+  "a": "va",
+  "u": "The Lost Explorers",
+  "t": "f",
+  "es": "Corregido que {Final Ascension} infligiera menos daño del previsto.",
+  "en": "Resolved an issue causing Final Ascension to inflict less damage than intended."
+ },
+ {
+  "d": "2026-08-19",
+  "a": "va",
+  "u": "The Lost Explorers",
+  "t": "f",
+  "es": "Corregido que Trader Gebbo no desapareciera a veces.",
+  "en": "Resolved an issue where Trader Gebbo would sometimes not despawn."
+ },
+ {
+  "d": "2026-11-05",
+  "a": "va",
+  "u": "The Twin Fangs",
+  "t": "g",
+  "es": "Daño de {Visceral Burst} −40 % en Mítica.",
+  "en": "Visceral Burst damage reduced by 40% on Mythic difficulty."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "The Twin Fangs",
+  "t": "g",
+  "es": "Daño de {Corrosive Spit} −20 % en Mítica.",
+  "en": "Corrosive Spit damage reduced by 20% on Mythic difficulty."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "The Twin Fangs",
+  "t": "g",
+  "es": "Número de Broodling of Ithraz invocados por {Rouse the Brood} 10.",
+  "en": "Reduced the amount of Broodlings of Ithraz spawned by Rouse the Brood to 10."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "The Twin Fangs",
+  "t": "g",
+  "es": "Tiempo de lanzamiento de {Visceral Burst} +0,5 s.",
+  "en": "Visceral Burst cast time increased by 0.5 seconds."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "va",
+  "u": "The Twin Fangs",
+  "t": "f",
+  "es": "Corregido que las inmunidades impidieran recibir más acumulaciones de {Eternal Venom} por encima del umbral de muerte en Mítica.",
+  "en": "Resolved an issue where immunities would prevent players from receiving additional applications of Eternal Venom beyond the death threshold on Mythic difficulty."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "va",
+  "u": "The Twin Fangs",
+  "t": "g",
+  "es": "Acumulaciones de {Eternal Venom} antes de que el objetivo muera: 10 en Mítica.",
+  "en": "Increased the number of applications before the target dies from Eternal Venom to 10 on Mythic difficulty."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "va",
+  "u": "The Twin Fangs",
+  "t": "r",
+  "es": "Mínimo de objetivos de {Ravenous Feast} 4 en Mítica.",
+  "en": "Increased the number of minimum targets to 4 for Ravenous Feast on Mythic difficulty."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "va",
+  "u": "The Twin Fangs",
+  "t": "g",
+  "es": "Vida de Vexhul e Ithraz −20 % en Buscador de bandas.",
+  "en": "Vexhul and Ithraz health reduced by 20% on Raid Finder difficulty."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "va",
+  "u": "The Twin Fangs",
+  "t": "g",
+  "es": "Efecto máximo de daño a la vida de {Eternal Venom} 50 % en Buscador de bandas.",
+  "en": "Reduced the maximum health damage effect of Eternal Venom to 50% on Raid Finder difficulty."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "va",
+  "u": "The Twin Fangs",
+  "t": "f",
+  "es": "Corregido que la Maestría del Paladín de Protección no funcionara bien contra {Caustic Deluge} y {Eternal Venom}.",
+  "en": "Resolved an issue where Protection Paladin's Mastery did not function correctly against Caustic Deluge or Eternal Venom."
+ },
+ {
+  "d": "2026-08-27",
+  "a": "va",
+  "u": "The Twin Fangs",
+  "t": "f",
+  "es": "Corregido que los indicadores de {Caustic Globule} y {Barbed Bulwark} desaparecieran antes del impacto del proyectil.",
+  "en": "Resolved an issue that could cause Caustic Globule/Barbed Bulwark world indicators to clear prior to the missile impact."
+ },
+ {
+  "d": "2026-08-19",
+  "a": "va",
+  "u": "The Twin Fangs",
+  "t": "f",
+  "es": "Corregido que {Coiling Ichor} afectara al rendimiento del cliente.",
+  "en": "Resolved an issue causing Coiling Ichor to impact game client performance."
+ },
+ {
+  "d": "2026-08-19",
+  "a": "va",
+  "u": "The Twin Fangs",
+  "t": "f",
+  "es": "Corregido que Zul'jarra y Orweyna no pudieran cruzar el puente tras derrotar a The Twin Fangs.",
+  "en": "Resolved an issue where Zul'jarra and Orweyna could fail to path across the bridge after The Twin Fangs were defeated."
+ },
+ {
+  "d": "2026-11-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "a",
+  "es": "Escalado de vida ajustado en Buscador de bandas, Normal y Heroica para tener mejor en cuenta las bandas pequeñas en estos enemigos: Ula'tek, Blightscale Rawling, Blightscale Viper, Blightscale Shrieker y Weakened Doomscale. Su vida base también baja en estas dificultades para que el escalado no la aumente con bandas más grandes.",
+  "en": "Adjusted the health scaling on the following enemies on Raid Finder, Normal, and Heroic difficulties to better account for smaller raid sizes. Their base health has also been reduced on these difficulties to ensure the health scaling does not increase their health with larger raid sizes."
+ },
+ {
+  "d": "2026-11-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Vida de Ula'tek −15 % en Heroica.",
+  "en": "Ula'tek health reduced by 15% on Heroic difficulty."
+ },
+ {
+  "d": "2026-11-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Daño de {Unchecked Rage} −61 % en todas las dificultades.",
+  "en": "Unchecked Rage damage reduced by 61% on all difficulties."
+ },
+ {
+  "d": "2026-11-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Daño de impacto de {Caustic Waves} −32 % en Heroica y Mítica.",
+  "en": "Caustic Waves impact damage reduced by 32% on Heroic and Mythic difficulties."
+ },
+ {
+  "d": "2026-11-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Daño periódico de {Caustic Waves} −75 % en Normal, −61 % en Heroica y −89 % en Mítica.",
+  "en": "Caustic Waves damage over time reduced by 75% on Normal, 61% on Heroic, and 89% on Mythic difficulties."
+ },
+ {
+  "d": "2026-11-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Daño de {Malice} −63 % en Normal y Heroica y −45 % en Mítica.",
+  "en": "Malice damage reduced by 63% on Normal and Heroic difficulty, and 45% on Mythic difficulty."
+ },
+ {
+  "d": "2026-11-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Daño de {Virulent Spit} −46 % en Buscador de bandas, −33 % en Normal y Heroica y −36 % en Mítica.",
+  "en": "Virulent Spit damage reduced by 46% on Raid Finder, 33% on Normal and Heroic, and 36% on Mythic difficulties."
+ },
+ {
+  "d": "2026-11-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Daño de {Falling Debris} −46 % en Buscador de bandas, −33 % en Normal y Heroica y −77 % en Mítica.",
+  "en": "Falling Debris damage reduced by 46% on Raid Finder, 33% on Normal and Heroic, and 77% on Mythic difficulties."
+ },
+ {
+  "d": "2026-11-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Daño de impacto de {Viscous Echoes} −53 % y daño periódico −25 % en todas las dificultades.",
+  "en": "Viscous Echoes impact damage reduced by 53% and damage over time reduced by 25% on all difficulties."
+ },
+ {
+  "d": "2026-11-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Menos huevos invocados por {Call of the Serpent} en Normal y Heroica.",
+  "en": "Reduced the number of eggs summoned by Call of the Serpent on Normal and Heroic difficulty."
+ },
+ {
+  "d": "2026-11-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Menos objetivos elegidos por {Serpent's Bite} en todas las dificultades.",
+  "en": "Reduced the number of targets selected by Serpent's Bite on all difficulties."
+ },
+ {
+  "d": "2026-11-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Menos objetivos elegidos por {Grasping Fangs} en Normal y Heroica.",
+  "en": "Reduced the number of targets selected by Grasping Fangs on Normal and Heroic difficulty."
+ },
+ {
+  "d": "2026-11-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Eliminados 2 huevos de cada lado en la Fase 2: 8 huevos por lado en total en Heroica.",
+  "en": "Removed 2 eggs from each side during Phase 2, reducing the total to 8 eggs per side on Heroic difficulty."
+ },
+ {
+  "d": "2026-11-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Ula'tek ya no genera {Caustic Waves} adicionales con {Spectral Tails} al enviar paredes de olas por las plataformas en la Fase 3 en Heroica.",
+  "en": "Ula'tek no longer generates additional Caustic Waves from Spectral Tails when sending walls of waves across the platforms during Phase 3 on Heroic difficulty."
+ },
+ {
+  "d": "2026-11-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Daño inicial de {Noxious Splash} −33 % y daño periódico −84 % en Mítica.",
+  "en": "Noxious Splash initial damage reduced by 33% and damage over time reduced by 84% on Mythic difficulty."
+ },
+ {
+  "d": "2026-11-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Duración de {Putrid Membrane} 20 s (antes 30 s) en Mítica.",
+  "en": "Putrid Membrane duration reduced to 20 seconds (was 30 seconds) on Mythic difficulty."
+ },
+ {
+  "d": "2026-10-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Daño de {Spectral Coils} −20 % en Heroica y Mítica.",
+  "en": "Spectral Coils damage reduced by 20% on Heroic and Mythic difficulties."
+ },
+ {
+  "d": "2026-10-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "[Fase 2] Daño de {Warden's Protection} −80 %.",
+  "en": "[Stage 02] Warden's Protection damage reduced by 80%."
+ },
+ {
+  "d": "2026-10-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "[Fase 2] Menos objetivos en el suelo durante {Virulent Spit}.",
+  "en": "[Stage 02] Reduced the number of ground targets during Virulent Spit."
+ },
+ {
+  "d": "2026-10-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "[Fase 2] Daño periódico de {Grasping Fangs} −30 % en Heroica y Mítica.",
+  "en": "[Stage 02] Grasping Fangs periodic damage reduced by 30% on Heroic and Mythic difficulties."
+ },
+ {
+  "d": "2026-10-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "[Fase 2] Duración de {Blight Vein} 4 s (antes 6 s) en Heroica y Mítica.",
+  "en": "[Stage 02] Blight Vein duration reduced to 4 seconds on Heroic and Mythic difficulties (was 6 seconds)."
+ },
+ {
+  "d": "2026-10-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "[Fase 3] Vida de Blightscale Shrieker −20 % en Heroica y Mítica.",
+  "en": "[Stage 03] Blightscale Shrieker health reduced by 20% on Heroic and Mythic difficulties."
+ },
+ {
+  "d": "2026-10-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "[Fase 3] Vida de Blightscale Clutch −20 % en Heroica y Mítica.",
+  "en": "[Stage 03] Blightscale Clutch health reduced by 20% on Heroic and Mythic difficulties."
+ },
+ {
+  "d": "2026-10-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "[Fase 3] Vida de Slithering Clutch −20 % en Mítica.",
+  "en": "[Stage 03] Slithering Clutch health reduced by 20% on Mythic difficulties."
+ },
+ {
+  "d": "2026-10-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "[Fase 3] Daño a la banda de {Circling Prey} −30 % en Heroica y Mítica.",
+  "en": "[Stage 03] Circling Prey raid damage reduced by 30% on Heroic and Mythic difficulties."
+ },
+ {
+  "d": "2026-10-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "[Fase 3] Ajustado el ritmo de drenaje de {Serpent's Bite}: ya no hacen falta más de 3 personas para absorberlo, sea cual sea el tamaño de la banda.",
+  "en": "[Stage 03] Adjusted the Drain Rate of Serpent's Bite so you no longer need more than 3 people to soak regardless of raid size."
+ },
+ {
+  "d": "2026-10-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "[Fase 3] Daño de {Toxic Burn} −30 % en Mítica.",
+  "en": "[Stage 03] Toxic Burn damage reduced by 30% on Mythic difficulty."
+ },
+ {
+  "d": "2026-10-06",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "[Fase 3] Oleadas que emite una cola durante {Caustic Waves} 3 (antes 7) en Mítica.",
+  "en": "[Stage 03] The number of waves that emit from a tail during Caustic Waves reduced to 3 on Mythic difficulty (was 7)."
+ },
+ {
+  "d": "2026-10-01",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "f",
+  "es": "Corregido que el Venomous Heart atacara a veces cuerpo a cuerpo a un jugador.",
+  "en": "Fixed an issue where the Venomous Heart would sometimes melee a player."
+ },
+ {
+  "d": "2026-09-29",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "f",
+  "es": "Corregido que {Mother's Wrath} de Ula'tek pudiera lanzarse sobre alguien que no era el objetivo actual si otro jugador tenía más amenaza pero no había superado el umbral para cambiar de objetivo.",
+  "en": "Fixed an issue with Ula'tek's Mother's Wrath where it can be cast at a target that isn't the current target if a non-target has higher threat but hasn't passed the threat threshold to force a target change."
+ },
+ {
+  "d": "2026-09-21",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "[Con el reinicio semanal] Daño de {Stone Venom} de Ula'tek −40 % en todas las dificultades.",
+  "en": "[ With weekly restarts ] Ula'tek's Stone Venom damage reduced by 40% on all difficulties."
+ },
+ {
+  "d": "2026-09-21",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "a",
+  "es": "[Con el reinicio semanal] {Boiling Venom} en Mítica es ahora un aura importante.",
+  "en": "[ With weekly restarts ] Boiling Venom on Mythic difficulty is now an Important Aura."
+ },
+ {
+  "d": "2026-09-21",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "f",
+  "es": "Corregido que {Stone Venom} pudiera no dañar a jugadores lejos de Ula'tek.",
+  "en": "Fixed an issue where Stone Venom could fail to inflict damage to players far from Ula'tek."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "No ponerse dentro de {Mother's Wrath} solo aplica ahora 1 acumulación de {Stone Venom} a la banda en Buscador de bandas.",
+  "en": "Failing to stand within Mother's Wrath now only inflicts 1 stack of Stone Venom onto the raid on Raid Finder difficulty."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Tiempo de lanzamiento de {Malice} de Doomscale Warden 5 s (antes 1,5 s) y daño reducido en Buscador de bandas.",
+  "en": "Doomscale Warden's Malice cast time increased to 5 seconds (was 1.5 seconds) and damage reduced on Raid Finder difficulty."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Blightscale Spawn en la Fase 2 6 en Buscador de bandas.",
+  "en": "The number of Bligthscale Spawn reduced to 6 during Stage 2 on Raid Finder difficulty."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Daño de {Unchecked Rage} reducido en Buscador de bandas.",
+  "en": "Ula'tek's Unchecked Rage damage reduced on Raid Finder difficulty."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Daño de {Rattler Slam} de Gore Rattler reducido en Buscador de bandas.",
+  "en": "Gore Rattler's Rattler Slam damage reduced on Raid Finder difficulty."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Daño de {Stone Venom} reducido en todas las dificultades.",
+  "en": "Stone Venom damage reduced on all difficulties."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Duración de {Putrid Membrane} 30 s (antes 1 hora) en Mítica.",
+  "en": "Putrid Membrane duration reduced to 30 seconds on Mythic difficulty (was 1 hour)."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Blightscale Spawn invocados por {Call of the Serpent} en la Fase 1 8 por oleada (antes 13) en Mítica.",
+  "en": "The number of Blightscale Spawn summoned from Serpent's Call reduced to 8 per wave during Stage 1 on Mythic difficulty (was 13)."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Blightscale Spawn en la Fase 2 12 por lado (antes 14) en Mítica.",
+  "en": "The number of Blightscale Spawn reduced to 12 per side during Stage 2 on Mythic difficulty (was 14)."
+ },
+ {
+  "d": "2026-09-15",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Huevos que suelta {Call of the Serpent} durante el intermedio 8 (antes 14) en Mítica.",
+  "en": "The number of eggs dropped by Serpent's Call during the intermission reduced to 8 on Mythic difficulty (was 14)."
+ },
+ {
+  "d": "2026-09-09",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "f",
+  "es": "Añadidos topes de vida para que el jefe salga de {Rage of the Shackled} al alcanzar ciertos umbrales de vida.",
+  "en": "Added in health backstops to ensure the boss transitions out of Rage of the Shackled when reaching specific health thresholds."
+ },
+ {
+  "d": "2026-09-03",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "r",
+  "es": "{Caustic Waves} se ha ajustado para que no se puedan esquivar nadando por debajo.",
+  "en": "Caustic Waves have been adjusted so they cannot be avoided by swimming under them."
+ },
+ {
+  "d": "2026-09-03",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "f",
+  "es": "Corregido un error en la descripción de {Blight Vein} que apuntaba a un valor de daño equivocado.",
+  "en": "Corrected an error in the Blight Vein spell description that was pointing to the wrong damage value."
+ },
+ {
+  "d": "2026-09-02",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Duración de {Soul Constrictor} 5 s en Mítica.",
+  "en": "Soul Constrictor duration reduced to 5 seconds on Mythic difficulty."
+ },
+ {
+  "d": "2026-09-02",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Daño de {Blight Vein} −25 % en Mítica.",
+  "en": "Blight Vein damage reduced by 25% on Mythic difficulty."
+ },
+ {
+  "d": "2026-09-02",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "f",
+  "es": "Corregido que un {Doomscale Egg} aún pudiera recogerse cuando aparece el Ravenous Doomscale mientras el Doomscale Warden sigue vivo.",
+  "en": "Corrected an issue where a Doomscale Egg could still be picked up after the Ravenous Doomscale spawns while the Doomscale Warden is alive."
+ },
+ {
+  "d": "2026-09-02",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "f",
+  "es": "Añadidas protecciones para no activar varias veces la recogida de un mismo huevo.",
+  "en": "Added additional protections against triggering an egg pickup multiple times from one egg."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "f",
+  "es": "Matar a un Blightscale Wretch fuera de su {Toxic Womb} ya no hace que Spectral Head se sumerja.",
+  "en": "Killing a Blightscale Wretch while outside of its Toxic Womb no longer triggers the Spectral Head to submerge."
+ },
+ {
+  "d": "2026-09-01",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "v",
+  "es": "Ajustada la animación de impacto de una criatura afectada por {Revenge} para que su placa de nombre no se mueva y no dificulte las interrupciones.",
+  "en": "Adjusted the impact animation on a creature affected by the application of Revenge so their nameplate does not shift making interrupts more difficult."
+ },
+ {
+  "d": "2026-08-31",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "a",
+  "es": "El daño por llevar huevos pasa a ser daño periódico (antes daño directo).",
+  "en": "Damage from carrying eggs is now treated as periodic damage (was direct damage)."
+ },
+ {
+  "d": "2026-08-31",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "f",
+  "es": "Corregido que {Blight Vein} pudiera infligir a veces daño adicional.",
+  "en": "Resolved an issue where Blight Vein could occasionally inflict additional damage."
+ },
+ {
+  "d": "2026-08-31",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "f",
+  "es": "Corregido que {Toxic Burn} pudiera infligir a veces daño adicional.",
+  "en": "Resolved an issue where Toxic Burn could occasionally inflict additional damage."
+ },
+ {
+  "d": "2026-08-31",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "f",
+  "es": "Corregido que {Dancing Rune Weapon} dejara de lanzar hechizos al tener como objetivo al Venomous Heart.",
+  "en": "Resolved an issue that could cause Dancing Rune Weapon to fail to cast spells when targeting the Venomous Heart."
+ },
+ {
+  "d": "2026-08-31",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "r",
+  "es": "Alcance de {Grasping Fangs} aumentado.",
+  "en": "Increased the range of Grasping Fangs."
+ },
+ {
+  "d": "2026-08-31",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "f",
+  "es": "Corregido que Ula'tek volviera a emerger durante el intermedio.",
+  "en": "Corrected an issue that would cause Ula'tek to re-emerge during the intermission."
+ },
+ {
+  "d": "2026-08-26",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "f",
+  "es": "Corregido que la selección de objetivo de {Mother's Wrath} pudiera fallar y Ula'tek usara su daño a toda la banda aunque el tanque estuviera en la burbuja.",
+  "en": "Fixed an issue where the targeting of Mother's Wrath could fail, causing Ula'tek to use her raid wide damage despite the tank being in the bubble."
+ },
+ {
+  "d": "2026-08-26",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "f",
+  "es": "Corregido que se aplicara dos veces {Doomscale Shell} sin querer.",
+  "en": "Fixed an issue that could cause unintended duplicate applications of Doomscale Shell."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "f",
+  "es": "Corregida la posición objetivo del Venomous Heart de Ula'tek para que los hechizos de área le den a él y a Ula'tek con más constancia.",
+  "en": "Corrected the target location of Ula'tek's Venomous Heart so that AoE spells more consistently hit it and Ula'tek."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "f",
+  "es": "Corregido que el combate no se reiniciara cuando no quedaba nadie vivo en la sala de Ula'tek.",
+  "en": "Fixed a bug preventing the encounter from resetting when no players were alive in Ula'tek's room."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "a",
+  "es": "Duración de {Greasy Hatchling} 35 s (antes 20 s).",
+  "en": "Increased the duration of Greasy Hatchling to 35 seconds (was 20 seconds)."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Los jugadores están ahora protegidos de ser elegidos por {Virulent Spit} mientras cruzan los charcos de veneno.",
+  "en": "Players are now protected against being targeted by Virulent Spit while crossing the venom pools."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "f",
+  "es": "Corregidos los problemas de rutas de {Necrotic Coil} de los Caballeros de la Muerte.",
+  "en": "Resolved an issue causing Death Knights' Necrotic Coil to have pathing issues."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "a",
+  "es": "Hacer que Doomscale Warden lance {Shadow Molt} antes de tiempo ya no reinicia sus tiempos de hechizo.",
+  "en": "Causing the Doomscale Warden to cast Shadow Molt early no longer resets their spell record timings."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Menos jugadores necesarios para absorber {Serpent's Bite} en todos los tamaños de banda.",
+  "en": "Reduced the number of players required to successfully soak Serpent's Bite across the range of raid sizes."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "r",
+  "es": "Los jugadores afectados por {Calcified Corpse} irradian ahora un daño enorme a la banda en Heroica y Mítica.",
+  "en": "Players affected by Calcified Corpse now radiate massive raid damage on Heroic and Mythic difficulties."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Ya no se aplica una décima acumulación errónea de {Stone Venom} al objetivo actual durante {Mother's Wrath}.",
+  "en": "An erroneous tenth stack of Stone Venom is no longer applied to the current target during Ula'tek's Mother's Wrath."
+ },
+ {
+  "d": "2026-08-21",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "f",
+  "es": "Ajustadas las {Caustic Waves} de Gore Rattler para que sigan por encima del suelo de la plataforma principal.",
+  "en": "Adjusted the Caustic Waves from the Gore Rattler so they remain above the floor of the main platform."
+ },
+ {
+  "d": "2026-08-21",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "f",
+  "es": "El tooltip de {Volatile Purge} de Ula'tek ya no tiene un error.",
+  "en": "The tooltip for Ula'tek's Volatile Purge no longer contains an error."
+ },
+ {
+  "d": "2026-08-20",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "g",
+  "es": "Daño de {Blight Vein} reducido en Heroica.",
+  "en": "Blight Vein damage reduced on Heroic difficulty."
+ },
+ {
+  "d": "2026-08-20",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "a",
+  "es": "{Grasping Fangs} apunta ahora a tres jugadores por lado en Heroica, sea cual sea el tamaño del grupo.",
+  "en": "Grasping Fangs now targets three players per side on Heroic difficulty, no matter the instance group size."
+ },
+ {
+  "d": "2026-08-20",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "a",
+  "es": "El área de {Volatile Purge} escala ahora con el tamaño de la banda en Normal y Heroica: el radio es máximo con 10 jugadores y baja poco a poco hasta ser mínimo con 30.",
+  "en": "Volatile Purge's area of effect now scales with raid size in Normal and Heroic difficulties. The effect radius is largest in a 10-player raid and gradually decreases as raid size increases, reaching its smallest size in a 30-player raid."
+ },
+ {
+  "d": "2026-08-20",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "f",
+  "es": "Corregido que el daño de {Spectral Coils} escalara sin querer en dificultades que no son Mítica.",
+  "en": "Resolved an issue causing the damage of Spectral Coils to unintentionally scale on non-Mythic difficulties."
+ },
+ {
+  "d": "2026-08-20",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "a",
+  "es": "{Spectral Coils} necesita ahora al 40 % de la banda para reducir su daño al mínimo.",
+  "en": "Spectral Coils now requires 40% of the raid to reduce its damage to a minimum value."
+ },
+ {
+  "d": "2026-08-20",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "a",
+  "es": "{Spectral Coils} ajustado en Heroica para que su temporización sea más constante.",
+  "en": "Spectral Coils adjusted on Heroic difficulty so it has more consistent timing."
+ },
+ {
+  "d": "2026-08-20",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "f",
+  "es": "Corregido que el debuff de {Blight Vein} no infligiera bien su daño según las acumulaciones en Heroica y Mítica.",
+  "en": "Corrected an issue where the Blight Vein debuff did not properly inflict its damage based on the number of stacks applied, on Heroic and Mythic difficulties."
+ },
+ {
+  "d": "2026-08-20",
+  "a": "va",
+  "u": "Ula'tek",
+  "t": "f",
+  "es": "Corregido que las mascotas de Estampida del talento de héroe Líder de la manada de los Cazadores no dañaran bien al Corazón de Ula'tek.",
+  "en": "Corrected an issue where Hunters' Stampede pets from the Pack Leader hero talents would not properly damage the Heart of Ula'tek during the encounter."
+ },
+ {
+  "d": "2026-11-06",
+  "a": "va",
+  "u": "Vashnik the Malignant",
+  "t": "g",
+  "es": "Daño de {Malignance} −37 % en Mítica.",
+  "en": "Malignance damage reduced by 37% on Mythic difficulty."
+ },
+ {
+  "d": "2026-11-06",
+  "a": "va",
+  "u": "Vashnik the Malignant",
+  "t": "g",
+  "es": "Duración del daño periódico de {Malignance} 16 s en Mítica.",
+  "en": "Malignance damage over time duration reduced to 16 seconds on Mythic difficulty."
+ },
+ {
+  "d": "2026-08-27",
+  "a": "va",
+  "u": "Vashnik the Malignant",
+  "t": "g",
+  "es": "Daño de {Siphoning Infection} −33 % en Buscador de bandas.",
+  "en": "Reduced the damage of Siphoning Infection by 33% on Raid Finder difficulty."
+ },
+ {
+  "d": "2026-08-27",
+  "a": "va",
+  "u": "Vashnik the Malignant",
+  "t": "g",
+  "es": "Daño de {Siphon Blood} −33 % en Buscador de bandas.",
+  "en": "Reduced the damage of Siphon Blood by 33% on Raid Finder difficulty."
+ },
+ {
+  "d": "2026-08-27",
+  "a": "va",
+  "u": "Vashnik the Malignant",
+  "t": "g",
+  "es": "Reducción de curación 80 % (antes 100 %) en Buscador de bandas.",
+  "en": "Reduced the healing reduction 80% (was 100%) on Raid Finder difficulty."
+ },
+ {
+  "d": "2026-08-27",
+  "a": "va",
+  "u": "Vashnik the Malignant",
+  "t": "a",
+  "es": "Curación de {Siphoning Infection} +10 % en Normal.",
+  "en": "Increased the healing of Siphoning Infection by 10% on Normal difficulty."
+ },
+ {
+  "d": "2026-08-27",
+  "a": "va",
+  "u": "Vashnik the Malignant",
+  "t": "a",
+  "es": "Curación de {Siphoning Infection} +500 % en Buscador de bandas.",
+  "en": "Increased the healing of Siphoning Infection by 500% on Raid Finder difficulty."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "Vashnik the Malignant",
+  "t": "f",
+  "es": "Corregido que el Solidified Snake Venom no apareciera para el logro.",
+  "en": "Fixed an issue causing the Solidified Snake Venom to not spawn for the achievement."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "Vashnik the Malignant",
+  "t": "f",
+  "es": "Corregido que {Burning Venom} no se moviera hacia la Malignant Cavity tras ser agarrado.",
+  "en": "Fixed an issue causing Burning Venom to not move towards the Malignant Cavity after being gripped."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "Vashnik the Malignant",
+  "t": "g",
+  "es": "Menos Malignant Totem por lanzamiento.",
+  "en": "Reduced the number of Malignant Totems per cast."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "Vashnik the Malignant",
+  "t": "a",
+  "es": "Ajustadas las posiciones de aparición de los Malignant Totem.",
+  "en": "Adjusted the spawn locations of Malignant Totems."
+ },
+ {
+  "d": "2026-08-25",
+  "a": "va",
+  "u": "Vashnik the Malignant",
+  "t": "f",
+  "es": "Corregido que {Imbibe} infligiera más daño del previsto en Normal y Heroica.",
+  "en": "Fixed a bug causing Imbibe to inflict more damage than intended on Normal and Heroic difficulties."
+ },
+ {
+  "d": "2026-08-21",
+  "a": "va",
+  "u": "Vashnik the Malignant",
+  "t": "g",
+  "es": "Menor escalado de objetivos de {Adaptive Infection}, menos castigador en grupos grandes.",
+  "en": "Reduced target scaling for Adaptive infection to be less punishing for larger group sizes."
+ },
+ {
+  "d": "2026-08-21",
+  "a": "va",
+  "u": "Vashnik the Malignant",
+  "t": "f",
+  "es": "Corregido que {Thinned Blood} se lanzara en dificultades que no son Mítica.",
+  "en": "Fixed an issue causing Thinned Blood to be cast on non-mythic difficulties."
+ },
+ {
+  "d": "2026-08-20",
+  "a": "va",
+  "u": "Vashnik the Malignant",
+  "t": "f",
+  "es": "Corregido que {Stygian Burst} infligiera daño en un área mayor de la prevista.",
+  "en": "Fixed an issue causing Stygian Burst to inflict damage in a larger area than intended."
+ },
+ {
+  "d": "2026-08-20",
+  "a": "va",
+  "u": "Vashnik the Malignant",
+  "t": "a",
+  "es": "Vida de Shrouded Venom redistribuida: ahora tiene un 40 % de vida y un 60 % de escudos.",
+  "en": "Shrouded Venom health redistributed and now have 40% health and 60% shields."
+ },
+ {
+  "d": "2026-08-20",
+  "a": "va",
+  "u": "Vashnik the Malignant",
+  "t": "f",
+  "es": "Corregido que los jugadores recibieran varios golpes de la misma oleada en poco tiempo.",
+  "en": "Fixed an issue causing players to get hit multiple times from the same wave in a short period of time."
+ },
+ {
+  "d": "2026-08-20",
+  "a": "va",
+  "u": "Vashnik the Malignant",
+  "t": "f",
+  "es": "Corregido un fallo poco frecuente por el que usar Arpón sobre un Venom dentro de la Malignant Cavity hacía caer a los jugadores a través del mapa.",
+  "en": "Fixed a rare issue where players using Harpoon on a Venom while inside the Malignant Cavity would cause them to fall through the playspace."
+ },
+ {
+  "d": "2026-08-19",
+  "a": "va",
+  "u": "Vashnik the Malignant",
+  "t": "f",
+  "es": "Corregido que Shrouded Venom evadiera a veces al aparecer.",
+  "en": "Fixed an issue causing Shrouded Venom to sometimes evade after spawning."
+ },
+ {
+  "d": "2026-10-20",
+  "a": "kx",
+  "u": "Kith'ix",
+  "t": "f",
+  "es": "Corregido que el efecto {Void Eruption} de las piezas de armadura de Kith'ix pudiera golpear a objetivos con los que no estás en combate.",
+  "en": "The Void Eruption effect on Kith'ix's armor pieces can no longer hit targets you aren't in combat with."
+ }
+]

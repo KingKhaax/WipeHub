@@ -1,7 +1,6 @@
-# Cada semana mira si el artículo de hotfixes de Blizzard tiene fechas más nuevas que la última de src/classchanges.js
-# (la pestaña «Cambios de clase»). Si las hay, abre un issue con el texto de esos días para pasarlo a la app.
-# No modifica nada solo: los cambios se revisan y se traducen a mano.
-name: Hotfixes de clases
+# Cada semana mira si los artículos de hotfixes de Blizzard tienen fechas más nuevas que los datos de clases, raids y Míticas+.
+# Si las hay, abre un issue con el texto de esos días; no modifica nada solo.
+name: Hotfixes de clases y raids
 
 on:
   schedule:
@@ -35,5 +34,5 @@ jobs:
             echo "Ya hay un issue para estas fechas."
             exit 0
           fi
-          { echo "El artículo de hotfixes de Blizzard tiene fechas más nuevas que la última de \`src/classchanges.js\` ($(jq -r .latestData hotfixes.json))."; echo; echo "Revisa los cambios de clases PvE y añádelos a la pestaña «Cambios de clase» (español e inglés)."; echo; echo '```'; jq -r .text hotfixes.json; echo '```'; } > body.md
+          { echo "Los artículos de hotfixes de Blizzard tienen fechas más nuevas que los datos de la app (clases hasta $(jq -r .latestClasses hotfixes.json), raids y Míticas+ hasta $(jq -r .latestRaids hotfixes.json))."; echo; echo "Sigue tools/raidchanges/FLUJO.md para añadirlos (español e inglés)."; echo; echo '### Clases'; echo '```'; jq -r .classText hotfixes.json; echo '```'; echo; echo '### Raids y Míticas+'; echo '```'; jq -r .raidText hotfixes.json; echo '```'; } > body.md
           gh issue create --title "$title" --body-file body.md
