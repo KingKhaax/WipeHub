@@ -65,7 +65,7 @@ const RaidChanges = (() => {
       const tags = row[4] ? `<span class="rc-ds">${[...row[4]].map((k) => `<i class="rc-d d-${k}">${esc(diffName(k))}</i>`).join('')}</span>` : '';
       body += `<li class="cc-row s-${s[2]}"><span class="cc-type">${L(s[0], s[1])}</span><span class="cc-txt">${text(row)}</span>${tags}</li>`;
     }
-    const pic = u.icon ? BOSS(u.icon) : u.ej ? `raidicons/ej_${u.ej}.webp` : u.k === 'b' || u.en === 'General changes' ? iconSrc(area.icon) : u.k === 'm' ? 'hd/inv_misc_bone_humanskull_01.webp' : '';
+    const pic = u.icon ? BOSS(u.icon) : u.ej ? `raidicons/ej_${u.ej}.webp` : u.en === 'General changes' ? 'hd/inv_misc_note_06.webp' : u.k === 'b' ? iconSrc(area.icon) : u.k === 'm' ? 'hd/inv_misc_bone_humanskull_01.webp' : '';
     const icon = pic ? `<img${u.ej ? ' class="ej"' : ''} src="${pic}" width="34" height="34" alt="" loading="lazy">` : '<span class="rc-gen"></span>';
     const dtag = mode === 'raid' && fDiff !== 'all' ? `<em class="rc-dt d-${fDiff}">${esc(diffName(fDiff))}</em>` : '';
     return `<article class="cc-spec rc-unit" style="--cc:${color}"><button type="button" class="cc-spec-h" data-rc-toggle aria-expanded="false">${icon}<span class="cc-spec-n">${esc(name(u))}${dtag}</span><span class="rc-counts">${mini(tally(rows))}</span><small>${rows.length}</small><i class="cc-chev"></i></button><ul class="cc-list" hidden>${body}</ul></article>`;

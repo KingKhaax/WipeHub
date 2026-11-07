@@ -5,7 +5,7 @@
 // Se numera con la última versión del grupo. Los cambios que solo tocan colores, tamaños o ajustes internos no se cuentan.
 // Estructura: { v, date, es: { intro, sections: [[icono, título, [viñetas]]] }, en: { ... } }
 const RELEASES = [
-  { v: '2.30.0', date: '2026-11-07',
+  { v: '2.31.0', date: '2026-11-07',
     es: { intro: 'Nuevo botón «Cambios de Raids / Míticas» con todo lo que Blizzard ha tocado en cada jefe y cada mazmorra desde el 12.1.0, y los paneles del 12.1.5 y del 12.1.7 al día con los hotfixes de esta semana.', sections: [
       ['inv_misc_note_06', 'Cambios de Raids / Míticas', [
         'Botón nuevo junto a «Cambios de clase»: al pulsarlo eliges entre Raids y Míticas+, y ves cada ajuste, mejora y corrección por jefe (con su icono de la Guía de aventuras) y por mazmorra.',
