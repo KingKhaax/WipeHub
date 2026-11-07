@@ -5,7 +5,33 @@
 // Se numera con la última versión del grupo. Los cambios que solo tocan colores, tamaños o ajustes internos no se cuentan.
 // Estructura: { v, date, es: { intro, sections: [[icono, título, [viñetas]]] }, en: { ... } }
 const RELEASES = [
-  { v: '2.19.0', date: '2026-11-07',
+  { v: '2.20.0', date: '2026-11-07',
+    es: { intro: 'Nuevo botón «Cambios de Raids / Míticas» con todo lo que Blizzard ha tocado en cada jefe y cada mazmorra desde el 12.1.0, y los paneles del 12.1.5 y del 12.1.7 al día con los hotfixes de esta semana.', sections: [
+      ['inv_misc_note_06', 'Cambios de Raids / Míticas', [
+        'Botón nuevo junto a «Cambios de clase»: al pulsarlo eliges entre Bandas y Míticas+, y ves cada ajuste, mejora y corrección por jefe (con su icono de la Guía de aventuras) y por mazmorra.',
+        'Verde cuando el jefe se vuelve más fácil (menos daño, vida o mecánicas), rojo cuando se vuelve más difícil, ámbar para cambios sin signo, azul para cambios visuales y gris para correcciones de errores.',
+        'Cubre El Abismo Venenoso, La Gruta Mareal y La liberación de Kith’ix, y las ocho mazmorras de Míticas+ de la temporada 2, desde el 18 de agosto hasta los hotfixes del 6 de noviembre.',
+        'Las habilidades llevan el nombre oficial en castellano, su icono y su tooltip.',
+      ]],
+      ['inv_scroll_02', 'Parches 12.1.5 y 12.1.7 al día', [
+        'El panel del 12.1.5 tiene una sección nueva, «Ajustes y hotfixes», con los ajustes de clases y de JcJ del 27 de octubre, los cambios de las bandas del 5 y 6 de noviembre, las correcciones de la semana y lo que se ha anunciado para los próximos días.',
+        'El panel del 12.1.7 añade los cambios de interfaz de las notas de desarrollo (clic a través de la pantalla de recursos personales, texto del Conjunto 1 de la transfiguración), las pociones de experiencia y los nuevos modelos de capa y arma.',
+      ]],
+    ] },
+    en: { intro: 'New "Raid / Mythic+ changes" button with everything Blizzard has touched on every boss and dungeon since 12.1.0, and the 12.1.5 and 12.1.7 panels up to date with this week’s hotfixes.', sections: [
+      ['inv_misc_note_06', 'Raid / Mythic+ changes', [
+        'A new button next to "Class changes": pick Raids or Mythic+ and see every tuning change, buff and fix per boss (with its Adventure Guide icon) and per dungeon.',
+        'Green when a boss gets easier (less damage, health or mechanics), red when it gets harder, amber for neutral changes, blue for visual changes and grey for bug fixes.',
+        'Covers The Venomous Abyss, The Tidebound Grotto and The Unbinding of Kith’ix, and the eight Season 2 Mythic+ dungeons, from August 18 to the November 6 hotfixes.',
+        'Abilities carry their official Spanish name, icon and tooltip.',
+      ]],
+      ['inv_scroll_02', 'Patches 12.1.5 and 12.1.7 up to date', [
+        'The 12.1.5 panel has a new "Tuning and hotfixes" section with the October 27 class and PvP tuning, the November 5 and 6 raid changes, this week’s fixes and what has been announced for the coming days.',
+        'The 12.1.7 panel adds the interface changes from the development notes (click-through Personal Resource Display, transmog Outfit 1 text), the experience potions and the new cape and weapon models.',
+      ]],
+    ] },
+  },
+  { v: '2.19.0', date: '2026-11-03',
     es: { intro: 'El parche 12.1.5 pasa a castellano con los nombres oficiales de Blizzard y los logros, objetos, monedas y misiones muestran su descripción al pasar el ratón.', sections: [
       ['inv_scroll_02', 'Parche 12.1.5 en castellano', [
         'Todo el contenido del panel del 12.1.5 usa los nombres oficiales en castellano de las notas de Blizzard y de Wowhead: La liberación de Kith\'ix, Laberinto de Kindo\'jan, Invasiones aqir y sus ocho afijos, núcleos de Vacío nebulosos, piedravenenos ascendentes, Isla Serpenteante, Puesto comercial y más.',

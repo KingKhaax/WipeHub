@@ -2065,7 +2065,7 @@ function renderWelcome() {
             <span class="patch"><small>${t('patchLabel')}</small>${esc(currentPatch())}</span>
             ${typeof Patch115 !== 'undefined' ? Patch115.homeHTML() : ''}
             ${typeof Patch122 !== 'undefined' ? Patch122.homeHTML() : ''}
-            ${typeof ClassChanges !== 'undefined' ? ClassChanges.homeHTML() : ''}
+            <div class="cc-pair">${typeof ClassChanges !== 'undefined' ? ClassChanges.homeHTML() : ''}${typeof RaidChanges !== 'undefined' ? RaidChanges.homeHTML() : ''}</div>
           </div>
           <small class="exp-hint" id="expHint"></small>
         </div>

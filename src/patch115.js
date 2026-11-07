@@ -199,11 +199,51 @@ const Patch115 = (() => {
       ])
       + h(L('Reputación de banda guerrera', 'Warband reputation'))
       + ul([L('Las reputaciones de Legion y Battle for Azeroth ahora se comparten con toda la banda guerrera.', 'Legion and Battle for Azeroth reputations are now shared across the warband.')])],
+    ['ajustes', L('Ajustes y hotfixes', 'Tuning and hotfixes'), () =>
+      h(L('Ajustes de clases · 27 de octubre', 'Class tuning · October 27'))
+      + ul([
+        L('<b>Feral:</b> todo el daño +5 %. <b>Restauración:</b> Verdancy +60 %, Regrowth +10 %, Improved Swiftmend +40 % (antes 30 %). Pensado para la sanación en mazmorras.', '<b>Feral:</b> all damage +5%. <b>Restoration:</b> Verdancy +60%, Regrowth +10%, Improved Swiftmend +40% (was 30%). Aimed at dungeon healing.'),
+        L('<b>Puntería:</b> Trick Shots 85 % (antes 75 %), Explosive Shot +10 %, Volley +10 %.', '<b>Marksmanship:</b> Trick Shots 85% (was 75%), Explosive Shot +10%, Volley +10%.'),
+        L('<b>Fuego:</b> todo el daño +5 %. <b>Aflicción:</b> Unstable Affliction +20 %. <b>Destrucción:</b> Rain of Fire +20 %.', '<b>Fire:</b> all damage +5%. <b>Affliction:</b> Unstable Affliction +20%. <b>Destruction:</b> Rain of Fire +20%.'),
+        L('<b>Sutileza:</b> daño de habilidades −8 % y Trickster — Fazed 5 % (antes 7 %): Blizzard recorta gran parte de la compensación que recibió en el 12.1.5.', '<b>Subtlety:</b> ability damage −8% and Trickster — Fazed 5% (was 7%): Blizzard rolls back much of the compensation buff it received in 12.1.5.'),
+        L(`<b>Tejedor de niebla:</b> corregido que ${sp(1280297, 'ability_monk_surgingmist', 'Línea de bruma')} no sanara a veces al objetivo con menos vida.`, `<b>Mistweaver:</b> fixed ${sp(1280297, 'ability_monk_surgingmist', 'Mistline')} sometimes not healing the lowest-health target.`),
+      ])
+      + h(L('JcJ · 27 de octubre', 'PvP · October 27'))
+      + ul([
+        L('<b>Caballero de la Muerte Profano:</b> San\'layn, Vampiric Strike −20 %. <b>Cazador de demonios Devorador:</b> Collapsing Star +20 %.', '<b>Unholy Death Knight:</b> San\'layn, Vampiric Strike −20%. <b>Devourer Demon Hunter:</b> Collapsing Star +20%.'),
+        L('<b>Evocador de Preservación:</b> Chronal Dynamo +80 % a Living Flame sin lanzamiento instantáneo (antes 50 %); Reverberations: Verdant Embrace +80 % en 8 s (antes 40 %).', '<b>Preservation Evoker:</b> Chronal Dynamo +80% to non-instant Living Flame (was 50%); Reverberations: Verdant Embrace +80% over 8 s (was 40%).'),
+        L('<b>Puntería:</b> Kill Shot +40 %; Deathblow con Aimed Shot 25 %; Dark Ranger: Black Arrow +40 %. <b>Fuego:</b> todo el daño −5 %. <b>Escarcha:</b> Frostfire, Isothermic Core (Meteor) +20 % y Duality (Pyroblast) +20 %.', '<b>Marksmanship:</b> Kill Shot +40%; Deathblow from Aimed Shot 25%; Dark Ranger: Black Arrow +40%. <b>Fire:</b> all damage −5%. <b>Frost:</b> Frostfire, Isothermic Core (Meteor) +20% and Duality (Pyroblast) +20%.'),
+        L('<b>Tejedor de niebla:</b> Conduit of the Celestials, Celestial Conduit +35 % y Strength of the Black Ox +25 %. <b>Paladín Sagrado:</b> toda la sanación +5 % y Divine Favor −50 % de coste de Holy Light (antes 30 %).', '<b>Mistweaver:</b> Conduit of the Celestials, Celestial Conduit +35% and Strength of the Black Ox +25%. <b>Holy Paladin:</b> all healing +5% and Divine Favor −50% Holy Light cost (was 30%).'),
+        L('<b>Sacerdote Sagrado:</b> Prayer of Healing +30 %, Prayerful Litany 75 % (antes 125 %); Archon: Resonant Energy 4 % por acumulación (antes 2 %), Empowered Surges 10 % (antes 5 %), Realized Potential 25 % (antes 20 %).', '<b>Holy Priest:</b> Prayer of Healing +30%, Prayerful Litany 75% (was 125%); Archon: Resonant Energy 4% per stack (was 2%), Empowered Surges 10% (was 5%), Realized Potential 25% (was 20%).'),
+        L('<b>Asesinato:</b> Deathstalker, Deathstalker\'s Mark +20 %, Hunt Them Down +20 % y Darkest Night +15 % (antes 8 %). <b>Chamán de Restauración:</b> Healing Stream Totem y Stormstream Totem +20 %.', '<b>Assassination:</b> Deathstalker, Deathstalker\'s Mark +20%, Hunt Them Down +20% and Darkest Night +15% (was 8%). <b>Restoration Shaman:</b> Healing Stream Totem and Stormstream Totem +20%.'),
+      ])
+      + h(L('Banda: Abismo Venenoso (5 y 6 de noviembre)', 'Raid: Venomous Abyss (November 5 and 6)'))
+      + ul([
+        L('<b>Centinelas sepultados:</b> los charcos de Blood Venom son más pequeños en Heroica y Mítica y duran 2 minutos en Mítica (antes 5).', '<b>Entombed Sentinels:</b> Blood Venom pools are smaller on Heroic and Mythic and last 2 minutes on Mythic (was 5).'),
+        L('<b>Los colmillos gemelos:</b> Visceral Burst −40 % en Mítica.', '<b>The Twin Fangs:</b> Visceral Burst −40% on Mythic.'),
+        L('<b>El Altar en Espiral:</b> Axegrinder −20 % de velocidad (todas) y −20 % de daño (Mítica), Gloombomb −20 %, Venom Rupture −15 %, Malevolent Resonance −60 %, un Spiteful Soulcoiler menos con Spiritcackle en Mítica.', '<b>The Coiled Altar:</b> Axegrinder −20% speed (all) and −20% damage (Mythic), Gloombomb −20%, Venom Rupture −15%, Malevolent Resonance −60%, one fewer Spiteful Soulcoiler from Spiritcackle on Mythic.'),
+        L('<b>Vashnik el Maligno:</b> Malignance −37 % de daño y 16 s de daño periódico en Mítica.', '<b>Vashnik the Malignant:</b> Malignance −37% damage and 16 s of periodic damage on Mythic.'),
+        L('<b>Ula\'tek:</b> vida −15 % en Heroica; Unchecked Rage −61 %; Caustic Waves −32 % de impacto y hasta −89 % de daño periódico; Malice −63 % / −45 %; Virulent Spit y Falling Debris reducidos; menos huevos y objetivos; Noxious Splash y Putrid Membrane suavizados en Mítica.', '<b>Ula\'tek:</b> health −15% on Heroic; Unchecked Rage −61%; Caustic Waves −32% impact and up to −89% periodic damage; Malice −63% / −45%; Virulent Spit and Falling Debris reduced; fewer eggs and targets; Noxious Splash and Putrid Membrane softened on Mythic.'),
+        L('Todo el detalle, jefe a jefe y desde el 12.1.0, está en <b>Cambios de Raids / Míticas</b> (botón del inicio).', 'The full boss-by-boss detail since 12.1.0 is in <b>Raid / Mythic+ changes</b> (home button).'),
+      ])
+      + h(L('Correcciones y otros cambios', 'Fixes and other changes'))
+      + ul([
+        L('<b>27 de octubre:</b> los escenarios del Laberinto que no daban crédito para la Gran Cámara ya lo dan; los tabardos ya no ocultan el conjunto de Rexxar.', '<b>October 27:</b> Labyrinth scenarios that were not granting Great Vault credit now do; tabards no longer hide the Rexxar armor set.'),
+        L('<b>30 de octubre:</b> el origen del adorno de plantas de Nagrand que vende la botánica Gril\'ka ya lleva a su ubicación; ajustadas las capas Darkscale y Deepscale de Azshara (línea visible con ciertas luces); corregidos el objetivo adicional «Voices of Stone» del escenario «Bear\'s Burden» y los iconos de ligadura parpadeantes de «The Wandering».', '<b>October 30:</b> tracking the Nagrand plant decor sold by Botanist Gril\'ka now leads to her location; Azshara\'s Darkscale and Deepscale Cloaks adjusted (a line was visible under some lighting); fixed the «Voices of Stone» bonus objective in «Bear\'s Burden» and flickering Tether icons in «The Wandering».'),
+        L('<b>5 de noviembre:</b> actualizados los nombres de varios PNJ tortollan; corregido que, en la variante «Basilisk Blitz» de Shadowguard Point, salir de la profundidad entre portales cambiara tu apariencia y te hiciera hostil a unidades amigas.', '<b>November 5:</b> updated the names of several Tortollan NPCs; fixed an issue in the «Basilisk Blitz» variant of Shadowguard Point where leaving the delve between waygates could change your appearance and make you hostile to friendly units.'),
+      ])
+      + h(L('Próximamente', 'Coming soon'))
+      + ul([
+        L('<b>Puesto comercial:</b> Blizzard ha anunciado correcciones para las monturas Hot Motocross Bunmover (ruedas que no giraban, solapamientos y problemas de asiento) antes del próximo mantenimiento semanal.', '<b>Trading Post:</b> Blizzard has announced fixes for the Hot Motocross Bunmover mounts (wheels not spinning, clipping and seating issues) before next week\'s maintenance.'),
+        L('<b>Crossover Dungeons &amp; Dragons × Warcraft (17 de noviembre):</b> el paquete digital + físico da en el WoW Retail la montura <b>Black Malice</b>, la mascota <b>Eyestalker</b> y el juguete y adorno <b>Shifty Chest</b>. No llegan a WoW Classic ni a WoW: Forever.', '<b>Dungeons &amp; Dragons × Warcraft crossover (November 17):</b> the Digital + Physical bundle grants Retail WoW the <b>Black Malice</b> mount, the <b>Eyestalker</b> battle pet and the <b>Shifty Chest</b> toy and decor. They do not appear in WoW Classic or WoW: Forever.'),
+      ])],
     ['fuentes', L('Fuentes', 'Sources'), () =>
       h(L('Fuentes oficiales de Blizzard', 'Official Blizzard sources'))
       + ul([
         `<a href="#" data-pn-link="${L(LINK_NEWS.replace('/en-us/', '/es-es/'), LINK_NEWS)}">${L('Anuncio: «Midnight\'s 12.1.5 Content Update Arrives October 13» (título original en inglés)', 'Announcement: "Midnight\'s 12.1.5 Content Update Arrives October 13"')}</a>`,
         `<a href="#" data-pn-link="${L(LINK_NOTES.replace('/en-us/', '/es-es/'), LINK_NOTES)}">${L('Notas de la actualización de contenido 12.1.5 (Midnight)', '12.1.5 Content Update Notes (Midnight)')}</a>`,
+        `<a href="#" data-pn-link="https://worldofwarcraft.blizzard.com/en-us/news/24307310/hotfixes-november-5-2026">${L('Registro oficial de hotfixes de Blizzard (octubre y noviembre)', 'Official Blizzard hotfix log (October and November)')}</a>`,
+        `<a href="#" data-pn-link="https://worldofwarcraft.blizzard.com/en-us/news/24296142">${L('Registro oficial de hotfixes de Blizzard (agosto a octubre)', 'Official Blizzard hotfix log (August to October)')}</a>`,
       ])
       + p(L('Los textos están resumidos y traducidos por WipeHub con los nombres oficiales en castellano de las notas de Blizzard y de Wowhead; los que no tienen traducción oficial confirmada se dejan en inglés. Pasa el ratón por los nombres subrayados para ver su descripción. La fecha del miércoles 14 en Europa viene de la prensa especializada. Si Blizzard cambia algo, manda su web.', 'Texts are summarised and translated by WipeHub; names without a confirmed official translation are kept in English. Hover the underlined names to see their description. The Wednesday 14 European date comes from the specialist press. If Blizzard changes anything, its website prevails.'))],
   ];
@@ -238,7 +278,7 @@ const Patch115 = (() => {
         L('<b>En el RPP</b> desde el <b>15 de octubre de 2026</b>. Todo lo que se cuenta aquí es el contenido del RPP y puede cambiar antes de salir.', '<b>On the PTR</b> since <b>October 15, 2026</b>. Everything here is PTR content and may change before release.'),
         L('Blizzard <b>no ha anunciado fecha de salida</b>. La prensa especializada calcula diciembre de 2026, pero es solo una estimación.', 'Blizzard has <b>not announced a release date</b>. The specialist press estimates December 2026, but that is only a guess.'),
         L('Última actualización del RPP: <b>build 70668</b> (29 de octubre de 2026), tras la 70424 y la 70493. Han ido apareciendo escenarios, logros, monturas y adornos nuevos.', 'Latest PTR update: <b>build 70668</b> (October 29, 2026), after builds 70424 and 70493. New scenarios, achievements, mounts and decor keep appearing.'),
-        L('Fin de semana de pruebas de <b>Historias de leyenda</b>: del <b>30 de octubre a las 10:00 PDT al 2 de noviembre a las 10:00 PDT</b> (hora del Pacífico de EE. UU.).', 'Talebound test weekend: from <b>October 30 at 10:00 AM PDT to November 2 at 10:00 AM PDT</b>.'),
+        L('Fin de semana de pruebas de <b>Historias de leyenda</b>: del <b>30 de octubre a las 10:00 PDT al 2 de noviembre a las 10:00 PDT</b> (hora del Pacífico de EE. UU.). Ya ha terminado.', 'Talebound test weekend: from <b>October 30 at 10:00 AM PDT to November 2 at 10:00 AM PDT</b>. It has now ended.'),
         L('Un parche ligero: el resumen oficial no incluye ninguna banda ni mazmorra nueva.', 'A light patch: the official overview lists no new raid or dungeon.'),
       ])
       + h(L('Qué trae', 'What it brings'))
@@ -412,6 +452,13 @@ const Patch115 = (() => {
       + ul([
         L('Aparecen textos para elegir el servicio de <b>chat de voz</b> (Discord o el clásico), el <b>modo de edición de la HUD</b> y los atajos de la <b>barra en cruz</b> del mando.', 'Texts appear for choosing the <b>voice chat</b> service (Discord or the legacy one), the <b>HUD edit mode</b> and the gamepad <b>crossbar</b> bindings.'),
         L('Un grupo solo puede entrar en una localización si el <b>líder del grupo</b> ya está dentro.', 'A party can enter a location only if the <b>party leader</b> is already inside.'),
+        L('<b>Modo de edición:</b> nueva opción para poder hacer clic a través de la <b>Pantalla de recursos personales</b> (Personal Resource Display).', '<b>Edit Mode:</b> new option to click through the <b>Personal Resource Display</b>.'),
+        L('<b>Transfiguración:</b> un texto aclara que el <b>Conjunto 1</b> (Outfit 1) es el que se muestra en la web de la Armería de WoW.', '<b>Transmog:</b> a tooltip clarifies that <b>Outfit 1</b> is the one shown on the WoW Armory website.'),
+      ])
+      + h(L('Objetos y consumibles', 'Items and consumables'))
+      + ul([
+        L('Se han encontrado <b>cuatro pociones nuevas</b> que dan un <b>30 % de experiencia adicional</b> (datos del RPP; todavía no se sabe cómo se consiguen).', '<b>Four new potions</b> granting <b>30% bonus experience</b> have been found (PTR data; how to obtain them is not known yet).'),
+        L('Nuevos <b>modelos de capa y de arma</b> en los archivos del RPP, además del conjunto <b>Witch Hunter</b> (ver Talebound).', 'New <b>cape and weapon models</b> in the PTR files, along with the <b>Witch Hunter</b> set (see Talebound).'),
       ])
       + h(L('Habilidades de jefes', 'Boss abilities'))
       + p(L('La build 70668 toca habilidades de la <b>sabia de pergaminos Iku</b> y del <b>contramaestre Nama</b>; Blizzard no ha explicado qué cambia:', 'Build 70668 touches abilities of <b>Scrollsage Iku</b> and <b>Boatswain Nama</b>; Blizzard has not said what changes:'))
