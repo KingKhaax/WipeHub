@@ -86,7 +86,7 @@ const RaidChanges = (() => {
     const card = (m) => {
       const o = MODES[m];
       const t = total(m);
-      return `<button type="button" class="rc-pick" style="--cc:${o.color}" data-rc-mode="${m}"><span class="rc-pick-ic">${stack(o.icons)}</span><b>${L(o.es, o.en)}</b><small>${L(o.subEs, o.subEn)}</small><span class="rc-pick-n">${badges(t)}<em>${t.n} ${L('cambios', 'changes')}</em></span></button>`;
+      return `<button type="button" class="rc-pick" style="--cc:${o.color}" data-rc-mode="${m}"><span class="rc-in"><span class="rc-pick-ic">${stack(o.icons)}</span><b>${L(o.es, o.en)}</b><small>${L(o.subEs, o.subEn)}</small><span class="rc-pick-n">${badges(t)}<em>${t.n} ${L('cambios', 'changes')}</em></span></span></button>`;
     };
     return `<div class="rc-pick-wrap"><div class="rc-pick-top"><div><h2>${L('Cambios de Raids / Míticas', 'Raid / Mythic+ changes')}</h2><small>${L('Parches 12.1.0 a 12.1.5 · hasta el', 'Patches 12.1.0 to 12.1.5 · up to')} ${esc(fmtDate(UPDATED))}</small></div><button type="button" class="btn ghost" data-rc-close>${L('Cerrar', 'Close')}</button></div><div class="rc-pick-grid">${card('raid')}${card('dungeon')}</div></div>`;
   }
