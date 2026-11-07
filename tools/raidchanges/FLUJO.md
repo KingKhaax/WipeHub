@@ -10,8 +10,13 @@ Este archivo lo sigue cualquier ejecución (manual o programada). Todo en españ
 
 ## 2. Cambios de clase (solo PvE)
 
-- Datos en `src/classchanges.js`: filas `['AAAA-MM-DD', tipo, 'texto en español', 'texto en inglés']` dentro de la clase y la especialización. Tipos: `b` mejora, `n` nerfeo, `r` cambio, `f` corrección.
-- Los nombres de talentos y hechizos se dejan en inglés (nombre oficial); la app les pone tooltip. Después regenera los hechizos con las herramientas de `tools/` (`build-classspells.mjs`, `fix-classspells.mjs`; la cabecera de cada una explica cómo se usa).
+1. Mira en `classText` (salida de check-hotfixes) las secciones «Classes» de cada fecha nueva. Solo PvE: ignora los apartados «Player versus Player».
+2. Añade filas en `src/classchanges.js`, dentro de la clase y la especialización que toque (o en `general` si afecta a toda la clase): `['AAAA-MM-DD', tipo, 'texto en español', 'texto en inglés']`. Tipos: `b` mejora, `n` nerfeo, `r` cambio o rediseño, `f` corrección. El texto en inglés es el oficial de Blizzard; el español lo traduces tú.
+3. Los nombres de talentos y hechizos se escriben en inglés dentro del texto en español: la app los sustituye sola por el nombre oficial en castellano con su icono y su tooltip. Para que eso funcione hay que regenerar los datos:
+   - `node tools/build-classspells.mjs` (descarga las tablas de nombres de wago.tools y escribe `src/classspells.js`).
+   - `node tools/fix-classspells.mjs --write` (ajusta cada hechizo al id exacto del árbol de talentos).
+4. Comprueba que no queda ningún nombre sin traducir: en `src/classspells.js` ningún nombre nuevo debe quedar con el español igual al inglés (salvo nombres propios como San'layn) ni con id -1. Si alguno no tiene traducción oficial en Wowhead (locale=6), añádelo a `MANUAL_ES` de `tools/fix-classspells.mjs` con su traducción y apúntalo en `tools/raidchanges/data/pending-names.json` para revisarlo cuando Wowhead lo traduzca.
+5. Actualiza el texto del subtítulo de la ventana (`PvE · parches 12.1.0 a 12.1.5 y ajustes del …`) y el enlace de fuente (`LINK_TUNING`/`LINK_HOTFIX`) si hay un artículo nuevo.
 
 ## 3. Cambios de raids y Míticas+
 
