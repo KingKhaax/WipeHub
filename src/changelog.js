@@ -5,10 +5,10 @@
 // Se numera con la última versión del grupo. Los cambios que solo tocan colores, tamaños o ajustes internos no se cuentan.
 // Estructura: { v, date, es: { intro, sections: [[icono, título, [viñetas]]] }, en: { ... } }
 const RELEASES = [
-  { v: '2.28.0', date: '2026-11-07',
+  { v: '2.29.0', date: '2026-11-07',
     es: { intro: 'Nuevo botón «Cambios de Raids / Míticas» con todo lo que Blizzard ha tocado en cada jefe y cada mazmorra desde el 12.1.0, y los paneles del 12.1.5 y del 12.1.7 al día con los hotfixes de esta semana.', sections: [
       ['inv_misc_note_06', 'Cambios de Raids / Míticas', [
-        'Botón nuevo junto a «Cambios de clase»: al pulsarlo se abre a su izquierda un desplegable para elegir entre Raids y Míticas+, y ves cada ajuste, mejora y corrección por jefe (con su icono de la Guía de aventuras) y por mazmorra.',
+        'Botón nuevo junto a «Cambios de clase»: al pulsarlo eliges entre Raids y Míticas+, y ves cada ajuste, mejora y corrección por jefe (con su icono de la Guía de aventuras) y por mazmorra.',
         'Verde para los nerfs (el jefe pierde daño, vida o mecánicas), rojo para los buffs, ámbar para cambios sin signo, azul para cambios visuales y gris para correcciones de errores.',
         'Cubre El Abismo Venenoso, La Gruta Mareal y La liberación de Kith’ix, y las ocho mazmorras de Míticas+ de la temporada 2, desde el 18 de agosto hasta los hotfixes del 6 de noviembre.',
         'Las habilidades llevan el nombre oficial en castellano, su icono y su tooltip.',

@@ -51,7 +51,7 @@ const RaidChanges = (() => {
   const mini = (t) => `${t.g ? `<i class="rc-n g" title="Nerfs">${t.g}</i>` : ''}${t.r ? `<i class="rc-n r" title="Buffs">${t.r}</i>` : ''}`;
 
   function homeHTML() {
-    return `<button type="button" class="pn-btn cc-btn rc-btn" data-rc="open"><span class="cc-btn-ic rc-btn-ic">${stack([3492, 3429, 3513])}</span><span class="cc-btn-t">${L('Cambios de Raids / Míticas', 'Raid / Mythic+ changes')}<small>${L('Jefes y mazmorras · 12.1.0 a 12.1.5', 'Bosses and dungeons · 12.1.0 to 12.1.5')}</small></span><i class="pn-chev rc-chev" aria-hidden="true">‹</i></button>`;
+    return `<button type="button" class="pn-btn cc-btn rc-btn" data-rc="open"><span class="cc-btn-ic rc-btn-ic">${stack([3492, 3429, 3513])}</span><span class="cc-btn-t">${L('Cambios de Raids / Míticas', 'Raid / Mythic+ changes')}<small>${L('Jefes y mazmorras · 12.1.0 a 12.1.5', 'Bosses and dungeons · 12.1.0 to 12.1.5')}</small></span></button>`;
   }
 
   function unitBlock(u, color, area) {
@@ -115,7 +115,6 @@ const RaidChanges = (() => {
 
   function open(m) {
     mode = m || null;
-    if (mode) cur = areaFor(mode);
     let dlg = document.getElementById('raidChangesDlg');
     if (!dlg) {
       dlg = document.createElement('dialog');
@@ -157,47 +156,9 @@ const RaidChanges = (() => {
     if (!dlg.open) dlg.showModal();
   }
 
-  let pop = null;
-
-  function closePop() {
-    if (!pop) return;
-    const el = pop;
-    pop = null;
-    document.querySelector('[data-rc="open"]')?.setAttribute('aria-expanded', 'false');
-    el.classList.add('out');
-    setTimeout(() => el.remove(), 140);
-  }
-
-  function popHTML() {
-    const fx = (n) => '<i></i>'.repeat(n);
-    return `<button type="button" role="menuitem" class="pn-opt pn-raid" data-rc-pick="raid"><span class="pn-fx" aria-hidden="true">${fx(6)}</span><span class="pn-t">${L('Raids', 'Raids')}</span></button><button type="button" role="menuitem" class="pn-opt pn-dun" data-rc-pick="dungeon"><span class="pn-fx" aria-hidden="true">${fx(4)}</span><span class="pn-t">${L('Míticas+', 'Mythic+')}</span></button>`;
-  }
-
-  function openPop(btn) {
-    const r = btn.getBoundingClientRect();
-    const el = document.createElement('div');
-    el.className = 'pn-pop rc-pop';
-    el.setAttribute('role', 'menu');
-    el.innerHTML = popHTML();
-    document.body.appendChild(el);
-    const w = el.offsetWidth;
-    const h = el.offsetHeight;
-    const left = r.left - w - 10 >= 8 ? r.left - w - 10 : Math.min(innerWidth - w - 8, r.right + 10);
-    el.style.left = left + 'px';
-    el.style.top = Math.max(8, Math.min(r.top + r.height / 2 - h / 2, innerHeight - h - 8)) + 'px';
-    btn.setAttribute('aria-expanded', 'true');
-    pop = el;
-    el.querySelector('.pn-opt')?.focus();
-  }
-
   document.addEventListener('click', (ev) => {
-    const pick = ev.target.closest('[data-rc-pick]');
-    if (pick) { const m = pick.dataset.rcPick; closePop(); open(m); return; }
-    const btn = ev.target.closest('[data-rc="open"]');
-    if (btn) { if (pop) closePop(); else openPop(btn); return; }
-    if (pop && !ev.target.closest('.rc-pop')) closePop();
+    if (ev.target.closest('[data-rc="open"]')) open(null);
   });
-  document.addEventListener('keydown', (ev) => { if (ev.key === 'Escape' && pop) closePop(); });
 
   return { homeHTML, open };
 })();
