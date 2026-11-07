@@ -22,7 +22,7 @@ const Patch115 = (() => {
 
   function homeHTML() {
     const count = live() ? '' : `<div class="pn-count"><small>${L('Parche 12.1.5 en', 'Patch 12.1.5 in')}</small><div id="pnTimer" class="pn-boxes"></div><small>${L('miércoles 14 de octubre · Kith\'ix', 'Wednesday, October 14 · Kith\'ix')}</small></div>`;
-    return `${count}<button type="button" class="pn-btn pn-menu-btn" data-pn="menu" aria-haspopup="menu" aria-expanded="false"><span class="pn-fx" aria-hidden="true"><i></i><i></i></span><span class="pn-lbl">${L('Contenido del 12.1.5 / 12.1.7', '12.1.5 / 12.1.7 content')}</span><i class="pn-chev" aria-hidden="true">▴</i></button>`;
+    return `${count}<button type="button" class="pn-btn pn-menu-btn" data-pn="menu" aria-haspopup="menu" aria-expanded="false"><span class="pn-fx" aria-hidden="true"><i></i><i></i></span><span class="pn-lbl">${L('Contenido del 12.1.5 / 12.1.7', '12.1.5 / 12.1.7 content')}</span><i class="pn-chev" aria-hidden="true">▸</i></button>`;
   }
 
   function tick() {
@@ -536,22 +536,34 @@ const Patch115 = (() => {
     el.classList.add('out');
     setTimeout(() => el.remove(), 140);
   }
+  function cardsHTML() {
+    const zam = (n) => `raidicons/z_${n}.webp`;
+    const boss = (id) => `raidicons/b${id}.webp`;
+    const card = (v, color, icons, title, sub, tag, date) => `<button type="button" role="menuitem" class="rc-pick pn-card" style="--cc:${color}" data-pn-patch="${v}"><span class="rc-pick-ic">${icons.map((i) => `<img src="${i}" alt="">`).join('')}</span><b>${title}</b><small>${sub}</small><span class="rc-pick-n"><i class="rc-n g">${tag}</i><em>${date}</em></span></button>`;
+    return card('12.1.5', '#b794ff', [boss(3513), zam('inv_121_trinket_raid_ulatek_ulatekclaw'), zam('inv_misc_net_01')], L('Parche 12.1.5', 'Patch 12.1.5'), L('La liberación de Kith\'ix, Laberinto de Kindo\'jan e Invasiones aqir', 'The Unbinding of Kith\'ix, Labyrinth of Kindo\'jan and Aqir Invasions'), L('En directo', 'Live'), L('13 y 14 de octubre', 'October 13 and 14'))
+      + card('12.1.7', '#ffc933', [zam('item_shadowcloth'), zam('inv_misc_book_09'), zam('inv_gilneashorsemount')], L('Parche 12.1.7', 'Patch 12.1.7'), L('Ecos del Núcleo del Mundo: Talebound, Paseo por la historia y más', 'Echoes of the Worldcore: Talebound, Lorewalking and more'), L('En el RPP', 'On the PTR'), L('Sin fecha de salida', 'No release date'));
+  }
+
   function openMenu(btn) {
     const r = btn.getBoundingClientRect();
     const el = document.createElement('div');
-    el.className = 'pn-pop';
+    el.className = 'pn-pop pn-pop-cards';
     el.setAttribute('role', 'menu');
-    // 12.1.5: vacío de Kith'ix (morado, estrellas y agujero negro) · 12.1.7: Núcleo del Mundo (oro con destellos)
-    el.innerHTML = `<button type="button" role="menuitem" class="pn-opt pn-void" data-pn-patch="12.1.5"><span class="pn-fx" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span><span class="pn-t">${L('Contenido del 12.1.5', '12.1.5 content')}</span></button>`
-      + `<button type="button" role="menuitem" class="pn-opt pn-gold" data-pn-patch="12.1.7"><span class="pn-fx" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></span><span class="pn-t">${L('Contenido del 12.1.7', '12.1.7 content')}</span></button>`;
+    el.innerHTML = cardsHTML();
     document.body.appendChild(el);
-    const w = Math.max(r.width, 250);
-    el.style.minWidth = w + 'px';
-    el.style.left = Math.max(8, Math.min(r.left, innerWidth - el.offsetWidth - 8)) + 'px';
-    el.style.bottom = (innerHeight - r.top + 8) + 'px';
+    el.style.visibility = 'hidden';
+    el.style.left = '0px';
+    el.style.top = '0px';
+    const room = innerWidth - r.right - 18;
+    if (room < el.offsetWidth) el.classList.add('stack');
+    const w = el.offsetWidth;
+    const h = el.offsetHeight;
+    el.style.left = (room >= w ? r.right + 12 : Math.max(8, innerWidth - w - 8)) + 'px';
+    el.style.top = Math.max(8, Math.min(r.top + r.height / 2 - h / 2, innerHeight - h - 8)) + 'px';
+    el.style.visibility = '';
     btn.setAttribute('aria-expanded', 'true');
     pop = el;
-    el.querySelector('.pn-opt')?.focus();
+    el.querySelector('.pn-card')?.focus();
   }
 
   document.addEventListener('click', (ev) => {

@@ -5,13 +5,16 @@
 // Se numera con la última versión del grupo. Los cambios que solo tocan colores, tamaños o ajustes internos no se cuentan.
 // Estructura: { v, date, es: { intro, sections: [[icono, título, [viñetas]]] }, en: { ... } }
 const RELEASES = [
-  { v: '2.20.0', date: '2026-11-07',
+  { v: '2.21.0', date: '2026-11-07',
     es: { intro: 'Nuevo botón «Cambios de Raids / Míticas» con todo lo que Blizzard ha tocado en cada jefe y cada mazmorra desde el 12.1.0, y los paneles del 12.1.5 y del 12.1.7 al día con los hotfixes de esta semana.', sections: [
       ['inv_misc_note_06', 'Cambios de Raids / Míticas', [
         'Botón nuevo junto a «Cambios de clase»: al pulsarlo eliges entre Bandas y Míticas+, y ves cada ajuste, mejora y corrección por jefe (con su icono de la Guía de aventuras) y por mazmorra.',
-        'Verde cuando el jefe se vuelve más fácil (menos daño, vida o mecánicas), rojo cuando se vuelve más difícil, ámbar para cambios sin signo, azul para cambios visuales y gris para correcciones de errores.',
+        'Verde para los nerfs (el jefe pierde daño, vida o mecánicas), rojo para los buffs, ámbar para cambios sin signo, azul para cambios visuales y gris para correcciones de errores.',
         'Cubre El Abismo Venenoso, La Gruta Mareal y La liberación de Kith’ix, y las ocho mazmorras de Míticas+ de la temporada 2, desde el 18 de agosto hasta los hotfixes del 6 de noviembre.',
         'Las habilidades llevan el nombre oficial en castellano, su icono y su tooltip.',
+        'Cada banda se puede filtrar por dificultad (Buscador de bandas, Normal, Heroica y Mítica) y por tipo (Nerfs, Buffs, cambios, visuales y correcciones), para ver por ejemplo solo los nerfs en Mítica de un jefe.',
+        'Los nombres de criaturas y jefes salen en castellano con los nombres oficiales de Wowhead, y los iconos de jefes y mazmorras están reescalados en alta definición.',
+        'El botón «Contenido del 12.1.5 / 12.1.7» abre ahora dos tarjetas a su derecha para elegir el parche.',
       ]],
       ['inv_scroll_02', 'Parches 12.1.5 y 12.1.7 al día', [
         'El panel del 12.1.5 tiene una sección nueva, «Ajustes y hotfixes», con los ajustes de clases y de JcJ del 27 de octubre, los cambios de las bandas del 5 y 6 de noviembre, las correcciones de la semana y lo que se ha anunciado para los próximos días.',
@@ -21,9 +24,12 @@ const RELEASES = [
     en: { intro: 'New "Raid / Mythic+ changes" button with everything Blizzard has touched on every boss and dungeon since 12.1.0, and the 12.1.5 and 12.1.7 panels up to date with this week’s hotfixes.', sections: [
       ['inv_misc_note_06', 'Raid / Mythic+ changes', [
         'A new button next to "Class changes": pick Raids or Mythic+ and see every tuning change, buff and fix per boss (with its Adventure Guide icon) and per dungeon.',
-        'Green when a boss gets easier (less damage, health or mechanics), red when it gets harder, amber for neutral changes, blue for visual changes and grey for bug fixes.',
+        'Green for nerfs (the boss loses damage, health or mechanics), red for buffs, amber for neutral changes, blue for visual changes and grey for bug fixes.',
         'Covers The Venomous Abyss, The Tidebound Grotto and The Unbinding of Kith’ix, and the eight Season 2 Mythic+ dungeons, from August 18 to the November 6 hotfixes.',
         'Abilities carry their official Spanish name, icon and tooltip.',
+        'Each raid can be filtered by difficulty (Raid Finder, Normal, Heroic and Mythic) and by type (Nerfs, Buffs, changes, visual changes and fixes), for example to see only the Mythic nerfs of one boss.',
+        'Creature and boss names appear in Spanish with Wowhead’s official names, and the boss and dungeon icons are upscaled in high definition.',
+        'The "12.1.5 / 12.1.7 content" button now opens two cards to its right to pick the patch.',
       ]],
       ['inv_scroll_02', 'Patches 12.1.5 and 12.1.7 up to date', [
         'The 12.1.5 panel has a new "Tuning and hotfixes" section with the October 27 class and PvP tuning, the November 5 and 6 raid changes, this week’s fixes and what has been announced for the coming days.',
