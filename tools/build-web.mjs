@@ -49,7 +49,7 @@ for (const f of fs.readdirSync(out)) {
       `<meta http-equiv="Content-Security-Policy"\n        content="default-src 'self'; img-src 'self' data: blob: https:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' ${proxy} https://raider.io https://nether.wowhead.com https://www.raidbots.com https://assets.rpglogs.com https://wow.zamimg.com https://render.worldofwarcraft.com; worker-src 'self'; frame-src 'self'">`);
     s = s.replace('<script src="boot.js"></script>', '<script src="web-api.js"></script>\n  <script src="boot.js"></script>');
     s = s.replace('title="Versión">v0.0.0<', 'title="Versión">v' + pkg.version + '<'); // reserva el ancho de la insignia antes de que arranque el JS
-    s = s.replace('<title>WipeHub</title>', '<title>WipeHub</title>\n  <link rel="icon" href="icon.png">');
+    s = s.replace('<title>WipeHub</title>', '<title>WipeHub</title>\n  <link rel="icon" href="favicon.ico" sizes="any">\n  <link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png">\n  <link rel="icon" type="image/png" sizes="256x256" href="icon.png">\n  <link rel="apple-touch-icon" href="icon.png">');
   }
   fs.writeFileSync(p, s);
 }

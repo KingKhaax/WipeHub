@@ -5,7 +5,7 @@
 // Se numera con la última versión del grupo. Los cambios que solo tocan colores, tamaños o ajustes internos no se cuentan.
 // Estructura: { v, date, es: { intro, sections: [[icono, título, [viñetas]]] }, en: { ... } }
 const RELEASES = [
-  { v: '2.18.0', date: '2026-11-03',
+  { v: '2.19.0', date: '2026-11-07',
     es: { intro: 'El parche 12.1.5 pasa a castellano con los nombres oficiales de Blizzard y los logros, objetos, monedas y misiones muestran su descripción al pasar el ratón.', sections: [
       ['inv_scroll_02', 'Parche 12.1.5 en castellano', [
         'Todo el contenido del panel del 12.1.5 usa los nombres oficiales en castellano de las notas de Blizzard y de Wowhead: La liberación de Kith\'ix, Laberinto de Kindo\'jan, Invasiones aqir y sus ocho afijos, núcleos de Vacío nebulosos, piedravenenos ascendentes, Isla Serpenteante, Puesto comercial y más.',
