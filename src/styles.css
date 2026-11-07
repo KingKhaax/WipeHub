@@ -3379,3 +3379,24 @@ body:not(:has(#homeBtn.on)) .bg-art, body:not(:has(#homeBtn.on)) .bg-dim { opaci
 @media (prefers-reduced-motion: reduce) { .rc-pick:hover, .rc-pick:focus-visible { animation: none; } }
 .rc-pick { justify-items: stretch; }
 .rc-in { width: 100%; }
+.rc-dlg .cc-day { display: flex; align-items: center; gap: 10px; }
+.rc-copy { white-space: nowrap; display: inline-flex; align-items: center; gap: 6px; padding: 3px 8px; border: 1px solid var(--line-strong, var(--line)); border-radius: 8px; background: var(--panel-2, var(--panel)); color: var(--muted); font: inherit; font-size: 11px; font-weight: 700; line-height: 1.2; cursor: pointer; transition: color .15s, border-color .15s, background .15s, transform .15s; }
+.rc-copy:hover { color: var(--text); border-color: var(--accent); background: var(--hover); transform: translateY(-1px); }
+.rc-copy:active { transform: none; }
+.rc-copy:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.rc-hw { display: flex; align-items: stretch; }
+.rc-hw .cc-spec-h { flex: 1 1 auto; min-width: 0; }
+.rc-copy.rc-copy-boss { margin: 0; padding: 0 16px; border: 0; border-left: 1px solid var(--line); border-radius: 0; background: color-mix(in srgb, var(--cc) 10%, transparent); color: var(--cc); }
+.rc-copy.rc-copy-boss:hover { background: color-mix(in srgb, var(--cc) 22%, transparent); transform: none; }
+.cc-spec.open .rc-copy.rc-copy-boss { border-bottom: 1px solid var(--line); }
+.rc-shot { box-sizing: border-box; padding: 20px 22px 14px; border-radius: 16px; background: var(--bg); color: var(--text); font-family: inherit; }
+.rc-shot .rc-shot-h { display: flex; align-items: center; gap: 14px; margin-bottom: 14px; }
+.rc-shot .rc-shot-h img { width: 52px; height: 52px; border-radius: 50%; border: 2px solid var(--line-strong, var(--line)); }
+.rc-shot .rc-shot-h img.ej { border-radius: 0; -webkit-mask-image: radial-gradient(circle at 50% 52%, #000 56%, transparent 80%); mask-image: radial-gradient(circle at 50% 52%, #000 56%, transparent 80%); }
+.rc-shot .rc-shot-h b { display: block; font-size: 24px; color: var(--cc); }
+.rc-shot .rc-shot-h small { color: var(--muted); font-size: 13px; }
+.rc-shot .cc-list { max-height: none; overflow: visible; padding: 0; margin: 0; list-style: none; }
+.rc-shot .rc-shot-f { margin-top: 12px; font-size: 11px; color: var(--muted); text-align: right; }
+.rc-shot .rc-ds { flex-wrap: nowrap; white-space: nowrap; flex: none; }
+.rc-shot .cc-row { align-items: center; }
+.rc-shot .cc-txt { flex: 1 1 auto; min-width: 0; }

@@ -5,13 +5,14 @@
 // Se numera con la última versión del grupo. Los cambios que solo tocan colores, tamaños o ajustes internos no se cuentan.
 // Estructura: { v, date, es: { intro, sections: [[icono, título, [viñetas]]] }, en: { ... } }
 const RELEASES = [
-  { v: '2.31.0', date: '2026-11-07',
+  { v: '2.32.0', date: '2026-11-07',
     es: { intro: 'Nuevo botón «Cambios de Raids / Míticas» con todo lo que Blizzard ha tocado en cada jefe y cada mazmorra desde el 12.1.0, y los paneles del 12.1.5 y del 12.1.7 al día con los hotfixes de esta semana.', sections: [
       ['inv_misc_note_06', 'Cambios de Raids / Míticas', [
         'Botón nuevo junto a «Cambios de clase»: al pulsarlo eliges entre Raids y Míticas+, y ves cada ajuste, mejora y corrección por jefe (con su icono de la Guía de aventuras) y por mazmorra.',
         'Verde para los nerfs (el jefe pierde daño, vida o mecánicas), rojo para los buffs, ámbar para cambios sin signo, azul para cambios visuales y gris para correcciones de errores.',
         'Cubre El Abismo Venenoso, La Gruta Mareal y La liberación de Kith’ix, y las ocho mazmorras de Míticas+ de la temporada 2, desde el 18 de agosto hasta los hotfixes del 6 de noviembre.',
         'Las habilidades llevan el nombre oficial en castellano, su icono y su tooltip.',
+        'Cada día tiene un botón para copiar sus cambios como imagen PNG, y cada jefe otro para copiar todos sus cambios.',
         'Cada banda se puede filtrar por dificultad (Buscador de bandas, Normal, Heroica y Mítica) y por tipo (Nerfs, Buffs, cambios, visuales y correcciones), para ver por ejemplo solo los nerfs en Mítica de un jefe.',
         'Los nombres de criaturas y jefes salen en castellano con los nombres oficiales de Wowhead, y los iconos de jefes y mazmorras están reescalados en alta definición.',
         'Los iconos de clases, habilidades, jefes y mazmorras se ven en alta definición, reescalados con IA, y cada jefe de mazmorra lleva su retrato 3D de la Guía de aventuras.',
@@ -27,6 +28,7 @@ const RELEASES = [
         'Green for nerfs (the boss loses damage, health or mechanics), red for buffs, amber for neutral changes, blue for visual changes and grey for bug fixes.',
         'Covers The Venomous Abyss, The Tidebound Grotto and The Unbinding of Kith’ix, and the eight Season 2 Mythic+ dungeons, from August 18 to the November 6 hotfixes.',
         'Abilities carry their official Spanish name, icon and tooltip.',
+        'Each day has a button to copy its changes as a PNG image, and each boss has another to copy all of its changes.',
         'Each raid can be filtered by difficulty (Raid Finder, Normal, Heroic and Mythic) and by type (Nerfs, Buffs, changes, visual changes and fixes), for example to see only the Mythic nerfs of one boss.',
         'Creature and boss names appear in Spanish with Wowhead’s official names, and the boss and dungeon icons are upscaled in high definition.',
         'Class, ability, boss and dungeon icons now look sharp in high definition, upscaled with AI, and each dungeon boss shows its Adventure Guide 3D portrait.',
