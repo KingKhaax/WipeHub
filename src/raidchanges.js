@@ -21,8 +21,13 @@ const RaidChanges = (() => {
   };
   let mode = null;
   let cur = 'va';
-  let fType = 'all';
-  let fDiff = 'all';
+  const STORE = 'wipehub.raidChanges';
+  const stored = (() => { try { return JSON.parse(localStorage.getItem(STORE)) || {}; } catch { return {}; } })();
+  let fType = TYPES.some((t) => t[0] === stored.t) ? stored.t : 'all';
+  let fDiff = DIFFS.some((d) => d[0] === stored.d) ? stored.d : 'all';
+  const lastArea = stored.a && typeof stored.a === 'object' ? stored.a : {};
+  const persist = () => { try { localStorage.setItem(STORE, JSON.stringify({ t: fType, d: fDiff, a: lastArea })); } catch {} };
+  const areaFor = (m) => { const list = areasOf(m); return list.some((a) => a.id === lastArea[m]) ? lastArea[m] : list[0].id; };
 
   const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   const spanish = () => L('es', 'en') === 'es';
@@ -118,13 +123,13 @@ const RaidChanges = (() => {
       document.body.appendChild(dlg);
       dlg.addEventListener('click', (ev) => {
         const md = ev.target.closest('[data-rc-mode]');
-        if (md) { mode = md.dataset.rcMode || null; if (mode) { cur = areasOf(mode)[0].id; fType = 'all'; fDiff = 'all'; } render(dlg); return; }
+        if (md) { mode = md.dataset.rcMode || null; if (mode) cur = areaFor(mode); render(dlg); return; }
         const nav = ev.target.closest('[data-rc-nav]');
-        if (nav) { cur = nav.dataset.rcNav; render(dlg); return; }
+        if (nav) { cur = nav.dataset.rcNav; lastArea[mode] = cur; persist(); render(dlg); return; }
         const ty = ev.target.closest('[data-rc-type]');
-        if (ty) { fType = ty.dataset.rcType; render(dlg); return; }
+        if (ty) { fType = ty.dataset.rcType; persist(); render(dlg); return; }
         const df = ev.target.closest('[data-rc-diff]');
-        if (df) { fDiff = df.dataset.rcDiff; render(dlg); return; }
+        if (df) { fDiff = df.dataset.rcDiff; persist(); render(dlg); return; }
         const tg = ev.target.closest('[data-rc-toggle]');
         if (tg) {
           const art = tg.closest('.cc-spec');
