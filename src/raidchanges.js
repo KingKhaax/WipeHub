@@ -16,7 +16,7 @@ const RaidChanges = (() => {
   const TYPES = [['all', 'Todo', 'All'], ['g', 'Nerfs', 'Nerfs'], ['r', 'Buffs', 'Buffs'], ['a', 'Cambios', 'Changes'], ['v', 'Visual', 'Visual'], ['f', 'Correcciones', 'Fixes']];
   const DIFFS = [['all', 'Todas', 'All'], ['R', 'Buscador de bandas', 'Raid Finder'], ['N', 'Normal', 'Normal'], ['H', 'Heroica', 'Heroic'], ['M', 'Mítica', 'Mythic']];
   const MODES = {
-    raid: { color: '#ff8a4c', es: 'Bandas', en: 'Raids', subEs: 'Cada jefe, con sus ajustes y correcciones por dificultad', subEn: 'Every boss, with its tuning and fixes per difficulty', icons: [3492, 3513, 3429] },
+    raid: { color: '#ff8a4c', es: 'Raids', en: 'Raids', subEs: 'Cada jefe, con sus ajustes y correcciones por dificultad', subEn: 'Every boss, with its tuning and fixes per difficulty', icons: [3492, 3513, 3429] },
     dungeon: { color: '#5cc8ff', es: 'Míticas+', en: 'Mythic+', subEs: 'Cada mazmorra, con sus jefes y enemigos', subEn: 'Every dungeon, with its bosses and enemies', icons: [12993, 12859, 12923] },
   };
   let mode = null;
