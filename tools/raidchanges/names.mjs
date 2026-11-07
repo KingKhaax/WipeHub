@@ -33,7 +33,7 @@ for (const p of pending) {
     const es = id ? await spanishName(id) : '';
     if (es && !es.startsWith('[') && es.toLowerCase() !== p.en.toLowerCase()) {
       translated.push({ en: p.en, es, npc: id });
-      if (write) names.push([p.en, es]);
+      if (write) { const i = names.findIndex((x) => x[0] === p.en); if (i >= 0) names.splice(i, 1); names.push([p.en, es]); }
     } else stillPending.push({ ...p, npc: id || p.npc });
   } catch { stillPending.push(p); }
 }

@@ -2532,7 +2532,7 @@
   "a": "va",
   "u": "Vashnik the Malignant",
   "t": "f",
-  "es": "Corregido un fallo poco frecuente por el que usar Arpón sobre un Venom dentro de la Malignant Cavity hacía caer a los jugadores a través del mapa.",
+  "es": "Corregido un fallo poco frecuente por el que usar Arpón sobre un Veneno dentro de la Malignant Cavity hacía caer a los jugadores a través del mapa.",
   "en": "Fixed a rare issue where players using Harpoon on a Venom while inside the Malignant Cavity would cause them to fall through the playspace."
  },
  {
